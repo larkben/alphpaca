@@ -9,10 +9,10 @@ export function Index() {
   return (
     <div className="min-h-screen bg-gray-800">
       <header className="flex items-center justify-between px-6 py-4 bg-gray-800 text-white">
-        <Link className="flex items-center space-x-2" href="#">
+        <Link className="flex items-center space-x-2 z-50" href="#">
           <span className="text-lg font-semibold text-white">ALPHpaca</span>
         </Link>
-        <nav className="hidden md:flex space-x-4">
+        <nav className="hidden md:flex space-x-4 z-50">
           <Link className="text-white hover:text-blue-500" href="#">
             Home
           </Link>
@@ -29,9 +29,12 @@ export function Index() {
             NFTs
           </Link>
         </nav>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 z-50">
           <Link className="text-white hover:text-blue-500" href="https://twitter.com/alphpacas">
             <TwitterIcon className="h-6 w-6" />
+          </Link>
+          <Link className="text-white hover:text-blue-500" href="https://github.com/larkben/nonchalant">
+            &lt;/&gt;
           </Link>
         </div>
       </header>
@@ -41,7 +44,7 @@ export function Index() {
       </main>
       <h1 className="text-4xl font-bold text-center mb-8 text-white"> Explore Decentralized Applications / Tools </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-20 py-20">
-        <div className="rounded-lg overflow-hidden shadow-lg bg-orange-500">
+        <div className="rounded-lg overflow-hidden shadow-lg bg-orange-500 z-50">
           <div className="p-6">
             <div className="flex justify-center">
               <CoinsIcon className="h-12 w-12 text-white" />
@@ -56,7 +59,7 @@ export function Index() {
             </Link>
           </div>
         </div>
-        <div className="rounded-lg overflow-hidden shadow-lg bg-pink-500">
+        <div className="rounded-lg overflow-hidden shadow-lg bg-pink-500 z-50">
           <div className="p-6">
             <div className="flex justify-center">
               <BanknoteIcon className="h-12 w-12 text-white" />
@@ -64,14 +67,14 @@ export function Index() {
             <h2 className="mt-4 text-xl font-semibold text-white">Defi Loans</h2>
             <p className="mt-2 text-white-400">P2P Loans, Defi with interest.</p>
             <Link
-              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-600 dark:border-gray-800"
+              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-pink-300 hover:bg-pink-400 dark:border-gray-800"
               href="#"
             >
-              Learn More
+              Create Loan
             </Link>
           </div>
         </div>
-        <div className="rounded-lg overflow-hidden shadow-lg bg-blue-800">
+        <div className="rounded-lg overflow-hidden shadow-lg bg-blue-800 z-50">
           <div className="p-6">
             <div className="flex justify-center">
               <Users2Icon className="h-12 w-12 text-white" />
@@ -79,10 +82,10 @@ export function Index() {
             <h2 className="mt-4 text-xl font-semibold text-white">Web3</h2>
             <p className="mt-2 text-white-400"> Coming Soon! </p>
             <Link
-              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-600 dark:border-gray-800"
+              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-blue-300 hover:bg-blue-400 dark:border-gray-800"
               href="#"
             >
-              Learn More
+              Connect Now
             </Link>
           </div>
         </div>
