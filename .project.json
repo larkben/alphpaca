@@ -1,0 +1,216 @@
+{
+  "fullNodeVersion": "v2.5.9",
+  "compilerOptionsUsed": {
+    "ignoreUnusedConstantsWarnings": false,
+    "ignoreUnusedVariablesWarnings": false,
+    "ignoreUnusedFieldsWarnings": false,
+    "ignoreUnusedPrivateFunctionsWarnings": false,
+    "ignoreUpdateFieldsCheckWarnings": false,
+    "ignoreCheckExternalCallerWarnings": false
+  },
+  "infos": {
+    "Buildtoken": {
+      "sourceFile": "scripts/make_token_alph.ral",
+      "sourceCodeHash": "df52d82dbc61c93fa7620ed0c47786ca5e0252830209092086345e30419aab5a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Burn": {
+      "sourceFile": "scripts/burn.ral",
+      "sourceCodeHash": "f9eb5dffc36f3e93bda01a7e1de3c9309085bb4d441f852ba58b9ae33eb2f9eb",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "BurnToken": {
+      "sourceFile": "burn.ral",
+      "sourceCodeHash": "bb81bbb02b93f89fb8e8d22ae3d08f3e7734c9ab4ae05afc95122f0b88066f22",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "f2def89f6c6812d5b48e2bc92ed1fc50520dfb84621676d9aa3e9e3b2bba609c",
+      "warnings": []
+    },
+    "Buyvirl": {
+      "sourceFile": "scripts/viral_buy.ral",
+      "sourceCodeHash": "bc9ccfb86d4ece45391dd02c74c5c9c662b8b78f916dce217e43ec8f829a2401",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "CancelSwap": {
+      "sourceFile": "scripts/cancel_swap.ral",
+      "sourceCodeHash": "e259f835a2934fde782aa0546976643c05c2f0c83e4a276772de5ed7913cd98e",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "ConfirmSwap": {
+      "sourceFile": "scripts/confirm_swap.ral",
+      "sourceCodeHash": "71e6b7523fef8f478f509c7dd3154b1bcbeda7f2d28fadf6005c9d4bce791550",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Create": {
+      "sourceFile": "scripts/create_swap.ral",
+      "sourceCodeHash": "b4ea369a1b8193fbd8ad3efadd2c5dd12c6bcf4b66214a67a3b9c54e931b60f9",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "CreateAlph": {
+      "sourceFile": "scripts/create_swapalph.ral",
+      "sourceCodeHash": "da381bc12e442646b1160143b0c884efe5b0a6505c8902cb5dbefce62990b123",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "CreateToken": {
+      "sourceFile": "createtoken/create_token.ral",
+      "sourceCodeHash": "1f75c67fc65f44672f0b66047fbbe2d7d4c999cc5ea4b175a0eced64133e1feb",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "7ed6793ccad176ce4c219e78b5957818968443e64427459cae59ead4c5e2dcb8",
+      "warnings": []
+    },
+    "Createswap": {
+      "sourceFile": "swaps/createswap.ral",
+      "sourceCodeHash": "ea18e7b6b0c9eb10de23eb2dcb46bc735a17497867805e4d4e42629f8d6170e7",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "6a1c560468731e2eedd68a31fffd7c197fa39d3bf947233d1e060d12b4018bec",
+      "warnings": []
+    },
+    "Destroy": {
+      "sourceFile": "scripts/destroy_faucet.ral",
+      "sourceCodeHash": "0447e8824afa27dc76fdcaac5fac72247eb5b4aa93d5efc87da36d1450e1c4f7",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "DestroyTokenSwap": {
+      "sourceFile": "scripts/destroy_tokenswap.ral",
+      "sourceCodeHash": "8ae50e4974df1c50b394797928ad4d6168963f590414bf87da523252ac0df6ce",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Destroycreator": {
+      "sourceFile": "createtoken/tx_destroy.ral",
+      "sourceCodeHash": "0181b19d66c8aa817f466b2a360f40eac7e4557e101666bde9b10039ccf4ea05",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Destroytoken": {
+      "sourceFile": "scripts/destroy_token.ral",
+      "sourceCodeHash": "aad40f301672386ec595e4bc47f72c10fedfbf615fa6f1e27de75d5ea8c3324e",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Editfee": {
+      "sourceFile": "scripts/editfee.ral",
+      "sourceCodeHash": "9cdeae542bc4274f07cc34f10ac8142a5cfad433a84eeb6e5ed35f7c6b6edc09",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Faucet": {
+      "sourceFile": "paca_faucet.ral",
+      "sourceCodeHash": "bdce2b9ca1b63c08b828775dddf23302f9d95a35798033bdc5262f7279ea06b5",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "8813de5a4adb21e4e0ea09357924ec19037b916ecfd6a228152238f8e9396d04",
+      "warnings": []
+    },
+    "FeeAlph": {
+      "sourceFile": "scripts/feealph.ral",
+      "sourceCodeHash": "1e12397dc597f5f2ce7c9da9cd1868b303a3ddeac7b43daff02e3bc210ebf8af",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "FeeCollection": {
+      "sourceFile": "test_fees.ral",
+      "sourceCodeHash": "c57c6d50b3844a156c7fcf9bed5ad1e8656db4a33099ccd3771e6d9c739f34b8",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "037be2975a9253dfe116077fa5b404f46ce64a23e2ccefbf2905dce4b66a7a7c",
+      "warnings": []
+    },
+    "FeePaca": {
+      "sourceFile": "scripts/feepaca.ral",
+      "sourceCodeHash": "0029c3792abef12ccdb011ce80b3c16d6f95aacfedceac8a9b01dea531e17308",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Gettoken": {
+      "sourceFile": "scripts/tokentest.ral",
+      "sourceCodeHash": "3e20a0e7e5ce052d940807ee059265d115a136931f0d38aea4484b5b29b4859b",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "IFungibleToken": {
+      "sourceFile": "../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceCodeHash": "6809cb06fb20fa7edf529461998beeebd12b1636d439612cca2f84214dbf4a20",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Reedeemalph": {
+      "sourceFile": "scripts/viral_alphdraw.ral",
+      "sourceCodeHash": "09929c8d2211004755bd4e10538bddda1aaaa47b701470965b39faede2bb8e0a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Sellvirl": {
+      "sourceFile": "scripts/viral_sell.ral",
+      "sourceCodeHash": "3f035ee4933f4f33397670cac3be604f7699d2f5fd41b56732f39233d1e3a7e8",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Sendout": {
+      "sourceFile": "scripts/withdraw.ral",
+      "sourceCodeHash": "bf59ec6bec02c4215901434da53d8078a0dad0909ba40d83042fcf298fa9b87f",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Swap": {
+      "sourceFile": "swaps/swap.ral",
+      "sourceCodeHash": "655553ba1c78cb625996f8fa38d2cdcb06216a2c3621436d9740cc12fa5816a7",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "7203c62f95e45ab6fa6b14a0c3f20480d255d86459ab1160ee4bae013a35be93",
+      "warnings": []
+    },
+    "Token": {
+      "sourceFile": "createtoken/token.ral",
+      "sourceCodeHash": "fcbdce030993275cfc162a2b970344a8e07a750122684f77ae7044756815f8db",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "9fb480d2534a9e8b5cf4b5ef005deeec049136f4462dfc72c56ad041a561526b",
+      "warnings": []
+    },
+    "Topup": {
+      "sourceFile": "scripts/deposit.ral",
+      "sourceCodeHash": "135b04fe1d2f2159f536e686fddff9fa5e33119faea0c4ad766a1c91cb82cefe",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Viral": {
+      "sourceFile": "ico/virl.ral",
+      "sourceCodeHash": "a45282df7ae0cc47e050ff91c8a5987c68a454a0d198cc6e6d34882ad04154ee",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "d87d6c74c21a7bec6cba00e9a0388ca81c5a71518b8efb77f43b5160cfdd4456",
+      "warnings": []
+    },
+    "Withdrawlassets": {
+      "sourceFile": "scripts/tokentesttwo.ral",
+      "sourceCodeHash": "5f365d681775d5ef7a91db608b378978177c127b14a6835538487a7956f3d61f",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    }
+  }
+}

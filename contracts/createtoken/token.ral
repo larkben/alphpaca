@@ -1,0 +1,49 @@
+import "std/fungible_token_interface"
+
+Contract Token (
+    symbol: ByteVec,
+    name: ByteVec,
+    decimals: U256,
+    supply: U256,
+    owner: Address
+) implements IFungibleToken {
+
+    event Destroy(user: Address, contract: ByteVec)
+
+    enum ErrorCodes {
+        InvalidCaller = 1
+    }
+
+    pub fn getSymbol() -> ByteVec {
+        return symbol
+    }
+
+    pub fn getName() -> ByteVec {
+        return name
+    }
+
+    pub fn getDecimals() -> U256 {
+        return decimals
+    }
+
+    pub fn getTotalSupply() -> U256 {
+        return supply
+    }
+
+    pub fn getOwner() -> Address {
+        return owner
+    }
+
+    @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn destroytoken() -> () {
+
+        let caller = callerAddress!()
+
+        checkCaller!(owner == caller, ErrorCodes.InvalidCaller)
+
+        destroySelf!(owner)
+
+        emit Destroy(owner, selfContractId!())
+    }
+
+}
