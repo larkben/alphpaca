@@ -57,7 +57,7 @@ export function Index() {
             <h2 className="mt-4 text-xl font-semibold text-white"> Token Creation </h2>
             <p className="mt-2 text-white-400"> Create a token on the Alephium Blockchain. </p>
             <Link
-              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-600 dark:border-gray-800"
+              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-yellow-300 hover:bg-yellow-400 dark:border-gray-800"
               href="/tokencreate"
             >
               Create Now
@@ -100,7 +100,7 @@ export function Index() {
         <div className="w-3/4 md:w-1/2 lg:w-1/3 p-6 bg-gray-800 rounded-lg shadow-lg mb-6">
           <h2 className="text-2xl font-bold mb-2">What is ALPHpaca&apos;s</h2>
           <p className="text-gray-300">
-            ALPHpaca&apos;s is a project dedicated to advancing tooling anf defi on the Alephium blockchain. We aim to explore various sectors not limted to and or included to Gaming, Defi, and Web3 interactions.
+            ALPHpaca&apos;s is a project dedicated to advancing tooling and defi on the Alephium blockchain. We aim to explore various sectors not limited to and or included to Gaming, Defi, and Web3 interactions.
           </p>
         </div>
         <div className="w-3/4 md:w-1/2 lg:w-1/3 p-6 bg-gray-800 rounded-lg shadow-lg mb-6">
