@@ -57,7 +57,7 @@ export function Index() {
             <h2 className="mt-4 text-xl font-semibold text-white"> Token Creation </h2>
             <p className="mt-2 text-white-400"> Create a token on the Alephium Blockchain. </p>
             <Link
-              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-yellow-300 hover:bg-yellow-400 dark:border-gray-800"
+              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-orange-300 hover:bg-orange-400 dark:border-gray-800"
               href="/tokencreate"
             >
               Create Now

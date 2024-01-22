@@ -22,15 +22,16 @@ export const TokenCreateAutomation: FC<{
   const addressGroup = config.groupIndex
   const [ongoingTxId, setOngoingTxId] = useState<string>()
 
-  //TODO convert to token create variables
-  const [discord, setDiscord] = useState<string>("")
+  const [symbol, setSymbol] = useState<string>("")
+  const [name, setName] = useState<string>("")
+  const [decimals, setDecimals] = useState('')
+  const [supply, setSupply] = useState('')
 
   // Handle of Subscription
-  const handleSubscribe = async (e: React.FormEvent) => {
+  const handleTokenCreate = async (e: React.FormEvent) => {
     e.preventDefault()
     if (signer) {
-      //const result = await BuildToken(signer, discord)
-      //setOngoingTxId(result.txId)
+      const result = await BuildToken(signer, symbol, name, decimals, supply)
     }
   }
 
@@ -51,7 +52,7 @@ export const TokenCreateAutomation: FC<{
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-100">Create Your Token</h2>
           <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token.</p>
         </div>
-        <form className="mt-8 space-y-6">
+        <form  onSubmit={handleTokenCreate} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="symbol">Symbol</label>
@@ -59,6 +60,8 @@ export const TokenCreateAutomation: FC<{
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="symbol"
                 name="symbol"
+                value={symbol}
+                onChange={(e) => setSymbol(e.target.value)}
                 required
                 type="text"
               />
@@ -69,6 +72,8 @@ export const TokenCreateAutomation: FC<{
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="name"
                 name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
                 type="text"
               />
@@ -81,6 +86,8 @@ export const TokenCreateAutomation: FC<{
                 max="18"
                 min="0"
                 name="decimals"
+                value={decimals}
+                onChange={(e) => setDecimals(e.target.value)}
                 required
                 type="number"
               />
@@ -92,6 +99,8 @@ export const TokenCreateAutomation: FC<{
                 id="supply"
                 min="0"
                 name="supply"
+                value={supply}
+                onChange={(e) => setSupply(e.target.value)}
                 required
                 type="number"
               />
