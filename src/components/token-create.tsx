@@ -51,13 +51,14 @@ export const TokenCreateAutomation: FC<{
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-100">Create Your Token</h2>
           <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token.</p>
+          <h3 className="text-1xl text-white text-center py-5"> Token Preview: </h3> 
         </div>
         <form  onSubmit={handleTokenCreate} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="symbol">Symbol</label>
+              <label className="text-white" htmlFor="symbol">Symbol</label>
               <Input
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="symbol"
                 name="symbol"
                 value={symbol}
@@ -67,9 +68,9 @@ export const TokenCreateAutomation: FC<{
               />
             </div>
             <div>
-              <label htmlFor="name">Name</label>
+              <label className="text-white" htmlFor="name">Name</label>
               <Input
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="name"
                 name="name"
                 value={name}
@@ -79,9 +80,9 @@ export const TokenCreateAutomation: FC<{
               />
             </div>
             <div>
-              <label htmlFor="decimals">Decimals</label>
+              <label className="text-white" htmlFor="decimals">Decimals</label>
               <Input
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="text-black appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="decimals"
                 max="18"
                 min="0"
@@ -93,9 +94,9 @@ export const TokenCreateAutomation: FC<{
               />
             </div>
             <div>
-              <label htmlFor="supply">Supply</label>
+              <label className="text-white" htmlFor="supply">Supply</label>
               <Input
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="supply"
                 min="0"
                 name="supply"
