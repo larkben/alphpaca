@@ -1,7 +1,7 @@
 {
   "version": "v2.5.7",
-  "name": "Sendout",
-  "bytecodeTemplate": "01010300000005{1}0d0c{0}0105",
+  "name": "Burn",
+  "bytecodeTemplate": "0101030001000e0c0d{0}01011700b41600{1}a3{1}0d0c{0}0102",
   "fieldsSig": {
     "names": [
       "contract",

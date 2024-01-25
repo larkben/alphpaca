@@ -11,23 +11,23 @@ import {
   SignerProvider,
   HexString,
 } from "@alephium/web3";
-import { default as BuildtokenScriptJson } from "../scripts/Buildtoken.ral.json";
-import { default as BurnScriptJson } from "../scripts/Burn.ral.json";
-import { default as BuyvirlScriptJson } from "../scripts/Buyvirl.ral.json";
-import { default as CancelSwapScriptJson } from "../scripts/CancelSwap.ral.json";
-import { default as ConfirmSwapScriptJson } from "../scripts/ConfirmSwap.ral.json";
-import { default as CreateScriptJson } from "../scripts/Create.ral.json";
-import { default as CreateAlphScriptJson } from "../scripts/CreateAlph.ral.json";
+import { default as BuildtokenScriptJson } from "../createtoken/Buildtoken.ral.json";
+import { default as BurnScriptJson } from "../burn/Burn.ral.json";
+import { default as BuyvirlScriptJson } from "../ico/Buyvirl.ral.json";
+import { default as CancelSwapScriptJson } from "../swaps/CancelSwap.ral.json";
+import { default as ConfirmSwapScriptJson } from "../swaps/ConfirmSwap.ral.json";
+import { default as CreateScriptJson } from "../swaps/Create.ral.json";
+import { default as CreateAlphScriptJson } from "../swaps/CreateAlph.ral.json";
 import { default as DestroyScriptJson } from "../scripts/Destroy.ral.json";
-import { default as DestroyTokenSwapScriptJson } from "../scripts/DestroyTokenSwap.ral.json";
+import { default as DestroyTokenSwapScriptJson } from "../swaps/DestroyTokenSwap.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
-import { default as DestroytokenScriptJson } from "../scripts/Destroytoken.ral.json";
+import { default as DestroytokenScriptJson } from "../createtoken/Destroytoken.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
-import { default as FeeAlphScriptJson } from "../scripts/FeeAlph.ral.json";
-import { default as FeePacaScriptJson } from "../scripts/FeePaca.ral.json";
+import { default as FeeAlphScriptJson } from "../swaps/FeeAlph.ral.json";
+import { default as FeePacaScriptJson } from "../swaps/FeePaca.ral.json";
 import { default as GettokenScriptJson } from "../scripts/Gettoken.ral.json";
-import { default as ReedeemalphScriptJson } from "../scripts/Reedeemalph.ral.json";
-import { default as SellvirlScriptJson } from "../scripts/Sellvirl.ral.json";
+import { default as ReedeemalphScriptJson } from "../ico/Reedeemalph.ral.json";
+import { default as SellvirlScriptJson } from "../ico/Sellvirl.ral.json";
 import { default as SendoutScriptJson } from "../scripts/Sendout.ral.json";
 import { default as TopupScriptJson } from "../scripts/Topup.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";

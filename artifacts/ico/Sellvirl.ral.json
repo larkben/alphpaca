@@ -1,7 +1,7 @@
 {
   "version": "v2.5.7",
-  "name": "Sendout",
-  "bytecodeTemplate": "01010300000005{1}0d0c{0}0105",
+  "name": "Sellvirl",
+  "bytecodeTemplate": "01010300020010{1}17000c0d{0}01001701b416011600a3{1}0d0c{0}0107",
   "fieldsSig": {
     "names": [
       "contract",
