@@ -1,20 +1,30 @@
 {
   "version": "v2.5.7",
   "name": "Createswap",
-  "bytecode": "050909121b4024407340c040ca40d440eb010000000102ce0202010000000102a00002010000000102a00102010000000102ce020201030408004025b41704160016011602160316041305641300641706170516047a13c40de0b6b3a7640000a216001601a3ce0116051606af17071604ce0000030001aa05160016011602160316077301030408004024b41704160016011602160316041305641300641706170516047a13c40de0b6b3a7640000a216001601a3ce0116051606af17071604ce000002a70516001601160216031607730100010100021600a1000100010100021600a10101020001000cb41700ce001600450d7bce00b006ce005e",
-  "codeHash": "6a1c560468731e2eedd68a31fffd7c197fa39d3bf947233d1e060d12b4018bec",
+  "bytecode": "0a0e09121b4024402d4036408f40e8413f41494153415d4188419f010000000102ce0202010000000102a00002010000000102a00202010000000102ce0202010000000102a00102010000000102ce03020103040800402bb41704160016011602160316041305641300641706170516047a13c40de0b6b3a7640000a216001601a3ce0116051606af17071604ce0000030001aaa00500012aa1050516001601160216031607160777740103040800402bb41704160016011602160316041305641300641706170516047a13c40de0b6b3a7640000a216001601a3ce0116051606af17071604ce0000050004aaa00400042aa1040516001601160216031607160777740103040800402ab41704160016011602160316041305641300641706170516047a13c40de0b6b3a7640000a216001601a3ce0116051606af17071604ce000002a7a00300022aa1030516001601160216031607160777740100010100021600a1000100010100021600a1020100010100021600a101010200000019ce00b4450d7bce000003a005abce000005a005abce00a003a80ca1050ca1040ca10307b45e01020001000cb41700ce001600450d7bce00b006ce005e",
+  "codeHash": "9f61a0bd9704f8dbb3a14912fd827d43fd1160c353a3e2f4799b5add86211937",
   "fieldsSig": {
     "names": [
       "owner",
       "contract",
       "paca",
+      "ngu",
       "pacafee",
-      "alphfee"
+      "ngufee",
+      "alphfee",
+      "ownedalph",
+      "ownedngu",
+      "ownedpaca"
     ],
     "types": [
       "Address",
       "ByteVec",
       "ByteVec",
+      "ByteVec",
+      "U256",
+      "U256",
+      "U256",
+      "U256",
       "U256",
       "U256"
     ],
@@ -22,6 +32,11 @@
       false,
       false,
       false,
+      false,
+      true,
+      true,
+      true,
+      true,
       true,
       true
     ]
@@ -34,18 +49,29 @@
         "amto",
         "tokenw",
         "amtw",
-        "contract"
+        "contract",
+        "address"
       ],
       "fieldTypes": [
         "ByteVec",
         "U256",
         "ByteVec",
         "U256",
-        "ByteVec"
+        "ByteVec",
+        "Address"
       ]
     },
     {
       "name": "Destroy",
+      "fieldNames": [
+        "who"
+      ],
+      "fieldTypes": [
+        "Address"
+      ]
+    },
+    {
+      "name": "WithdrawFees",
       "fieldNames": [
         "who"
       ],
@@ -104,7 +130,56 @@
       ]
     },
     {
+      "name": "getNguFee",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getNguToken",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
       "name": "createswappaca",
+      "usePreapprovedAssets": true,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "tokenOffered",
+        "tokenOfferedAmt",
+        "tokenWanted",
+        "tokenWantedAmt"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256",
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "createswapngu",
       "usePreapprovedAssets": true,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -183,6 +258,32 @@
       "paramIsMutable": [
         false
       ],
+      "returnTypes": []
+    },
+    {
+      "name": "feengu",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "amount"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "collectfees",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": true,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
       "returnTypes": []
     },
     {

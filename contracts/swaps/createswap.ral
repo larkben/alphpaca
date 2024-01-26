@@ -1,15 +1,25 @@
-// Protocol Contract
+// Protocol Contract, Fractional Contracts
 
 Contract Createswap (
     owner: Address,
+    // Swap Contract
     contract: ByteVec,
-    paca: ByteVec,                                       // Protocol Token Fee
+    // Tokens
+    paca: ByteVec,
+    ngu: ByteVec, 
+    // Fees associated with contract creation
     mut pacafee: U256,
-    mut alphfee: U256
+    mut ngufee: U256,
+    mut alphfee: U256,
+    // Variables used for fee collection
+    mut ownedalph: U256,
+    mut ownedngu: U256,
+    mut ownedpaca: U256
 ) {
     // Events
-    event Swap(tokeno: ByteVec, amto: U256, tokenw: ByteVec, amtw: U256, contract: ByteVec)
+    event Swap(tokeno: ByteVec, amto: U256, tokenw: ByteVec, amtw: U256, contract: ByteVec, address: Address)
     event Destroy(who: Address)
+    event WithdrawFees(who: Address)
 
     // Error Codes
     enum ErrorCodes {
@@ -33,8 +43,16 @@ Contract Createswap (
         return paca
     }
 
+    pub fn getNguFee() -> U256 {
+        return ngufee
+    }
+
+    pub fn getNguToken() -> ByteVec {
+        return ngu
+    }
+
     // Contract Functions
-    @using(preapprovedAssets = true, assetsInContract = false, updateFields = false, checkExternalCaller = false)
+    @using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = false)
     pub fn createswappaca(tokenOffered: ByteVec, tokenOfferedAmt: U256, tokenWanted: ByteVec, tokenWantedAmt: U256) -> () {
         
         let minter = callerAddress!()
@@ -49,10 +67,32 @@ Contract Createswap (
 
         transferToken!(minter, owner, getPacaToken(), getPacaFee())
 
-        emit Swap(tokenOffered, tokenOfferedAmt, tokenWanted, tokenWantedAmt, contractID)
+        ownedpaca = ownedpaca + getPacaFee()
+
+        emit Swap(tokenOffered, tokenOfferedAmt, tokenWanted, tokenWantedAmt, contractID, contractIdToAddress!(contractID))
     }
 
-    @using(preapprovedAssets = true, assetsInContract = false, updateFields = false, checkExternalCaller = false)
+    @using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = false)
+    pub fn createswapngu(tokenOffered: ByteVec, tokenOfferedAmt: U256, tokenWanted: ByteVec, tokenWantedAmt: U256) -> () {
+        
+        let minter = callerAddress!()
+
+        let (encodeImmutableFields, encodeMutableFields) = Swap.encodeFields!(tokenOffered, tokenOfferedAmt, tokenWanted, tokenWantedAmt, minter)
+
+        let contractID = copyCreateContract!{minter -> ALPH: 1 alph, tokenOffered: tokenOfferedAmt}(
+            contract,                                                                                  
+            encodeImmutableFields,
+            encodeMutableFields
+        )
+
+        transferToken!(minter, owner, getNguToken(), getNguFee())
+
+        ownedngu = ownedngu + getNguFee()
+
+        emit Swap(tokenOffered, tokenOfferedAmt, tokenWanted, tokenWantedAmt, contractID, contractIdToAddress!(contractID))
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = false)
     pub fn createswapalph(tokenOffered: ByteVec, tokenOfferedAmt: U256, tokenWanted: ByteVec, tokenWantedAmt: U256) -> () {
         
         let minter = callerAddress!()
@@ -67,7 +107,9 @@ Contract Createswap (
 
         transferToken!(minter, owner, ALPH, getAlphFee())
 
-        emit Swap(tokenOffered, tokenOfferedAmt, tokenWanted, tokenWantedAmt, contractID)
+        ownedalph = ownedalph + getAlphFee()
+
+        emit Swap(tokenOffered, tokenOfferedAmt, tokenWanted, tokenWantedAmt, contractID, contractIdToAddress!(contractID))
     }
 
     @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = false)
@@ -84,6 +126,32 @@ Contract Createswap (
         alphfee = amount
 
         //emit AlphFeeChange(alphfee)
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = false)
+    pub fn feengu(amount: U256) -> () {
+        
+        ngufee = amount
+
+        //emit AlphFeeChange(alphfee)
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn collectfees() -> () {
+
+        assert!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
+        
+        transferTokenFromSelf!(owner, getPacaToken(), ownedpaca)
+
+        transferTokenFromSelf!(owner, getNguToken(), ownedpaca)
+
+        transferTokenFromSelf!(owner, ALPH, ownedalph)
+
+        ownedpaca = 0
+        ownedngu = 0
+        ownedalph = 0
+
+        emit WithdrawFees(callerAddress!())
     }
 
     @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)

@@ -44,6 +44,13 @@
       "codeHashDebug": "",
       "warnings": []
     },
+    "CollectFees": {
+      "sourceFile": "swaps/tx_collectfees.ral",
+      "sourceCodeHash": "c29c2962c4207f584ec0e6d5c52c18736f2c59a979e9c3addb74cf6e13c2e123",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
     "ConfirmSwap": {
       "sourceFile": "swaps/tx_confirmSwap.ral",
       "sourceCodeHash": "71e6b7523fef8f478f509c7dd3154b1bcbeda7f2d28fadf6005c9d4bce791550",
@@ -74,9 +81,9 @@
     },
     "Createswap": {
       "sourceFile": "swaps/createswap.ral",
-      "sourceCodeHash": "ea18e7b6b0c9eb10de23eb2dcb46bc735a17497867805e4d4e42629f8d6170e7",
+      "sourceCodeHash": "f8698c051c20e2832a2878eb7fd24aba833ce202dfd98a996cf1f240136c8a78",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "6a1c560468731e2eedd68a31fffd7c197fa39d3bf947233d1e060d12b4018bec",
+      "codeHashDebug": "9f61a0bd9704f8dbb3a14912fd827d43fd1160c353a3e2f4799b5add86211937",
       "warnings": []
     },
     "Destroy": {
@@ -133,6 +140,13 @@
       "sourceCodeHash": "c57c6d50b3844a156c7fcf9bed5ad1e8656db4a33099ccd3771e6d9c739f34b8",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "037be2975a9253dfe116077fa5b404f46ce64a23e2ccefbf2905dce4b66a7a7c",
+      "warnings": []
+    },
+    "FeeNgu": {
+      "sourceFile": "swaps/tx_feengu.ral",
+      "sourceCodeHash": "dff802e6cf350623a1160918b29e76e46796d9b8743d56bf53d1f9a4f4181ccb",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
       "warnings": []
     },
     "FeePaca": {

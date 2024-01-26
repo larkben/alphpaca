@@ -15,6 +15,7 @@ import { default as BuildtokenScriptJson } from "../createtoken/Buildtoken.ral.j
 import { default as BurnScriptJson } from "../burn/Burn.ral.json";
 import { default as BuyvirlScriptJson } from "../ico/Buyvirl.ral.json";
 import { default as CancelSwapScriptJson } from "../swaps/CancelSwap.ral.json";
+import { default as CollectFeesScriptJson } from "../swaps/CollectFees.ral.json";
 import { default as ConfirmSwapScriptJson } from "../swaps/ConfirmSwap.ral.json";
 import { default as CreateScriptJson } from "../swaps/Create.ral.json";
 import { default as CreateAlphScriptJson } from "../swaps/CreateAlph.ral.json";
@@ -24,6 +25,7 @@ import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreat
 import { default as DestroytokenScriptJson } from "../createtoken/Destroytoken.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
 import { default as FeeAlphScriptJson } from "../swaps/FeeAlph.ral.json";
+import { default as FeeNguScriptJson } from "../swaps/FeeNgu.ral.json";
 import { default as FeePacaScriptJson } from "../swaps/FeePaca.ral.json";
 import { default as GettokenScriptJson } from "../scripts/Gettoken.ral.json";
 import { default as ReedeemalphScriptJson } from "../ico/Reedeemalph.ral.json";
@@ -49,6 +51,9 @@ export const Buyvirl = new ExecutableScript<{
 }>(Script.fromJson(BuyvirlScriptJson));
 export const CancelSwap = new ExecutableScript<{ contract: HexString }>(
   Script.fromJson(CancelSwapScriptJson)
+);
+export const CollectFees = new ExecutableScript<{ contract: HexString }>(
+  Script.fromJson(CollectFeesScriptJson)
 );
 export const ConfirmSwap = new ExecutableScript<{ contract: HexString }>(
   Script.fromJson(ConfirmSwapScriptJson)
@@ -87,6 +92,10 @@ export const FeeAlph = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
 }>(Script.fromJson(FeeAlphScriptJson));
+export const FeeNgu = new ExecutableScript<{
+  contract: HexString;
+  amount: bigint;
+}>(Script.fromJson(FeeNguScriptJson));
 export const FeePaca = new ExecutableScript<{
   contract: HexString;
   amount: bigint;

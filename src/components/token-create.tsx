@@ -13,7 +13,7 @@ import { FC, useState, useEffect } from 'react'
 // Import Alephium Services
 import { TokenCreate } from "../services/utils"
 import { useWallet } from "@alephium/web3-react"
-import { BuildToken } from "../services/token.services"
+import { BuildToken, DestroyToken } from "../services/token.services"
 
 export const TokenCreateAutomation: FC<{
   config: TokenCreate
@@ -27,11 +27,20 @@ export const TokenCreateAutomation: FC<{
   const [decimals, setDecimals] = useState('')
   const [supply, setSupply] = useState('')
 
+  const [contract, setContract] = useState<string>("")
+
   // Handle of Subscription
   const handleTokenCreate = async (e: React.FormEvent) => {
     e.preventDefault()
     if (signer) {
       const result = await BuildToken(signer, symbol, name, decimals, supply)
+    }
+  }
+
+  const handleTokenDestroy = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (signer) {
+      const result = await DestroyToken(signer, contract)
     }
   }
 
@@ -113,6 +122,36 @@ export const TokenCreateAutomation: FC<{
               type="submit"
             >
               Create Token
+            </Button>
+          </div>
+        </form>
+        <br/>
+        <br/>
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-100">Destroy your Token</h2>
+          <p className="mt-2 text-center text-sm text-gray-400">Please enter the contract id, of the token.</p>
+        </div>
+        <form  onSubmit={handleTokenDestroy} className="mt-8 space-y-6">
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div>
+              <label className="text-white" htmlFor="symbol">Contract ID</label>
+              <Input
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                id="contract"
+                name="contract"
+                value={contract}
+                onChange={(e) => setContract(e.target.value)}
+                required
+                type="text"
+              />
+            </div>
+          </div>
+          <div>
+            <Button
+              className="group relative w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-800"
+              type="submit"
+            >
+              Destroy Token
             </Button>
           </div>
         </form>

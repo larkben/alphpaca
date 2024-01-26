@@ -21,7 +21,7 @@ export function Index() {
             Home
           </Link>
           <Link className="text-white hover:text-blue-500" href="#">
-            Whitepaper
+            Alephium?
           </Link>
           <Link className="text-white hover:text-blue-500" href="/tokencreate">
             Token Creation

@@ -7,9 +7,8 @@ import Link from "next/link"
 import { JSX, SVGProps } from "react"
 import { TokenCreateAutomation } from "./token-create"
 import { AlephiumConnectButton, AlephiumWalletProvider } from '@alephium/web3-react'
-import { TokenCreate } from "../services/utils"
 
-export function Navbar() {
+export function NavbarTools() {
   return (
     <div className="min-h-screen bg-gray-800">
       <header className="flex items-center justify-between px-6 py-4 bg-gray-800 text-white">
@@ -45,7 +44,6 @@ export function Navbar() {
           </AlephiumWalletProvider>
         </div>
       </header>
-      {/* Insert Tooling Here */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-y-0 right-0 flex items-center" />
       </div>

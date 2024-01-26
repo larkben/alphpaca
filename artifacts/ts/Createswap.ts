@@ -33,8 +33,13 @@ export namespace CreateswapTypes {
     owner: Address;
     contract: HexString;
     paca: HexString;
+    ngu: HexString;
     pacafee: bigint;
+    ngufee: bigint;
     alphfee: bigint;
+    ownedalph: bigint;
+    ownedngu: bigint;
+    ownedpaca: bigint;
   };
 
   export type State = ContractState<Fields>;
@@ -45,8 +50,10 @@ export namespace CreateswapTypes {
     tokenw: HexString;
     amtw: bigint;
     contract: HexString;
+    address: Address;
   }>;
   export type DestroyEvent = ContractEvent<{ who: Address }>;
+  export type WithdrawFeesEvent = ContractEvent<{ who: Address }>;
 
   export interface CallMethodTable {
     getTokenId: {
@@ -62,6 +69,14 @@ export namespace CreateswapTypes {
       result: CallContractResult<bigint>;
     };
     getPacaToken: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getNguFee: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getNguToken: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<HexString>;
     };
@@ -88,7 +103,7 @@ class Factory extends ContractFactory<
     return this.contract.getInitialFieldsWithDefaultValues() as CreateswapTypes.Fields;
   }
 
-  eventIndex = { Swap: 0, Destroy: 1 };
+  eventIndex = { Swap: 0, Destroy: 1, WithdrawFees: 2 };
   consts = { ErrorCodes: { InvalidCaller: BigInt(1) } };
 
   at(address: string): CreateswapInstance {
@@ -128,6 +143,22 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResult<HexString>> => {
       return testMethod(this, "getPacaToken", params);
     },
+    getNguFee: async (
+      params: Omit<
+        TestContractParams<CreateswapTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getNguFee", params);
+    },
+    getNguToken: async (
+      params: Omit<
+        TestContractParams<CreateswapTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<HexString>> => {
+      return testMethod(this, "getNguToken", params);
+    },
     createswappaca: async (
       params: TestContractParams<
         CreateswapTypes.Fields,
@@ -140,6 +171,19 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResult<null>> => {
       return testMethod(this, "createswappaca", params);
+    },
+    createswapngu: async (
+      params: TestContractParams<
+        CreateswapTypes.Fields,
+        {
+          tokenOffered: HexString;
+          tokenOfferedAmt: bigint;
+          tokenWanted: HexString;
+          tokenWantedAmt: bigint;
+        }
+      >
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "createswapngu", params);
     },
     createswapalph: async (
       params: TestContractParams<
@@ -164,6 +208,19 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResult<null>> => {
       return testMethod(this, "feealph", params);
     },
+    feengu: async (
+      params: TestContractParams<CreateswapTypes.Fields, { amount: bigint }>
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "feengu", params);
+    },
+    collectfees: async (
+      params: Omit<
+        TestContractParams<CreateswapTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "collectfees", params);
+    },
     destroytokenswap: async (
       params: Omit<
         TestContractParams<CreateswapTypes.Fields, never>,
@@ -180,7 +237,7 @@ export const Createswap = new Factory(
   Contract.fromJson(
     CreateswapContractJson,
     "",
-    "6a1c560468731e2eedd68a31fffd7c197fa39d3bf947233d1e060d12b4018bec"
+    "9f61a0bd9704f8dbb3a14912fd827d43fd1160c353a3e2f4799b5add86211937"
   )
 );
 
@@ -224,9 +281,24 @@ export class CreateswapInstance extends ContractInstance {
     );
   }
 
+  subscribeWithdrawFeesEvent(
+    options: EventSubscribeOptions<CreateswapTypes.WithdrawFeesEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      Createswap.contract,
+      this,
+      options,
+      "WithdrawFees",
+      fromCount
+    );
+  }
+
   subscribeAllEvents(
     options: EventSubscribeOptions<
-      CreateswapTypes.SwapEvent | CreateswapTypes.DestroyEvent
+      | CreateswapTypes.SwapEvent
+      | CreateswapTypes.DestroyEvent
+      | CreateswapTypes.WithdrawFeesEvent
     >,
     fromCount?: number
   ): EventSubscription {
@@ -279,6 +351,28 @@ export class CreateswapInstance extends ContractInstance {
         Createswap,
         this,
         "getPacaToken",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNguFee: async (
+      params?: CreateswapTypes.CallMethodParams<"getNguFee">
+    ): Promise<CreateswapTypes.CallMethodResult<"getNguFee">> => {
+      return callMethod(
+        Createswap,
+        this,
+        "getNguFee",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getNguToken: async (
+      params?: CreateswapTypes.CallMethodParams<"getNguToken">
+    ): Promise<CreateswapTypes.CallMethodResult<"getNguToken">> => {
+      return callMethod(
+        Createswap,
+        this,
+        "getNguToken",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
