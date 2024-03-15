@@ -29,6 +29,8 @@ export const TokenCreateAutomation: FC<{
 
   const [contract, setContract] = useState<string>("")
 
+  const supplyWithDecimals = Number(`${supply}e-${decimals}`);
+
   // Handle of Subscription
   const handleTokenCreate = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,15 +54,17 @@ export const TokenCreateAutomation: FC<{
       <div className="max-w-md w-full space-y-8 bg-gray-800 p-6 rounded-lg shadow-md z-50">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-100">Create Your Token</h2>
-          <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token.</p>
+          <p className="mt-2 text-center text-sm text-gray-400">Please double check your token with the preview below before you create.</p>
           <h3 className="text-1xl text-white text-center py-5"> Token Preview: </h3> 
+          <p className="text-1xl text-white text-center"> Token: {name} : ({symbol}) </p>
+          <p className="text-1xl text-white text-center"> Total Supply: {supplyWithDecimals} </p>
         </div>
         <form  onSubmit={handleTokenCreate} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label className="text-white" htmlFor="symbol">Symbol</label>
               <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-blue rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="symbol"
                 name="symbol"
                 value={symbol}
@@ -72,7 +76,7 @@ export const TokenCreateAutomation: FC<{
             <div>
               <label className="text-white" htmlFor="name">Name</label>
               <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-blue focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="name"
                 name="name"
                 value={name}
@@ -84,7 +88,7 @@ export const TokenCreateAutomation: FC<{
             <div>
               <label className="text-white" htmlFor="decimals">Decimals</label>
               <Input
-                className="text-white appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="text-blue appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="decimals"
                 max="18"
                 min="0"
@@ -98,7 +102,7 @@ export const TokenCreateAutomation: FC<{
             <div>
               <label className="text-white" htmlFor="supply">Supply</label>
               <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-white-100 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-blue rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="supply"
                 min="0"
                 name="supply"
