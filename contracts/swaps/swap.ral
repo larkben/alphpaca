@@ -1,16 +1,25 @@
-// Swap Child Contract
+//////////////////////////////////////////
+// Swap Contract - swap.ral             //
+//////////////////////////////////////////
+//                         ^___^        //
+//   |--| |--| |--- |--|  |     \       //
+//   |--| |--| |    |--|  |  O -\--,    //
+//   |    |  | |--- |  |  \_____|--|    //
+//                                      //
+//   cuddly, cute, and fluffy as hell   //
+//                                      //
+//////////////////////////////////////////
 
 Contract Swap (
-    token: ByteVec,                                     // token wanting to trade
-    amount: U256,                                     // amount
-    tradetoken: ByteVec,                            // token you want
-    tamount: U256,                                  // amount of that token
+    sell: U256,
+    selltoken: ByteVec,
+    buy: U256,
+    buytoken: ByteVec,
     owner: Address
 ) {
     // Events
-    event Success(id: ByteVec, tone: ByteVec, aone: U256, ttwo: ByteVec, atwo: U256)
+    event Success(id: ByteVec, selltoken: ByteVec, sell: U256, buytoken: ByteVec, buy: U256)
     event Cancel(id: ByteVec)
-    event Edit(id: ByteVec, ttwo: ByteVec, atwo: U256) // Can only edit the token / amount requested
 
     // Public Functions
     pub fn getToken() -> ByteVec {
@@ -34,21 +43,13 @@ Contract Swap (
     }
 
     // Contract Functions
+    // market buy iterates through all instances of contracts that satisfy lowest number first
     @using(preapprovedAssets = true, assetsInContract = true, updateFields = false, checkExternalCaller = false)
     pub fn confirmswap() -> () {
 
-        // Transfer Caller Assets  -> Owner
-        transferToken!(callerAddress!(), getOwner(), getTradeToken(), getTAmount()) // Caller Sends Assets to Owner
-        // Transfer Owner Assets -> Caller
-        transferToken!(selfAddress!(), callerAddress!(), getToken(), getAmount()) // Contract send Owners assets to Caller
-
-        // Contract is finalized
-        destroySelf!(owner)
-
-        // Call an emit
-        emit Success(selfContractId!(), getToken(), getAmount(), getTradeToken(), getTAmount())
     }
 
+    // mass cancel all order function?
     @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = false)
     pub fn cancelswap() -> () {
 
