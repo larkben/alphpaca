@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v2.5.7",
+  "fullNodeVersion": "v2.10.3",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -73,10 +73,10 @@
       "warnings": []
     },
     "CreateToken": {
-      "sourceFile": "createtoken/createToken.ral",
-      "sourceCodeHash": "1f75c67fc65f44672f0b66047fbbe2d7d4c999cc5ea4b175a0eced64133e1feb",
+      "sourceFile": "createtoken/createtoken.ral",
+      "sourceCodeHash": "03d83de89b94e58482187c6b35dcb5b6ef53058d7f7b590fc084f4c699ba654e",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "7ed6793ccad176ce4c219e78b5957818968443e64427459cae59ead4c5e2dcb8",
+      "codeHashDebug": "25a4e5d70394e30b900c369c931375c39e3c7c49bc306d466f5e1bd8a839d3a9",
       "warnings": []
     },
     "Createswap": {
@@ -103,13 +103,6 @@
     "Destroycreator": {
       "sourceFile": "createtoken/tx_destroy.ral",
       "sourceCodeHash": "0181b19d66c8aa817f466b2a360f40eac7e4557e101666bde9b10039ccf4ea05",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
-    },
-    "Destroytoken": {
-      "sourceFile": "createtoken/tx_destroyToken.ral",
-      "sourceCodeHash": "aad40f301672386ec595e4bc47f72c10fedfbf615fa6f1e27de75d5ea8c3324e",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -164,7 +157,7 @@
       "warnings": []
     },
     "IFungibleToken": {
-      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "6809cb06fb20fa7edf529461998beeebd12b1636d439612cca2f84214dbf4a20",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
@@ -200,9 +193,9 @@
     },
     "Token": {
       "sourceFile": "createtoken/token.ral",
-      "sourceCodeHash": "fcbdce030993275cfc162a2b970344a8e07a750122684f77ae7044756815f8db",
+      "sourceCodeHash": "9c20c0b49bb6743d8c9182715fabf3c3976e41cb9ed4e7bf3ebcf3723450e904",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "9fb480d2534a9e8b5cf4b5ef005deeec049136f4462dfc72c56ad041a561526b",
+      "codeHashDebug": "ca6b8c08739a44b63b275e82ca2fa299d38793c1d6860d741c688e0bc352061b",
       "warnings": []
     },
     "Topup": {

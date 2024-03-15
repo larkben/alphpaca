@@ -1,5 +1,5 @@
 {
-  "version": "v2.5.7",
+  "version": "v2.10.3",
   "name": "ConfirmSwap",
   "bytecodeTemplate": "010103000200120c0d{0}010217000c0d{0}01031701b416001601a30c0c{0}0105",
   "fieldsSig": {
@@ -7,7 +7,7 @@
       "contract"
     ],
     "types": [
-      "ByteVec"
+      "Swap"
     ],
     "isMutable": [
       false

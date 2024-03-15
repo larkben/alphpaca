@@ -1,5 +1,0 @@
-TxScript Destroytoken (
-    contract: Token
-) {
-    contract.destroytoken()
-}

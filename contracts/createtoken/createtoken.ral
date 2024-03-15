@@ -11,7 +11,7 @@ Contract CreateToken(
     }
 
     @using(preapprovedAssets = true, assetsInContract = false, updateFields = false, checkExternalCaller = false)
-    pub fn buildtoken(symbol: ByteVec, name: ByteVec, decimals: U256, tokenTotal: U256) -> (ByteVec) {
+    pub fn buildtoken(symbol: ByteVec, name: ByteVec, decimals: U256, tokenTotal: U256) -> () {
 
         let minter = callerAddress!()
 
@@ -26,8 +26,6 @@ Contract CreateToken(
         )
 
         emit CreateToken(minter, contractID)
-
-        return contractID
     }
 
     @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)
