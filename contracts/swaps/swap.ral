@@ -18,28 +18,31 @@ Contract Swap (
     owner: Address
 ) {
     // Events
-    event Success(id: ByteVec, selltoken: ByteVec, sell: U256, buytoken: ByteVec, buy: U256)
-    event Cancel(id: ByteVec)
+    event SwapComplete(type: U256, id: ByteVec) // Type 1
+    event Cancel(type: U256, id: ByteVec)       // Type 2
 
-    // Public Functions
-    pub fn getToken() -> ByteVec {
-        return token
+    pub fn getSell() -> U256 {
+        return sell
     }
 
-    pub fn getAmount() -> U256 {
-        return amount
+    pub fn getSellToken() -> ByteVec {
+        return selltoken
     }
 
-    pub fn getTradeToken() -> ByteVec {
-        return tradetoken
+    pub fn getBuy() -> U256 {
+        return buy
     }
 
-    pub fn getTAmount() -> U256 {
-        return tamount
+    pub fn getBuyToken() -> ByteVec {
+        return buytoken
     }
 
-    pub fn getOwner() -> Address {
-        return owner
+    pub fn getSellBuyRatio() -> U256 {
+        let ratioOne = getSell()
+        let ratioTwo = getBuy()
+
+        let ratio = ratioOne / ratioTwo
+        return ratio
     }
 
     // Contract Functions
@@ -47,7 +50,18 @@ Contract Swap (
     @using(preapprovedAssets = true, assetsInContract = true, updateFields = false, checkExternalCaller = false)
     pub fn confirmswap() -> () {
 
+        let buyer = callerAddress!()
+
+        transferToken!(buyer, selfAddress!(), getBuyToken(), getBuy())
+        transferToken!(selfAddress!(), buyer, getSellToken(), getSell())
+
+        emit SwapComplete(1, selfContractId!())
     }
+
+    //@using(preapprovedAssets = true, assetsInContract = true, updateFields = false, checkExternalCaller = false)
+    //pub fn partialswap() -> () {
+
+    //}
 
     // mass cancel all order function?
     @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = false)
@@ -56,7 +70,7 @@ Contract Swap (
         // Call Destroy
         destroySelf!(owner)
 
-        emit Cancel(selfContractId!())
+        emit Cancel(2, selfContractId!())
         
     }
 }

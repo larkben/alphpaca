@@ -3,10 +3,11 @@
 /* eslint-disable */
 
 export * from "./BurnToken";
+export * from "./CreateMarket";
 export * from "./CreateToken";
-export * from "./Createswap";
 export * from "./Faucet";
 export * from "./FeeCollection";
+export * from "./Market";
 export * from "./Swap";
 export * from "./Token";
 export * from "./Viral";

@@ -41,30 +41,6 @@ export namespace CreateTokenTypes {
     user: Address;
     contract: HexString;
   }>;
-
-  export interface CallMethodTable {
-    buildtoken: {
-      params: CallContractParams<{
-        symbol: HexString;
-        name: HexString;
-        decimals: bigint;
-        tokenTotal: bigint;
-      }>;
-      result: CallContractResult<HexString>;
-    };
-  }
-  export type CallMethodParams<T extends keyof CallMethodTable> =
-    CallMethodTable[T]["params"];
-  export type CallMethodResult<T extends keyof CallMethodTable> =
-    CallMethodTable[T]["result"];
-  export type MultiCallParams = Partial<{
-    [Name in keyof CallMethodTable]: CallMethodTable[Name]["params"];
-  }>;
-  export type MultiCallResults<T extends MultiCallParams> = {
-    [MaybeName in keyof T]: MaybeName extends keyof CallMethodTable
-      ? CallMethodTable[MaybeName]["result"]
-      : undefined;
-  };
 }
 
 class Factory extends ContractFactory<
@@ -93,7 +69,7 @@ class Factory extends ContractFactory<
           tokenTotal: bigint;
         }
       >
-    ): Promise<TestContractResult<HexString>> => {
+    ): Promise<TestContractResult<null>> => {
       return testMethod(this, "buildtoken", params);
     },
     destroycreator: async (
@@ -112,7 +88,7 @@ export const CreateToken = new Factory(
   Contract.fromJson(
     CreateTokenContractJson,
     "",
-    "7ed6793ccad176ce4c219e78b5957818968443e64427459cae59ead4c5e2dcb8"
+    "25a4e5d70394e30b900c369c931375c39e3c7c49bc306d466f5e1bd8a839d3a9"
   )
 );
 
@@ -168,30 +144,5 @@ export class CreateTokenInstance extends ContractInstance {
       options,
       fromCount
     );
-  }
-
-  methods = {
-    buildtoken: async (
-      params: CreateTokenTypes.CallMethodParams<"buildtoken">
-    ): Promise<CreateTokenTypes.CallMethodResult<"buildtoken">> => {
-      return callMethod(
-        CreateToken,
-        this,
-        "buildtoken",
-        params,
-        getContractByCodeHash
-      );
-    },
-  };
-
-  async multicall<Calls extends CreateTokenTypes.MultiCallParams>(
-    calls: Calls
-  ): Promise<CreateTokenTypes.MultiCallResults<Calls>> {
-    return (await multicallMethods(
-      CreateToken,
-      this,
-      calls,
-      getContractByCodeHash
-    )) as CreateTokenTypes.MultiCallResults<Calls>;
   }
 }

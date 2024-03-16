@@ -30,49 +30,41 @@ import { getContractByCodeHash } from "./contracts";
 // Custom types for the contract
 export namespace SwapTypes {
   export type Fields = {
-    token: HexString;
-    amount: bigint;
-    tradetoken: HexString;
-    tamount: bigint;
+    sell: bigint;
+    selltoken: HexString;
+    buy: bigint;
+    buytoken: HexString;
     owner: Address;
   };
 
   export type State = ContractState<Fields>;
 
-  export type SuccessEvent = ContractEvent<{
+  export type SwapCompleteEvent = ContractEvent<{
+    type: bigint;
     id: HexString;
-    tone: HexString;
-    aone: bigint;
-    ttwo: HexString;
-    atwo: bigint;
   }>;
-  export type CancelEvent = ContractEvent<{ id: HexString }>;
-  export type EditEvent = ContractEvent<{
-    id: HexString;
-    ttwo: HexString;
-    atwo: bigint;
-  }>;
+  export type CancelEvent = ContractEvent<{ type: bigint; id: HexString }>;
 
   export interface CallMethodTable {
-    getToken: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<HexString>;
-    };
-    getAmount: {
+    getSell: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
-    getTradeToken: {
+    getSellToken: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<HexString>;
     };
-    getTAmount: {
+    getBuy: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
-    getOwner: {
+    getBuyToken: {
       params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<Address>;
+      result: CallContractResult<HexString>;
+    };
+    getSellBuyRatio: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
     };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
@@ -94,37 +86,37 @@ class Factory extends ContractFactory<SwapInstance, SwapTypes.Fields> {
     return this.contract.getInitialFieldsWithDefaultValues() as SwapTypes.Fields;
   }
 
-  eventIndex = { Success: 0, Cancel: 1, Edit: 2 };
+  eventIndex = { SwapComplete: 0, Cancel: 1 };
 
   at(address: string): SwapInstance {
     return new SwapInstance(address);
   }
 
   tests = {
-    getToken: async (
-      params: Omit<TestContractParams<SwapTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<HexString>> => {
-      return testMethod(this, "getToken", params);
-    },
-    getAmount: async (
+    getSell: async (
       params: Omit<TestContractParams<SwapTypes.Fields, never>, "testArgs">
     ): Promise<TestContractResult<bigint>> => {
-      return testMethod(this, "getAmount", params);
+      return testMethod(this, "getSell", params);
     },
-    getTradeToken: async (
+    getSellToken: async (
       params: Omit<TestContractParams<SwapTypes.Fields, never>, "testArgs">
     ): Promise<TestContractResult<HexString>> => {
-      return testMethod(this, "getTradeToken", params);
+      return testMethod(this, "getSellToken", params);
     },
-    getTAmount: async (
+    getBuy: async (
       params: Omit<TestContractParams<SwapTypes.Fields, never>, "testArgs">
     ): Promise<TestContractResult<bigint>> => {
-      return testMethod(this, "getTAmount", params);
+      return testMethod(this, "getBuy", params);
     },
-    getOwner: async (
+    getBuyToken: async (
       params: Omit<TestContractParams<SwapTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<Address>> => {
-      return testMethod(this, "getOwner", params);
+    ): Promise<TestContractResult<HexString>> => {
+      return testMethod(this, "getBuyToken", params);
+    },
+    getSellBuyRatio: async (
+      params: Omit<TestContractParams<SwapTypes.Fields, never>, "testArgs">
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getSellBuyRatio", params);
     },
     confirmswap: async (
       params: Omit<TestContractParams<SwapTypes.Fields, never>, "testArgs">
@@ -144,7 +136,7 @@ export const Swap = new Factory(
   Contract.fromJson(
     SwapContractJson,
     "",
-    "7203c62f95e45ab6fa6b14a0c3f20480d255d86459ab1160ee4bae013a35be93"
+    "894de413005867ad18bc1032eab7eb84976244cdc03de1ff500ce8233fd9dc5a"
   )
 );
 
@@ -162,15 +154,15 @@ export class SwapInstance extends ContractInstance {
     return getContractEventsCurrentCount(this.address);
   }
 
-  subscribeSuccessEvent(
-    options: EventSubscribeOptions<SwapTypes.SuccessEvent>,
+  subscribeSwapCompleteEvent(
+    options: EventSubscribeOptions<SwapTypes.SwapCompleteEvent>,
     fromCount?: number
   ): EventSubscription {
     return subscribeContractEvent(
       Swap.contract,
       this,
       options,
-      "Success",
+      "SwapComplete",
       fromCount
     );
   }
@@ -188,22 +180,9 @@ export class SwapInstance extends ContractInstance {
     );
   }
 
-  subscribeEditEvent(
-    options: EventSubscribeOptions<SwapTypes.EditEvent>,
-    fromCount?: number
-  ): EventSubscription {
-    return subscribeContractEvent(
-      Swap.contract,
-      this,
-      options,
-      "Edit",
-      fromCount
-    );
-  }
-
   subscribeAllEvents(
     options: EventSubscribeOptions<
-      SwapTypes.SuccessEvent | SwapTypes.CancelEvent | SwapTypes.EditEvent
+      SwapTypes.SwapCompleteEvent | SwapTypes.CancelEvent
     >,
     fromCount?: number
   ): EventSubscription {
@@ -211,57 +190,57 @@ export class SwapInstance extends ContractInstance {
   }
 
   methods = {
-    getToken: async (
-      params?: SwapTypes.CallMethodParams<"getToken">
-    ): Promise<SwapTypes.CallMethodResult<"getToken">> => {
+    getSell: async (
+      params?: SwapTypes.CallMethodParams<"getSell">
+    ): Promise<SwapTypes.CallMethodResult<"getSell">> => {
       return callMethod(
         Swap,
         this,
-        "getToken",
+        "getSell",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    getAmount: async (
-      params?: SwapTypes.CallMethodParams<"getAmount">
-    ): Promise<SwapTypes.CallMethodResult<"getAmount">> => {
+    getSellToken: async (
+      params?: SwapTypes.CallMethodParams<"getSellToken">
+    ): Promise<SwapTypes.CallMethodResult<"getSellToken">> => {
       return callMethod(
         Swap,
         this,
-        "getAmount",
+        "getSellToken",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    getTradeToken: async (
-      params?: SwapTypes.CallMethodParams<"getTradeToken">
-    ): Promise<SwapTypes.CallMethodResult<"getTradeToken">> => {
+    getBuy: async (
+      params?: SwapTypes.CallMethodParams<"getBuy">
+    ): Promise<SwapTypes.CallMethodResult<"getBuy">> => {
       return callMethod(
         Swap,
         this,
-        "getTradeToken",
+        "getBuy",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    getTAmount: async (
-      params?: SwapTypes.CallMethodParams<"getTAmount">
-    ): Promise<SwapTypes.CallMethodResult<"getTAmount">> => {
+    getBuyToken: async (
+      params?: SwapTypes.CallMethodParams<"getBuyToken">
+    ): Promise<SwapTypes.CallMethodResult<"getBuyToken">> => {
       return callMethod(
         Swap,
         this,
-        "getTAmount",
+        "getBuyToken",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    getOwner: async (
-      params?: SwapTypes.CallMethodParams<"getOwner">
-    ): Promise<SwapTypes.CallMethodResult<"getOwner">> => {
+    getSellBuyRatio: async (
+      params?: SwapTypes.CallMethodParams<"getSellBuyRatio">
+    ): Promise<SwapTypes.CallMethodResult<"getSellBuyRatio">> => {
       return callMethod(
         Swap,
         this,
-        "getOwner",
+        "getSellBuyRatio",
         params === undefined ? {} : params,
         getContractByCodeHash
       );

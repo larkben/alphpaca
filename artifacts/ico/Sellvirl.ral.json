@@ -1,5 +1,5 @@
 {
-  "version": "v2.10.3",
+  "version": "v2.10.1",
   "name": "Sellvirl",
   "bytecodeTemplate": "01010300020010{1}17000c0d{0}01001701b416011600a3{1}0d0c{0}0107",
   "fieldsSig": {

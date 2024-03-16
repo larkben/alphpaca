@@ -13,7 +13,9 @@
 Contract CreateMarket (
     owner: Address,
     // Swap Contract
+    swap: ByteVec,
     marketcontract: ByteVec,
+    mut markets: U256,
     // Auction Contract
     // auctioncontract: ByteVec,
     // Loan Contract
@@ -29,6 +31,7 @@ Contract CreateMarket (
 ) {
 
     event FeeChange(feetype: U256, newfee: U256)
+    event NewMarket(type: U256, contract: ByteVec)  // Type 10 New Market
 
     // Error Codes
     enum ErrorCodes {
@@ -45,6 +48,35 @@ Contract CreateMarket (
 
     pub fn getPacaToken() -> ByteVec {
         return paca
+    }
+
+    @using(updateFields = true, checkExternalCaller = false)
+    pub fn updatePacaAmount(newamount: U256) -> U256 {
+        ownedpaca = ownedpaca + newamount
+        return ownedpaca
+    }
+
+    @using(updateFields = true, checkExternalCaller = false)
+    pub fn updateAlphAmount(newamount: U256) -> U256 {
+        ownedalph = ownedalph + newamount
+        return ownedalph
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = false)
+    pub fn createmarket(tokenOne: ByteVec, tokenTwo: ByteVec) -> () {
+
+        let (encodeImmutableFields, encodeMutableFields) = Market.encodeFields!(tokenOne, tokenTwo, 0, swap, selfContractId!())
+
+        let newmarketid = createSubContract!{callerAddress!() -> ALPH: 1 alph}(
+            toByteVec!(markets),
+            marketcontract,
+            encodeImmutableFields,
+            encodeMutableFields
+        )
+
+        markets = markets + 1
+
+        emit NewMarket(10, newmarketid)
     }
 
     @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
@@ -79,17 +111,4 @@ Contract CreateMarket (
         ownedpaca = 0
         ownedalph = 0
     }
-
-    @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)
-    pub fn destroymarketcreation() -> () {
-
-        let caller = callerAddress!()
-
-        checkCaller!(owner == caller, ErrorCodes.InvalidCaller)
-
-        destroySelf!(owner)
-
-        emit Destroy(owner)
-    }
-
 }
