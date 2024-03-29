@@ -1,0 +1,108 @@
+{
+  "version": "v2.10.1",
+  "name": "Market",
+  "bytecode": "050409121c40a1010000000102ce0002010000000102ce0102010000000103ce0377020103050900404bb41705160116031602160416051305641300641707170616057a13c40de0b6b3a7640000a216031601a3a00040ce0216061607c11708a0000d2aa10016000d2f4c11160500020c0dce030101a70c0dce0301010d0dce030104184a14160500020c0dce0301020c0dce030100aa0c0dce0301000d0dce030103180516085e",
+  "codeHash": "069f382551a2986f8257d139ba296ac7736cc9060da90273a335e833726dfafc",
+  "fieldsSig": {
+    "names": [
+      "tokenOne",
+      "tokenTwo",
+      "totalswaps",
+      "swapcontract",
+      "marketcreationid"
+    ],
+    "types": [
+      "ByteVec",
+      "ByteVec",
+      "U256",
+      "ByteVec",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  "eventsSig": [
+    {
+      "name": "SellOrder",
+      "fieldNames": [
+        "contractid"
+      ],
+      "fieldTypes": [
+        "ByteVec"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "getTokenOne",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getTokenTwo",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getParentContract",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "Address"
+      ]
+    },
+    {
+      "name": "sellorder",
+      "usePreapprovedAssets": true,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "type",
+        "sell",
+        "buy",
+        "selltoken",
+        "buytoken"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256",
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": []
+}

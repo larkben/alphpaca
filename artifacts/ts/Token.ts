@@ -39,11 +39,6 @@ export namespace TokenTypes {
 
   export type State = ContractState<Fields>;
 
-  export type DestroyEvent = ContractEvent<{
-    user: Address;
-    contract: HexString;
-  }>;
-
   export interface CallMethodTable {
     getSymbol: {
       params: Omit<CallContractParams<{}>, "args">;
@@ -85,9 +80,6 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
     return this.contract.getInitialFieldsWithDefaultValues() as TokenTypes.Fields;
   }
 
-  eventIndex = { Destroy: 0 };
-  consts = { ErrorCodes: { InvalidCaller: BigInt(1) } };
-
   at(address: string): TokenInstance {
     return new TokenInstance(address);
   }
@@ -118,11 +110,6 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
     ): Promise<TestContractResult<Address>> => {
       return testMethod(this, "getOwner", params);
     },
-    destroytoken: async (
-      params: Omit<TestContractParams<TokenTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<null>> => {
-      return testMethod(this, "destroytoken", params);
-    },
   };
 }
 
@@ -131,7 +118,7 @@ export const Token = new Factory(
   Contract.fromJson(
     TokenContractJson,
     "",
-    "9fb480d2534a9e8b5cf4b5ef005deeec049136f4462dfc72c56ad041a561526b"
+    "ca6b8c08739a44b63b275e82ca2fa299d38793c1d6860d741c688e0bc352061b"
   )
 );
 
@@ -143,23 +130,6 @@ export class TokenInstance extends ContractInstance {
 
   async fetchState(): Promise<TokenTypes.State> {
     return fetchContractState(Token, this);
-  }
-
-  async getContractEventsCurrentCount(): Promise<number> {
-    return getContractEventsCurrentCount(this.address);
-  }
-
-  subscribeDestroyEvent(
-    options: EventSubscribeOptions<TokenTypes.DestroyEvent>,
-    fromCount?: number
-  ): EventSubscription {
-    return subscribeContractEvent(
-      Token.contract,
-      this,
-      options,
-      "Destroy",
-      fromCount
-    );
   }
 
   methods = {

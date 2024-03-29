@@ -1,0 +1,105 @@
+//////////////////////////////////////////
+// Market Contract - market.ral         //
+//////////////////////////////////////////
+//                         ^___^        //
+//   |--| |--| |--- |--|  |     \       //
+//   |--| |--| |    |--|  |  O -\--,    //
+//   |    |  | |--- |  |  \_____|--|    //
+//                                      //
+//   cuddly, cute, and fluffy as hell   //
+//                                      //
+//////////////////////////////////////////
+
+Contract Market (
+    // Pair
+    tokenOne: ByteVec,
+    tokenTwo: ByteVec,
+    // Total Swaps
+    mut totalswaps: U256,
+    // Contract for Swap
+    swapcontract: ByteVec,
+    // Parent Contract
+    marketcreationid: ByteVec
+) {
+    // Events
+    event SellOrder(contractid: ByteVec)
+
+    // Public Functions
+
+    pub fn getTokenOne() -> ByteVec {
+        return tokenOne
+    }
+
+    pub fn getTokenTwo() -> ByteVec {
+        return tokenTwo
+    }
+
+    pub fn getParentContract() -> Address {
+        return contractIdToAddress!(marketcreationid)
+    }
+
+    // Contract Functions
+    //** one -> two **// slippage options
+    @using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = false)
+    pub fn sellorder(type: U256, sell: U256, buy: U256, selltoken: ByteVec, buytoken: ByteVec) -> () { // TYPE: if 1, then use ALPH, if 2 then use $PACA
+        
+        let minter = callerAddress!()
+
+        let (encodeImmutableFields, encodeMutableFields) = Swap.encodeFields!(sell, selltoken, buy, buytoken, minter) 
+
+        let contractid = copyCreateSubContract!{minter -> ALPH: 1 alph, selltoken: sell}(
+            toByteVec!(totalswaps),
+            swapcontract,                                                                                  
+            encodeImmutableFields,
+            encodeMutableFields
+        )
+
+        totalswaps = totalswaps + 1
+
+        // TODO: Call Parent Contract to Send Fees // complete
+        if (type == 1) {
+            transferToken!(minter, getParentContract(), ALPH, CreateMarket(marketcreationid).getAlphFee())
+            CreateMarket(marketcreationid).updateAlphAmount(CreateMarket(marketcreationid).getAlphFee())
+        }
+        else {
+            transferToken!(minter, getParentContract(), CreateMarket(marketcreationid).getPacaToken(), CreateMarket(marketcreationid).getPacaFee())
+            CreateMarket(marketcreationid).updatePacaAmount(CreateMarket(marketcreationid).getPacaFee())
+        }
+
+        emit SellOrder(contractid)
+    }
+
+    //** sellers meet buyers, there buy order is not a contract but calls on active sell orders with the intent of buying at a fixed price instead of all that is available**/
+    //@using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = false)
+    //pub fn orderbuy(type: U256, sell: U256, buy: U256, selltoken: ByteVec, buytoken: ByteVec) -> () { // TYPE: if 1, then use ALPH, if 2 then use $PACA
+        //let minter = callerAddress!()
+
+        // Perform for loops and if statments to determine if conditions exist to satisfy buyer
+
+        // TODO: Call Parent Contract to Send Fees // complete
+        //if (type == 1) {
+            //transferToken!(minter, getParentContract(), ALPH, CreateMarket(marketcreationid).getAlphFee())
+            //CreateMarket(marketcreationid).updateAlphAmount(CreateMarket(marketcreationid).getAlphFee())
+        //}
+        //else {
+            //transferToken!(minter, getParentContract(), CreateMarket(marketcreationid).getPacaToken(), CreateMarket(marketcreationid).getPacaFee())
+            //CreateMarket(marketcreationid).updatePacaAmount(CreateMarket(marketcreationid).getPacaFee())
+        //}
+    //}
+
+    //* sort of like buy order but consumes all active sell contracts as long as funds are available
+    //@using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = false)
+    //pub fn marketbuy(type: U256, ) -> () { // if 1, then use ALPH, if 2 then use PACA
+        
+        //let minter = callerAddress!()
+
+        //if (type == 1) {
+            //transferToken!(minter, owner, ALPH, getAlphFee())
+            //ownedalph = ownedalph + getAlphFee()
+        //}
+        //else {
+            //transferToken!(minter, owner, getPacaToken(), getPacaFee())
+            //ownedpaca = ownedpaca + getPacaFee()
+        //}
+    //}
+}

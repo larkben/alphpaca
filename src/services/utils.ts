@@ -15,7 +15,6 @@ export interface TokenCreate {
   groupIndex: number
   contractAddress: string
   contractId: string
-  tokenContract: string
   pacaId: string                    // PACA fee
 }
 
@@ -83,23 +82,19 @@ export function loadSettings(network: 'devnet' | 'testnet' | 'mainnet'): { commi
 //* TokenCreate
 function getTokenCreateConfig(): TokenCreate {
   const network = getNetwork()
-  const createToken = loadDeployments(network).contracts.CreateToken.contractInstance    // This is not in the initial setup but is super important
-  const tokenTemplate = loadDeployments(network).contracts.Token.contractInstance
-  const groupIndex = createToken.groupIndex
-  const contractAddress = createToken.address
-  const contractId = createToken.contractId
-  const tokenContract = tokenTemplate.contractId   
-  const pacaId = "23ced1fcda7fb1f53641dc299cf49b12a89338c80d05534fc5b366d5b65acd02"      // $PACA ID
-  return { network, groupIndex, contractAddress, contractId, tokenContract, pacaId}
+  const groupIndex = 0
+  const contractAddress = "vgz6gJB8GVmZgokXJzBNagTUuZJyUuNmAtHtKqQJZ8Go"                    // 4/14/24
+  const contractId = "1db99e938897977a45a9467b63f3aa83515b28f0a49b2064935729b65a734400"     // 4/14/24
+  const pacaId = "b2d71c116408ae47b931482a440f675dc9ea64453db24ee931dacd578cae9002"         // $PACA ID
+  return { network, groupIndex, contractAddress, contractId, pacaId}
 }
 
 //* TokenTemplate // For TokenCreation
 function getTokenTemplateConfig(): TokenTemplate {
   const network = getNetwork()
-  const TokenTemplate = loadDeployments(network).contracts.Token.contractInstance
-  const groupIndex = TokenTemplate.groupIndex
-  const contractAddress = TokenTemplate.address
-  const contractId = TokenTemplate.contractId
+  const groupIndex = 0
+  const contractAddress = "vXmb4V9aqCeuUTciZjtvtJLGo86LioMeP7LCHjsVTraK"                    // 4/14/24
+  const contractId = "1b5d3f0f2c2db3f91cb1d32675854a1add4fa9a4397a252a4a855fb60ada5a00"     // 4/14/24
   return {network, groupIndex, contractAddress, contractId}
 }
 

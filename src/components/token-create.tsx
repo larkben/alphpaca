@@ -13,7 +13,7 @@ import { FC, useState, useEffect } from 'react'
 // Import Alephium Services
 import { TokenCreate } from "../services/utils"
 import { useWallet } from "@alephium/web3-react"
-import { BuildToken, DestroyToken } from "../services/token.services"
+import { BuildToken } from "../services/token.services"
 import { AlephiumConnectButton } from '@alephium/web3-react'
 
 export const TokenCreateAutomation: FC<{
@@ -37,13 +37,6 @@ export const TokenCreateAutomation: FC<{
     e.preventDefault()
     if (signer) {
       const result = await BuildToken(signer, symbol, name, decimals, supply)
-    }
-  }
-
-  const handleTokenDestroy = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (signer) {
-      const result = await DestroyToken(signer, contract)
     }
   }
 

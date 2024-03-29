@@ -1,85 +1,70 @@
 {
   "version": "v2.10.1",
-  "name": "Viral",
-  "bytecode": "050a09121b40244034403d40464077409740b7010000000102ce0002010000000102a00002010000000102ce0002010000000102ce0002010002030106160016012c1702160202010000000102ce0102010000000102a0010201010102001b0005160000041701b4b21601a7b2b400001600aaa00116012aa101a00016002ba10006b41600a001a00061010201020010b41701a00016002aa1001601b200001600aa0516011600160060010200010011b417001600ce02450f7ba001a0012ba101ce02a001a80716005e",
-  "codeHash": "d87d6c74c21a7bec6cba00e9a0388ca81c5a71518b8efb77f43b5160cfdd4456",
+  "name": "CreateMarket",
+  "bytecode": "090909121b402b403b4077408c40a140bf010000000102a00102010000000102a00202010000000102ce0302010001010106a00416002aa104a00402010001010106a00316002aa103a0030201000205001d16001601ce01b11304640c13016417031702b413c40de0b6b3a7640000a2a00040ce0216021603bf1704a0000d2aa10006130a16045f01000101000bb4ce00450d7b1600a101050ea0015f01000101000bb4ce00450d7b1600a102050da0025f010200000010ce00b4450d7bce000002a004abce00a003a80ca1040ca103",
+  "codeHash": "09782e9e119d4a850549d9af0196ba2843eec00f51d4e9bac522b5336443264d",
   "fieldsSig": {
     "names": [
-      "tokenId",
-      "balance",
-      "alphbalance",
-      "pricevirl",
-      "owner"
+      "owner",
+      "swap",
+      "marketcontract",
+      "markets",
+      "paca",
+      "pacafee",
+      "alphfee",
+      "ownedalph",
+      "ownedpaca"
     ],
     "types": [
+      "Address",
+      "ByteVec",
+      "ByteVec",
+      "U256",
       "ByteVec",
       "U256",
       "U256",
       "U256",
-      "Address"
+      "U256"
     ],
     "isMutable": [
       false,
-      true,
+      false,
+      false,
       true,
       false,
-      false
+      true,
+      true,
+      true,
+      true
     ]
   },
   "eventsSig": [
     {
-      "name": "Sell",
+      "name": "FeeChange",
       "fieldNames": [
-        "from",
-        "amount",
-        "balvirl"
+        "feetype",
+        "newfee"
       ],
       "fieldTypes": [
-        "Address",
         "U256",
         "U256"
       ]
     },
     {
-      "name": "Buy",
+      "name": "NewMarket",
       "fieldNames": [
-        "to",
-        "amount",
-        "balalph",
-        "balvirl"
+        "type",
+        "contract"
       ],
       "fieldTypes": [
-        "Address",
         "U256",
-        "U256",
-        "U256"
-      ]
-    },
-    {
-      "name": "WithdrawAlph",
-      "fieldNames": [
-        "to"
-      ],
-      "fieldTypes": [
-        "Address"
+        "ByteVec"
       ]
     }
   ],
   "functions": [
     {
-      "name": "getTokenId",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "ByteVec"
-      ]
-    },
-    {
-      "name": "getBalance",
+      "name": "getPacaFee",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -91,7 +76,19 @@
       ]
     },
     {
-      "name": "getSymbol",
+      "name": "getAlphFee",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getPacaToken",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -103,66 +100,64 @@
       ]
     },
     {
-      "name": "getName",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "ByteVec"
-      ]
-    },
-    {
-      "name": "tokenPrice",
+      "name": "updatePacaAmount",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
       "paramNames": [
-        "price",
-        "amount"
+        "newamount"
       ],
       "paramTypes": [
-        "U256",
         "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "updateAlphAmount",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "newamount"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "createmarket",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "tokenOne",
+        "tokenTwo"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec"
       ],
       "paramIsMutable": [
         false,
         false
       ],
-      "returnTypes": [
-        "U256"
-      ]
+      "returnTypes": []
     },
     {
-      "name": "getPrice",
+      "name": "feepaca",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "U256"
-      ]
-    },
-    {
-      "name": "getAlphBalance",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "U256"
-      ]
-    },
-    {
-      "name": "buyvirl",
-      "usePreapprovedAssets": true,
-      "useAssetsInContract": true,
       "isPublic": true,
       "paramNames": [
         "amount"
@@ -176,9 +171,9 @@
       "returnTypes": []
     },
     {
-      "name": "sell",
+      "name": "feealph",
       "usePreapprovedAssets": false,
-      "useAssetsInContract": true,
+      "useAssetsInContract": false,
       "isPublic": true,
       "paramNames": [
         "amount"
@@ -192,7 +187,7 @@
       "returnTypes": []
     },
     {
-      "name": "removealph",
+      "name": "collectfees",
       "usePreapprovedAssets": false,
       "useAssetsInContract": true,
       "isPublic": true,
@@ -211,7 +206,7 @@
           "name": "InvalidCaller",
           "value": {
             "type": "U256",
-            "value": "3"
+            "value": "1"
           }
         }
       ]

@@ -18,8 +18,8 @@ const tokenTemplate: DeployFunction<Settings> = async (
       owner: "16gAmGuCysLjGxHK8TUENkvhbqvwZRb6BabUbsxLYkSkd" //! Owner
     }
   })
-  console.log('Token contract id: ' + result.contractInstance.contractId)
-  console.log('Token contract address: ' + result.contractInstance.address)
+  console.log('Token Template contract id: ' + result.contractInstance.contractId)
+  console.log('Token Template contract address: ' + result.contractInstance.address)
 }
 
 export default tokenTemplate
