@@ -1,6 +1,0 @@
-TxScript CollectFees (
-    contract: Createswap
-) {
-
-    contract.collectfees()
-}

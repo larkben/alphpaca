@@ -1,0 +1,50 @@
+//
+// |----| |----| |---| |----|
+// |    | |    | |     |    |
+// |----| |----| |     |----|
+// |      |    | |---| |    |
+//
+// A project built by the OG PACA. 🦙
+//
+
+Contract Auction (
+    auctioncontract: ByteVec,     // might wanna update the auction contract to support more features
+    owner: Address,
+    paca: ByteVec,                // paca token might be updated in the future to include decimals
+    mut pacafee: U256,
+    mut alphfee: U256
+) {
+    event AuctionStartToken(contractid: ByteVec, token: ByteVec, amount: ByteVec, bid: U256, increment: U256, time: U256)
+    event AuctionStartNFT(contractid: ByteVec, token: ByteVec, collectionid: ByteVec, image: ByteVec, amount: ByteVec, bid: U256, increment: U256, time: U256)
+
+    enum ErrorCodes {
+        InvalidCaller = 0
+    }
+
+    pub fn getOwner() -> Address {
+        return owner
+    }
+
+    pub fn getPaca() -> ByteVec {
+        return paca
+    }
+
+    pub fn getPacaFee() -> U256 {
+        return pacafee
+    }
+
+    pub fn getAlphFee() -> U256 {
+        return alphfee
+    }
+
+    pub fn createauctiontoken(token: ByteVec, amount: U256, bid: U256, increment: U256) {
+
+        let caller = callerAddress!()
+
+        let newauction = createSubContract!{callerAddress!() -> ALPH: 1 alph}()
+    }
+
+    pub fn createnftauction() {
+
+    }
+}

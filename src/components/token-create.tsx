@@ -14,6 +14,7 @@ import { FC, useState, useEffect } from 'react'
 import { TokenCreate } from "../services/utils"
 import { useWallet } from "@alephium/web3-react"
 import { BuildToken, DestroyToken } from "../services/token.services"
+import { AlephiumConnectButton, AlephiumWalletProvider } from '@alephium/web3-react'
 
 export const TokenCreateAutomation: FC<{
   config: TokenCreate
@@ -57,6 +58,9 @@ export const TokenCreateAutomation: FC<{
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-12 bg-gray-900 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-gray-800 p-6 rounded-lg shadow-md z-50">
+        <AlephiumWalletProvider network={"mainnet"}>
+            <AlephiumConnectButton></AlephiumConnectButton>
+        </AlephiumWalletProvider>
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-100">Create Your Token</h2>
           <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token.</p>

@@ -1,8 +1,0 @@
-TxScript Reedeemalph (
-    contract: Viral,
-    amount: U256
-) {
-    let alphamount = contract.getAlphBalance()
-
-    contract.buyvirl{callerAddress!() -> ALPH: alphamount}(amount)
-}

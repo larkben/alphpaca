@@ -1,6 +1,0 @@
-TxScript CancelSwap (
-    contract: Swap
-) {
-
-    contract.cancelswap()
-}
