@@ -14,7 +14,7 @@ import { FC, useState, useEffect } from 'react'
 import { TokenCreate } from "../services/utils"
 import { useWallet } from "@alephium/web3-react"
 import { BuildToken, DestroyToken } from "../services/token.services"
-import { AlephiumConnectButton, AlephiumWalletProvider } from '@alephium/web3-react'
+import { AlephiumConnectButton } from '@alephium/web3-react'
 
 export const TokenCreateAutomation: FC<{
   config: TokenCreate
@@ -30,7 +30,9 @@ export const TokenCreateAutomation: FC<{
 
   const [contract, setContract] = useState<string>("")
 
-  // Handle of Subscription
+  const supplyWithDecimals = Number(`${supply}e-${decimals}`);
+
+  // Handle of Token Create
   const handleTokenCreate = async (e: React.FormEvent) => {
     e.preventDefault()
     if (signer) {
@@ -58,20 +60,22 @@ export const TokenCreateAutomation: FC<{
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-12 bg-gray-900 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-gray-800 p-6 rounded-lg shadow-md z-50">
-        <AlephiumWalletProvider network={"mainnet"}>
-            <AlephiumConnectButton></AlephiumConnectButton>
-        </AlephiumWalletProvider>
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-100">Create Your Token</h2>
-          <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token.</p>
+          <div className="items-center">
+            <AlephiumConnectButton/>
+          </div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-500">Create Your Token</h2>
+          <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token. All tokens are final and immutable. 1 ALPH will be taken as deposit. </p>
           <h3 className="text-1xl text-white text-center py-5"> Token Preview: </h3> 
+          <p className="text-1xl text-white text-center"> Token: {name} : ({symbol}) </p>
+          <p className="text-1xl text-white text-center"> Total Supply: {supplyWithDecimals} </p>
         </div>
         <form  onSubmit={handleTokenCreate} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label className="text-white" htmlFor="symbol">Symbol</label>
               <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-blue-500 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="symbol"
                 name="symbol"
                 value={symbol}
@@ -83,7 +87,7 @@ export const TokenCreateAutomation: FC<{
             <div>
               <label className="text-white" htmlFor="name">Name</label>
               <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-blue-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="name"
                 name="name"
                 value={name}
@@ -95,7 +99,7 @@ export const TokenCreateAutomation: FC<{
             <div>
               <label className="text-white" htmlFor="decimals">Decimals</label>
               <Input
-                className="text-black appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="text-blue-500 appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="decimals"
                 max="18"
                 min="0"
@@ -109,7 +113,7 @@ export const TokenCreateAutomation: FC<{
             <div>
               <label className="text-white" htmlFor="supply">Supply</label>
               <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-blue-500 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="supply"
                 min="0"
                 name="supply"
@@ -122,7 +126,7 @@ export const TokenCreateAutomation: FC<{
           </div>
           <div>
             <Button
-              className="group relative w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-800"
+              className="group relative w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-800"
               type="submit"
             >
               Create Token
@@ -131,35 +135,7 @@ export const TokenCreateAutomation: FC<{
         </form>
         <br/>
         <br/>
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-100">Destroy your Token</h2>
-          <p className="mt-2 text-center text-sm text-gray-400">Please enter the contract id, of the token.</p>
         </div>
-        <form  onSubmit={handleTokenDestroy} className="mt-8 space-y-6">
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label className="text-white" htmlFor="symbol">Contract ID</label>
-              <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
-                id="contract"
-                name="contract"
-                value={contract}
-                onChange={(e) => setContract(e.target.value)}
-                required
-                type="text"
-              />
-            </div>
-          </div>
-          <div>
-            <Button
-              className="group relative w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-800"
-              type="submit"
-            >
-              Destroy Token
-            </Button>
-          </div>
-        </form>
-      </div>
     </main>
   )
 }

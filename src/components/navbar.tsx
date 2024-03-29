@@ -40,9 +40,6 @@ export function Navbar() {
           <Link className="text-white hover:text-blue-500" href="https://github.com/larkben/nonchalant">
             &lt;/&gt;
           </Link>
-          <AlephiumWalletProvider network={"mainnet"}>
-            <AlephiumConnectButton></AlephiumConnectButton>
-          </AlephiumWalletProvider>
         </div>
       </header>
       <div className="absolute inset-0 overflow-hidden">
