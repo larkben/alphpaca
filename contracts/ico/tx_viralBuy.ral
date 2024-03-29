@@ -1,8 +1,0 @@
-TxScript Buyvirl (
-    contract: Viral,
-    amount: U256
-) {
-    let purchase = amount * contract.getPrice()
-
-    contract.buyvirl{callerAddress!() -> ALPH: purchase}(amount)
-}

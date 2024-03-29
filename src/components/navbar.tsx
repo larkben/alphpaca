@@ -11,7 +11,7 @@ import { TokenCreate } from "../services/utils"
 
 export function Navbar() {
   return (
-    <div className="min-h-screen bg-gray-800">
+    <div className="bg-gray-800">
       <header className="flex items-center justify-between px-6 py-4 bg-gray-800 text-white">
         <Link className="flex items-center space-x-2 z-50" href="#">
           <span className="text-lg font-semibold text-white">ALPHpaca</span>
@@ -40,14 +40,8 @@ export function Navbar() {
           <Link className="text-white hover:text-blue-500" href="https://github.com/larkben/nonchalant">
             &lt;/&gt;
           </Link>
-          <AlephiumWalletProvider network={"mainnet"}>
-            <AlephiumConnectButton></AlephiumConnectButton>
-          </AlephiumWalletProvider>
         </div>
       </header>
-      <AlephiumWalletProvider network={"mainnet"}>
-        <TokenCreateAutomation config={TokenCreate}></TokenCreateAutomation>
-      </AlephiumWalletProvider>
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-y-0 right-0 flex items-center" />
       </div>

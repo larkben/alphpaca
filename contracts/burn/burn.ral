@@ -1,13 +1,23 @@
 // This contract is designed to revoked permissions from anyone
 // including the owner. Once contract takes ownership tokens will
-// under the full subject of this contract.
+// under the full subject of this contract and it's code. 
+
+// Code is Law ⚖️
 
 // Use this contract carefully, funds will not and cannot be refunded.
 
-Contract BurnToken (
-	mut tokensburned: U256,
-	tokenid: ByteVec,          // PACA, used for name (ALPHpaca)
-	owner: Address
+//
+// |----| |----| |---| |----|
+// |    | |    | |     |    |
+// |----| |----| |     |----|
+// |      |    | |---| |    |
+//
+// A project built by the OG PACA. 🦙
+//
+
+Contract TokenBurner (
+	owner: Address,
+	alphbalance: U256
 ) {
 	// Events
 	event Burn(from: Address, amount: U256, token: ByteVec)
@@ -26,15 +36,30 @@ Contract BurnToken (
 	}
 
 	@using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = false)
-	pub fn burntoken(amount: U256) -> () {
+	pub fn burntoken(amount: U256, tokenid: ByteVec, decimals: U256) -> () {
 
 		let caller = callerAddress!()
 
-		burnToken!(caller, tokenid, amount)
+		let tempamount = amount * decimals
 
-		tokensburned = tokensburned + amount  // Added to total tokens burned
+		transferToken!(callerAddress!(), selfAddress!(), ALPH, 100000000000000000) // 0.1 ALPH FEE
 
-		emit Burn(caller, amount, tokenid)
+		alphbalance = alphbalance + 100000000000000000
+
+		burnToken!(caller, tokenid, tempamount)
+
+		emit Burn(caller, tempamount, tokenid)
+	}
+
+	@using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = true)
+	pub fn withdrawalph(amount: U256, tokenid: ByteVec, decimals: U256) -> () {
+
+		checkCaller!(callerAddress!() == owner, Error.InvalidCaller)
+
+		transferToken!(selfAddress!(), callerAddress!(), ALPH, alphbalance)
+
+		alphbalance = alphbalance - alphbalance
+		
 	}
 
 	pub fn destroy() -> () {
