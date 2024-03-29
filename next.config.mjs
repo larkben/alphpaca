@@ -10,6 +10,9 @@ const nextConfig = {
   
       return config;
     },
+    images: {
+      domains: ['www.rainforest-alliance.org'], // Add the hostname here
+    },
   };
   
   export default nextConfig;

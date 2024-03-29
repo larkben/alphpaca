@@ -41,7 +41,7 @@ export function Hero() {
             <p className="mt-2 text-white-400">Timed Fun, with Deals.</p>
             <Link
               className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-pink-300 hover:bg-pink-400 dark:border-gray-800"
-              href="#"
+              href="/paddock"
             >
               Create / View Auction&apos;s
             </Link>
