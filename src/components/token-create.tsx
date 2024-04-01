@@ -54,9 +54,6 @@ export const TokenCreateAutomation: FC<{
     <main className="flex flex-col items-center justify-center min-h-screen py-12 bg-gray-900 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-gray-800 p-6 rounded-lg shadow-md z-50">
         <div>
-          <div className="items-center">
-            <AlephiumConnectButton/>
-          </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-500">Create Your Token</h2>
           <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token. All tokens are final and immutable. 1 ALPH will be taken as deposit. </p>
           <h3 className="text-1xl text-white text-center py-5"> Token Preview: </h3> 

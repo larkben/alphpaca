@@ -1,19 +1,18 @@
 import Image from "next/image";
-import { Hero } from "../components";
-import { Navbar } from "../components/navbar";
-import { Dapps } from "../components/un_dapps";
+import { Navbar } from "../../components/navbar";
 import {
   AlephiumConnectButton,
   AlephiumWalletProvider,
 } from "@alephium/web3-react";
+import { SaddleDisplay } from "../../components/saddle-display"
 
-export default function Home() {
+export default function Saddle() {
   return (
-    <div>
+    <main>
       <AlephiumWalletProvider network={"mainnet"}>
         <Navbar/>
-        <Hero/>
+        <SaddleDisplay />
       </AlephiumWalletProvider>
-    </div>
+    </main>
   );
 }

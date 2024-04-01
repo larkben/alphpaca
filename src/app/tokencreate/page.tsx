@@ -7,8 +7,8 @@ import { AlephiumConnectButton, AlephiumWalletProvider } from '@alephium/web3-re
 export default function TokenCPage() {
   return (
     <main>
-      <Navbar/>
       <AlephiumWalletProvider network={"mainnet"}>
+        <Navbar/>
         <TokenCreateAutomation config={TokenCreate}></TokenCreateAutomation>
       </AlephiumWalletProvider>
     </main>
