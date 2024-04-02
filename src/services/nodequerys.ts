@@ -1,4 +1,6 @@
-const config = require('../../config.json');
+const dotenv = require('dotenv');
+dotenv.config()
+
 const { NodeProvider, hexToString, binToHex, contractIdFromAddress, fetchContractState, addressFromContractId } = require('@alephium/web3')
 
 // Node , NodeAPI , DjangoServer
@@ -9,7 +11,7 @@ const { NodeProvider, hexToString, binToHex, contractIdFromAddress, fetchContrac
 // https://ipfs.filebase.io/ipfs/QmX6hKNuK9eua8e91Nu2jbzKBM9ucczKp2p5DizphXGiKk/16
 // https://ipfs.filebase.io/ipfs/QmPeqHaNjsm3U9Uk1qnEgH9iCFWMoGx1o6UsJr8p8h4wHx/16.svg
 
-const nodeProvider = new NodeProvider(`${config.Node}`, `${config.NodeAPI}`)
+const nodeProvider = new NodeProvider(`${process.env.Node}`, `${process.env.NodeAPI}`)
 
 export async function getAssets(walletAddy: any): Promise<any> {
     let walletAssets = await nodeProvider.addresses.getAddressesAddressBalance(walletAddy);
@@ -19,15 +21,15 @@ export async function getAssets(walletAddy: any): Promise<any> {
 
 export async function getImageUri(tokenId: string): Promise<{ imageUrl: string, imageName: string }> {
     let tokenIdAddress = addressFromContractId(tokenId);
-    const url = `${config.Node}contracts/${tokenIdAddress}/state?group=0`; // only group 0 nfts
-    const apiKey = config.NodeAPI;
+    const url = `${process.env.Node}contracts/${tokenIdAddress}/state?group=0`; // only group 0 nfts
+    const apiKey = process.env.NodeAPI;
 
     try {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'accept': 'application/json',
-                'X-API-KEY': apiKey
+                'X-API-KEY': String(apiKey)
             }
         });
 
