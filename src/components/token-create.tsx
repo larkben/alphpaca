@@ -15,6 +15,7 @@ import { TokenCreate } from "../services/utils"
 import { useWallet } from "@alephium/web3-react"
 import { BuildToken } from "../services/token.services"
 import { AlephiumConnectButton } from '@alephium/web3-react'
+import { contractIdFromAddress } from "@alephium/web3";
 
 export const TokenCreateAutomation: FC<{
   config: TokenCreate
@@ -30,6 +31,8 @@ export const TokenCreateAutomation: FC<{
 
   const [contract, setContract] = useState<string>("")
 
+  const [id, setId] = useState<string>("")
+
   const supplyWithDecimals = Number(`${supply}e-${decimals}`);
 
   // Handle of Token Create
@@ -39,6 +42,15 @@ export const TokenCreateAutomation: FC<{
       const result = await BuildToken(signer, symbol, name, decimals, supply)
     }
   }
+
+  const getTokenId = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const result = await contractIdFromAddress(id.toString());
+    setId(result.toString()); // Update state with the retrieved token ID
+  };  
+
+  // Token Id
+  const tokenId = getTokenId
 
   useEffect(() => {
     // Your client-side code here
@@ -120,6 +132,34 @@ export const TokenCreateAutomation: FC<{
               type="submit"
             >
               Create Token
+            </Button>
+          </div>
+        </form>
+        <div>
+          <p className="text-1xl text-white text-center"> Token Id: {id} </p>
+        </div>
+        <form className="mt-8 space-y-6">
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div>
+              <label className="text-white" htmlFor="id">Token Contract Address:</label>
+              <Input
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-blue-500 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                id="id"
+                name="id"
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+                required
+                type="text"
+              />
+            </div>
+          </div>
+          <div>
+            <Button
+              onClick={getTokenId} // Call getTokenId function on button click
+              className="group relative w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-800"
+              type="button" // Change the type to "button" to prevent form submission
+            >
+              Get Token Id
             </Button>
           </div>
         </form>
