@@ -1,0 +1,29 @@
+Contract Stake (
+    owner: Address,
+    pacalp: ByteVec,
+    amountlp: U256
+) {
+    enum ErrorCodes = {
+        InvalidCaller = 0
+    }
+
+    pub fn getOwner() -> () {
+        return owner
+    }
+
+    pub fn getPacaLpToken() -> () {
+        return pacalp
+    }
+
+    pub fn getAmountLpToken() -> () {
+        return amountlp
+    }
+
+    pub fn addstake(amount: U256) -> () {
+        
+    }
+
+    pub fn removestake(amount: U256) -> () {
+
+    }
+}

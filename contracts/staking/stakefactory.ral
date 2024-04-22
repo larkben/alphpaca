@@ -1,0 +1,52 @@
+Contract StakeFactory(
+    owner: Address,
+    pacalp: ByteVec,
+    amountstaked: U256,
+    totalstaked: U256
+) {
+    pub fn getOwner() -> () {
+        return owner
+    }
+
+    pub fn getPacaLpToken() -> () {
+        return pacalp
+    }
+
+    pub fn getAmountStaked() -> () {
+        return amountstaked
+    }
+
+    pub fn getTotalStaked() -> () {
+        return totalstaked
+    }
+
+    pub fn doesStakeExist(staker: Address) -> (U256) {
+        for (let i = 0; i < totalstaked; i = i + 1) {
+            let stakecontract = subContractId!(toByteVec!(i))
+
+            let owner = Stake(stakecontract).getOwner()
+
+            if (owner == staker) {
+                return i                                        // the contract path to the stake
+            }
+        }
+
+        return 99999999999
+    }
+
+    pub fn addstake() -> () {
+
+        if (doesStakeExist(callerAddress!()) != 99999999999) {
+
+        }
+
+    }
+
+    pub fn withdrawstake() -> () {
+
+    }
+
+    pub fn distributerewards() -> () {
+        
+    }
+}
