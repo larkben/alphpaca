@@ -24,13 +24,10 @@ export function Navbar() {
             Home
           </Link>
           <Link className="text-white hover:text-blue-500" href="/saddle">
-            Your Saddle
+            Staking Services
           </Link>
           <Link className="text-white hover:text-blue-500" href="/tokencreate">
             Token Creation
-          </Link>
-          <Link className="text-white hover:text-blue-500" href="/paddock">
-            Auctions
           </Link>
           <Link className="text-white hover:text-blue-500" href="#">
             ...

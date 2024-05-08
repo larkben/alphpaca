@@ -1,18 +1,15 @@
 {
-  "version": "v2.10.1",
-  "name": "Reedeemalph",
-  "bytecodeTemplate": "0101030001000d0c0d{0}01061700b41600a2{1}0d0c{0}0107",
+  "version": "v2.12.0",
+  "name": "CollectFees",
+  "bytecodeTemplate": "010103000000040c0c{0}0103",
   "fieldsSig": {
     "names": [
-      "contract",
-      "amount"
+      "contract"
     ],
     "types": [
-      "Viral",
-      "U256"
+      "CreateToken"
     ],
     "isMutable": [
-      false,
       false
     ]
   },

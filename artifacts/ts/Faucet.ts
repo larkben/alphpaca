@@ -23,6 +23,10 @@ import {
   fetchContractState,
   ContractInstance,
   getContractEventsCurrentCount,
+  TestContractParamsWithoutMaps,
+  TestContractResultWithoutMaps,
+  addStdIdToFields,
+  encodeContractFields,
 } from "@alephium/web3";
 import { default as FaucetContractJson } from "../Faucet.ral.json";
 import { getContractByCodeHash } from "./contracts";
@@ -74,6 +78,14 @@ export namespace FaucetTypes {
 }
 
 class Factory extends ContractFactory<FaucetInstance, FaucetTypes.Fields> {
+  encodeFields(fields: FaucetTypes.Fields) {
+    return encodeContractFields(
+      addStdIdToFields(this.contract, fields),
+      this.contract.fieldsSig,
+      []
+    );
+  }
+
   getInitialFieldsWithDefaultValues() {
     return this.contract.getInitialFieldsWithDefaultValues() as FaucetTypes.Fields;
   }
@@ -93,38 +105,59 @@ class Factory extends ContractFactory<FaucetInstance, FaucetTypes.Fields> {
 
   tests = {
     getTokenId: async (
-      params: Omit<TestContractParams<FaucetTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<HexString>> => {
+      params: Omit<
+        TestContractParamsWithoutMaps<FaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
       return testMethod(this, "getTokenId", params);
     },
     getBalance: async (
-      params: Omit<TestContractParams<FaucetTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<bigint>> => {
+      params: Omit<
+        TestContractParamsWithoutMaps<FaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getBalance", params);
     },
     getSymbol: async (
-      params: Omit<TestContractParams<FaucetTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<HexString>> => {
+      params: Omit<
+        TestContractParamsWithoutMaps<FaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
       return testMethod(this, "getSymbol", params);
     },
     getName: async (
-      params: Omit<TestContractParams<FaucetTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<HexString>> => {
+      params: Omit<
+        TestContractParamsWithoutMaps<FaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
       return testMethod(this, "getName", params);
     },
     topup: async (
-      params: TestContractParams<FaucetTypes.Fields, { amount: bigint }>
-    ): Promise<TestContractResult<null>> => {
+      params: TestContractParamsWithoutMaps<
+        FaucetTypes.Fields,
+        { amount: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "topup", params);
     },
     sendout: async (
-      params: TestContractParams<FaucetTypes.Fields, { amount: bigint }>
-    ): Promise<TestContractResult<null>> => {
+      params: TestContractParamsWithoutMaps<
+        FaucetTypes.Fields,
+        { amount: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "sendout", params);
     },
     destroy: async (
-      params: Omit<TestContractParams<FaucetTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<null>> => {
+      params: Omit<
+        TestContractParamsWithoutMaps<FaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "destroy", params);
     },
   };
@@ -135,7 +168,8 @@ export const Faucet = new Factory(
   Contract.fromJson(
     FaucetContractJson,
     "",
-    "8813de5a4adb21e4e0ea09357924ec19037b916ecfd6a228152238f8e9396d04"
+    "8813de5a4adb21e4e0ea09357924ec19037b916ecfd6a228152238f8e9396d04",
+    []
   )
 );
 

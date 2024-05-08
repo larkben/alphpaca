@@ -1,7 +1,7 @@
 import { DUST_AMOUNT, ExecutableScript, ExecuteScriptResult, SignerProvider, contractIdFromAddress } from '@alephium/web3'
-import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Burn, Destroycreator } from '../../artifacts/ts/scripts'
+import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator } from '../../artifacts/ts/scripts'
 import { TokenCreate, TokenFaucetConfig, TokenTemplate } from './utils'
-import { BurnToken, Faucet, Token } from '../../artifacts/ts'
+import { Faucet, Token } from '../../artifacts/ts'
 import * as web3 from '@alephium/web3'
 
 // Token Creation Tool
@@ -31,7 +31,7 @@ export const DestroyTokenCreator = async (
 ): Promise<ExecuteScriptResult> => {
   return await Destroycreator.execute(signerProvider, {
     initialFields: {
-      contract: "1db99e938897977a45a9467b63f3aa83515b28f0a49b2064935729b65a734400"
+      contract: TokenCreate.contractId
     },
     attoAlphAmount: DUST_AMOUNT
   })

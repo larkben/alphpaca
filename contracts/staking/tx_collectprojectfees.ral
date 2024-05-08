@@ -1,0 +1,5 @@
+TxScript CollectStakeFees (
+    contract: CreateStakeFactory
+) {
+    contract.collectfees()
+}

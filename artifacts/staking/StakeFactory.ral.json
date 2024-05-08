@@ -1,28 +1,34 @@
 {
   "version": "v2.12.0",
-  "name": "FeeCollection",
-  "bytecode": "060a09121b4024402d4036403f406e40a040b8010000000102ce0002010000000102ce0102010000000102a00002010000000102a00102010000000102a00202010000000102ce0002010000000102ce000201010101001c16000c330d7bb4b200001600aab4b200010004aaa00016002aa100a00116002aa10105b4160000006001020001001cb41700ce021600450f7bb2160000000002aab2160000010003aaa000a0002ba100a001a0012ba1010816005e01000102000cb41701ce021601450f7b1600a1020916015e",
-  "codeHash": "037be2975a9253dfe116077fa5b404f46ce64a23e2ccefbf2905dce4b66a7a7c",
+  "name": "StakeFactory",
+  "bytecode": "080b09121b4024402d406240da4117416c41d341e3010000000102ce0002010000000102ce0202010000000102a00002010000000102a00102010000000102a0020201000104021e0c170116010004314c15160140cb17020c0d16020100170316031600454c031601030216010d2a17014a271601040201030107004043b40005170217011602041d4c16160140cb170316000d0c16030104a00016002aa10006b416000c0d16030103604a4025b4b2130264160013016417051704b413c40de0b6b3a7640000a2a00240ce0316041605c11706a0020d2aa102a0010d2aa101a00016002aa10006b416001606636001020105004023b40005170217011602041d0d7b160140cb170316000d0d160301051704a00016002ba100b400011600ab1604041c4c04a0010d2ba1010100000801402e0c17000c170116010004314c1a160140cb17020c0d160201011703160313232c170416041343e82d1705160016052a170016010d2a17014a221600a0032c170616061343e82d1707160016072a02010300080040390c17000c170116010004314c1f160140cb17020c0d1602010117031603a0032c170416041343e82d170516050d0c16020104160016052a170016010d2a17014a7fdd1600a0032c170616061343e82d1707b4ce0100011607aab4b200011600aa010001010007ce00b4450c7b1600a103",
+  "codeHash": "c718571d54c17c01664658866bbbb0f7379c31523a86d5a6356a862f8c67420c",
   "fieldsSig": {
     "names": [
-      "tokenOne",
-      "tokenTwo",
-      "balanceOne",
-      "balanceTwo",
-      "fee",
-      "owner"
+      "owner",
+      "dev",
+      "token",
+      "total",
+      "users",
+      "path",
+      "monthlyrewards",
+      "stakecontract"
     ],
     "types": [
+      "Address",
+      "Address",
       "ByteVec",
-      "ByteVec",
       "U256",
       "U256",
       "U256",
-      "Address"
+      "U256",
+      "ByteVec"
     ],
     "isMutable": [
       false,
       false,
+      false,
+      true,
       true,
       true,
       true,
@@ -31,62 +37,47 @@
   },
   "eventsSig": [
     {
-      "name": "RecievedToken",
+      "name": "StakeDecreased",
       "fieldNames": [
-        "from",
+        "who",
         "amount",
-        "id"
+        "contractaddy"
       ],
       "fieldTypes": [
         "Address",
         "U256",
-        "ByteVec"
+        "Address"
       ]
     },
     {
-      "name": "FeeRecieved",
+      "name": "StakeIncreased",
       "fieldNames": [
-        "from",
+        "who",
         "amount",
-        "id"
+        "contractaddy"
       ],
       "fieldTypes": [
         "Address",
         "U256",
-        "ByteVec"
-      ]
-    },
-    {
-      "name": "Destroy",
-      "fieldNames": [
-        "destroyer"
-      ],
-      "fieldTypes": [
-        "Address"
-      ]
-    },
-    {
-      "name": "WithdrawlAssets",
-      "fieldNames": [
-        "from"
-      ],
-      "fieldTypes": [
-        "Address"
-      ]
-    },
-    {
-      "name": "Success",
-      "fieldNames": [
-        "from"
-      ],
-      "fieldTypes": [
         "Address"
       ]
     }
   ],
   "functions": [
     {
-      "name": "getTokenOne",
+      "name": "getOwner",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "Address"
+      ]
+    },
+    {
+      "name": "getToken",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -98,19 +89,7 @@
       ]
     },
     {
-      "name": "getTokenTwo",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "ByteVec"
-      ]
-    },
-    {
-      "name": "getBalanceOne",
+      "name": "getTotal",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -122,7 +101,7 @@
       ]
     },
     {
-      "name": "getBalanceTwo",
+      "name": "getUsers",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -134,7 +113,7 @@
       ]
     },
     {
-      "name": "getFee",
+      "name": "getPath",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -146,32 +125,43 @@
       ]
     },
     {
-      "name": "getSymbol",
+      "name": "doesStakeExist",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
+      "paramNames": [
+        "staker"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
       "returnTypes": [
-        "ByteVec"
+        "U256",
+        "Bool"
       ]
     },
     {
-      "name": "getName",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "ByteVec"
-      ]
-    },
-    {
-      "name": "gettoken",
+      "name": "addstake",
       "usePreapprovedAssets": true,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "amount"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdrawstake",
+      "usePreapprovedAssets": false,
       "useAssetsInContract": true,
       "isPublic": true,
       "paramNames": [
@@ -186,9 +176,21 @@
       "returnTypes": []
     },
     {
-      "name": "withdrawalassets",
+      "name": "calculaterewards",
       "usePreapprovedAssets": false,
-      "useAssetsInContract": true,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "distributerewards",
+      "usePreapprovedAssets": true,
+      "useAssetsInContract": false,
       "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
@@ -196,12 +198,12 @@
       "returnTypes": []
     },
     {
-      "name": "editfee",
+      "name": "editrewards",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
       "paramNames": [
-        "edit"
+        "newreward"
       ],
       "paramTypes": [
         "U256"
@@ -218,17 +220,17 @@
       "name": "ErrorCodes",
       "fields": [
         {
-          "name": "InvalidRecieve",
-          "value": {
-            "type": "U256",
-            "value": "1"
-          }
-        },
-        {
           "name": "InvalidCaller",
           "value": {
             "type": "U256",
-            "value": "3"
+            "value": "0"
+          }
+        },
+        {
+          "name": "ContractNotExist",
+          "value": {
+            "type": "U256",
+            "value": "1"
           }
         }
       ]

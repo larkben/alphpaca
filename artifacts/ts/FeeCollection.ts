@@ -23,6 +23,10 @@ import {
   fetchContractState,
   ContractInstance,
   getContractEventsCurrentCount,
+  TestContractParamsWithoutMaps,
+  TestContractResultWithoutMaps,
+  addStdIdToFields,
+  encodeContractFields,
 } from "@alephium/web3";
 import { default as FeeCollectionContractJson } from "../FeeCollection.ral.json";
 import { getContractByCodeHash } from "./contracts";
@@ -102,6 +106,14 @@ class Factory extends ContractFactory<
   FeeCollectionInstance,
   FeeCollectionTypes.Fields
 > {
+  encodeFields(fields: FeeCollectionTypes.Fields) {
+    return encodeContractFields(
+      addStdIdToFields(this.contract, fields),
+      this.contract.fieldsSig,
+      []
+    );
+  }
+
   getInitialFieldsWithDefaultValues() {
     return this.contract.getInitialFieldsWithDefaultValues() as FeeCollectionTypes.Fields;
   }
@@ -124,76 +136,82 @@ class Factory extends ContractFactory<
   tests = {
     getTokenOne: async (
       params: Omit<
-        TestContractParams<FeeCollectionTypes.Fields, never>,
+        TestContractParamsWithoutMaps<FeeCollectionTypes.Fields, never>,
         "testArgs"
       >
-    ): Promise<TestContractResult<HexString>> => {
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
       return testMethod(this, "getTokenOne", params);
     },
     getTokenTwo: async (
       params: Omit<
-        TestContractParams<FeeCollectionTypes.Fields, never>,
+        TestContractParamsWithoutMaps<FeeCollectionTypes.Fields, never>,
         "testArgs"
       >
-    ): Promise<TestContractResult<HexString>> => {
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
       return testMethod(this, "getTokenTwo", params);
     },
     getBalanceOne: async (
       params: Omit<
-        TestContractParams<FeeCollectionTypes.Fields, never>,
+        TestContractParamsWithoutMaps<FeeCollectionTypes.Fields, never>,
         "testArgs"
       >
-    ): Promise<TestContractResult<bigint>> => {
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getBalanceOne", params);
     },
     getBalanceTwo: async (
       params: Omit<
-        TestContractParams<FeeCollectionTypes.Fields, never>,
+        TestContractParamsWithoutMaps<FeeCollectionTypes.Fields, never>,
         "testArgs"
       >
-    ): Promise<TestContractResult<bigint>> => {
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getBalanceTwo", params);
     },
     getFee: async (
       params: Omit<
-        TestContractParams<FeeCollectionTypes.Fields, never>,
+        TestContractParamsWithoutMaps<FeeCollectionTypes.Fields, never>,
         "testArgs"
       >
-    ): Promise<TestContractResult<bigint>> => {
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getFee", params);
     },
     getSymbol: async (
       params: Omit<
-        TestContractParams<FeeCollectionTypes.Fields, never>,
+        TestContractParamsWithoutMaps<FeeCollectionTypes.Fields, never>,
         "testArgs"
       >
-    ): Promise<TestContractResult<HexString>> => {
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
       return testMethod(this, "getSymbol", params);
     },
     getName: async (
       params: Omit<
-        TestContractParams<FeeCollectionTypes.Fields, never>,
+        TestContractParamsWithoutMaps<FeeCollectionTypes.Fields, never>,
         "testArgs"
       >
-    ): Promise<TestContractResult<HexString>> => {
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
       return testMethod(this, "getName", params);
     },
     gettoken: async (
-      params: TestContractParams<FeeCollectionTypes.Fields, { amount: bigint }>
-    ): Promise<TestContractResult<null>> => {
+      params: TestContractParamsWithoutMaps<
+        FeeCollectionTypes.Fields,
+        { amount: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "gettoken", params);
     },
     withdrawalassets: async (
       params: Omit<
-        TestContractParams<FeeCollectionTypes.Fields, never>,
+        TestContractParamsWithoutMaps<FeeCollectionTypes.Fields, never>,
         "testArgs"
       >
-    ): Promise<TestContractResult<null>> => {
+    ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "withdrawalassets", params);
     },
     editfee: async (
-      params: TestContractParams<FeeCollectionTypes.Fields, { edit: bigint }>
-    ): Promise<TestContractResult<null>> => {
+      params: TestContractParamsWithoutMaps<
+        FeeCollectionTypes.Fields,
+        { edit: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "editfee", params);
     },
   };
@@ -204,7 +222,8 @@ export const FeeCollection = new Factory(
   Contract.fromJson(
     FeeCollectionContractJson,
     "",
-    "037be2975a9253dfe116077fa5b404f46ce64a23e2ccefbf2905dce4b66a7a7c"
+    "037be2975a9253dfe116077fa5b404f46ce64a23e2ccefbf2905dce4b66a7a7c",
+    []
   )
 );
 

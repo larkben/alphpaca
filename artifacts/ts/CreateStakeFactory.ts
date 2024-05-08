@@ -28,25 +28,23 @@ import {
   addStdIdToFields,
   encodeContractFields,
 } from "@alephium/web3";
-import { default as CreateTokenContractJson } from "../createtoken/CreateToken.ral.json";
+import { default as CreateStakeFactoryContractJson } from "../staking/CreateStakeFactory.ral.json";
 import { getContractByCodeHash } from "./contracts";
 
 // Custom types for the contract
-export namespace CreateTokenTypes {
+export namespace CreateStakeFactoryTypes {
   export type Fields = {
     owner: Address;
-    contract: HexString;
     alphfee: bigint;
-    alphcollected: bigint;
+    collectedfees: bigint;
+    stakefactory: HexString;
+    stakecontract: HexString;
+    path: bigint;
   };
 
   export type State = ContractState<Fields>;
 
-  export type DestroyEvent = ContractEvent<{ user: Address }>;
-  export type CreateTokenEvent = ContractEvent<{
-    user: Address;
-    contract: HexString;
-  }>;
+  export type NewProjectEvent = ContractEvent<{ projectid: HexString }>;
 
   export interface CallMethodTable {
     getFee: {
@@ -69,10 +67,10 @@ export namespace CreateTokenTypes {
 }
 
 class Factory extends ContractFactory<
-  CreateTokenInstance,
-  CreateTokenTypes.Fields
+  CreateStakeFactoryInstance,
+  CreateStakeFactoryTypes.Fields
 > {
-  encodeFields(fields: CreateTokenTypes.Fields) {
+  encodeFields(fields: CreateStakeFactoryTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -81,135 +79,87 @@ class Factory extends ContractFactory<
   }
 
   getInitialFieldsWithDefaultValues() {
-    return this.contract.getInitialFieldsWithDefaultValues() as CreateTokenTypes.Fields;
+    return this.contract.getInitialFieldsWithDefaultValues() as CreateStakeFactoryTypes.Fields;
   }
 
-  eventIndex = { Destroy: 0, CreateToken: 1 };
-  consts = { ErrorCodes: { InvalidCaller: BigInt(1) } };
+  eventIndex = { NewProject: 0 };
+  consts = { ErrorCodes: { InvalidCaller: BigInt(0) } };
 
-  at(address: string): CreateTokenInstance {
-    return new CreateTokenInstance(address);
+  at(address: string): CreateStakeFactoryInstance {
+    return new CreateStakeFactoryInstance(address);
   }
 
   tests = {
     getFee: async (
       params: Omit<
-        TestContractParamsWithoutMaps<CreateTokenTypes.Fields, never>,
+        TestContractParamsWithoutMaps<CreateStakeFactoryTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getFee", params);
     },
-    buildtoken: async (
+    addproject: async (
       params: TestContractParamsWithoutMaps<
-        CreateTokenTypes.Fields,
-        {
-          symbol: HexString;
-          name: HexString;
-          decimals: bigint;
-          tokenTotal: bigint;
-        }
+        CreateStakeFactoryTypes.Fields,
+        { token: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "buildtoken", params);
-    },
-    updatefee: async (
-      params: TestContractParamsWithoutMaps<
-        CreateTokenTypes.Fields,
-        { newfee: bigint }
-      >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "updatefee", params);
+      return testMethod(this, "addproject", params);
     },
     collectfees: async (
       params: Omit<
-        TestContractParamsWithoutMaps<CreateTokenTypes.Fields, never>,
+        TestContractParamsWithoutMaps<CreateStakeFactoryTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "collectfees", params);
     },
-    destroycreator: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<CreateTokenTypes.Fields, never>,
-        "testArgs"
-      >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "destroycreator", params);
-    },
   };
 }
 
 // Use this object to test and deploy the contract
-export const CreateToken = new Factory(
+export const CreateStakeFactory = new Factory(
   Contract.fromJson(
-    CreateTokenContractJson,
+    CreateStakeFactoryContractJson,
     "",
-    "ca10f06d922709c2703aeb48ec348856722b586dc7a6accaf36f629ec989aa35",
+    "3f0ef70b28093b7b5c8a61aff08ba8655be232bfa64b17abf2327b7789f43cbe",
     []
   )
 );
 
 // Use this class to interact with the blockchain
-export class CreateTokenInstance extends ContractInstance {
+export class CreateStakeFactoryInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<CreateTokenTypes.State> {
-    return fetchContractState(CreateToken, this);
+  async fetchState(): Promise<CreateStakeFactoryTypes.State> {
+    return fetchContractState(CreateStakeFactory, this);
   }
 
   async getContractEventsCurrentCount(): Promise<number> {
     return getContractEventsCurrentCount(this.address);
   }
 
-  subscribeDestroyEvent(
-    options: EventSubscribeOptions<CreateTokenTypes.DestroyEvent>,
+  subscribeNewProjectEvent(
+    options: EventSubscribeOptions<CreateStakeFactoryTypes.NewProjectEvent>,
     fromCount?: number
   ): EventSubscription {
     return subscribeContractEvent(
-      CreateToken.contract,
+      CreateStakeFactory.contract,
       this,
       options,
-      "Destroy",
-      fromCount
-    );
-  }
-
-  subscribeCreateTokenEvent(
-    options: EventSubscribeOptions<CreateTokenTypes.CreateTokenEvent>,
-    fromCount?: number
-  ): EventSubscription {
-    return subscribeContractEvent(
-      CreateToken.contract,
-      this,
-      options,
-      "CreateToken",
-      fromCount
-    );
-  }
-
-  subscribeAllEvents(
-    options: EventSubscribeOptions<
-      CreateTokenTypes.DestroyEvent | CreateTokenTypes.CreateTokenEvent
-    >,
-    fromCount?: number
-  ): EventSubscription {
-    return subscribeContractEvents(
-      CreateToken.contract,
-      this,
-      options,
+      "NewProject",
       fromCount
     );
   }
 
   methods = {
     getFee: async (
-      params?: CreateTokenTypes.CallMethodParams<"getFee">
-    ): Promise<CreateTokenTypes.CallMethodResult<"getFee">> => {
+      params?: CreateStakeFactoryTypes.CallMethodParams<"getFee">
+    ): Promise<CreateStakeFactoryTypes.CallMethodResult<"getFee">> => {
       return callMethod(
-        CreateToken,
+        CreateStakeFactory,
         this,
         "getFee",
         params === undefined ? {} : params,
@@ -218,14 +168,14 @@ export class CreateTokenInstance extends ContractInstance {
     },
   };
 
-  async multicall<Calls extends CreateTokenTypes.MultiCallParams>(
+  async multicall<Calls extends CreateStakeFactoryTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<CreateTokenTypes.MultiCallResults<Calls>> {
+  ): Promise<CreateStakeFactoryTypes.MultiCallResults<Calls>> {
     return (await multicallMethods(
-      CreateToken,
+      CreateStakeFactory,
       this,
       calls,
       getContractByCodeHash
-    )) as CreateTokenTypes.MultiCallResults<Calls>;
+    )) as CreateStakeFactoryTypes.MultiCallResults<Calls>;
   }
 }

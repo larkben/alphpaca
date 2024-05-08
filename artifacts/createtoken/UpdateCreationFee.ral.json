@@ -1,15 +1,18 @@
 {
   "version": "v2.12.0",
-  "name": "Destroy",
-  "bytecodeTemplate": "010103000000040c0c{0}0106",
+  "name": "UpdateCreationFee",
+  "bytecodeTemplate": "01010300000005{1}0d0c{0}0102",
   "fieldsSig": {
     "names": [
-      "contract"
+      "contract",
+      "amount"
     ],
     "types": [
-      "Faucet"
+      "CreateToken",
+      "U256"
     ],
     "isMutable": [
+      false,
       false
     ]
   },

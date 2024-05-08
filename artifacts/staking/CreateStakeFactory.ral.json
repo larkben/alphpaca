@@ -1,52 +1,48 @@
 {
-  "version": "v2.10.1",
-  "name": "BurnToken",
-  "bytecode": "0304091240314048010000000102ce0002010000000102ce000201030102000fb417011601ce001600bda00016002aa1000516011600ce006001000001000cb417001600ce01450c7bce01b00616005e",
-  "codeHash": "f2def89f6c6812d5b48e2bc92ed1fc50520dfb84621676d9aa3e9e3b2bba609c",
+  "version": "v2.12.0",
+  "name": "CreateStakeFactory",
+  "bytecode": "06030940594072010000000102ce010201030105004029b417011601b2ce01a71601ce001600ce031304640c0c0c132313046417031702b413c40de0b6b3a7640000a2a00140ce0216021603c11704a0010d2aa101a000ce012aa1000516045e01020000000db4ce00450c7bb2ce00a000a7a000a0002ba100",
+  "codeHash": "3f0ef70b28093b7b5c8a61aff08ba8655be232bfa64b17abf2327b7789f43cbe",
   "fieldsSig": {
     "names": [
-      "tokensburned",
-      "tokenid",
-      "owner"
+      "owner",
+      "alphfee",
+      "collectedfees",
+      "stakefactory",
+      "stakecontract",
+      "path"
     ],
     "types": [
+      "Address",
+      "U256",
       "U256",
       "ByteVec",
-      "Address"
+      "ByteVec",
+      "U256"
     ],
     "isMutable": [
+      false,
+      false,
       true,
       false,
-      false
+      false,
+      true
     ]
   },
   "eventsSig": [
     {
-      "name": "Burn",
+      "name": "NewProject",
       "fieldNames": [
-        "from",
-        "amount",
-        "token"
+        "projectid"
       ],
       "fieldTypes": [
-        "Address",
-        "U256",
         "ByteVec"
-      ]
-    },
-    {
-      "name": "Destroy",
-      "fieldNames": [
-        "from"
-      ],
-      "fieldTypes": [
-        "Address"
       ]
     }
   ],
   "functions": [
     {
-      "name": "getSymbol",
+      "name": "getFee",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -54,31 +50,19 @@
       "paramTypes": [],
       "paramIsMutable": [],
       "returnTypes": [
-        "ByteVec"
+        "U256"
       ]
     },
     {
-      "name": "getName",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "ByteVec"
-      ]
-    },
-    {
-      "name": "burntoken",
+      "name": "addproject",
       "usePreapprovedAssets": true,
       "useAssetsInContract": false,
       "isPublic": true,
       "paramNames": [
-        "amount"
+        "token"
       ],
       "paramTypes": [
-        "U256"
+        "ByteVec"
       ],
       "paramIsMutable": [
         false
@@ -86,9 +70,9 @@
       "returnTypes": []
     },
     {
-      "name": "destroy",
+      "name": "collectfees",
       "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
+      "useAssetsInContract": true,
       "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
@@ -99,7 +83,7 @@
   "constants": [],
   "enums": [
     {
-      "name": "Error",
+      "name": "ErrorCodes",
       "fields": [
         {
           "name": "InvalidCaller",

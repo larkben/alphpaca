@@ -1,0 +1,6 @@
+TxScript WithdrawStake (
+	contract: StakeFactory,
+	amount: U256
+) {
+	contract.withdrawstake(amount)
+}

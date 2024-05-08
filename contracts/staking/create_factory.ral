@@ -1,0 +1,56 @@
+// Revenue Generation of Staking for Projects seeking Staking Services
+
+Contract CreateStakeFactory(
+    owner: Address,
+    //
+    alphfee: U256,
+    mut collectedfees: U256,
+    //
+    stakefactory: ByteVec,
+    stakecontract: ByteVec,
+    //
+    mut path: U256
+) {
+
+    event NewProject(projectid: ByteVec)
+
+    enum ErrorCodes {
+        InvalidCaller = 0
+    }
+
+    pub fn getFee() -> U256 {
+        return alphfee
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = false)
+    pub fn addproject(token: ByteVec) -> () {
+        
+        let minter = callerAddress!()
+
+        transferToken!(minter, selfAddress!(), ALPH, alphfee)
+
+        let (encodeImmutableFields, encodeMutableFields) = StakeFactory.encodeFields!(minter, owner, token, 0, 0, 0, 35, stakecontract)
+
+        let projectid = copyCreateSubContract!{callerAddress!() -> ALPH: 1 alph}(
+            toByteVec!(path),
+            stakefactory,                                                                                  
+            encodeImmutableFields,
+            encodeMutableFields
+        )
+
+        path = path + 1
+        collectedfees = collectedfees + alphfee
+
+        emit NewProject(projectid)
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = true, checkExternalCaller = true)
+    pub fn collectfees() -> () {
+        
+        checkCaller!(callerAddress!() == owner, ErrorCodes.InvalidCaller)
+
+        transferToken!(selfAddress!(), owner, ALPH, collectedfees)
+
+        collectedfees = collectedfees - collectedfees
+    }
+}

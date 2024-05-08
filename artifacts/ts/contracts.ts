@@ -4,30 +4,26 @@
 
 import { Contract, ContractFactory } from "@alephium/web3";
 import {
-  BurnToken,
-  CreateMarket,
+  CreateStakeFactory,
   CreateToken,
   Faucet,
   FeeCollection,
-  Market,
-  Swap,
+  Stake,
+  StakeFactory,
   Token,
-  Viral,
 } from ".";
 
 let contracts: ContractFactory<any>[] | undefined = undefined;
 export function getContractByCodeHash(codeHash: string): Contract {
   if (contracts === undefined) {
     contracts = [
-      BurnToken,
-      CreateMarket,
+      CreateStakeFactory,
       CreateToken,
       Faucet,
       FeeCollection,
-      Market,
-      Swap,
+      Stake,
+      StakeFactory,
       Token,
-      Viral,
     ];
   }
   const c = contracts.find(

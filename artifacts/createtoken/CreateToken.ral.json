@@ -1,20 +1,26 @@
 {
-  "version": "v2.10.1",
+  "version": "v2.12.0",
   "name": "CreateToken",
-  "bytecode": "02024045405c01030408001cb41704160016011602160316041406414c5048000113066413006417061705160413c40de0b6b3a7640000a2ce011605160616031604c7170706160416075f01020001000cb41700ce001600450d7bce00b005ce005e",
-  "codeHash": "25a4e5d70394e30b900c369c931375c39e3c7c49bc306d466f5e1bd8a839d3a9",
+  "bytecode": "040509405c4070408d40a4010000000102a0000201030408004024b417041604b2a000a7a001a0002aa101160016011602160316041406414c5048000113066413006417061705160413c40de0b6b3a7640000a2ce011605160616031604c7170706160416075f010001020009b41701ce001601450d7b1600a10001020001000fb41700ce001600450d7bb2ce00a001a7a001a0012ba10101020001000cb41700ce001600450d7bce00b005ce005e",
+  "codeHash": "ca10f06d922709c2703aeb48ec348856722b586dc7a6accaf36f629ec989aa35",
   "fieldsSig": {
     "names": [
       "owner",
-      "contract"
+      "contract",
+      "alphfee",
+      "alphcollected"
     ],
     "types": [
       "Address",
-      "ByteVec"
+      "ByteVec",
+      "U256",
+      "U256"
     ],
     "isMutable": [
       false,
-      false
+      false,
+      true,
+      true
     ]
   },
   "eventsSig": [
@@ -41,6 +47,18 @@
   ],
   "functions": [
     {
+      "name": "getFee",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
       "name": "buildtoken",
       "usePreapprovedAssets": true,
       "useAssetsInContract": false,
@@ -63,6 +81,32 @@
         false,
         false
       ],
+      "returnTypes": []
+    },
+    {
+      "name": "updatefee",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "newfee"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "collectfees",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": true,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
       "returnTypes": []
     },
     {

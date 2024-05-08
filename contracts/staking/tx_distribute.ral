@@ -1,0 +1,10 @@
+// awards 3.5% on token amount
+TxScript Distribute (
+	contract: StakeFactory
+) {
+    let token = contract.getToken()
+
+    let tokenamount = contract.calculaterewards()
+
+	contract.distributerewards{callerAddress!() -> token: tokenamount}()
+}

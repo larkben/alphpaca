@@ -11,13 +11,15 @@ export function Terminal() {
           <div className="w-3 h-3 rounded-full bg-yellow-500" />
           <div className="w-3 h-3 rounded-full bg-green-500" />
         </div>
-        <p className="text-sm">bash</p>
+        <p className="text-sm">alphpaca-stats</p>
       </div>
       <div className="mt-4">
-        <p className="text-green-400">$ npm install alphpacas</p>
-        <p className="text-white">+ alephium@rhone</p>
-        <p className="text-white"> added 3 dapps and planted many hay </p>
-        <p className="text-green-400">$</p>
+        <p className="text-green-400">$ npm run stats       </p>
+        <p className="text-white">$ PACA staked:            </p>
+        <p className="text-white">$ alphpaca nft volume:    </p>
+        <p className="text-white">$ total fees collected:   </p>
+        <p className="text-white">$ dapps: 2                </p>
+        <p className="text-green-400">$                     </p>
       </div>
     </aside>
   )

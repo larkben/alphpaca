@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v2.10.1",
+  "fullNodeVersion": "v2.12.0",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -9,46 +9,53 @@
     "ignoreCheckExternalCallerWarnings": false
   },
   "infos": {
+    "AddStake": {
+      "sourceFile": "staking/tx_addstake.ral",
+      "sourceCodeHash": "432b3bfb62c8ba5f86107351cbd5cc78d074e501450ca8f5080d469c53391ca8",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
     "Buildtoken": {
       "sourceFile": "createtoken/tx_make_token_alph.ral",
-      "sourceCodeHash": "df52d82dbc61c93fa7620ed0c47786ca5e0252830209092086345e30419aab5a",
+      "sourceCodeHash": "ce9de973033c53adde5b0f4758b34dfa3da12a439ad684d5f6b48e6830f71f08",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
     },
-    "Burn": {
-      "sourceFile": "burn/tx_burn.ral",
-      "sourceCodeHash": "f9eb5dffc36f3e93bda01a7e1de3c9309085bb4d441f852ba58b9ae33eb2f9eb",
+    "CollectFees": {
+      "sourceFile": "createtoken/tx_collectfees.ral",
+      "sourceCodeHash": "064c03c31e64485c8f72ef99dadad4471b1967e54ce43c073114cdfed3175eb1",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
     },
-    "BurnToken": {
-      "sourceFile": "burn/burn.ral",
-      "sourceCodeHash": "bb81bbb02b93f89fb8e8d22ae3d08f3e7734c9ab4ae05afc95122f0b88066f22",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "f2def89f6c6812d5b48e2bc92ed1fc50520dfb84621676d9aa3e9e3b2bba609c",
-      "warnings": []
-    },
-    "Buyvirl": {
-      "sourceFile": "ico/tx_viralBuy.ral",
-      "sourceCodeHash": "bc9ccfb86d4ece45391dd02c74c5c9c662b8b78f916dce217e43ec8f829a2401",
+    "CollectStakeFees": {
+      "sourceFile": "staking/tx_collectprojectfees.ral",
+      "sourceCodeHash": "a7207d1edb6152b4e50e0955be466399c068fb662e43a386b14a310b8da7de7f",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
     },
-    "CreateMarket": {
-      "sourceFile": "swaps/p2pmarket.ral",
-      "sourceCodeHash": "28837cea9905b8e5585bac2a79439f0593ad7bdbe837dbdbf1b158fce6116e31",
+    "CreateStakeFactory": {
+      "sourceFile": "staking/create_factory.ral",
+      "sourceCodeHash": "6c6235534086e69ec49b4c094f20b85d6558af5f2e37bd149b64c988d355c00a",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "09782e9e119d4a850549d9af0196ba2843eec00f51d4e9bac522b5336443264d",
+      "codeHashDebug": "3f0ef70b28093b7b5c8a61aff08ba8655be232bfa64b17abf2327b7789f43cbe",
+      "warnings": []
+    },
+    "CreateStakeProject": {
+      "sourceFile": "staking/tx_createproject.ral",
+      "sourceCodeHash": "b05a53c1c149302ecc9c4ec908b3bcb46b046a8ef69269730435cc404486cdf6",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
       "warnings": []
     },
     "CreateToken": {
       "sourceFile": "createtoken/createtoken.ral",
-      "sourceCodeHash": "03d83de89b94e58482187c6b35dcb5b6ef53058d7f7b590fc084f4c699ba654e",
+      "sourceCodeHash": "8a1a2940bc4508db097095e78c6de21a0333c6c8c9e63731157e117316d8603f",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "25a4e5d70394e30b900c369c931375c39e3c7c49bc306d466f5e1bd8a839d3a9",
+      "codeHashDebug": "ca10f06d922709c2703aeb48ec348856722b586dc7a6accaf36f629ec989aa35",
       "warnings": []
     },
     "Destroy": {
@@ -61,6 +68,20 @@
     "Destroycreator": {
       "sourceFile": "createtoken/tx_destroy.ral",
       "sourceCodeHash": "0181b19d66c8aa817f466b2a360f40eac7e4557e101666bde9b10039ccf4ea05",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "Distribute": {
+      "sourceFile": "staking/tx_distribute.ral",
+      "sourceCodeHash": "4c0b2ae5656cd5e814abfd67628145840dc5c69012de65554198aa7864f4e41d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "EditRewards": {
+      "sourceFile": "staking/tx_editrewards.ral",
+      "sourceCodeHash": "6d89c88de2e83249361a370b8f4dcb803955ba7d4afd0638703fd415bf6d12da",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -94,29 +115,8 @@
       "warnings": []
     },
     "IFungibleToken": {
-      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "6809cb06fb20fa7edf529461998beeebd12b1636d439612cca2f84214dbf4a20",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
-    },
-    "Market": {
-      "sourceFile": "swaps/market.ral",
-      "sourceCodeHash": "5560fdf88c941aae6a04e40bf57060ef5d36611bfb14a8236e923e6ae0b4e549",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "069f382551a2986f8257d139ba296ac7736cc9060da90273a335e833726dfafc",
-      "warnings": []
-    },
-    "Reedeemalph": {
-      "sourceFile": "ico/tx_viralAlphdraw.ral",
-      "sourceCodeHash": "09929c8d2211004755bd4e10538bddda1aaaa47b701470965b39faede2bb8e0a",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
-    },
-    "Sellvirl": {
-      "sourceFile": "ico/tx_viralSell.ral",
-      "sourceCodeHash": "3f035ee4933f4f33397670cac3be604f7699d2f5fd41b56732f39233d1e3a7e8",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -128,11 +128,18 @@
       "codeHashDebug": "",
       "warnings": []
     },
-    "Swap": {
-      "sourceFile": "swaps/swap.ral",
-      "sourceCodeHash": "e1d54db9c2a8756c39e298b76bbe61bb157dcc7bda5f14780a82b914db49dcaf",
+    "Stake": {
+      "sourceFile": "staking/stake.ral",
+      "sourceCodeHash": "e438ee040c3cbe12d7e61bfed89a8bbc053f2bc6b00e1739fbc5b220102c28c5",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "894de413005867ad18bc1032eab7eb84976244cdc03de1ff500ce8233fd9dc5a",
+      "codeHashDebug": "9e6a2ddabdcdb0fbe6f7da800aab6e464067364c599870f83c2df7b60bbcae67",
+      "warnings": []
+    },
+    "StakeFactory": {
+      "sourceFile": "staking/stake_factory.ral",
+      "sourceCodeHash": "78c1cbedaf7b289298db5c00cef5862c8d13636f9a1d82902cf749a598033dae",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "c718571d54c17c01664658866bbbb0f7379c31523a86d5a6356a862f8c67420c",
       "warnings": []
     },
     "Token": {
@@ -149,11 +156,18 @@
       "codeHashDebug": "",
       "warnings": []
     },
-    "Viral": {
-      "sourceFile": "ico/virl.ral",
-      "sourceCodeHash": "a45282df7ae0cc47e050ff91c8a5987c68a454a0d198cc6e6d34882ad04154ee",
+    "UpdateCreationFee": {
+      "sourceFile": "createtoken/tx_updatefee.ral",
+      "sourceCodeHash": "930ec4ac679793f934b95521e88b750e414af71820c72f9bcfd03cb747fedd15",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "d87d6c74c21a7bec6cba00e9a0388ca81c5a71518b8efb77f43b5160cfdd4456",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "WithdrawStake": {
+      "sourceFile": "staking/tx_withdrawstake.ral",
+      "sourceCodeHash": "0ae3a3411d411e1d5b16211c7baf76f9b3598ac71cf886b587180a417d0f0f58",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
       "warnings": []
     },
     "Withdrawlassets": {

@@ -1,6 +1,8 @@
 Contract CreateToken(
-    owner: Address,         //* Creator
-    contract: ByteVec       //* Token Contract
+    owner: Address,          //* Creator
+    contract: ByteVec,       //* Token Contract
+    mut alphfee: U256,
+    mut alphcollected: U256
 ) {
 
     event Destroy(user: Address)
@@ -10,10 +12,18 @@ Contract CreateToken(
         InvalidCaller = 1
     }
 
-    @using(preapprovedAssets = true, assetsInContract = false, updateFields = false, checkExternalCaller = false)
+    pub fn getFee() -> U256 {
+        return alphfee
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = false)
     pub fn buildtoken(symbol: ByteVec, name: ByteVec, decimals: U256, tokenTotal: U256) -> () {
 
         let minter = callerAddress!()
+
+        transferToken!(minter, selfAddress!(), ALPH, alphfee)
+
+        alphcollected = alphcollected + alphfee
 
         let (encodeImmutableFields, encodeMutableFields) = Token.encodeFields!(symbol, name, decimals, tokenTotal, minter)
 
@@ -26,6 +36,28 @@ Contract CreateToken(
         )
 
         emit CreateToken(minter, contractID)
+    }
+    
+    @using(updateFields = true, checkExternalCaller = true)
+    pub fn updatefee(newfee: U256) -> () {
+
+        let caller = callerAddress!()
+
+        checkCaller!(owner == caller, ErrorCodes.InvalidCaller)
+
+        alphfee = newfee
+    }
+
+    @using(assetsInContract = true, updateFields = true, checkExternalCaller = true)
+    pub fn collectfees() -> () {
+
+        let caller = callerAddress!()
+
+        checkCaller!(owner == caller, ErrorCodes.InvalidCaller)
+
+        transferToken!(selfAddress!(), owner, ALPH, alphcollected)
+
+        alphcollected = alphcollected - alphcollected
     }
 
     @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)

@@ -1,29 +1,48 @@
 Contract Stake (
     owner: Address,
-    pacalp: ByteVec,
-    amountlp: U256
+    mut amount: U256,
+    pcontract: Address
 ) {
-    enum ErrorCodes = {
+    enum ErrorCodes {
         InvalidCaller = 0
     }
 
-    pub fn getOwner() -> () {
+    pub fn getOwner() -> Address {
         return owner
     }
 
-    pub fn getPacaLpToken() -> () {
-        return pacalp
+    pub fn getAmount() -> U256 {
+        return amount
     }
 
-    pub fn getAmountLpToken() -> () {
-        return amountlp
+    pub fn getPContract() -> Address {
+        return pcontract
     }
 
-    pub fn addstake(amount: U256) -> () {
-        
+    pub fn getContractAddress() -> Address {
+        return selfAddress!()
     }
 
-    pub fn removestake(amount: U256) -> () {
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
+    pub fn add(add: U256) -> () {
+        checkCaller!(owner == getPContract(), ErrorCodes.InvalidCaller)
 
+        amount = amount + add
     }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
+    pub fn remove(sub: U256) -> Bool {
+        checkCaller!(owner == getPContract(), ErrorCodes.InvalidCaller)
+
+        amount = amount - sub
+
+        if (amount == 0) {
+            destroySelf!(getOwner())
+
+            return false // contract has been destroyed
+        }
+
+        return true // contract still alive
+    }
+    
 }

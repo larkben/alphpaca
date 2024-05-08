@@ -5,7 +5,9 @@ TxScript Buildtoken (
     decimals: U256,
     tokenTotal: U256
 ) {
-    let minimalAlphInContract = 1 alph
+    let fee = contract.getFee()
+
+    let minimalAlphInContract = 1 alph + fee
     let approvedAlphAmount = minimalAlphInContract
 
     contract.buildtoken{callerAddress!() -> ALPH: approvedAlphAmount}(symbol, name, decimals, tokenTotal)

@@ -22,19 +22,12 @@ export const DevDashboard: FC<{
   const addressGroup = config.groupIndex
   const [ongoingTxId, setOngoingTxId] = useState<string>()
 
-  const [symbol, setSymbol] = useState<string>("")
-  const [name, setName] = useState<string>("")
-  const [decimals, setDecimals] = useState('')
-  const [supply, setSupply] = useState('')
-
-  const [contract, setContract] = useState<string>("")
-
   // Handle of Contract Destruction
 
   const handleTokenCreationDestroy = async (e: React.FormEvent) => {
     e.preventDefault()
     if (signer) {
-      const result = await DestroyTokenCreator(signer, contract)
+      const result = await DestroyTokenCreator(signer, TokenCreate.contractId)
     }
   }
 
@@ -62,8 +55,7 @@ export const DevDashboard: FC<{
           </div>
         </form>
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-100">Destroy your Token</h2>
-          <p className="mt-2 text-center text-sm text-gray-400">Please enter the contract id, of the token.</p>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-100">Destroy Token Creator</h2>
         </div>
       </div>
     </main>

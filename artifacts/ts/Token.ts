@@ -23,6 +23,10 @@ import {
   fetchContractState,
   ContractInstance,
   getContractEventsCurrentCount,
+  TestContractParamsWithoutMaps,
+  TestContractResultWithoutMaps,
+  addStdIdToFields,
+  encodeContractFields,
 } from "@alephium/web3";
 import { default as TokenContractJson } from "../createtoken/Token.ral.json";
 import { getContractByCodeHash } from "./contracts";
@@ -76,6 +80,14 @@ export namespace TokenTypes {
 }
 
 class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
+  encodeFields(fields: TokenTypes.Fields) {
+    return encodeContractFields(
+      addStdIdToFields(this.contract, fields),
+      this.contract.fieldsSig,
+      []
+    );
+  }
+
   getInitialFieldsWithDefaultValues() {
     return this.contract.getInitialFieldsWithDefaultValues() as TokenTypes.Fields;
   }
@@ -86,28 +98,43 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
 
   tests = {
     getSymbol: async (
-      params: Omit<TestContractParams<TokenTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<HexString>> => {
+      params: Omit<
+        TestContractParamsWithoutMaps<TokenTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
       return testMethod(this, "getSymbol", params);
     },
     getName: async (
-      params: Omit<TestContractParams<TokenTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<HexString>> => {
+      params: Omit<
+        TestContractParamsWithoutMaps<TokenTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
       return testMethod(this, "getName", params);
     },
     getDecimals: async (
-      params: Omit<TestContractParams<TokenTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<bigint>> => {
+      params: Omit<
+        TestContractParamsWithoutMaps<TokenTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getDecimals", params);
     },
     getTotalSupply: async (
-      params: Omit<TestContractParams<TokenTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<bigint>> => {
+      params: Omit<
+        TestContractParamsWithoutMaps<TokenTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getTotalSupply", params);
     },
     getOwner: async (
-      params: Omit<TestContractParams<TokenTypes.Fields, never>, "testArgs">
-    ): Promise<TestContractResult<Address>> => {
+      params: Omit<
+        TestContractParamsWithoutMaps<TokenTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<Address>> => {
       return testMethod(this, "getOwner", params);
     },
   };
@@ -118,7 +145,8 @@ export const Token = new Factory(
   Contract.fromJson(
     TokenContractJson,
     "",
-    "ca6b8c08739a44b63b275e82ca2fa299d38793c1d6860d741c688e0bc352061b"
+    "ca6b8c08739a44b63b275e82ca2fa299d38793c1d6860d741c688e0bc352061b",
+    []
   )
 );
 

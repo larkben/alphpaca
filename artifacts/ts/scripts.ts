@@ -11,18 +11,27 @@ import {
   SignerProvider,
   HexString,
 } from "@alephium/web3";
+import { default as AddStakeScriptJson } from "../staking/AddStake.ral.json";
 import { default as BuildtokenScriptJson } from "../createtoken/Buildtoken.ral.json";
-import { default as BurnScriptJson } from "../burn/Burn.ral.json";
-import { default as BuyvirlScriptJson } from "../ico/Buyvirl.ral.json";
+import { default as CollectFeesScriptJson } from "../createtoken/CollectFees.ral.json";
+import { default as CollectStakeFeesScriptJson } from "../staking/CollectStakeFees.ral.json";
+import { default as CreateStakeProjectScriptJson } from "../staking/CreateStakeProject.ral.json";
 import { default as DestroyScriptJson } from "../scripts/Destroy.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
+import { default as DistributeScriptJson } from "../staking/Distribute.ral.json";
+import { default as EditRewardsScriptJson } from "../staking/EditRewards.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
 import { default as GettokenScriptJson } from "../scripts/Gettoken.ral.json";
-import { default as ReedeemalphScriptJson } from "../ico/Reedeemalph.ral.json";
-import { default as SellvirlScriptJson } from "../ico/Sellvirl.ral.json";
 import { default as SendoutScriptJson } from "../scripts/Sendout.ral.json";
 import { default as TopupScriptJson } from "../scripts/Topup.ral.json";
+import { default as UpdateCreationFeeScriptJson } from "../createtoken/UpdateCreationFee.ral.json";
+import { default as WithdrawStakeScriptJson } from "../staking/WithdrawStake.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
+
+export const AddStake = new ExecutableScript<{
+  contract: HexString;
+  amount: bigint;
+}>(Script.fromJson(AddStakeScriptJson, "", []));
 
 export const Buildtoken = new ExecutableScript<{
   contract: HexString;
@@ -30,56 +39,68 @@ export const Buildtoken = new ExecutableScript<{
   name: HexString;
   decimals: bigint;
   tokenTotal: bigint;
-}>(Script.fromJson(BuildtokenScriptJson, ""));
+}>(Script.fromJson(BuildtokenScriptJson, "", []));
 
-export const Burn = new ExecutableScript<{
-  contract: HexString;
-  amount: bigint;
-}>(Script.fromJson(BurnScriptJson, ""));
+export const CollectFees = new ExecutableScript<{ contract: HexString }>(
+  Script.fromJson(CollectFeesScriptJson, "", [])
+);
 
-export const Buyvirl = new ExecutableScript<{
+export const CollectStakeFees = new ExecutableScript<{ contract: HexString }>(
+  Script.fromJson(CollectStakeFeesScriptJson, "", [])
+);
+
+export const CreateStakeProject = new ExecutableScript<{
   contract: HexString;
-  amount: bigint;
-}>(Script.fromJson(BuyvirlScriptJson, ""));
+  token: HexString;
+}>(Script.fromJson(CreateStakeProjectScriptJson, "", []));
 
 export const Destroy = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(DestroyScriptJson, "")
+  Script.fromJson(DestroyScriptJson, "", [])
 );
 
 export const Destroycreator = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(DestroycreatorScriptJson, "")
+  Script.fromJson(DestroycreatorScriptJson, "", [])
 );
+
+export const Distribute = new ExecutableScript<{ contract: HexString }>(
+  Script.fromJson(DistributeScriptJson, "", [])
+);
+
+export const EditRewards = new ExecutableScript<{
+  contract: HexString;
+  newreward: bigint;
+}>(Script.fromJson(EditRewardsScriptJson, "", []));
 
 export const Editfee = new ExecutableScript<{
   contract: HexString;
   edit: bigint;
-}>(Script.fromJson(EditfeeScriptJson, ""));
+}>(Script.fromJson(EditfeeScriptJson, "", []));
 
 export const Gettoken = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(GettokenScriptJson, ""));
-
-export const Reedeemalph = new ExecutableScript<{
-  contract: HexString;
-  amount: bigint;
-}>(Script.fromJson(ReedeemalphScriptJson, ""));
-
-export const Sellvirl = new ExecutableScript<{
-  contract: HexString;
-  amount: bigint;
-}>(Script.fromJson(SellvirlScriptJson, ""));
+}>(Script.fromJson(GettokenScriptJson, "", []));
 
 export const Sendout = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(SendoutScriptJson, ""));
+}>(Script.fromJson(SendoutScriptJson, "", []));
 
 export const Topup = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(TopupScriptJson, ""));
+}>(Script.fromJson(TopupScriptJson, "", []));
+
+export const UpdateCreationFee = new ExecutableScript<{
+  contract: HexString;
+  amount: bigint;
+}>(Script.fromJson(UpdateCreationFeeScriptJson, "", []));
+
+export const WithdrawStake = new ExecutableScript<{
+  contract: HexString;
+  amount: bigint;
+}>(Script.fromJson(WithdrawStakeScriptJson, "", []));
 
 export const Withdrawlassets = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(WithdrawlassetsScriptJson, "")
+  Script.fromJson(WithdrawlassetsScriptJson, "", [])
 );
