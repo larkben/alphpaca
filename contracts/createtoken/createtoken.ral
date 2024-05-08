@@ -16,7 +16,7 @@ Contract CreateToken(
         return alphfee
     }
 
-    @using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = false)
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
     pub fn buildtoken(symbol: ByteVec, name: ByteVec, decimals: U256, tokenTotal: U256) -> () {
 
         let minter = callerAddress!()

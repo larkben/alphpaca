@@ -27,7 +27,7 @@ export const DevDashboard: FC<{
   const handleTokenCreationDestroy = async (e: React.FormEvent) => {
     e.preventDefault()
     if (signer) {
-      const result = await DestroyTokenCreator(signer, TokenCreate.contractId)
+      const result = await DestroyTokenCreator(signer)
     }
   }
 

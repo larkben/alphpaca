@@ -53,9 +53,9 @@
     },
     "CreateToken": {
       "sourceFile": "createtoken/createtoken.ral",
-      "sourceCodeHash": "8a1a2940bc4508db097095e78c6de21a0333c6c8c9e63731157e117316d8603f",
+      "sourceCodeHash": "9cf9397f420f1e1f32edc4b0a9aa8ae438de14614960f14225b26cb4dacb1239",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "ca10f06d922709c2703aeb48ec348856722b586dc7a6accaf36f629ec989aa35",
+      "codeHashDebug": "3446422f9d17342e692efbdf1960fec2eb2edd25bece98044f4d2b28320c0bca",
       "warnings": []
     },
     "Destroy": {
@@ -115,7 +115,7 @@
       "warnings": []
     },
     "IFungibleToken": {
-      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "6809cb06fb20fa7edf529461998beeebd12b1636d439612cca2f84214dbf4a20",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",

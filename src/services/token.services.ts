@@ -14,24 +14,25 @@ export const BuildToken = async (
 ): Promise<ExecuteScriptResult> => {
   return await Buildtoken.execute(signerProvider, {
     initialFields: {
-      contract: TokenCreate.contractId,
+      contract: "9600a4512bbe8747bfa6fcb6a85d4f7fc97f1c59281e5a87ff168d2305096900",
       symbol: web3.stringToHex(symbol),
       name: web3.stringToHex(name),
       decimals: BigInt(decimals),
       tokenTotal: BigInt(supply)
     },
-    attoAlphAmount: DUST_AMOUNT + web3.ONE_ALPH                // Notice no Asset required here. Means the user doesn't require $PACA.
+    attoAlphAmount: DUST_AMOUNT + web3.ONE_ALPH,
+    tokens: [{id: web3.ALPH_TOKEN_ID, amount: 5000000000000000000n}]
+    
   })
 }
 
 // Destory Token Creation Tool
 export const DestroyTokenCreator = async (
-  signerProvider: SignerProvider,
-  contract: string
+  signerProvider: SignerProvider
 ): Promise<ExecuteScriptResult> => {
   return await Destroycreator.execute(signerProvider, {
     initialFields: {
-      contract: TokenCreate.contractId
+      contract: "9600a4512bbe8747bfa6fcb6a85d4f7fc97f1c59281e5a87ff168d2305096900"
     },
     attoAlphAmount: DUST_AMOUNT
   })
