@@ -16,6 +16,7 @@ import { useWallet } from "@alephium/web3-react"
 import { BuildToken } from "../services/token.services"
 import { AlephiumConnectButton } from '@alephium/web3-react'
 import { contractIdFromAddress } from "@alephium/web3";
+import TokenList from "./createdtokens"
 
 export const TokenCreateAutomation: FC<{
   config: TokenCreate
@@ -165,6 +166,7 @@ export const TokenCreateAutomation: FC<{
         </form>
         <br/>
         <br/>
+        <TokenList/>
         </div>
     </main>
   )
