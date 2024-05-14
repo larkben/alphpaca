@@ -1,5 +1,5 @@
 {
-  "version": "v2.12.0",
+  "version": "v2.14.0",
   "name": "CreateStakeProject",
   "bytecodeTemplate": "0101030001000d0c0d{0}01001700b41600a2{1}0d0c{0}0101",
   "fieldsSig": {

@@ -64,11 +64,11 @@ export const TokenCreateAutomation: FC<{
 
   // Form submit to insert values and receive input
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen py-12 bg-gray-900 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-gray-800 p-6 rounded-lg shadow-md z-50">
+    <main className="flex flex-col items-center justify-center min-h-screen py-20 bg-gray-900 sm:px-6 lg:px-8">
+      <div className="min-w-30 space-y-8 bg-gray-800 p-6 rounded-lg shadow-md z-50">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-500">Create Your Token</h2>
-          <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token. All tokens are final and immutable. 1 ALPH will be taken as deposit. </p>
+          <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token. All tokens are final and immutable. 6 ALPH will be taken as deposit. <br/> 5 ALPH for service and 1 ALPH for blockchain storage requirements. </p>
           <h3 className="text-1xl text-white text-center py-5"> Token Preview: </h3> 
           <p className="text-1xl text-white text-center"> Token: {name} : ({symbol}) </p>
           <p className="text-1xl text-white text-center"> Total Supply: {supplyWithDecimals} </p>
@@ -136,36 +136,8 @@ export const TokenCreateAutomation: FC<{
             </Button>
           </div>
         </form>
-        <div>
-          <p className="text-1xl text-white text-center"> Token Id: {id} </p>
-        </div>
-        <form className="mt-8 space-y-6">
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label className="text-white" htmlFor="id">Token Contract Address:</label>
-              <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-blue-500 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
-                id="id"
-                name="id"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-                required
-                type="text"
-              />
-            </div>
-          </div>
-          <div>
-            <Button
-              onClick={getTokenId} // Call getTokenId function on button click
-              className="group relative w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-800"
-              type="button" // Change the type to "button" to prevent form submission
-            >
-              Get Token Id
-            </Button>
-          </div>
-        </form>
         <br/>
-        <br/>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-500">Created Tokens:</h2>
         <TokenList/>
         </div>
     </main>

@@ -4,15 +4,15 @@ import {
   AlephiumConnectButton,
   AlephiumWalletProvider,
 } from "@alephium/web3-react";
-import { DevDashboard } from "../../components/devdashboard";
+import { FaucetDapp } from "../../components/faucet";
 import { TokenCreate } from "../../services/utils";
 
-export default function Dashboard() {
+export default function Faucet() {
   return (
     <main>
       <AlephiumWalletProvider network={"mainnet"}>
         <Navbar/>
-        <DevDashboard config={TokenCreate}/>
+        <FaucetDapp config={TokenCreate}/>
       </AlephiumWalletProvider>
     </main>
   );

@@ -1,15 +1,18 @@
 {
   "version": "v2.14.0",
-  "name": "Withdrawlassets",
-  "bytecodeTemplate": "010103000000040c0c{0}0108",
+  "name": "DepositAlph",
+  "bytecodeTemplate": "01010300000008b4{1}a2{1}0d0c{0}0102",
   "fieldsSig": {
     "names": [
-      "contract"
+      "contract",
+      "amount"
     ],
     "types": [
-      "FeeCollection"
+      "RhoneBussin",
+      "U256"
     ],
     "isMutable": [
+      false,
       false
     ]
   },

@@ -223,7 +223,7 @@ export const StakeFactory = new Factory(
   Contract.fromJson(
     StakeFactoryContractJson,
     "",
-    "c718571d54c17c01664658866bbbb0f7379c31523a86d5a6356a862f8c67420c",
+    "7d1a817498b458ae9e2d37c94fa4a4e5f9c4144c300d60144373a2bafe284289",
     []
   )
 );

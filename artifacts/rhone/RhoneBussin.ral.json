@@ -1,48 +1,26 @@
 {
   "version": "v2.14.0",
-  "name": "CreateStakeFactory",
-  "bytecode": "06030e40634081010000000103d36638d1f4ce01020103010500402ad3ebf91044b417011601b2ce01a71601ce001600ce031304640c0c0c132313046417031702b413c40de0b6b3a7640000a2a00140ce0216021603c11704a0010d2aa101a000ce012aa1000516045e01020000000ed3d6607dbbb4ce00450c7bb2ce00a000a7a000a0002ba100",
-  "codeHash": "b2b96ab2187a427827807944713b8dc9ba107f65f2e74138d541936898f7293d",
+  "name": "RhoneBussin",
+  "bytecode": "02040e403c40534067010000000103d3f2607b5ea00002010201010015d38e222d93160013c3470de4df820000310d7bb2b41600a7b281d0a00016002ba100a000812ba100010301010009d3915d0d21b4b21600a7a00016002aa100010200000008d307dcbe54b4ce00450c7bce00b0",
+  "codeHash": "38fba9c4962c032098042c1eafb12cb14835345fc241d731bb19a4c04e1bd8a3",
   "fieldsSig": {
     "names": [
-      "owner",
-      "alphfee",
-      "collectedfees",
-      "stakefactory",
-      "stakecontract",
-      "path"
+      "alphInContract",
+      "owner"
     ],
     "types": [
-      "Address",
       "U256",
-      "U256",
-      "ByteVec",
-      "ByteVec",
-      "U256"
+      "Address"
     ],
     "isMutable": [
-      false,
-      false,
       true,
-      false,
-      false,
-      true
+      false
     ]
   },
-  "eventsSig": [
-    {
-      "name": "NewProject",
-      "fieldNames": [
-        "projectid"
-      ],
-      "fieldTypes": [
-        "ByteVec"
-      ]
-    }
-  ],
+  "eventsSig": [],
   "functions": [
     {
-      "name": "getFee",
+      "name": "getAlphInContract",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -54,15 +32,15 @@
       ]
     },
     {
-      "name": "addproject",
-      "usePreapprovedAssets": true,
-      "useAssetsInContract": false,
+      "name": "withdrawalph",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": true,
       "isPublic": true,
       "paramNames": [
-        "token"
+        "amount"
       ],
       "paramTypes": [
-        "ByteVec"
+        "U256"
       ],
       "paramIsMutable": [
         false
@@ -70,7 +48,23 @@
       "returnTypes": []
     },
     {
-      "name": "collectfees",
+      "name": "depositalph",
+      "usePreapprovedAssets": true,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "amount"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "destroyfaucet",
       "usePreapprovedAssets": false,
       "useAssetsInContract": true,
       "isPublic": true,
@@ -90,6 +84,13 @@
           "value": {
             "type": "U256",
             "value": "0"
+          }
+        },
+        {
+          "name": "InvalidAmount",
+          "value": {
+            "type": "U256",
+            "value": "1"
           }
         }
       ]

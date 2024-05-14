@@ -30,7 +30,7 @@ Contract Stake (
         amount = amount + add
     }
 
-    @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = true, checkExternalCaller = true)
     pub fn remove(sub: U256) -> Bool {
         checkCaller!(owner == getPContract(), ErrorCodes.InvalidCaller)
 

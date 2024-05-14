@@ -1,0 +1,64 @@
+Contract RhoneBussin (
+    mut alphInContract: U256,
+    owner: Address
+) {
+
+    enum ErrorCodes {
+        InvalidCaller = 0
+        InvalidAmount = 1
+    }
+
+    pub fn getAlphInContract() -> U256 {
+        return alphInContract
+    }
+
+    @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn withdrawalph(amount: U256) -> () {
+
+        assert!(amount < 20000000000000000, ErrorCodes.InvalidAmount) // 0.02 alph is max amount
+        
+        transferToken!(selfAddress!(), callerAddress!(), ALPH, amount)
+
+        payGasFee!(selfAddress!(), txGasFee!())
+
+        alphInContract = alphInContract - amount
+        alphInContract = alphInContract - txGasFee!()
+
+    }
+
+    @using(assetsInContract = false, updateFields = true, checkExternalCaller = false, preapprovedAssets = true)
+    pub fn depositalph(amount: U256) -> () {
+        
+        transferToken!(callerAddress!(), selfAddress!(), ALPH, amount)
+
+        alphInContract = alphInContract + amount
+    }
+
+    @using(assetsInContract = true, updateFields = false, checkExternalCaller = true, preapprovedAssets = false)
+    pub fn destroyfaucet() -> () {
+        checkCaller!(callerAddress!() == owner, ErrorCodes.InvalidCaller)
+
+        destroySelf!(owner)
+    }
+    
+}
+
+TxScript WithdrawAlph (
+    contract: RhoneBussin,
+    amount: U256
+) {
+    contract.withdrawalph(amount)
+}
+
+TxScript DestroyFaucet (
+    contract: RhoneBussin
+) {
+    contract.destroyfaucet()
+}
+
+TxScript DepositAlph (
+    contract: RhoneBussin,
+    amount: U256
+) {
+    contract.depositalph{callerAddress!() -> ALPH: amount}(amount)
+}

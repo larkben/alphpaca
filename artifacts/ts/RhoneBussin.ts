@@ -28,26 +28,20 @@ import {
   addStdIdToFields,
   encodeContractFields,
 } from "@alephium/web3";
-import { default as CreateStakeFactoryContractJson } from "../staking/CreateStakeFactory.ral.json";
+import { default as RhoneBussinContractJson } from "../rhone/RhoneBussin.ral.json";
 import { getContractByCodeHash } from "./contracts";
 
 // Custom types for the contract
-export namespace CreateStakeFactoryTypes {
+export namespace RhoneBussinTypes {
   export type Fields = {
+    alphInContract: bigint;
     owner: Address;
-    alphfee: bigint;
-    collectedfees: bigint;
-    stakefactory: HexString;
-    stakecontract: HexString;
-    path: bigint;
   };
 
   export type State = ContractState<Fields>;
 
-  export type NewProjectEvent = ContractEvent<{ projectid: HexString }>;
-
   export interface CallMethodTable {
-    getFee: {
+    getAlphInContract: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
@@ -67,10 +61,10 @@ export namespace CreateStakeFactoryTypes {
 }
 
 class Factory extends ContractFactory<
-  CreateStakeFactoryInstance,
-  CreateStakeFactoryTypes.Fields
+  RhoneBussinInstance,
+  RhoneBussinTypes.Fields
 > {
-  encodeFields(fields: CreateStakeFactoryTypes.Fields) {
+  encodeFields(fields: RhoneBussinTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -79,103 +73,95 @@ class Factory extends ContractFactory<
   }
 
   getInitialFieldsWithDefaultValues() {
-    return this.contract.getInitialFieldsWithDefaultValues() as CreateStakeFactoryTypes.Fields;
+    return this.contract.getInitialFieldsWithDefaultValues() as RhoneBussinTypes.Fields;
   }
 
-  eventIndex = { NewProject: 0 };
-  consts = { ErrorCodes: { InvalidCaller: BigInt(0) } };
+  consts = {
+    ErrorCodes: { InvalidCaller: BigInt(0), InvalidAmount: BigInt(1) },
+  };
 
-  at(address: string): CreateStakeFactoryInstance {
-    return new CreateStakeFactoryInstance(address);
+  at(address: string): RhoneBussinInstance {
+    return new RhoneBussinInstance(address);
   }
 
   tests = {
-    getFee: async (
+    getAlphInContract: async (
       params: Omit<
-        TestContractParamsWithoutMaps<CreateStakeFactoryTypes.Fields, never>,
+        TestContractParamsWithoutMaps<RhoneBussinTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "getFee", params);
+      return testMethod(this, "getAlphInContract", params);
     },
-    addproject: async (
+    withdrawalph: async (
       params: TestContractParamsWithoutMaps<
-        CreateStakeFactoryTypes.Fields,
-        { token: HexString }
+        RhoneBussinTypes.Fields,
+        { amount: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "addproject", params);
+      return testMethod(this, "withdrawalph", params);
     },
-    collectfees: async (
+    depositalph: async (
+      params: TestContractParamsWithoutMaps<
+        RhoneBussinTypes.Fields,
+        { amount: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "depositalph", params);
+    },
+    destroyfaucet: async (
       params: Omit<
-        TestContractParamsWithoutMaps<CreateStakeFactoryTypes.Fields, never>,
+        TestContractParamsWithoutMaps<RhoneBussinTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "collectfees", params);
+      return testMethod(this, "destroyfaucet", params);
     },
   };
 }
 
 // Use this object to test and deploy the contract
-export const CreateStakeFactory = new Factory(
+export const RhoneBussin = new Factory(
   Contract.fromJson(
-    CreateStakeFactoryContractJson,
+    RhoneBussinContractJson,
     "",
-    "b2b96ab2187a427827807944713b8dc9ba107f65f2e74138d541936898f7293d",
+    "38fba9c4962c032098042c1eafb12cb14835345fc241d731bb19a4c04e1bd8a3",
     []
   )
 );
 
 // Use this class to interact with the blockchain
-export class CreateStakeFactoryInstance extends ContractInstance {
+export class RhoneBussinInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<CreateStakeFactoryTypes.State> {
-    return fetchContractState(CreateStakeFactory, this);
-  }
-
-  async getContractEventsCurrentCount(): Promise<number> {
-    return getContractEventsCurrentCount(this.address);
-  }
-
-  subscribeNewProjectEvent(
-    options: EventSubscribeOptions<CreateStakeFactoryTypes.NewProjectEvent>,
-    fromCount?: number
-  ): EventSubscription {
-    return subscribeContractEvent(
-      CreateStakeFactory.contract,
-      this,
-      options,
-      "NewProject",
-      fromCount
-    );
+  async fetchState(): Promise<RhoneBussinTypes.State> {
+    return fetchContractState(RhoneBussin, this);
   }
 
   methods = {
-    getFee: async (
-      params?: CreateStakeFactoryTypes.CallMethodParams<"getFee">
-    ): Promise<CreateStakeFactoryTypes.CallMethodResult<"getFee">> => {
+    getAlphInContract: async (
+      params?: RhoneBussinTypes.CallMethodParams<"getAlphInContract">
+    ): Promise<RhoneBussinTypes.CallMethodResult<"getAlphInContract">> => {
       return callMethod(
-        CreateStakeFactory,
+        RhoneBussin,
         this,
-        "getFee",
+        "getAlphInContract",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
   };
 
-  async multicall<Calls extends CreateStakeFactoryTypes.MultiCallParams>(
+  async multicall<Calls extends RhoneBussinTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<CreateStakeFactoryTypes.MultiCallResults<Calls>> {
+  ): Promise<RhoneBussinTypes.MultiCallResults<Calls>> {
     return (await multicallMethods(
-      CreateStakeFactory,
+      RhoneBussin,
       this,
       calls,
       getContractByCodeHash
-    )) as CreateStakeFactoryTypes.MultiCallResults<Calls>;
+    )) as RhoneBussinTypes.MultiCallResults<Calls>;
   }
 }

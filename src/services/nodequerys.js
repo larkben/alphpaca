@@ -17,11 +17,29 @@ async function logTokens() {
     for (let i = 0; i < result.nextStart; i ++) {
 
         let id = result.events[i].fields[1].value
-        console.log("Token ID: " + id)
+        //console.log("Token ID: " + id)
         let address = addressFromContractId(id)
-        console.log(" Token Address: " + address)
+        //console.log(" Token Address: " + address)
 
         const url = `${Node}/contracts/${address}/state`;
+
+        fetch(`https://wallet-v20.mainnet.alephium.org/contracts/${address}/state`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            return response.json();
+            })
+            .then(data => {
+                let hexsymbol = data.immFields[0].value; // This will log the JSON data to the console
+                let hexname = data.immFields[1].value; 
+                let decimals = data.immFields[2].value; 
+                let supply = data.immFields[3].value; 
+                console.log(hexToString(hexsymbol) + " " + hexToString(hexname) + "Total Supply: " + supply)
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
 
     }
 }
