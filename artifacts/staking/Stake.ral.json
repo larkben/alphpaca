@@ -1,8 +1,8 @@
 {
   "version": "v2.14.0",
   "name": "Stake",
-  "bytecode": "03060e1c402a403740504076010000000103d34ffef083ce0002010000000103d3bada87d8a00002010000000103d3adb06926ce0102010000000103d3a79ea0fcb20201000101000ad39bddc96dce000002450c7ba00016002aa100010201010114d345dbf53ece000002450c7ba00016002ba100a0000c2f4c040000b004020302",
-  "codeHash": "ef468530276552e70cc22b1034ebf4aff9e541506615a4edf70110c30c84c703",
+  "bytecode": "03070e1c402a403740504076408a010000000103d34ffef083ce0002010000000103d3bada87d8a00002010000000103d3adb06926ce0102010000000103d3a79ea0fcb20201000101000ad39bddc96dce000002450c7ba00016002aa100010201010114d345dbf53ece000002450c7ba00016002ba100a0000c2f4c040000b004020302010200000008d37fa16846b4ce00450c7bce00b0",
+  "codeHash": "8e9db1975a5fab53eb509f7a243bfbb98cc2443349a04095ba1ca6cffbb8f9bc",
   "fieldsSig": {
     "names": [
       "owner",
@@ -103,6 +103,16 @@
       "returnTypes": [
         "Bool"
       ]
+    },
+    {
+      "name": "destroystakeprotocol",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": true,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
     }
   ],
   "constants": [],

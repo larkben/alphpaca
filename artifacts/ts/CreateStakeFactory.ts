@@ -114,6 +114,14 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "collectfees", params);
     },
+    destroystakeprotocol: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<CreateStakeFactoryTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "destroystakeprotocol", params);
+    },
   };
 }
 
@@ -122,7 +130,7 @@ export const CreateStakeFactory = new Factory(
   Contract.fromJson(
     CreateStakeFactoryContractJson,
     "",
-    "b2b96ab2187a427827807944713b8dc9ba107f65f2e74138d541936898f7293d",
+    "faee87efd3939de62184e3f13706d3b7ce65f1c8b9acfd7364ec43967b08011c",
     []
   )
 );

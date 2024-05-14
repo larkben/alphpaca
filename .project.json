@@ -39,9 +39,9 @@
     },
     "CreateStakeFactory": {
       "sourceFile": "staking/create_factory.ral",
-      "sourceCodeHash": "6c6235534086e69ec49b4c094f20b85d6558af5f2e37bd149b64c988d355c00a",
+      "sourceCodeHash": "7d996259a5e4ecc5923a0de38e1e2b2ec2af8294b339568db9aa832874d0a8d5",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "b2b96ab2187a427827807944713b8dc9ba107f65f2e74138d541936898f7293d",
+      "codeHashDebug": "faee87efd3939de62184e3f13706d3b7ce65f1c8b9acfd7364ec43967b08011c",
       "warnings": []
     },
     "CreateStakeProject": {
@@ -59,7 +59,7 @@
       "warnings": []
     },
     "DepositAlph": {
-      "sourceFile": "rhone/rhonebussin.ral",
+      "sourceFile": "rhonetest/rhonebussin.ral",
       "sourceCodeHash": "ff58030a119a7e82a5142e8393bd95b2beea324704997cc9b3a6b15b67211f0b",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
@@ -73,8 +73,29 @@
       "warnings": []
     },
     "DestroyFaucet": {
-      "sourceFile": "rhone/rhonebussin.ral",
+      "sourceFile": "rhonetest/rhonebussin.ral",
       "sourceCodeHash": "ff58030a119a7e82a5142e8393bd95b2beea324704997cc9b3a6b15b67211f0b",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "DestroyStake": {
+      "sourceFile": "staking/stake.ral",
+      "sourceCodeHash": "f0ff76e7130dc6c83004fe3b54f694936febc2e9e38bca17c7352a6db0b7f5ad",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "DestroyStakeFactory": {
+      "sourceFile": "staking/stake_factory.ral",
+      "sourceCodeHash": "875cda6e5243ca7d2f89fe9ccbbc68219bcd5dfebf309fc989945a24898212d4",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "DestroyStakeProtocol": {
+      "sourceFile": "staking/create_factory.ral",
+      "sourceCodeHash": "7d996259a5e4ecc5923a0de38e1e2b2ec2af8294b339568db9aa832874d0a8d5",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -136,7 +157,7 @@
       "warnings": []
     },
     "RhoneBussin": {
-      "sourceFile": "rhone/rhonebussin.ral",
+      "sourceFile": "rhonetest/rhonebussin.ral",
       "sourceCodeHash": "ff58030a119a7e82a5142e8393bd95b2beea324704997cc9b3a6b15b67211f0b",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "38fba9c4962c032098042c1eafb12cb14835345fc241d731bb19a4c04e1bd8a3",
@@ -151,16 +172,16 @@
     },
     "Stake": {
       "sourceFile": "staking/stake.ral",
-      "sourceCodeHash": "1614b6b682da04adef726f02c953f78be6de0024f682fe8e25df80078f8726c6",
+      "sourceCodeHash": "f0ff76e7130dc6c83004fe3b54f694936febc2e9e38bca17c7352a6db0b7f5ad",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "ef468530276552e70cc22b1034ebf4aff9e541506615a4edf70110c30c84c703",
+      "codeHashDebug": "8e9db1975a5fab53eb509f7a243bfbb98cc2443349a04095ba1ca6cffbb8f9bc",
       "warnings": []
     },
     "StakeFactory": {
       "sourceFile": "staking/stake_factory.ral",
-      "sourceCodeHash": "78c1cbedaf7b289298db5c00cef5862c8d13636f9a1d82902cf749a598033dae",
+      "sourceCodeHash": "875cda6e5243ca7d2f89fe9ccbbc68219bcd5dfebf309fc989945a24898212d4",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "7d1a817498b458ae9e2d37c94fa4a4e5f9c4144c300d60144373a2bafe284289",
+      "codeHashDebug": "e741c0070223ecc10dc6a3589925f858d5e0ceed2f525212a50b8dcaefb77d8a",
       "warnings": []
     },
     "Token": {
@@ -185,7 +206,7 @@
       "warnings": []
     },
     "WithdrawAlph": {
-      "sourceFile": "rhone/rhonebussin.ral",
+      "sourceFile": "rhonetest/rhonebussin.ral",
       "sourceCodeHash": "ff58030a119a7e82a5142e8393bd95b2beea324704997cc9b3a6b15b67211f0b",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",

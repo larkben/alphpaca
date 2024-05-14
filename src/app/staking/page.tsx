@@ -5,7 +5,7 @@ import {
   AlephiumWalletProvider,
 } from "@alephium/web3-react";
 
-export default function Saddle() {
+export default function Staking() {
   return (
     <main>
       <AlephiumWalletProvider network={"mainnet"}>

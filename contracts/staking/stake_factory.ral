@@ -5,7 +5,7 @@ Contract StakeFactory(
     mut total: U256,
     mut users: U256,
     mut path: U256,
-    //
+    // Reward Rate
     mut monthlyrewards: U256,
     // Contract
     stakecontract: ByteVec
@@ -154,4 +154,19 @@ Contract StakeFactory(
 
         monthlyrewards = newreward
     }
+
+    // this will need to be removed for mainnet
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn destroystakeprotocol() -> () {
+        
+        checkCaller!(callerAddress!() == dev, ErrorCodes.InvalidCaller)
+
+        destroySelf!(dev)
+    }
+}
+
+TxScript DestroyStakeFactory (
+    contract: StakeFactory
+) {
+    contract.destroystakeprotocol()
 }

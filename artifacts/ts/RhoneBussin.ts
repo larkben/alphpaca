@@ -28,7 +28,7 @@ import {
   addStdIdToFields,
   encodeContractFields,
 } from "@alephium/web3";
-import { default as RhoneBussinContractJson } from "../rhone/RhoneBussin.ral.json";
+import { default as RhoneBussinContractJson } from "../rhonetest/RhoneBussin.ral.json";
 import { getContractByCodeHash } from "./contracts";
 
 // Custom types for the contract

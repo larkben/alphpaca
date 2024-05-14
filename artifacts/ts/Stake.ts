@@ -139,6 +139,14 @@ class Factory extends ContractFactory<StakeInstance, StakeTypes.Fields> {
     ): Promise<TestContractResultWithoutMaps<boolean>> => {
       return testMethod(this, "remove", params);
     },
+    destroystakeprotocol: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<StakeTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "destroystakeprotocol", params);
+    },
   };
 }
 
@@ -147,7 +155,7 @@ export const Stake = new Factory(
   Contract.fromJson(
     StakeContractJson,
     "",
-    "ef468530276552e70cc22b1034ebf4aff9e541506615a4edf70110c30c84c703",
+    "8e9db1975a5fab53eb509f7a243bfbb98cc2443349a04095ba1ca6cffbb8f9bc",
     []
   )
 );

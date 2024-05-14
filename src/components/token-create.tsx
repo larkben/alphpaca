@@ -71,7 +71,8 @@ export const TokenCreateAutomation: FC<{
           <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token. All tokens are final and immutable. 6 ALPH will be taken as deposit. <br/> 5 ALPH for service and 1 ALPH for blockchain storage requirements. </p>
           <h3 className="text-1xl text-white text-center py-5"> Token Preview: </h3> 
           <p className="text-1xl text-white text-center"> Token: {name} : ({symbol}) </p>
-          <p className="text-1xl text-white text-center"> Total Supply: {supplyWithDecimals} </p>
+          <p className="text-1xl text-white text-center"> Total Supply with Decimals: {supplyWithDecimals} </p>
+          <p className="text-1xl text-white text-center"> Total Supply &apos;without&apos; Decimals: {supply} </p>
         </div>
         <form  onSubmit={handleTokenCreate} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">

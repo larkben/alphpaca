@@ -1,0 +1,99 @@
+{
+  "version": "v2.14.0",
+  "name": "RhoneBussin",
+  "bytecode": "02040e403c40534067010000000103d3f2607b5ea00002010201010015d38e222d93160013c3470de4df820000310d7bb2b41600a7b281d0a00016002ba100a000812ba100010301010009d3915d0d21b4b21600a7a00016002aa100010200000008d307dcbe54b4ce00450c7bce00b0",
+  "codeHash": "38fba9c4962c032098042c1eafb12cb14835345fc241d731bb19a4c04e1bd8a3",
+  "fieldsSig": {
+    "names": [
+      "alphInContract",
+      "owner"
+    ],
+    "types": [
+      "U256",
+      "Address"
+    ],
+    "isMutable": [
+      true,
+      false
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "getAlphInContract",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "withdrawalph",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": true,
+      "isPublic": true,
+      "paramNames": [
+        "amount"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "depositalph",
+      "usePreapprovedAssets": true,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "amount"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "destroyfaucet",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": true,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "InvalidCaller",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "InvalidAmount",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  ]
+}

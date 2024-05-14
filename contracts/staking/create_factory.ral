@@ -2,13 +2,13 @@
 
 Contract CreateStakeFactory(
     owner: Address,
-    //
+    // Fees for Staking Protocol
     alphfee: U256,
     mut collectedfees: U256,
-    //
+    // Stake Factory
     stakefactory: ByteVec,
     stakecontract: ByteVec,
-    //
+    // Contract Path for Sub Contracts
     mut path: U256
 ) {
 
@@ -53,4 +53,19 @@ Contract CreateStakeFactory(
 
         collectedfees = collectedfees - collectedfees
     }
+
+    // this will need to be removed for mainnet
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn destroystakeprotocol() -> () {
+        
+        checkCaller!(callerAddress!() == owner, ErrorCodes.InvalidCaller)
+
+        destroySelf!(owner)
+    }
+}
+
+TxScript DestroyStakeProtocol (
+    contract: CreateStakeFactory
+) {
+    contract.destroystakeprotocol()
 }

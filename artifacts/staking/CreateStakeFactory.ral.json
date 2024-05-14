@@ -1,8 +1,8 @@
 {
   "version": "v2.14.0",
   "name": "CreateStakeFactory",
-  "bytecode": "06030e40634081010000000103d36638d1f4ce01020103010500402ad3ebf91044b417011601b2ce01a71601ce001600ce031304640c0c0c132313046417031702b413c40de0b6b3a7640000a2a00140ce0216021603c11704a0010d2aa101a000ce012aa1000516045e01020000000ed3d6607dbbb4ce00450c7bb2ce00a000a7a000a0002ba100",
-  "codeHash": "b2b96ab2187a427827807944713b8dc9ba107f65f2e74138d541936898f7293d",
+  "bytecode": "06040e406340814095010000000103d36638d1f4ce01020103010500402ad3ebf91044b417011601b2ce01a71601ce001600ce031304640c0c0c132313046417031702b413c40de0b6b3a7640000a2a00140ce0216021603c11704a0010d2aa101a000ce012aa1000516045e01020000000ed3d6607dbbb4ce00450c7bb2ce00a000a7a000a0002ba100010200000008d37fa16846b4ce00450c7bce00b0",
+  "codeHash": "faee87efd3939de62184e3f13706d3b7ce65f1c8b9acfd7364ec43967b08011c",
   "fieldsSig": {
     "names": [
       "owner",
@@ -71,6 +71,16 @@
     },
     {
       "name": "collectfees",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": true,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "destroystakeprotocol",
       "usePreapprovedAssets": false,
       "useAssetsInContract": true,
       "isPublic": true,

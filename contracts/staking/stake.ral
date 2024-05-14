@@ -44,5 +44,20 @@ Contract Stake (
 
         return true // contract still alive
     }
+
+    // this will need to be removed for mainnet
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn destroystakeprotocol() -> () {
+        
+        checkCaller!(callerAddress!() == owner, ErrorCodes.InvalidCaller)
+
+        destroySelf!(owner)
+    }
     
+}
+
+TxScript DestroyStake (
+    contract: Stake
+) {
+    contract.destroystakeprotocol()
 }
