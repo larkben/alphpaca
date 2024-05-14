@@ -1,7 +1,7 @@
 // This faucet takes advantage of the Rhone gasless transactions
 import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
-import { CreateToken, RhoneBussin } from '../artifacts/ts'
+import { CreateStakeFactory, CreateToken, RhoneBussin } from '../artifacts/ts'
 
 //! TestNet Token $PACA
 // 23ced1fcda7fb1f53641dc299cf49b12a89338c80d05534fc5b366d5b65acd02
@@ -11,19 +11,23 @@ import { CreateToken, RhoneBussin } from '../artifacts/ts'
 
 // This deploy function will be called by cli deployment tool automatically
 //* Note that deployment scripts should prefixed with numbers (starting from 0)
-const tokenCreate: DeployFunction<Settings> = async (
+const tokenStakeFactoryCreator: DeployFunction<Settings> = async (
   deployer: Deployer,
 ): Promise<void> => {
   // Get settings
-  const result = await deployer.deployContract(RhoneBussin, {
+  const result = await deployer.deployContract(CreateStakeFactory, {
     // The initial states of the faucet contract
     initialFields: {
-        alphInContract: 0n,
-        owner: "16gAmGuCysLjGxHK8TUENkvhbqvwZRb6BabUbsxLYkSkd" //! Owner
+        owner: "16gAmGuCysLjGxHK8TUENkvhbqvwZRb6BabUbsxLYkSkd", //! Owner
+        alphfee: 20000000000000000000n,
+        collectedfees: 0n,
+        stakefactory: "",
+        stakecontract: "",
+        path: 0n
     }
   })
-  console.log('Faucet contract id: ' + result.contractInstance.contractId)
-  console.log('Faucet contract address: ' + result.contractInstance.address)
+  console.log('Stake Factory Creator id: ' + result.contractInstance.contractId)
+  console.log('Stake Factory Creator address: ' + result.contractInstance.address)
 }
 
-export default tokenCreate
+export default tokenStakeFactoryCreator
