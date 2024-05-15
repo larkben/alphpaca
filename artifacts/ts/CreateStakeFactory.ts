@@ -130,7 +130,7 @@ export const CreateStakeFactory = new Factory(
   Contract.fromJson(
     CreateStakeFactoryContractJson,
     "",
-    "faee87efd3939de62184e3f13706d3b7ce65f1c8b9acfd7364ec43967b08011c",
+    "24dc3f1769fd3df869ec4a2300694bff4a8470e809d9ea9e6139c82772ff3cfe",
     []
   )
 );

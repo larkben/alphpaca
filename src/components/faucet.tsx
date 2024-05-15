@@ -13,7 +13,7 @@ import { FC, useState, useEffect } from 'react'
 // Import Alephium Services
 import { TokenCreate } from "../services/utils"
 import { useWallet } from "@alephium/web3-react"
-import { BuildToken, FaucetDeposit, FaucetWithdraw } from "../services/token.services"
+import { BuildToken } from "../services/token.services"
 import { AlephiumConnectButton } from '@alephium/web3-react'
 import { contractIdFromAddress } from "@alephium/web3";
 
@@ -31,6 +31,7 @@ export const FaucetDapp: FC<{
   const [id, setId] = useState<string>("")
 
   // Handle of Faucet
+  /*
   const handleDepositFaucet = async (e: React.FormEvent) => {
     e.preventDefault()
     if (signer) {
@@ -45,6 +46,7 @@ export const FaucetDapp: FC<{
       const result = await FaucetWithdraw(signer, ''+20000000000000000)
     }
   }
+  */
 
   useEffect(() => {
     // Your client-side code here
@@ -64,7 +66,7 @@ export const FaucetDapp: FC<{
           <br/>
           <p className="text-1xl text-white text-center"> Withdraw is 0.02 alph. </p>
         </div>
-        <form  onSubmit={handleWithdrawFaucet} className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6">
           <div>
             <Button
               className="group relative w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-800"
@@ -76,7 +78,7 @@ export const FaucetDapp: FC<{
         </form>
         <br/>
         <br/>
-        <form  onSubmit={handleDepositFaucet} className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label className="text-white" htmlFor="decimals">Amount to be Deposited into Faucet:</label>

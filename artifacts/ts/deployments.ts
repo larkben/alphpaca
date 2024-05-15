@@ -4,7 +4,18 @@
 
 import { RunScriptResult, DeployContractExecutionResult } from "@alephium/cli";
 import { NetworkId } from "@alephium/web3";
-import { Token, TokenInstance, CreateToken, CreateTokenInstance } from ".";
+import {
+  Token,
+  TokenInstance,
+  CreateToken,
+  CreateTokenInstance,
+  StakeFactory,
+  StakeFactoryInstance,
+  Stake,
+  StakeInstance,
+  CreateStakeFactory,
+  CreateStakeFactoryInstance,
+} from ".";
 import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
 
@@ -13,6 +24,9 @@ export type Deployments = {
   contracts: {
     Token: DeployContractExecutionResult<TokenInstance>;
     CreateToken: DeployContractExecutionResult<CreateTokenInstance>;
+    StakeFactory?: DeployContractExecutionResult<StakeFactoryInstance>;
+    Stake?: DeployContractExecutionResult<StakeInstance>;
+    CreateStakeFactory?: DeployContractExecutionResult<CreateStakeFactoryInstance>;
   };
 };
 
@@ -30,6 +44,33 @@ function toDeployments(json: any): Deployments {
         json.contracts["CreateToken"].contractInstance.address
       ),
     },
+    StakeFactory:
+      json.contracts["StakeFactory"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["StakeFactory"],
+            contractInstance: StakeFactory.at(
+              json.contracts["StakeFactory"].contractInstance.address
+            ),
+          },
+    Stake:
+      json.contracts["Stake"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["Stake"],
+            contractInstance: Stake.at(
+              json.contracts["Stake"].contractInstance.address
+            ),
+          },
+    CreateStakeFactory:
+      json.contracts["CreateStakeFactory"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["CreateStakeFactory"],
+            contractInstance: CreateStakeFactory.at(
+              json.contracts["CreateStakeFactory"].contractInstance.address
+            ),
+          },
   };
   return {
     ...json,

@@ -1,5 +1,5 @@
 import { DUST_AMOUNT, ExecutableScript, ExecuteScriptResult, SignerProvider, addressFromContractId, contractIdFromAddress, hexToString } from '@alephium/web3'
-import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, WithdrawAlph, DepositAlph, CollectFees, CreateStakeProject, CollectStakeFees, AddStake, WithdrawStake, EditRewards, Distribute } from '../../artifacts/ts/scripts'
+import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, CollectFees, CreateStakeProject, CollectStakeFees, AddStake, WithdrawStake, EditRewards, Distribute, UpdateCreationFee } from '../../artifacts/ts/scripts'
 import { TokenCreate, TokenFaucetConfig, TokenTemplate } from './utils'
 import { Faucet, Token } from '../../artifacts/ts'
 import * as web3 from '@alephium/web3'
@@ -50,8 +50,23 @@ export const CollectCreatorFees = async (
   })
 }
 
+// Token Creator Fee Edit
+export const EditCreatorFees = async (
+  signerProvider: SignerProvider,
+  amount: string
+): Promise<ExecuteScriptResult> => {
+  return await UpdateCreationFee.execute(signerProvider, {
+    initialFields: {
+      contract: "9600a4512bbe8747bfa6fcb6a85d4f7fc97f1c59281e5a87ff168d2305096900",
+      amount: BigInt(amount),
+    },
+    attoAlphAmount: DUST_AMOUNT
+  })
+}
+
 // Rhone Gasless Transactions Tests
 // ALPHFaucet
+/*
 export const FaucetDeposit = async (
   signerProvider: SignerProvider,
   amount: string
@@ -78,6 +93,7 @@ export const FaucetWithdraw = async (
     }
   })
 }
+*/
 
 // ------------------------------------------------- //
 //                                                   //

@@ -16,9 +16,7 @@ import { default as BuildtokenScriptJson } from "../createtoken/Buildtoken.ral.j
 import { default as CollectFeesScriptJson } from "../createtoken/CollectFees.ral.json";
 import { default as CollectStakeFeesScriptJson } from "../staking/CollectStakeFees.ral.json";
 import { default as CreateStakeProjectScriptJson } from "../staking/CreateStakeProject.ral.json";
-import { default as DepositAlphScriptJson } from "../rhonetest/DepositAlph.ral.json";
 import { default as DestroyScriptJson } from "../scripts/Destroy.ral.json";
-import { default as DestroyFaucetScriptJson } from "../rhonetest/DestroyFaucet.ral.json";
 import { default as DestroyStakeScriptJson } from "../staking/DestroyStake.ral.json";
 import { default as DestroyStakeFactoryScriptJson } from "../staking/DestroyStakeFactory.ral.json";
 import { default as DestroyStakeProtocolScriptJson } from "../staking/DestroyStakeProtocol.ral.json";
@@ -30,7 +28,6 @@ import { default as GettokenScriptJson } from "../scripts/Gettoken.ral.json";
 import { default as SendoutScriptJson } from "../scripts/Sendout.ral.json";
 import { default as TopupScriptJson } from "../scripts/Topup.ral.json";
 import { default as UpdateCreationFeeScriptJson } from "../createtoken/UpdateCreationFee.ral.json";
-import { default as WithdrawAlphScriptJson } from "../rhonetest/WithdrawAlph.ral.json";
 import { default as WithdrawStakeScriptJson } from "../staking/WithdrawStake.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
 
@@ -60,17 +57,8 @@ export const CreateStakeProject = new ExecutableScript<{
   token: HexString;
 }>(Script.fromJson(CreateStakeProjectScriptJson, "", []));
 
-export const DepositAlph = new ExecutableScript<{
-  contract: HexString;
-  amount: bigint;
-}>(Script.fromJson(DepositAlphScriptJson, "", []));
-
 export const Destroy = new ExecutableScript<{ contract: HexString }>(
   Script.fromJson(DestroyScriptJson, "", [])
-);
-
-export const DestroyFaucet = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(DestroyFaucetScriptJson, "", [])
 );
 
 export const DestroyStake = new ExecutableScript<{ contract: HexString }>(
@@ -122,11 +110,6 @@ export const UpdateCreationFee = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
 }>(Script.fromJson(UpdateCreationFeeScriptJson, "", []));
-
-export const WithdrawAlph = new ExecutableScript<{
-  contract: HexString;
-  amount: bigint;
-}>(Script.fromJson(WithdrawAlphScriptJson, "", []));
 
 export const WithdrawStake = new ExecutableScript<{
   contract: HexString;

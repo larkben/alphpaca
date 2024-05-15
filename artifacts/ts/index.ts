@@ -6,7 +6,6 @@ export * from "./CreateStakeFactory";
 export * from "./CreateToken";
 export * from "./Faucet";
 export * from "./FeeCollection";
-export * from "./RhoneBussin";
 export * from "./Stake";
 export * from "./StakeFactory";
 export * from "./Token";
