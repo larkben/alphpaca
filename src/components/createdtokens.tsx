@@ -98,7 +98,7 @@ const TokenComponent: React.FC = () => {
   console.log("Rendering token list...");
 
   return (
-    <div className="p-4">
+    <div className="p-4 text-amber-500">
       <ul className="space-y-4">
         {tokens.map((token, index) => (
           <li key={index} className="border border-gray-300 p-4 rounded-lg">
