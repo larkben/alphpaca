@@ -1,4 +1,5 @@
-const { NodeProvider, hexToString, binToHex, contractIdFromAddress, fetchContractState, addressFromContractId } = require('@alephium/web3')
+const { NodeProvider, hexToString, binToHex, contractIdFromAddress, fetchContractState, addressFromContractId, web3 } = require('@alephium/web3')
+const { PrivateKeyWallet } = require('@alephium/web3-wallet')
 require('dotenv').config({ path: '../../.env' });
 
 //const Node = process.env.Node;
@@ -56,13 +57,14 @@ async function logTokens() {
 
 //const nodeProvider = new NodeProvider("https://wallet-v20.mainnet.alephium.org")
 
-/*
 
 async function getAssets(walletAddy) {
     let walletAssets = await nodeProvider.addresses.getAddressesAddressBalance(walletAddy);
     console.log(walletAssets);
     return walletAssets;
 }
+
+/*
 
 // gets the image url of the nft by its token id
 async function getImageUri(tokenId) {
@@ -105,12 +107,18 @@ async function getImageUri(tokenId) {
 
 */
 
-//console.log(addressFromContractId("3426a33ad6041001fe365f41b17b0d50c2417ab54919ea200a5cff24dd7a9300"))
+const wallet =  new PrivateKeyWallet({privateKey: '92f833a63e393b8a328d4cca75a9cf3b7bfec091b6d8c8ea13bbf04d7297139f', keyType: undefined, nodeProvider: nodeProvider})
 
-//console.log(hexToString("68747470733a2f2f697066732e66696c65626173652e696f2f697066732f516d5836684b4e754b39657561386539314e75326a627a4b424d397563637a4b7032703544697a70685847694b6b2f3136"))
+getAssets(wallet.address)
 
-//console.log(getAssets("148n4B7H7CB8wUJHpSoj95ctMcENYjBM5ysbHoTq2Kf9t"))
+console.log(wallet.privateKey)
 
-//getImageUri("3426a33ad6041001fe365f41b17b0d50c2417ab54919ea200a5cff24dd7a9300");
-
-logTokens()
+async function sendALPH() {
+await wallet.signAndSubmitTransferTx({
+    signerAddress: wallet.account.address,
+    destinations: [{
+      address: '148n4B7H7CB8wUJHpSoj95ctMcENYjBM5ysbHoTq2Kf9t',
+      attoAlphAmount: 1470000000000000000
+    }]
+  })
+}

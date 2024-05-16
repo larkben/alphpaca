@@ -108,7 +108,7 @@ export const CreateStakeFactory = async (
 ): Promise<ExecuteScriptResult> => {
   return await CreateStakeProject.execute(signerProvider, {
     initialFields: {
-      contract: "9600a4512bbe8747bfa6fcb6a85d4f7fc97f1c59281e5a87ff168d2305096900",
+      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700",
       token: tokenid
     },
     attoAlphAmount: DUST_AMOUNT
@@ -121,7 +121,7 @@ export const CollectFactoryFees = async (
 ): Promise<ExecuteScriptResult> => {
   return await CollectStakeFees.execute(signerProvider, {
     initialFields: {
-      contract: "9600a4512bbe8747bfa6fcb6a85d4f7fc97f1c59281e5a87ff168d2305096900",
+      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700",
     },
     attoAlphAmount: DUST_AMOUNT
   })

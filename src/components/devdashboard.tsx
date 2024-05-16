@@ -8,7 +8,7 @@ import { FC, useState, useEffect } from 'react'
 // Import Alephium Services
 import { TokenCreate } from "../services/utils"
 import { useWallet } from "@alephium/web3-react"
-import { BuildToken, CollectCreatorFees, DestroyTokenCreator, EditCreatorFees } from "../services/token.services"
+import { BuildToken, CollectCreatorFees, CollectFactoryFees, DestroyTokenCreator, EditCreatorFees } from "../services/token.services"
 import { NodeProvider } from "@alephium/web3"
 
 const Node = "https://wallet-v20.mainnet.alephium.org"
@@ -47,6 +47,13 @@ export const DevDashboard: FC<{
     e.preventDefault()
     if (signer) {
       const result = await EditCreatorFees(signer, amount)
+    }
+  }
+
+  const handleCollectStakingFees = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (signer) {
+      const result = await CollectFactoryFees(signer)
     }
   }
 
@@ -116,6 +123,17 @@ export const DevDashboard: FC<{
               type="submit"
             >
               Edit Token Creation Fees
+            </Button>
+          </div>
+      </form>
+      <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-500"> Staking Services Fee Collection </h2>
+      <form  onSubmit={handleCollectStakingFees} className="mt-8 space-y-6">
+          <div>
+            <Button
+              className="group relative w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-800"
+              type="submit"
+            >
+              Staking Services Collect
             </Button>
           </div>
       </form>

@@ -12,7 +12,7 @@ import { AlephiumConnectButton } from '@alephium/web3-react'
 import { contractIdFromAddress } from "@alephium/web3";
 import TokenList from "./createdtokens"
 
-export const TokenCreateAutomation: FC<{
+export const StakingServices: FC<{
   config: TokenCreate
 }> = ({ config }) => {
   const { signer, account } = useWallet()
