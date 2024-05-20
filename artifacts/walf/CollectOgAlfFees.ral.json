@@ -1,0 +1,28 @@
+{
+  "version": "v2.14.0",
+  "name": "CollectOgAlfFees",
+  "bytecodeTemplate": "010103000000040c0c{0}010b",
+  "fieldsSig": {
+    "names": [
+      "contract"
+    ],
+    "types": [
+      "WrappedOgAlfProtocol"
+    ],
+    "isMutable": [
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "usePreapprovedAssets": true,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

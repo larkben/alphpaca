@@ -11,6 +11,7 @@ import {
   Stake,
   StakeFactory,
   Token,
+  WrappedOgAlfProtocol,
 } from ".";
 
 let contracts: ContractFactory<any>[] | undefined = undefined;
@@ -24,6 +25,7 @@ export function getContractByCodeHash(codeHash: string): Contract {
       Stake,
       StakeFactory,
       Token,
+      WrappedOgAlfProtocol,
     ];
   }
   const c = contracts.find(

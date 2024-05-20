@@ -9,4 +9,5 @@ export * from "./FeeCollection";
 export * from "./Stake";
 export * from "./StakeFactory";
 export * from "./Token";
+export * from "./WrappedOgAlfProtocol";
 export * from "./scripts";
