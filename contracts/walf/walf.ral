@@ -102,7 +102,7 @@ Contract WrappedOgAlfProtocol (
     @using(preapprovedAssets = false, assetsInContract = false, updateFields = false, checkExternalCaller = true)
     pub fn destroyprotocol() -> () {
 
-        assert!(ogalf < 1, ErrorCodes.OgAlfInContract)
+        assert!(ogalfamount < 1, ErrorCodes.OgAlfInContract)
 
         checkCaller!(owner == callerAddress!())
 
