@@ -100,7 +100,7 @@ Contract WrappedOgAlfProtocol (
         emit OgAlfRedeemed(minter, mintedamount)
     }
 
-    @using(preapprovedAssets = false, assetsInContract = false, updateFields = false, checkExternalCaller = true)
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
     pub fn destroyprotocol() -> () {
 
         assert!(ogalfamount < 1, ErrorCodes.OgAlfInContract)
