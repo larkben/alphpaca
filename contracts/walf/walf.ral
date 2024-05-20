@@ -23,6 +23,7 @@ Contract WrappedOgAlfProtocol (
         InvalidOgAlf = 0
         InvalidWrappedAlf = 1
         OgAlfInContract = 2
+        InvalidCaller = 3
     }
 
     pub fn getSymbol() -> ByteVec {
@@ -104,7 +105,7 @@ Contract WrappedOgAlfProtocol (
 
         assert!(ogalfamount < 1, ErrorCodes.OgAlfInContract)
 
-        checkCaller!(owner == callerAddress!())
+        checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
 
         destroySelf!(owner)
     }
@@ -112,7 +113,7 @@ Contract WrappedOgAlfProtocol (
     @using(preapprovedAssets = false, assetsInContract = true, updateFields = true, checkExternalCaller = true)
     pub fn collectfees() -> () {
 
-        checkCaller!(owner == callerAddress!())
+        checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
 
         transferToken!(selfAddress!(), owner, ALPH, feescollected)
 
@@ -122,7 +123,7 @@ Contract WrappedOgAlfProtocol (
     @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
     pub fn editfee(newfee: U256) -> () {
 
-        checkCaller!(owner == callerAddress!())
+        checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
 
         fee = newfee
     }
