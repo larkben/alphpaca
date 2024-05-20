@@ -3,15 +3,16 @@ import "std/fungible_token_interface"
 Contract WrappedOgAlfProtocol (
     symbol: ByteVec,
     name: ByteVec,
-    decimals: U256, // 4
-    mut supply: U256,   // 128000_0000
+    decimals: U256,     // 4
+    mut supply: U256,   // 1000000_1000 // 0.1 for dex aquisitions
     owner: Address,
     //
     ogalf: ByteVec,
     mut ogalfamount: U256,
     //
     mut fee: U256,
-    mut feescollected: U256
+    mut feescollected: U256,
+    mut dextoken: U256
 ) implements IFungibleToken {
 
     event WrappedAlfMinted(who: Address, amount: U256)
@@ -22,6 +23,7 @@ Contract WrappedOgAlfProtocol (
         InvalidWrappedAlf = 1
         OgAlfInContract = 2
         InvalidCaller = 3
+        InvalidDexTokens = 4
     }
 
     pub fn getSymbol() -> ByteVec {
@@ -65,7 +67,7 @@ Contract WrappedOgAlfProtocol (
 
         let minter = callerAddress!()
 
-        let mintedamount = amount * 10000000 // 1000 w/ 4 decimals
+        let mintedamount = amount * 100000000 // 1000 w/ 4 decimals
 
         transferToken!(minter, selfAddress!(), ALPH, fee)
         transferToken!(selfAddress!(), minter, selfTokenId!(), mintedamount) 
@@ -86,7 +88,7 @@ Contract WrappedOgAlfProtocol (
 
         let minter = callerAddress!()
 
-        let mintedamount = amount / 10000000 // 1000 w/ 4 decimals
+        let mintedamount = amount / 100000000 // 1000 w/ 4 decimals
 
         transferToken!(minter, selfAddress!(), ALPH, fee)
         transferToken!(selfAddress!(), minter, ogalf, mintedamount)
@@ -116,6 +118,18 @@ Contract WrappedOgAlfProtocol (
         transferToken!(selfAddress!(), owner, ALPH, feescollected)
 
         feescollected = feescollected - feescollected
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn emitdextoken() -> () {
+
+        assert!(dextoken > 0, ErrorCodes.InvalidDexTokens)
+
+        dextoken = dextoken - 1
+
+        checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
+
+        transferToken!(selfAddress!(), owner, selfTokenId!(), 1)
     }
 
     @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
@@ -167,4 +181,10 @@ TxScript DestroyOgAlfProtocol(
     contract: WrappedOgAlfProtocol
 ) {
     contract.destroyprotocol()
+}
+
+TxScript RecieveDexDust(
+    contract: WrappedOgAlfProtocol
+) {
+    contract.emitdextoken()
 }
