@@ -1,0 +1,171 @@
+import "std/fungible_token_interface"
+
+Contract WrappedOgAlfProtocol (
+    symbol: ByteVec,
+    name: ByteVec,
+    decimals: U256, // 4
+    mut supply: U256,   // 128000_0000
+    owner: Address,
+    //
+    ogalf: ByteVec,
+    mut ogalfamount: U256,
+    //
+    conversionrate: U256,
+    //
+    mut fee: U256,
+    mut feescollected: U256
+) implements IFungibleToken {
+
+    event WrappedAlfMinted(who: Address, amount: U256)
+    event OgAlfRedeemed(who: Address, amount: U256)
+
+    enum ErrorCodes {
+        InvalidOgAlf = 0
+        InvalidWrappedAlf = 1
+        OgAlfInContract = 2
+    }
+
+    pub fn getSymbol() -> ByteVec {
+        return symbol
+    }
+
+    pub fn getName() -> ByteVec {
+        return name
+    }
+
+    pub fn getDecimals() -> U256 {
+        return decimals
+    }
+
+    pub fn getTotalSupply() -> U256 {
+        return supply
+    }
+
+    pub fn getOwner() -> Address {
+        return owner
+    }
+
+    pub fn getOgAlf() -> ByteVec {
+        return ogalf
+    }
+
+    pub fn getWrappedAlf() -> ByteVec {
+        return selfTokenId!()
+    }
+
+    pub fn getFee() -> U256 {
+        return fee
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn mintalf(amount: U256) -> () {
+
+        assert!(amount > 0, ErrorCodes.InvalidOgAlf)
+
+        ogalfamount = ogalfamount + amount
+
+        let minter = callerAddress!()
+
+        let mintedamount = amount * 10000000 // 1000 w/ 4 decimals
+
+        transferToken!(minter, selfAddress!(), ALPH, fee)
+        transferToken!(selfAddress!(), minter, selfTokenId!(), mintedamount) 
+
+        supply = supply - mintedamount
+
+        feescollected = feescollected + fee
+
+        emit WrappedAlfMinted(minter, mintedamount)
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn mintogalf(amount: U256) -> () {
+
+        assert(amount > 9990000) // 999 w/ 4 decimals
+
+        supply = supply + amount
+
+        let minter = callerAddress!()
+
+        let mintedamount = amount / 10000000 // 1000 w/ 4 decimals
+
+        transferToken!(minter, selfAddress!(), ALPH, fee)
+        transferToken!(selfAddress!(), minter, ogalf, mintedamount)
+        
+        ogalfamount = ogalfamount - mintedamount
+
+        feescollected = feescollected + fee
+
+        emit OgAlfRedeemed(minter, mintedamount)
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = false, checkExternalCaller = true)
+    pub fn destroyprotocol() -> () {
+
+        assert!(ogalf < 1, ErrorCodes.OgAlfInContract)
+
+        checkCaller!(owner == callerAddress!())
+
+        destroySelf!(owner)
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = true, checkExternalCaller = true)
+    pub fn collectfees() -> () {
+
+        checkCaller!(owner == callerAddress!())
+
+        transferToken!(selfAddress!(), owner, ALPH, feescollected)
+
+        feescollected = feescollected - feescollected
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
+    pub fn editfee(newfee: U256) -> () {
+
+        checkCaller!(owner == callerAddress!())
+
+        fee = newfee
+    }
+    
+}
+
+TxScript MintOgAlf(
+    contract: WrappedOgAlfProtocol,
+    amount: U256
+) {
+    let ogalftoken = contract.getOgAlf()
+
+    let fee = contract.getFee()
+
+    contract.mintogalf{callerAddress!() -> ogalftoken: amount, ALPH: fee}(amount)
+}
+
+TxScript MintAlf(
+    contract: WrappedOgAlfProtocol,
+    amount: U256
+) {
+    let wrappedalftoken = contract.getWrappedAlf()
+
+    let fee = contract.getFee()
+
+    contract.mintalf{callerAddress!() -> wrappedalftoken: amount, ALPH: fee}(amount)
+}
+
+TxScript CollectOgAlfFees(
+    contract: WrappedOgAlfProtocol,
+) {
+    contract.collectfees()
+}
+
+TxScript EditOgAlfFees(
+    contract: WrappedOgAlfProtocol,
+    newfee: U256
+) {
+    contract.editfee()
+}
+
+TxScript DestroyOgAlfProtocol(
+    contract: WrappedOgAlfProtocol
+) {
+    contract.destroyprotocol()
+}
