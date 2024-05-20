@@ -1,5 +1,5 @@
 import { DUST_AMOUNT, ExecutableScript, ExecuteScriptResult, SignerProvider, addressFromContractId, contractIdFromAddress, hexToString } from '@alephium/web3'
-import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, CollectFees, CreateStakeProject, CollectStakeFees, AddStake, WithdrawStake, EditRewards, Distribute, UpdateCreationFee } from '../../artifacts/ts/scripts'
+import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, CollectFees, CreateStakeProject, CollectStakeFees, AddStake, WithdrawStake, EditRewards, Distribute, UpdateCreationFee, MintAlf, MintOgAlf, CollectOgAlfFees, EditOgAlfFees, DestroyOgAlfProtocol } from '../../artifacts/ts/scripts'
 import { TokenCreate, TokenFaucetConfig, TokenTemplate } from './utils'
 import { Faucet, Token } from '../../artifacts/ts'
 import * as web3 from '@alephium/web3'
@@ -225,5 +225,76 @@ export const DistributeRewards = async (
     },
     attoAlphAmount: DUST_AMOUNT,
     tokens: [{id: await getProjectToken(contract), amount: 5000000000000000000n}]
+  })
+}
+
+// ------------------------------------------------- //
+//                                                   //
+//           Wrapped Alf Protcol - 5/20/24           //
+//                                                   //
+// ------------------------------------------------- //
+
+// mint wrapped alf
+export const ServiceMintWrappedAlf = async (
+  signerProvider: SignerProvider,
+  amount: string
+): Promise<ExecuteScriptResult> => {
+  return await MintAlf.execute(signerProvider, {
+    initialFields: {
+      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700",
+      amount: BigInt(amount)
+    },
+    attoAlphAmount: DUST_AMOUNT,
+    tokens: [{id: "c0c0af7a481e3e50c50e418bf8ff6923dc4d878ac3744474e8c708a8adccfb00", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 5000000000000000000n}]
+  })
+}
+
+// mint wrapped alf -- contract needs to be deployed then it can be edited
+export const ServiceMintOgAlf = async (
+  signerProvider: SignerProvider,
+  amount: string
+): Promise<ExecuteScriptResult> => {
+  return await MintOgAlf.execute(signerProvider, {
+    initialFields: {
+      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700",
+      amount: BigInt(amount)
+    },
+    attoAlphAmount: DUST_AMOUNT,
+    tokens: [{id: "c0c0af7a481e3e50c50e418bf8ff6923dc4d878ac3744474e8c708a8adccfb00", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 5000000000000000000n}]
+  })
+}
+
+export const ServiceCollectOgAlfFees = async (
+  signerProvider: SignerProvider
+): Promise<ExecuteScriptResult> => {
+  return await CollectOgAlfFees.execute(signerProvider, {
+    initialFields: {
+      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700"
+    },
+    attoAlphAmount: DUST_AMOUNT
+  })
+}
+
+export const ServiceEditFees = async (
+  signerProvider: SignerProvider,
+  amount: string
+): Promise<ExecuteScriptResult> => {
+  return await EditOgAlfFees.execute(signerProvider, {
+    initialFields: {
+      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700",
+      newfee: BigInt(amount)
+    },
+    attoAlphAmount: DUST_AMOUNT
+  })
+}
+
+export const ServiceDestroyWrappedAlfProtocol = async (
+  signerProvider: SignerProvider
+): Promise<ExecuteScriptResult> => {
+  return await DestroyOgAlfProtocol.execute(signerProvider, {
+    initialFields: {
+      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700"
+    },
+    attoAlphAmount: DUST_AMOUNT
   })
 }

@@ -1,4 +1,3 @@
-// This faucet takes advantage of the Rhone gasless transactions
 import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
 import { CreateStakeFactory, CreateToken, StakeFactory, Stake } from '../artifacts/ts'

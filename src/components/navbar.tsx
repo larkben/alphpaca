@@ -29,8 +29,8 @@ export function Navbar() {
           <Link className="text-white hover:text-blue-500" href="/tokencreate">
             Token Creation
           </Link>
-          <Link className="text-white hover:text-blue-500" href="#">
-            ...
+          <Link className="text-white hover:text-blue-500" href="/walf">
+            Wrapped Alf Protocol
           </Link>
         </nav>
         <div className="z-50 flex items-center space-x-2">
