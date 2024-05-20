@@ -81,7 +81,7 @@ Contract WrappedOgAlfProtocol (
     @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
     pub fn mintogalf(amount: U256) -> () {
 
-        assert(amount > 9990000) // 999 w/ 4 decimals
+        assert!(amount > 9990000, ErrorCodes.InvalidWrappedAlf) // 999 w/ 4 decimals
 
         supply = supply + amount
 
