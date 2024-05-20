@@ -21,7 +21,7 @@ export const BuildToken = async (
       tokenTotal: BigInt(supply)
     },
     attoAlphAmount: DUST_AMOUNT + web3.ONE_ALPH,
-    tokens: [{id: web3.ALPH_TOKEN_ID, amount: 9000000000000000000n}]
+    tokens: [{id: web3.ALPH_TOKEN_ID, amount: 10000000000000000000n}]
     
   })
 }
