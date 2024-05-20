@@ -10,8 +10,6 @@ Contract WrappedOgAlfProtocol (
     ogalf: ByteVec,
     mut ogalfamount: U256,
     //
-    conversionrate: U256,
-    //
     mut fee: U256,
     mut feescollected: U256
 ) implements IFungibleToken {
