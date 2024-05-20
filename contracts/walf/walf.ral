@@ -162,7 +162,7 @@ TxScript EditOgAlfFees(
     contract: WrappedOgAlfProtocol,
     newfee: U256
 ) {
-    contract.editfee()
+    contract.editfee(newfee)
 }
 
 TxScript DestroyOgAlfProtocol(
