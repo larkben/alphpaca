@@ -152,13 +152,13 @@ TxScript MintAlf(
 }
 
 TxScript CollectOgAlfFees(
-    contract: WrappedOgAlfProtocol,
+    contract: WrappedOgAlfProtocol
 ) {
     contract.collectfees()
 }
 
 TxScript EditOgAlfFees(
-    contract: WrappedOgAlfProtocol,
+    contract: WrappedOgAlfProtocol
     newfee: U256
 ) {
     contract.editfee()
