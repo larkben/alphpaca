@@ -106,7 +106,7 @@ Contract WrappedOgAlfProtocol (
         feescollected = feescollected - feescollected
     }
 
-    @using(preapprovedAssets = true, assetsInContract = false, updateFields = true, checkExternalCaller = true)
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = true)
     pub fn topupwalf() -> () {
 
         checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)

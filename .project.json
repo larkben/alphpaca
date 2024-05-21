@@ -11,7 +11,7 @@
   "infos": {
     "ActivateWalfProtocol": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "59849a65e860f867c25e3b63c94268f0a6fc55866e5792f76aedf50373cc2f78",
+      "sourceCodeHash": "4c9c330a09d93acce31c6f0aa2af53bb10d9a5b6eba688b8b1a99899012590e0",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -39,7 +39,7 @@
     },
     "CollectOgAlfFees": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "59849a65e860f867c25e3b63c94268f0a6fc55866e5792f76aedf50373cc2f78",
+      "sourceCodeHash": "4c9c330a09d93acce31c6f0aa2af53bb10d9a5b6eba688b8b1a99899012590e0",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -81,7 +81,7 @@
     },
     "DestroyOgAlfProtocol": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "59849a65e860f867c25e3b63c94268f0a6fc55866e5792f76aedf50373cc2f78",
+      "sourceCodeHash": "4c9c330a09d93acce31c6f0aa2af53bb10d9a5b6eba688b8b1a99899012590e0",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -123,7 +123,7 @@
     },
     "EditOgAlfFees": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "59849a65e860f867c25e3b63c94268f0a6fc55866e5792f76aedf50373cc2f78",
+      "sourceCodeHash": "4c9c330a09d93acce31c6f0aa2af53bb10d9a5b6eba688b8b1a99899012590e0",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -172,14 +172,14 @@
     },
     "MintAlf": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "59849a65e860f867c25e3b63c94268f0a6fc55866e5792f76aedf50373cc2f78",
+      "sourceCodeHash": "4c9c330a09d93acce31c6f0aa2af53bb10d9a5b6eba688b8b1a99899012590e0",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
     },
     "MintOgAlf": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "59849a65e860f867c25e3b63c94268f0a6fc55866e5792f76aedf50373cc2f78",
+      "sourceCodeHash": "4c9c330a09d93acce31c6f0aa2af53bb10d9a5b6eba688b8b1a99899012590e0",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -242,9 +242,9 @@
     },
     "WrappedOgAlfProtocol": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "59849a65e860f867c25e3b63c94268f0a6fc55866e5792f76aedf50373cc2f78",
+      "sourceCodeHash": "4c9c330a09d93acce31c6f0aa2af53bb10d9a5b6eba688b8b1a99899012590e0",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "ad6449c334ed5f15733b081e1e18dd543634b5062acab8337201a259cdde2dcb",
+      "codeHashDebug": "022be9fc30642e2dd757b87acf5b4a844907bac653af09a5ff260f63e2042007",
       "warnings": []
     }
   }
