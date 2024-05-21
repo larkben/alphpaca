@@ -241,7 +241,7 @@ export const ServiceMintWrappedAlf = async (
 ): Promise<ExecuteScriptResult> => {
   return await MintAlf.execute(signerProvider, {
     initialFields: {
-      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00",
+      contract: "abdbef63c540786c372132bff9391b35b0ac4859d8c350b50214342d3b816300",
       amount: BigInt(amount)
     },
     attoAlphAmount: DUST_AMOUNT,
@@ -256,7 +256,7 @@ export const ServiceMintOgAlf = async (
 ): Promise<ExecuteScriptResult> => {
   return await MintOgAlf.execute(signerProvider, {
     initialFields: {
-      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00",
+      contract: "abdbef63c540786c372132bff9391b35b0ac4859d8c350b50214342d3b816300",
       amount: BigInt(amount)
     },
     attoAlphAmount: DUST_AMOUNT,
@@ -269,7 +269,7 @@ export const ServiceCollectOgAlfFees = async (
 ): Promise<ExecuteScriptResult> => {
   return await CollectOgAlfFees.execute(signerProvider, {
     initialFields: {
-      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00"
+      contract: "abdbef63c540786c372132bff9391b35b0ac4859d8c350b50214342d3b816300"
     },
     attoAlphAmount: DUST_AMOUNT
   })
@@ -281,7 +281,7 @@ export const ServiceEditFees = async (
 ): Promise<ExecuteScriptResult> => {
   return await EditOgAlfFees.execute(signerProvider, {
     initialFields: {
-      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00",
+      contract: "abdbef63c540786c372132bff9391b35b0ac4859d8c350b50214342d3b816300",
       newfee: BigInt(amount)
     },
     attoAlphAmount: DUST_AMOUNT
@@ -293,7 +293,7 @@ export const ServiceTopupWalf = async (
 ): Promise<ExecuteScriptResult> => {
   return await ActivateWalfProtocol.execute(signerProvider, {
     initialFields: {
-      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00"
+      contract: "abdbef63c540786c372132bff9391b35b0ac4859d8c350b50214342d3b816300"
     },
     attoAlphAmount: DUST_AMOUNT,
     tokens: [{id: "b0417ab164526a00b8ddb66afe5b76041cd4987f825e5b51459476fd01f60700", amount: 10000000000n }]
@@ -305,7 +305,7 @@ export const ServiceDestroyWrappedAlfProtocol = async (
 ): Promise<ExecuteScriptResult> => {
   return await DestroyOgAlfProtocol.execute(signerProvider, {
     initialFields: {
-      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00"
+      contract: "abdbef63c540786c372132bff9391b35b0ac4859d8c350b50214342d3b816300"
     },
     attoAlphAmount: DUST_AMOUNT
   })
