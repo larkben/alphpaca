@@ -130,22 +130,22 @@ TxScript MintOgAlf(
     contract: WrappedOgAlfProtocol,
     amount: U256
 ) {
-    let ogalftoken = contract.getOgAlf()
+    let wrappedalph = contract.getWalfToken()
 
     let fee = contract.getFee()
 
-    contract.mintogalf{callerAddress!() -> ogalftoken: amount, ALPH: fee}(amount)
+    contract.mintogalf{callerAddress!() -> wrappedalph: amount, ALPH: fee}(amount)
 }
 
 TxScript MintAlf(
     contract: WrappedOgAlfProtocol,
     amount: U256
 ) {
-    let wrappedalftoken = contract.getWalfToken()
+    let ogalph = contract.getOgAlf()
 
     let fee = contract.getFee()
 
-    contract.mintalf{callerAddress!() -> wrappedalftoken: amount, ALPH: fee}(amount)
+    contract.mintalf{callerAddress!() -> ogalph: amount, ALPH: fee}(amount)
 }
 
 TxScript CollectOgAlfFees(
