@@ -11,6 +11,7 @@ import {
   SignerProvider,
   HexString,
 } from "@alephium/web3";
+import { default as ActivateWalfProtocolScriptJson } from "../walf/ActivateWalfProtocol.ral.json";
 import { default as AddStakeScriptJson } from "../staking/AddStake.ral.json";
 import { default as BuildtokenScriptJson } from "../createtoken/Buildtoken.ral.json";
 import { default as CollectFeesScriptJson } from "../createtoken/CollectFees.ral.json";
@@ -35,6 +36,10 @@ import { default as TopupScriptJson } from "../scripts/Topup.ral.json";
 import { default as UpdateCreationFeeScriptJson } from "../createtoken/UpdateCreationFee.ral.json";
 import { default as WithdrawStakeScriptJson } from "../staking/WithdrawStake.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
+
+export const ActivateWalfProtocol = new ExecutableScript<{
+  contract: HexString;
+}>(Script.fromJson(ActivateWalfProtocolScriptJson, "", []));
 
 export const AddStake = new ExecutableScript<{
   contract: HexString;

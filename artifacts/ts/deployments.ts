@@ -15,6 +15,8 @@ import {
   StakeInstance,
   CreateStakeFactory,
   CreateStakeFactoryInstance,
+  WrappedOgAlfProtocol,
+  WrappedOgAlfProtocolInstance,
 } from ".";
 import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
@@ -27,6 +29,7 @@ export type Deployments = {
     StakeFactory?: DeployContractExecutionResult<StakeFactoryInstance>;
     Stake?: DeployContractExecutionResult<StakeInstance>;
     CreateStakeFactory?: DeployContractExecutionResult<CreateStakeFactoryInstance>;
+    WrappedOgAlfProtocol?: DeployContractExecutionResult<WrappedOgAlfProtocolInstance>;
   };
 };
 
@@ -69,6 +72,15 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["CreateStakeFactory"],
             contractInstance: CreateStakeFactory.at(
               json.contracts["CreateStakeFactory"].contractInstance.address
+            ),
+          },
+    WrappedOgAlfProtocol:
+      json.contracts["WrappedOgAlfProtocol"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["WrappedOgAlfProtocol"],
+            contractInstance: WrappedOgAlfProtocol.at(
+              json.contracts["WrappedOgAlfProtocol"].contractInstance.address
             ),
           },
   };

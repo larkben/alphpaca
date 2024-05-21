@@ -34,10 +34,8 @@ import { getContractByCodeHash } from "./contracts";
 // Custom types for the contract
 export namespace WrappedOgAlfProtocolTypes {
   export type Fields = {
-    symbol: HexString;
-    name: HexString;
-    decimals: bigint;
-    supply: bigint;
+    walf: HexString;
+    walfamount: bigint;
     owner: Address;
     ogalf: HexString;
     ogalfamount: bigint;
@@ -57,19 +55,11 @@ export namespace WrappedOgAlfProtocolTypes {
   }>;
 
   export interface CallMethodTable {
-    getSymbol: {
+    getWalfToken: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<HexString>;
     };
-    getName: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<HexString>;
-    };
-    getDecimals: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<bigint>;
-    };
-    getTotalSupply: {
+    getWalfAmount: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
@@ -78,10 +68,6 @@ export namespace WrappedOgAlfProtocolTypes {
       result: CallContractResult<Address>;
     };
     getOgAlf: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<HexString>;
-    };
-    getWrappedAlf: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<HexString>;
     };
@@ -135,37 +121,21 @@ class Factory extends ContractFactory<
   }
 
   tests = {
-    getSymbol: async (
+    getWalfToken: async (
       params: Omit<
         TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
-      return testMethod(this, "getSymbol", params);
+      return testMethod(this, "getWalfToken", params);
     },
-    getName: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
-        "testArgs"
-      >
-    ): Promise<TestContractResultWithoutMaps<HexString>> => {
-      return testMethod(this, "getName", params);
-    },
-    getDecimals: async (
+    getWalfAmount: async (
       params: Omit<
         TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "getDecimals", params);
-    },
-    getTotalSupply: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
-        "testArgs"
-      >
-    ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "getTotalSupply", params);
+      return testMethod(this, "getWalfAmount", params);
     },
     getOwner: async (
       params: Omit<
@@ -182,14 +152,6 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
       return testMethod(this, "getOgAlf", params);
-    },
-    getWrappedAlf: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
-        "testArgs"
-      >
-    ): Promise<TestContractResultWithoutMaps<HexString>> => {
-      return testMethod(this, "getWrappedAlf", params);
     },
     getFee: async (
       params: Omit<
@@ -231,6 +193,14 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "collectfees", params);
     },
+    topupwalf: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "topupwalf", params);
+    },
     editfee: async (
       params: TestContractParamsWithoutMaps<
         WrappedOgAlfProtocolTypes.Fields,
@@ -247,7 +217,7 @@ export const WrappedOgAlfProtocol = new Factory(
   Contract.fromJson(
     WrappedOgAlfProtocolContractJson,
     "",
-    "e7e519a65691e2c610b0b2106d7629ed372a22ae6fb0d40067766b7f31711e00",
+    "08bb74a394e450ba254b5693a534f8200315379e9820534fa36db58a0afed0e6",
     []
   )
 );
@@ -308,48 +278,24 @@ export class WrappedOgAlfProtocolInstance extends ContractInstance {
   }
 
   methods = {
-    getSymbol: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getSymbol">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getSymbol">> => {
+    getWalfToken: async (
+      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getWalfToken">
+    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getWalfToken">> => {
       return callMethod(
         WrappedOgAlfProtocol,
         this,
-        "getSymbol",
+        "getWalfToken",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    getName: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getName">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getName">> => {
+    getWalfAmount: async (
+      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getWalfAmount">
+    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getWalfAmount">> => {
       return callMethod(
         WrappedOgAlfProtocol,
         this,
-        "getName",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
-    },
-    getDecimals: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getDecimals">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getDecimals">> => {
-      return callMethod(
-        WrappedOgAlfProtocol,
-        this,
-        "getDecimals",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
-    },
-    getTotalSupply: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getTotalSupply">
-    ): Promise<
-      WrappedOgAlfProtocolTypes.CallMethodResult<"getTotalSupply">
-    > => {
-      return callMethod(
-        WrappedOgAlfProtocol,
-        this,
-        "getTotalSupply",
+        "getWalfAmount",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
@@ -372,17 +318,6 @@ export class WrappedOgAlfProtocolInstance extends ContractInstance {
         WrappedOgAlfProtocol,
         this,
         "getOgAlf",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
-    },
-    getWrappedAlf: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getWrappedAlf">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getWrappedAlf">> => {
-      return callMethod(
-        WrappedOgAlfProtocol,
-        this,
-        "getWrappedAlf",
         params === undefined ? {} : params,
         getContractByCodeHash
       );

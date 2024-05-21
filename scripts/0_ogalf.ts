@@ -17,10 +17,8 @@ const wrappedAlfProtocol: DeployFunction<Settings> = async (
   const result = await deployer.deployContract(WrappedOgAlfProtocol, {
     // The initial states of the faucet contract
     initialFields: {
-        symbol: Buffer.from('TEMP', 'utf8').toString('hex'),
-        name: Buffer.from('Template', 'utf8').toString('hex'),
-        decimals: 18n,
-        supply: 1000n,
+        walf: "b0417ab164526a00b8ddb66afe5b76041cd4987f825e5b51459476fd01f60700", // walf token id
+        walfamount: 0n,
         owner: "16gAmGuCysLjGxHK8TUENkvhbqvwZRb6BabUbsxLYkSkd", //! Owner
         ogalf: "c0c0af7a481e3e50c50e418bf8ff6923dc4d878ac3744474e8c708a8adccfb00", // token id
         ogalfamount: 0n,

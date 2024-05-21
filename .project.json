@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v2.14.0",
+  "fullNodeVersion": "v2.12.0",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -9,6 +9,13 @@
     "ignoreCheckExternalCallerWarnings": false
   },
   "infos": {
+    "ActivateWalfProtocol": {
+      "sourceFile": "walf/walf.ral",
+      "sourceCodeHash": "3754d479f141717854329c278c8ac7371511b8c976caa083577cb6c1ea3e5925",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
     "AddStake": {
       "sourceFile": "staking/tx_addstake.ral",
       "sourceCodeHash": "432b3bfb62c8ba5f86107351cbd5cc78d074e501450ca8f5080d469c53391ca8",
@@ -32,7 +39,7 @@
     },
     "CollectOgAlfFees": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "3ecf41ebbff51d78897695f5ac43620cb1861c6478844f6ddde46963a9a7446f",
+      "sourceCodeHash": "3754d479f141717854329c278c8ac7371511b8c976caa083577cb6c1ea3e5925",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -48,7 +55,7 @@
       "sourceFile": "staking/create_factory.ral",
       "sourceCodeHash": "7d996259a5e4ecc5923a0de38e1e2b2ec2af8294b339568db9aa832874d0a8d5",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "faee87efd3939de62184e3f13706d3b7ce65f1c8b9acfd7364ec43967b08011c",
+      "codeHashDebug": "24dc3f1769fd3df869ec4a2300694bff4a8470e809d9ea9e6139c82772ff3cfe",
       "warnings": []
     },
     "CreateStakeProject": {
@@ -62,7 +69,7 @@
       "sourceFile": "createtoken/createtoken.ral",
       "sourceCodeHash": "9cf9397f420f1e1f32edc4b0a9aa8ae438de14614960f14225b26cb4dacb1239",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "2417efe145ca648a8d8cbc37ef9bc41b7d2f28406925fe7a88725c33a61542d9",
+      "codeHashDebug": "3446422f9d17342e692efbdf1960fec2eb2edd25bece98044f4d2b28320c0bca",
       "warnings": []
     },
     "Destroy": {
@@ -74,7 +81,7 @@
     },
     "DestroyOgAlfProtocol": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "3ecf41ebbff51d78897695f5ac43620cb1861c6478844f6ddde46963a9a7446f",
+      "sourceCodeHash": "3754d479f141717854329c278c8ac7371511b8c976caa083577cb6c1ea3e5925",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -116,7 +123,7 @@
     },
     "EditOgAlfFees": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "3ecf41ebbff51d78897695f5ac43620cb1861c6478844f6ddde46963a9a7446f",
+      "sourceCodeHash": "3754d479f141717854329c278c8ac7371511b8c976caa083577cb6c1ea3e5925",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -139,14 +146,14 @@
       "sourceFile": "paca_faucet.ral",
       "sourceCodeHash": "bdce2b9ca1b63c08b828775dddf23302f9d95a35798033bdc5262f7279ea06b5",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "236dc0af410205d895500f454e6acbce51ba2c88b644b47aa75d40bcf21f2ad0",
+      "codeHashDebug": "8813de5a4adb21e4e0ea09357924ec19037b916ecfd6a228152238f8e9396d04",
       "warnings": []
     },
     "FeeCollection": {
       "sourceFile": "test_fees.ral",
       "sourceCodeHash": "c57c6d50b3844a156c7fcf9bed5ad1e8656db4a33099ccd3771e6d9c739f34b8",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "8671dc4d763fef38a37762180a03a69d0a42c85466d4fee89b25e8598c5645fb",
+      "codeHashDebug": "037be2975a9253dfe116077fa5b404f46ce64a23e2ccefbf2905dce4b66a7a7c",
       "warnings": []
     },
     "Gettoken": {
@@ -165,14 +172,14 @@
     },
     "MintAlf": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "3ecf41ebbff51d78897695f5ac43620cb1861c6478844f6ddde46963a9a7446f",
+      "sourceCodeHash": "3754d479f141717854329c278c8ac7371511b8c976caa083577cb6c1ea3e5925",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
     },
     "MintOgAlf": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "3ecf41ebbff51d78897695f5ac43620cb1861c6478844f6ddde46963a9a7446f",
+      "sourceCodeHash": "3754d479f141717854329c278c8ac7371511b8c976caa083577cb6c1ea3e5925",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -188,21 +195,21 @@
       "sourceFile": "staking/stake.ral",
       "sourceCodeHash": "f0ff76e7130dc6c83004fe3b54f694936febc2e9e38bca17c7352a6db0b7f5ad",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "8e9db1975a5fab53eb509f7a243bfbb98cc2443349a04095ba1ca6cffbb8f9bc",
+      "codeHashDebug": "f2268ea846fd135c2920c13d04cfbc1d01fee64298dbdca775ec94fd22ee8cc9",
       "warnings": []
     },
     "StakeFactory": {
       "sourceFile": "staking/stake_factory.ral",
       "sourceCodeHash": "875cda6e5243ca7d2f89fe9ccbbc68219bcd5dfebf309fc989945a24898212d4",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "e741c0070223ecc10dc6a3589925f858d5e0ceed2f525212a50b8dcaefb77d8a",
+      "codeHashDebug": "b50f9e19c245b1179d9f91583b070d07527e1c06bc643343cbb7640032939838",
       "warnings": []
     },
     "Token": {
       "sourceFile": "createtoken/token.ral",
       "sourceCodeHash": "9c20c0b49bb6743d8c9182715fabf3c3976e41cb9ed4e7bf3ebcf3723450e904",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "215fe6aae7ba67810780a11c1f098f7845593d41f36aa7b99c737e2021b33c7b",
+      "codeHashDebug": "ca6b8c08739a44b63b275e82ca2fa299d38793c1d6860d741c688e0bc352061b",
       "warnings": []
     },
     "Topup": {
@@ -235,9 +242,9 @@
     },
     "WrappedOgAlfProtocol": {
       "sourceFile": "walf/walf.ral",
-      "sourceCodeHash": "3ecf41ebbff51d78897695f5ac43620cb1861c6478844f6ddde46963a9a7446f",
+      "sourceCodeHash": "3754d479f141717854329c278c8ac7371511b8c976caa083577cb6c1ea3e5925",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "e7e519a65691e2c610b0b2106d7629ed372a22ae6fb0d40067766b7f31711e00",
+      "codeHashDebug": "08bb74a394e450ba254b5693a534f8200315379e9820534fa36db58a0afed0e6",
       "warnings": []
     }
   }

@@ -1,44 +1,35 @@
 {
-  "version": "v2.14.0",
+  "version": "v2.12.0",
   "name": "WrappedOgAlfProtocol",
-  "bytecode": "0a0d09121b402440324040404d405b40a240ee41084126413b010000000102ce0002010000000102ce0102010000000102ce0202010000000102a00002010000000103d34ffef083ce0302010000000103d30e22198dce0402010000000103d39186e68ab102010000000103d36638d1f4a0020201010103004025d3c2cf330f16000c330c7ba00116002aa101b41701160013809896802c17021601b2a002a7b21601b11602aaa00016022ba100a003a0022aa10305160116025f01010103004025d32d5e3cc516001380986f70330d7ba00016002aa100b41701160013809896802d17021601b2a002a7b21601ce041602aaa00116022ba101a003a0022aa10306160116025f01020000000dd3c80ec82ea0010d310e7bce03b4450f7bce03b001020000000ed3d6607dbbce03b4450f7bb2ce03a003a7a003a0032ba103010001010008d36f682d7ace03b4450f7b1600a102",
-  "codeHash": "e7e519a65691e2c610b0b2106d7629ed372a22ae6fb0d40067766b7f31711e00",
+  "bytecode": "070b09121b4024402d407840c740dc40f5411a412a010000000102ce0002010000000102a00002010000000102ce0102010000000102ce0202010000000102a002020101010300402916000c330c7ba00116002aa101b4170116001385f5e1002c17021601b2a002a71601b200031600aab2160100001602aaa00016002ba100a003a0022aa10305160116025f0101010300402916001385f5e0ff330d7ba00016002aa100b4170116001385f5e1002d17021601b2a002a71601b200001600aab21601ce021602aaa00116022ba101a003a0022aa10306160116025f01020000000ca00111310e7bce01b4450f7bce01b001020000000dce01b4450f7bb2ce01a003a7a003a0032ba10301020000000ece01b4450f7bb2ce01000013c102540be400aaa00013c102540be4002aa100010001010007ce01b4450f7b1600a102",
+  "codeHash": "08bb74a394e450ba254b5693a534f8200315379e9820534fa36db58a0afed0e6",
   "fieldsSig": {
     "names": [
-      "symbol",
-      "name",
-      "decimals",
-      "supply",
+      "walf",
+      "walfamount",
       "owner",
       "ogalf",
       "ogalfamount",
       "fee",
-      "feescollected",
-      "__stdInterfaceId"
+      "feescollected"
     ],
     "types": [
       "ByteVec",
-      "ByteVec",
-      "U256",
       "U256",
       "Address",
       "ByteVec",
       "U256",
       "U256",
-      "U256",
-      "ByteVec"
+      "U256"
     ],
     "isMutable": [
       false,
-      false,
-      false,
       true,
       false,
       false,
       true,
       true,
-      true,
-      false
+      true
     ]
   },
   "eventsSig": [
@@ -67,7 +58,7 @@
   ],
   "functions": [
     {
-      "name": "getSymbol",
+      "name": "getWalfToken",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -79,31 +70,7 @@
       ]
     },
     {
-      "name": "getName",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "ByteVec"
-      ]
-    },
-    {
-      "name": "getDecimals",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "U256"
-      ]
-    },
-    {
-      "name": "getTotalSupply",
+      "name": "getWalfAmount",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -128,18 +95,6 @@
     },
     {
       "name": "getOgAlf",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "ByteVec"
-      ]
-    },
-    {
-      "name": "getWrappedAlf",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -215,6 +170,16 @@
       "returnTypes": []
     },
     {
+      "name": "topupwalf",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": true,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
       "name": "editfee",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
@@ -266,6 +231,5 @@
         }
       ]
     }
-  ],
-  "stdInterfaceId": "0001"
+  ]
 }

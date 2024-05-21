@@ -1,5 +1,5 @@
 import { DUST_AMOUNT, ExecutableScript, ExecuteScriptResult, SignerProvider, addressFromContractId, contractIdFromAddress, hexToString } from '@alephium/web3'
-import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, CollectFees, CreateStakeProject, CollectStakeFees, AddStake, WithdrawStake, EditRewards, Distribute, UpdateCreationFee, MintAlf, MintOgAlf, CollectOgAlfFees, EditOgAlfFees, DestroyOgAlfProtocol } from '../../artifacts/ts/scripts'
+import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, CollectFees, CreateStakeProject, CollectStakeFees, AddStake, WithdrawStake, EditRewards, Distribute, UpdateCreationFee, MintAlf, MintOgAlf, CollectOgAlfFees, EditOgAlfFees, DestroyOgAlfProtocol, ActivateWalfProtocol } from '../../artifacts/ts/scripts'
 import { TokenCreate, TokenFaucetConfig, TokenTemplate } from './utils'
 import { Faucet, Token } from '../../artifacts/ts'
 import * as web3 from '@alephium/web3'
@@ -241,7 +241,7 @@ export const ServiceMintWrappedAlf = async (
 ): Promise<ExecuteScriptResult> => {
   return await MintAlf.execute(signerProvider, {
     initialFields: {
-      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700",
+      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00",
       amount: BigInt(amount)
     },
     attoAlphAmount: DUST_AMOUNT,
@@ -256,11 +256,11 @@ export const ServiceMintOgAlf = async (
 ): Promise<ExecuteScriptResult> => {
   return await MintOgAlf.execute(signerProvider, {
     initialFields: {
-      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700",
+      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00",
       amount: BigInt(amount)
     },
     attoAlphAmount: DUST_AMOUNT,
-    tokens: [{id: "c0c0af7a481e3e50c50e418bf8ff6923dc4d878ac3744474e8c708a8adccfb00", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 5000000000000000000n}]
+    tokens: [{id: "b0417ab164526a00b8ddb66afe5b76041cd4987f825e5b51459476fd01f60700", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 5000000000000000000n}]
   })
 }
 
@@ -269,7 +269,7 @@ export const ServiceCollectOgAlfFees = async (
 ): Promise<ExecuteScriptResult> => {
   return await CollectOgAlfFees.execute(signerProvider, {
     initialFields: {
-      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700"
+      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00"
     },
     attoAlphAmount: DUST_AMOUNT
   })
@@ -281,8 +281,19 @@ export const ServiceEditFees = async (
 ): Promise<ExecuteScriptResult> => {
   return await EditOgAlfFees.execute(signerProvider, {
     initialFields: {
-      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700",
+      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00",
       newfee: BigInt(amount)
+    },
+    attoAlphAmount: DUST_AMOUNT
+  })
+}
+
+export const ServiceTopupWalf = async (
+  signerProvider: SignerProvider
+): Promise<ExecuteScriptResult> => {
+  return await ActivateWalfProtocol.execute(signerProvider, {
+    initialFields: {
+      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00"
     },
     attoAlphAmount: DUST_AMOUNT
   })
@@ -293,7 +304,7 @@ export const ServiceDestroyWrappedAlfProtocol = async (
 ): Promise<ExecuteScriptResult> => {
   return await DestroyOgAlfProtocol.execute(signerProvider, {
     initialFields: {
-      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700"
+      contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00"
     },
     attoAlphAmount: DUST_AMOUNT
   })

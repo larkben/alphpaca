@@ -72,7 +72,7 @@ export const WrappedAlfDapp: FC<{
       <div className="min-w-30 space-y-8 bg-gray-800 p-6 rounded-lg shadow-md z-50">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-orange-500">Wrapped OG ALF Protocol *NOT LIVE* </h2>
-          <p className="mt-2 text-center text-sm text-gray-400"> This is a wrapper for your OG Alf. This contract protects your OG Alf and allows for redemptions. <br/> The ratio is: 10000:1 <br/> Therefore the total maximum supply of wrapped OG Alf is 1,280,000.0000 </p>
+          <p className="mt-2 text-center text-sm text-gray-400"> This is a wrapper for your OG Alf. This contract protects your OG Alf and allows for redemptions. <br/> The ratio is: 10000:1 <br/> Therefore the total maximum supply of wrapped OG Alf is 1,000,000.1000 </p>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-orange-500"> Mint Wrapped Alf </h2>
         <form  onSubmit={handleMintWrappedOgAlf} className="mt-8 space-y-6">

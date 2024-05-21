@@ -1,7 +1,7 @@
 {
-  "version": "v2.14.0",
+  "version": "v2.12.0",
   "name": "DestroyOgAlfProtocol",
-  "bytecodeTemplate": "010103000000040c0c{0}010a",
+  "bytecodeTemplate": "010103000000040c0c{0}0107",
   "fieldsSig": {
     "names": [
       "contract"

@@ -1,7 +1,7 @@
 {
-  "version": "v2.14.0",
+  "version": "v2.12.0",
   "name": "CollectOgAlfFees",
-  "bytecodeTemplate": "010103000000040c0c{0}010b",
+  "bytecodeTemplate": "010103000000040c0c{0}0108",
   "fieldsSig": {
     "names": [
       "contract"

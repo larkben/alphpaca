@@ -145,7 +145,7 @@ export const Token = new Factory(
   Contract.fromJson(
     TokenContractJson,
     "",
-    "215fe6aae7ba67810780a11c1f098f7845593d41f36aa7b99c737e2021b33c7b",
+    "ca6b8c08739a44b63b275e82ca2fa299d38793c1d6860d741c688e0bc352061b",
     []
   )
 );

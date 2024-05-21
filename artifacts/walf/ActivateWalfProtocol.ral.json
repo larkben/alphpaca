@@ -1,18 +1,15 @@
 {
   "version": "v2.12.0",
-  "name": "MintOgAlf",
-  "bytecodeTemplate": "010103000200160c0d{0}010317000c0d{0}01041701b47a1600{1}a31601a2{1}0d0c{0}0106",
+  "name": "ActivateWalfProtocol",
+  "bytecodeTemplate": "010103000000040c0c{0}0109",
   "fieldsSig": {
     "names": [
-      "contract",
-      "amount"
+      "contract"
     ],
     "types": [
-      "WrappedOgAlfProtocol",
-      "U256"
+      "WrappedOgAlfProtocol"
     ],
     "isMutable": [
-      false,
       false
     ]
   },

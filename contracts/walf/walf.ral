@@ -1,19 +1,14 @@
-import "std/fungible_token_interface"
-
 Contract WrappedOgAlfProtocol (
-    symbol: ByteVec,
-    name: ByteVec,
-    decimals: U256,     // 4
-    mut supply: U256,   // 1000000_1000 // 0.1 for dex aquisitions
+    walf: ByteVec,
+    mut walfamount: U256,   // 1000000_1000 // 0.1 for dex aquisitions
     owner: Address,
     //
     ogalf: ByteVec,
     mut ogalfamount: U256,
     //
     mut fee: U256,
-    mut feescollected: U256,
-    mut dextoken: U256
-) implements IFungibleToken {
+    mut feescollected: U256
+) {
 
     event WrappedAlfMinted(who: Address, amount: U256)
     event OgAlfRedeemed(who: Address, amount: U256)
@@ -23,23 +18,14 @@ Contract WrappedOgAlfProtocol (
         InvalidWrappedAlf = 1
         OgAlfInContract = 2
         InvalidCaller = 3
-        InvalidDexTokens = 4
     }
 
-    pub fn getSymbol() -> ByteVec {
-        return symbol
+    pub fn getWalfToken() -> ByteVec {
+        return walf
     }
 
-    pub fn getName() -> ByteVec {
-        return name
-    }
-
-    pub fn getDecimals() -> U256 {
-        return decimals
-    }
-
-    pub fn getTotalSupply() -> U256 {
-        return supply
+    pub fn getWalfAmount() -> U256 {
+        return walfamount
     }
 
     pub fn getOwner() -> Address {
@@ -48,10 +34,6 @@ Contract WrappedOgAlfProtocol (
 
     pub fn getOgAlf() -> ByteVec {
         return ogalf
-    }
-
-    pub fn getWrappedAlf() -> ByteVec {
-        return selfTokenId!()
     }
 
     pub fn getFee() -> U256 {
@@ -67,12 +49,14 @@ Contract WrappedOgAlfProtocol (
 
         let minter = callerAddress!()
 
-        let mintedamount = amount * 100000000 // 1000 w/ 4 decimals
+        let mintedamount = amount * 100000000 // 10000 w/ 4 decimals
 
         transferToken!(minter, selfAddress!(), ALPH, fee)
-        transferToken!(selfAddress!(), minter, selfTokenId!(), mintedamount) 
+        transferToken!(minter, selfAddress!(), getOgAlf(), amount)
 
-        supply = supply - mintedamount
+        transferToken!(selfAddress!(), minter, getWalfToken(), mintedamount) 
+
+        walfamount = walfamount - amount
 
         feescollected = feescollected + fee
 
@@ -82,15 +66,17 @@ Contract WrappedOgAlfProtocol (
     @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
     pub fn mintogalf(amount: U256) -> () {
 
-        assert!(amount > 9990000, ErrorCodes.InvalidWrappedAlf) // 999 w/ 4 decimals
+        assert!(amount > 99999999, ErrorCodes.InvalidWrappedAlf) // 9999 w/ 4 decimals
 
-        supply = supply + amount
+        walfamount = walfamount + amount
 
         let minter = callerAddress!()
 
-        let mintedamount = amount / 100000000 // 1000 w/ 4 decimals
+        let mintedamount = amount / 100000000 // 10000 w/ 4 decimals
 
         transferToken!(minter, selfAddress!(), ALPH, fee)
+        transferToken!(minter, selfAddress!(), getWalfToken(), amount)
+
         transferToken!(selfAddress!(), minter, ogalf, mintedamount)
         
         ogalfamount = ogalfamount - mintedamount
@@ -103,7 +89,7 @@ Contract WrappedOgAlfProtocol (
     @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
     pub fn destroyprotocol() -> () {
 
-        assert!(ogalfamount < 1, ErrorCodes.OgAlfInContract)
+        assert!(ogalfamount < 5, ErrorCodes.OgAlfInContract) // 5 is a saftey net here
 
         checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
 
@@ -120,16 +106,14 @@ Contract WrappedOgAlfProtocol (
         feescollected = feescollected - feescollected
     }
 
-    @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
-    pub fn emitdextoken() -> () {
-
-        assert!(dextoken > 0, ErrorCodes.InvalidDexTokens)
-
-        dextoken = dextoken - 1
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = true, checkExternalCaller = true)
+    pub fn topupwalf() -> () {
 
         checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
 
-        transferToken!(selfAddress!(), owner, selfTokenId!(), 1)
+        transferToken!(selfAddress!(), owner, getWalfToken(), 10000000000)
+
+        walfamount = walfamount + 10000000000
     }
 
     @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
@@ -157,7 +141,7 @@ TxScript MintAlf(
     contract: WrappedOgAlfProtocol,
     amount: U256
 ) {
-    let wrappedalftoken = contract.getWrappedAlf()
+    let wrappedalftoken = contract.getWalfToken()
 
     let fee = contract.getFee()
 
@@ -183,8 +167,8 @@ TxScript DestroyOgAlfProtocol(
     contract.destroyprotocol()
 }
 
-TxScript RecieveDexDust(
+TxScript ActivateWalfProtocol(
     contract: WrappedOgAlfProtocol
 ) {
-    contract.emitdextoken()
+    contract.topupwalf()
 }
