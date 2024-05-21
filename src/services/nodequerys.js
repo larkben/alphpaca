@@ -107,18 +107,6 @@ async function getImageUri(tokenId) {
 
 */
 
-const wallet =  new PrivateKeyWallet({privateKey: '92f833a63e393b8a328d4cca75a9cf3b7bfec091b6d8c8ea13bbf04d7297139f', keyType: undefined, nodeProvider: nodeProvider})
+let tokenIdAddress = addressFromContractId("x3N8DjuzWMaZtZbxXWMbaW5dRuXZgw6VjGnDYuhFd3b5");
 
-getAssets(wallet.address)
-
-console.log(wallet.privateKey)
-
-async function sendALPH() {
-await wallet.signAndSubmitTransferTx({
-    signerAddress: wallet.account.address,
-    destinations: [{
-      address: '148n4B7H7CB8wUJHpSoj95ctMcENYjBM5ysbHoTq2Kf9t',
-      attoAlphAmount: 1470000000000000000
-    }]
-  })
-}
+console.log(tokenIdAddress)

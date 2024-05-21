@@ -217,7 +217,7 @@ export const WrappedOgAlfProtocol = new Factory(
   Contract.fromJson(
     WrappedOgAlfProtocolContractJson,
     "",
-    "022be9fc30642e2dd757b87acf5b4a844907bac653af09a5ff260f63e2042007",
+    "b57c6780fe090cb8fce242aa66ea63bc1eff51a9f2ec0fc50ca65314878b4865",
     []
   )
 );
