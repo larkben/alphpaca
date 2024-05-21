@@ -295,7 +295,8 @@ export const ServiceTopupWalf = async (
     initialFields: {
       contract: "e180342b3100930cb5eb3e9c662a74a4f194e26d3268fac531c93492e647ce00"
     },
-    attoAlphAmount: DUST_AMOUNT
+    attoAlphAmount: DUST_AMOUNT,
+    tokens: [{id: "b0417ab164526a00b8ddb66afe5b76041cd4987f825e5b51459476fd01f60700", amount: 10000000000n }]
   })
 }
 
