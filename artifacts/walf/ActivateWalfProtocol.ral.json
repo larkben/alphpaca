@@ -1,7 +1,7 @@
 {
   "version": "v2.12.0",
   "name": "ActivateWalfProtocol",
-  "bytecodeTemplate": "0101030001000d0c0d{0}01001700b4160013c102540be400a30c0c{0}0109",
+  "bytecodeTemplate": "0101030001000d0c0d{0}01001700b4160013c5055de6a779bbac0000a30c0c{0}0109",
   "fieldsSig": {
     "names": [
       "contract"

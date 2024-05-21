@@ -115,9 +115,9 @@ Contract WrappedOgAlfProtocol (
 
         checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
 
-        transferToken!(callerAddress!(), selfAddress!(), getWalfToken(), 10000000000)
+        transferToken!(callerAddress!(), selfAddress!(), getWalfToken(), 99000000000000000000)
 
-        walfamount = walfamount + 10000000000
+        walfamount = walfamount + 99000000000000000000
     }
 
     @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
@@ -176,5 +176,5 @@ TxScript ActivateWalfProtocol(
 ) {
     let walf = contract.getWalfToken()
 
-    contract.topupwalf{callerAddress!() -> walf: 10000000000}()
+    contract.topupwalf{callerAddress!() -> walf: 99000000000000000000}()
 }
