@@ -27,7 +27,7 @@ export const WrappedAlfDapp: FC<{
 
   useEffect(() => {
     if (amountOgAlf) {
-      setPredictedWrappedAmount(Number(amountOgAlf) * 10000);
+      setPredictedWrappedAmount(Number(amountOgAlf) * 1000000000000000000);
     } else {
       setPredictedWrappedAmount(0);
     }
@@ -35,7 +35,7 @@ export const WrappedAlfDapp: FC<{
 
   useEffect(() => {
     if (amountWrappedAlf) {
-      setPredictedOgAlfAmount(Number(amountWrappedAlf) / 10000);
+      setPredictedOgAlfAmount(Number(amountWrappedAlf) / 1000000000000000000);
     } else {
       setPredictedOgAlfAmount(0);
     }

@@ -1,0 +1,53 @@
+Contract SimpleDaoFactory (
+    owner: Address,
+    tokenTemplateContract: ByteVec,
+    daoTemplateContract: ByteVec
+    fee: U256,
+    feesCollected: U256,
+) {
+    pub fn getOwner() -> Address {
+        return owner
+    }
+
+    pub fn getFee() -> U256 {
+        return fee
+    }
+
+    pub fn getFeesCollected() -> U256 {
+        return feesCollected
+    }
+
+    // token required and is made for user
+    @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn createvotewithtoken(proposal: ByteVec) -> () {
+
+        
+    }
+
+    // no token required; instead the project in questions uses its own native token
+    @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn createvote(proposal: ByteVec, token: ByteVec, decimals: U256) -> () {
+
+        
+    }
+
+    @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn editdaofees(newfee: U256) -> () {
+
+        
+    }
+
+    @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn withdrawdaofees() -> () {
+
+        
+    }
+
+    @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn destroydao() -> () {
+
+        
+    }
+
+}
+
