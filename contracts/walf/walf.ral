@@ -111,7 +111,7 @@ Contract WrappedOgAlfProtocol (
 
         checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
 
-        transferToken!(selfAddress!(), owner, getWalfToken(), 10000000000)
+        transferToken!(callerAddress!(), selfAddress!(), getWalfToken(), 10000000000)
 
         walfamount = walfamount + 10000000000
     }
