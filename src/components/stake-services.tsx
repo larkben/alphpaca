@@ -87,7 +87,7 @@ export const StakingServices: FC<{
     <main className="flex flex-col items-center justify-center min-h-screen py-20 bg-gray-900 sm:px-6 lg:px-8">
       <div className="min-w-30 space-y-8 bg-gray-800 p-6 rounded-lg shadow-md z-50">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-500">Create Your Stake Pool</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-500">Create Your Stake Pool *Coming Soon* </h2>
         </div>
         <form  onSubmit={handleCreateStakeFactory} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
