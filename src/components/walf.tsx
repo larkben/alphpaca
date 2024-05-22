@@ -102,10 +102,10 @@ export const WrappedAlfDapp: FC<{
         </form>
         <br/>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-orange-500">Mint Og Alf</h2>
-        <form  onSubmit={handleMintWrappedOgAlf} className="mt-8 space-y-6">
+        <form  onSubmit={handleMintOgAlf} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label className="text-white" htmlFor="symbol">OG Alf Amount</label>
+              <label className="text-white" htmlFor="symbol">Wrapped OG ALF Amount</label>
               <Input
                 className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-blue-500 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="amountWrappedAlf"
