@@ -1,8 +1,9 @@
-import { DUST_AMOUNT, ExecutableScript, ExecuteScriptResult, SignerProvider, addressFromContractId, contractIdFromAddress, hexToString } from '@alephium/web3'
-import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, CollectFees, CreateStakeProject, CollectStakeFees, AddStake, WithdrawStake, EditRewards, Distribute, UpdateCreationFee, MintAlf, MintOgAlf, CollectOgAlfFees, EditOgAlfFees, DestroyOgAlfProtocol, ActivateWalfProtocol } from '../../artifacts/ts/scripts'
+import { DUST_AMOUNT, ExecutableScript, ExecuteScriptResult, SignerProvider, addressFromContractId, contractIdFromAddress, hexToString, stringToHex } from '@alephium/web3'
+import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, CollectFees, CreateStakeProject, CollectStakeFees, AddStake, WithdrawStake, EditRewards, Distribute, UpdateCreationFee, MintAlf, MintOgAlf, CollectOgAlfFees, EditOgAlfFees, DestroyOgAlfProtocol, ActivateWalfProtocol, CreateListing, BuyListing, DestroyMarketplace } from '../../artifacts/ts/scripts'
 import { TokenCreate, TokenFaucetConfig, TokenTemplate } from './utils'
 import { Faucet, Token } from '../../artifacts/ts'
 import * as web3 from '@alephium/web3'
+import { error } from 'console'
 
 // Token Creation Tool
 export const BuildToken = async (
@@ -308,5 +309,74 @@ export const ServiceDestroyWrappedAlfProtocol = async (
       contract: "8a8fe3c9b1e5e8ac47363a79c0afe21b3152f6bad0e8b23de73ad0e4f434c600"
     },
     attoAlphAmount: DUST_AMOUNT
+  })
+}
+
+// ------------------------------------------------- //
+//                                                   //
+//           Marketplace Dapp Services               //
+//                                                   //
+// ------------------------------------------------- //
+
+export const ServiceCreateListing = async (
+  signerProvider: SignerProvider,
+  token: string,
+  tokenamount: number,
+  price: number,
+  priceToken: string
+): Promise<ExecuteScriptResult> => {
+  if (price == 30000000) {
+    return await CreateListing.execute(signerProvider, {
+      initialFields: {
+        contract: "46ee746d1f3d245615ed807910763bac4100351e3befd9f2064656a8a2df5c00",
+        token: token,
+        tokenamount: BigInt(tokenamount),
+        price: BigInt(price),
+        priceToken: priceToken,
+        exp: BigInt(0)
+      },
+      attoAlphAmount: DUST_AMOUNT + web3.ONE_ALPH,
+      tokens: [{id: token, amount: BigInt(tokenamount)}]
+    })
+  }
+  else {
+    return await BuyListing.execute(signerProvider, {
+      initialFields: {
+        contract: "46ee746d1f3d245615ed807910763bac4100351e3befd9f2064656a8a2df5c00",
+        contractpath: BigInt(1),
+        priceToken: priceToken,
+        price: BigInt(price)
+      },
+      attoAlphAmount: DUST_AMOUNT,
+      tokens: [{id: priceToken, amount: BigInt(1234)}]
+    })
+  }
+}
+
+export const ServiceBuyListing = async (
+  signerProvider: SignerProvider,
+  contractpath: string,
+  priceToken: string,
+  price: string
+): Promise<ExecuteScriptResult> => {
+  return await BuyListing.execute(signerProvider, {
+    initialFields: {
+      contract: "46ee746d1f3d245615ed807910763bac4100351e3befd9f2064656a8a2df5c00",
+      contractpath: BigInt(contractpath),
+      priceToken: priceToken,
+      price: BigInt(price)
+    },
+    attoAlphAmount: DUST_AMOUNT,
+    tokens: [{id: priceToken, amount: BigInt(price)}]
+  })
+}
+
+export const ServiceDestroyMarketplace = async (
+  signerProvider: SignerProvider
+): Promise<ExecuteScriptResult> => {
+  return await DestroyMarketplace.execute(signerProvider, {
+    initialFields: {
+      contract: "46ee746d1f3d245615ed807910763bac4100351e3befd9f2064656a8a2df5c00"
+    }
   })
 }

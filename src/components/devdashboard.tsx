@@ -8,7 +8,7 @@ import { FC, useState, useEffect } from 'react'
 // Import Alephium Services
 import { TokenCreate } from "../services/utils"
 import { useWallet } from "@alephium/web3-react"
-import { BuildToken, CollectCreatorFees, CollectFactoryFees, DestroyTokenCreator, EditCreatorFees, ServiceDestroyWrappedAlfProtocol, ServiceTopupWalf } from "../services/token.services"
+import { BuildToken, CollectCreatorFees, CollectFactoryFees, DestroyTokenCreator, EditCreatorFees, ServiceDestroyMarketplace, ServiceDestroyWrappedAlfProtocol, ServiceTopupWalf } from "../services/token.services"
 import { NodeProvider } from "@alephium/web3"
 import { DestroyOgAlfProtocol } from "../../artifacts/ts"
 
@@ -61,7 +61,7 @@ export const DevDashboard: FC<{
   const handleDestroyWalfProtocol = async (e: React.FormEvent) => {
     e.preventDefault()
     if (signer) {
-      const result = await ServiceDestroyWrappedAlfProtocol(signer)
+      const result = await ServiceDestroyMarketplace(signer)
     }
   }
 

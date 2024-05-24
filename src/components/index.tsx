@@ -37,13 +37,13 @@ export function Hero() {
             <div className="flex justify-center">
               <ClockIcon className="h-12 w-12 text-white" />
             </div>
-            <h2 className="mt-4 text-xl font-semibold text-white">Staking Services&apos;s</h2>
-            <p className="mt-2 text-white-400"> Stake Coins, Get Rewards </p>
+            <h2 className="mt-4 text-xl font-semibold text-white">Marketplace&apos;s</h2>
+            <p className="mt-2 text-white-400"> Great Deals Awaiting a Degen like You </p>
             <Link
               className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-pink-300 hover:bg-pink-400 dark:border-gray-800"
-              href="/paddock"
+              href="/createlistings"
             >
-              Create / View Stakes
+              Create / View Listings
             </Link>
           </div>
         </div>

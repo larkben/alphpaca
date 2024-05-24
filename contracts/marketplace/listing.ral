@@ -1,0 +1,91 @@
+Contract Listing (
+    owner: Address,
+    marketplaceContract: Address,
+    //
+    assetListed: ByteVec,
+    assetAmount: U256,
+    //
+    mut price: U256,
+    priceToken: ByteVec,
+    // 
+    listedTime: U256,
+    expiration: U256
+) {
+    enum ErrorCodes {
+        NotCalledFromDapp = 2
+        InvalidCaller = 3
+    }
+
+    pub fn getAssetListed() -> ByteVec {
+        return assetListed
+    }
+
+    pub fn getPriceToken() -> ByteVec {
+        return priceToken
+    }
+
+    pub fn getAssetAmount() -> U256 {
+        return assetAmount
+    }
+
+    pub fn getPrice() -> U256 {
+        return price
+    }
+
+    pub fn getOwner() -> Address {
+        return owner
+    }
+
+    pub fn getMarketplaceAddress() -> Address {
+        return marketplaceContract
+    }
+
+    pub fn getListedTime() -> U256 {
+        return listedTime
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
+    pub fn edit(caller: Address, newprice: U256) -> () {
+
+        checkCaller!(callerAddress!() == marketplaceContract, ErrorCodes.NotCalledFromDapp)
+
+        assert!(caller == owner, ErrorCodes.InvalidCaller)
+
+        price = newprice
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn cancel(caller: Address) -> () {
+
+        checkCaller!(callerAddress!() == marketplaceContract, ErrorCodes.NotCalledFromDapp)
+
+        assert!(caller == getOwner(), ErrorCodes.InvalidCaller)
+
+        transferToken!(selfAddress!(), getOwner(), getAssetListed(), getAssetAmount())
+
+        destroySelf!(owner)
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn buy(buyer: Address, priceAfterFee: U256) -> () {
+
+        checkCaller!(callerAddress!() == marketplaceContract, ErrorCodes.NotCalledFromDapp)
+
+        let currentTime = blockTimeStamp!()
+
+        if (currentTime < expiration || expiration == 0) { // enforce expiration
+
+            transferToken!(selfAddress!(), buyer, getAssetListed(), getAssetAmount()) // transfer assets 
+            transferToken!(buyer, getOwner(), getPriceToken(), priceAfterFee)
+
+            destroySelf!(owner) // owner recieves back contract deposit
+        }
+
+        else { // contract is voided by caller due to listing having expired
+            transferToken!(selfAddress!(), getOwner(), getAssetListed(), getAssetAmount())
+
+            destroySelf!(owner)
+        }
+    }
+
+}

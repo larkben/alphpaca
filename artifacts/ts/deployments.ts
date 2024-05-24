@@ -17,6 +17,10 @@ import {
   CreateStakeFactoryInstance,
   WrappedOgAlfProtocol,
   WrappedOgAlfProtocolInstance,
+  Listing,
+  ListingInstance,
+  Marketplace,
+  MarketplaceInstance,
 } from ".";
 import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
@@ -30,6 +34,8 @@ export type Deployments = {
     Stake?: DeployContractExecutionResult<StakeInstance>;
     CreateStakeFactory?: DeployContractExecutionResult<CreateStakeFactoryInstance>;
     WrappedOgAlfProtocol?: DeployContractExecutionResult<WrappedOgAlfProtocolInstance>;
+    Listing?: DeployContractExecutionResult<ListingInstance>;
+    Marketplace?: DeployContractExecutionResult<MarketplaceInstance>;
   };
 };
 
@@ -81,6 +87,24 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["WrappedOgAlfProtocol"],
             contractInstance: WrappedOgAlfProtocol.at(
               json.contracts["WrappedOgAlfProtocol"].contractInstance.address
+            ),
+          },
+    Listing:
+      json.contracts["Listing"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["Listing"],
+            contractInstance: Listing.at(
+              json.contracts["Listing"].contractInstance.address
+            ),
+          },
+    Marketplace:
+      json.contracts["Marketplace"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["Marketplace"],
+            contractInstance: Marketplace.at(
+              json.contracts["Marketplace"].contractInstance.address
             ),
           },
   };

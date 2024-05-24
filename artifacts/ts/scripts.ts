@@ -14,17 +14,24 @@ import {
 import { default as ActivateWalfProtocolScriptJson } from "../walf/ActivateWalfProtocol.ral.json";
 import { default as AddStakeScriptJson } from "../staking/AddStake.ral.json";
 import { default as BuildtokenScriptJson } from "../createtoken/Buildtoken.ral.json";
+import { default as BuyListingScriptJson } from "../marketplace/BuyListing.ral.json";
+import { default as CancelListingScriptJson } from "../marketplace/CancelListing.ral.json";
 import { default as CollectFeesScriptJson } from "../createtoken/CollectFees.ral.json";
 import { default as CollectOgAlfFeesScriptJson } from "../walf/CollectOgAlfFees.ral.json";
 import { default as CollectStakeFeesScriptJson } from "../staking/CollectStakeFees.ral.json";
+import { default as CreateListingScriptJson } from "../marketplace/CreateListing.ral.json";
 import { default as CreateStakeProjectScriptJson } from "../staking/CreateStakeProject.ral.json";
 import { default as DestroyScriptJson } from "../scripts/Destroy.ral.json";
+import { default as DestroyMarketplaceScriptJson } from "../marketplace/DestroyMarketplace.ral.json";
 import { default as DestroyOgAlfProtocolScriptJson } from "../walf/DestroyOgAlfProtocol.ral.json";
 import { default as DestroyStakeScriptJson } from "../staking/DestroyStake.ral.json";
 import { default as DestroyStakeFactoryScriptJson } from "../staking/DestroyStakeFactory.ral.json";
 import { default as DestroyStakeProtocolScriptJson } from "../staking/DestroyStakeProtocol.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
 import { default as DistributeScriptJson } from "../staking/Distribute.ral.json";
+import { default as EditListingScriptJson } from "../marketplace/EditListing.ral.json";
+import { default as EditListingFeesScriptJson } from "../marketplace/EditListingFees.ral.json";
+import { default as EditMarketplaceContractFeeScriptJson } from "../marketplace/EditMarketplaceContractFee.ral.json";
 import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.json";
 import { default as EditRewardsScriptJson } from "../staking/EditRewards.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
@@ -34,6 +41,7 @@ import { default as MintOgAlfScriptJson } from "../walf/MintOgAlf.ral.json";
 import { default as SendoutScriptJson } from "../scripts/Sendout.ral.json";
 import { default as TopupScriptJson } from "../scripts/Topup.ral.json";
 import { default as UpdateCreationFeeScriptJson } from "../createtoken/UpdateCreationFee.ral.json";
+import { default as WithdrawFeesScriptJson } from "../marketplace/WithdrawFees.ral.json";
 import { default as WithdrawStakeScriptJson } from "../staking/WithdrawStake.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
 
@@ -54,6 +62,18 @@ export const Buildtoken = new ExecutableScript<{
   tokenTotal: bigint;
 }>(Script.fromJson(BuildtokenScriptJson, "", []));
 
+export const BuyListing = new ExecutableScript<{
+  contract: HexString;
+  contractpath: bigint;
+  priceToken: HexString;
+  price: bigint;
+}>(Script.fromJson(BuyListingScriptJson, "", []));
+
+export const CancelListing = new ExecutableScript<{
+  contract: HexString;
+  contractpath: bigint;
+}>(Script.fromJson(CancelListingScriptJson, "", []));
+
 export const CollectFees = new ExecutableScript<{ contract: HexString }>(
   Script.fromJson(CollectFeesScriptJson, "", [])
 );
@@ -66,6 +86,15 @@ export const CollectStakeFees = new ExecutableScript<{ contract: HexString }>(
   Script.fromJson(CollectStakeFeesScriptJson, "", [])
 );
 
+export const CreateListing = new ExecutableScript<{
+  contract: HexString;
+  token: HexString;
+  tokenamount: bigint;
+  price: bigint;
+  priceToken: HexString;
+  exp: bigint;
+}>(Script.fromJson(CreateListingScriptJson, "", []));
+
 export const CreateStakeProject = new ExecutableScript<{
   contract: HexString;
   token: HexString;
@@ -73,6 +102,10 @@ export const CreateStakeProject = new ExecutableScript<{
 
 export const Destroy = new ExecutableScript<{ contract: HexString }>(
   Script.fromJson(DestroyScriptJson, "", [])
+);
+
+export const DestroyMarketplace = new ExecutableScript<{ contract: HexString }>(
+  Script.fromJson(DestroyMarketplaceScriptJson, "", [])
 );
 
 export const DestroyOgAlfProtocol = new ExecutableScript<{
@@ -98,6 +131,22 @@ export const Destroycreator = new ExecutableScript<{ contract: HexString }>(
 export const Distribute = new ExecutableScript<{ contract: HexString }>(
   Script.fromJson(DistributeScriptJson, "", [])
 );
+
+export const EditListing = new ExecutableScript<{
+  contract: HexString;
+  contractpath: bigint;
+  newprice: bigint;
+}>(Script.fromJson(EditListingScriptJson, "", []));
+
+export const EditListingFees = new ExecutableScript<{
+  contract: HexString;
+  newfee: bigint;
+}>(Script.fromJson(EditListingFeesScriptJson, "", []));
+
+export const EditMarketplaceContractFee = new ExecutableScript<{
+  contract: HexString;
+  newfee: bigint;
+}>(Script.fromJson(EditMarketplaceContractFeeScriptJson, "", []));
 
 export const EditOgAlfFees = new ExecutableScript<{
   contract: HexString;
@@ -143,6 +192,12 @@ export const UpdateCreationFee = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
 }>(Script.fromJson(UpdateCreationFeeScriptJson, "", []));
+
+export const WithdrawFees = new ExecutableScript<{
+  contract: HexString;
+  amount: bigint;
+  token: HexString;
+}>(Script.fromJson(WithdrawFeesScriptJson, "", []));
 
 export const WithdrawStake = new ExecutableScript<{
   contract: HexString;

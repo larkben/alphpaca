@@ -107,6 +107,51 @@ async function getImageUri(tokenId) {
 
 */
 
-let tokenIdAddress = addressFromContractId("x3N8DjuzWMaZtZbxXWMbaW5dRuXZgw6VjGnDYuhFd3b5");
+async function getEventsMarketplace() {
+    const result = await nodeProvider.events.getEventsContractContractaddress(
+        "yTqYQ6hiiCDJEEdLc8qZH6o7gQeHBCwXHkdagcB9xsBV", {start: 0, limit: 100}
+    )
+    let event = result.events[0].fields
 
-console.log(tokenIdAddress)
+    for (let i = 0; i < result.nextStart; i ++) {
+
+        let event = result.events[i].fields
+
+        let type = hexToString(event[0].value)
+
+        if (type == "ListingPurchased") {
+            continue
+        }
+        let contractid = event[1].value
+        let contractpath = event[2].value
+        //let tokenAmount = event[4].value
+        //let priceToken = event[5].value
+        //let price = event[6].value
+        console.log(type)
+        console.log("Contract Id: " + contractid)
+        console.log("Contract Path: " + contractpath)
+        //console.log("TokenAmount: " + tokenAmount)
+        //console.log("PriceToken: " + priceToken)
+        //console.log("Price:       " + price)
+
+        let address = addressFromContractId(contractid)
+
+        console.log(address)
+
+        fetch(`https://wallet-v20.mainnet.alephium.org/contracts/${address}/state`)
+            .then(response => {
+                if (!response.ok) {
+                    console.log("This contract has been executed.")
+                }
+            return response.json();
+            })
+            .then(data => {
+                console.log(data)
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
+}
+
+getEventsMarketplace()

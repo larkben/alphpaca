@@ -1,0 +1,43 @@
+{
+  "version": "v2.14.3",
+  "name": "CreateListing",
+  "bytecodeTemplate": "010103000100150c0d{0}01021700b47a{1}{2}a31600a2{1}{2}{3}{4}{5}110c{0}0103",
+  "fieldsSig": {
+    "names": [
+      "contract",
+      "token",
+      "tokenamount",
+      "price",
+      "priceToken",
+      "exp"
+    ],
+    "types": [
+      "Marketplace",
+      "ByteVec",
+      "U256",
+      "U256",
+      "ByteVec",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "usePreapprovedAssets": true,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

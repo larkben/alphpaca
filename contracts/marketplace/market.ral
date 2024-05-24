@@ -1,0 +1,214 @@
+Contract Marketplace (
+    owner: Address,
+    mut fee: U256,
+    listingTemplateId: ByteVec,
+    mut storagefee: U256
+) {
+    event NewListing(type: ByteVec, contract: ByteVec, contractpath: U256, token: ByteVec, tokenAmount: U256, priceToken: ByteVec, price: U256, exp: U256)
+    event ListingRemoved(type: ByteVec, who: Address, contractpath: U256)
+    event ListingEdited(type: ByteVec, who: Address, contractpath: U256, price: U256)
+
+    enum ErrorCodes {
+        NotOwner = 0
+    }
+
+    pub fn getOwner() -> Address {
+        return owner
+    }
+
+    pub fn getListingFee() -> U256 {
+        return fee
+    }
+
+    pub fn getStorageFee() -> U256 {
+        return storagefee
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = false, checkExternalCaller = false)
+    pub fn createlisting(token: ByteVec, tokenamount: U256, price: U256, priceToken: ByteVec, mut exp: U256) -> () {
+
+        let a = b`NewListing`
+
+        if (exp != 0) {
+            exp = blockTimeStamp!() + exp
+        }
+
+        let (encodeImmutableFields, encodeMutableFields) = Listing.encodeFields!(callerAddress!(), selfAddress!(), token, tokenamount, price, priceToken, blockTimeStamp!(), exp)
+
+        let timepath = blockTimeStamp!()
+        
+        let contractid = copyCreateSubContract!{callerAddress!() -> ALPH: getStorageFee(), token: tokenamount}(
+            toByteVec!(timepath),
+            listingTemplateId,                                                                                  
+            encodeImmutableFields,
+            encodeMutableFields
+        )
+
+        emit NewListing(a, contractid, timepath, token, tokenamount, priceToken, price, exp)
+
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = false, checkExternalCaller = false)
+    pub fn editlisting(contractpath: U256, newprice: U256) -> () {
+
+        let a = b`ListingEdited`
+
+        let selectedListing = subContractId!(toByteVec!(contractpath))
+
+        Listing(selectedListing).edit(callerAddress!(), newprice)
+
+        emit ListingEdited(a, callerAddress!(), contractpath, newprice)
+        
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = false, checkExternalCaller = false)
+    pub fn cancellisting(contractpath: U256) -> () {
+
+        let a = b`ListingRemoved`
+
+        let selectedListing = subContractId!(toByteVec!(contractpath))
+
+        let contractOwner = Listing(selectedListing).getOwner()
+
+        assert!(callerAddress!() == contractOwner, ErrorCodes.NotOwner)
+
+        Listing(selectedListing).cancel(callerAddress!())
+
+        emit ListingRemoved(a, callerAddress!(), contractpath)
+        
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = false, checkExternalCaller = false)
+    pub fn buylisting(contractpath: U256) -> () {
+
+        let a = b`ListingPurchased`
+
+        let selectedListing = subContractId!(toByteVec!(contractpath))
+
+        // collect 2% fee on token
+        let feetoken = Listing(selectedListing).getPriceToken()
+        let feeamount = Listing(selectedListing).getPrice()
+
+        // 2% fee would be fee: 20
+        let percent = feeamount / 1000
+        let platformfee = percent * fee
+
+        transferToken!(callerAddress!(), selfAddress!(), feetoken, platformfee)
+
+        Listing(selectedListing).buy{callerAddress!() -> feetoken: feeamount - platformfee}(callerAddress!(), feeamount - platformfee)
+
+        emit ListingRemoved(a, callerAddress!(), contractpath)
+        
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
+    pub fn editlistingfees(newfee: U256) -> () {
+
+        checkCaller!(callerAddress!() == owner, ErrorCodes.NotOwner)
+
+        fee = newfee
+        
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
+    pub fn editstoragefees(newfee: U256) -> () {
+
+        checkCaller!(callerAddress!() == owner, ErrorCodes.NotOwner)
+
+        storagefee = newfee
+        
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn withdrawfees(amount: U256, token: ByteVec) -> () {
+
+        checkCaller!(callerAddress!() == owner, ErrorCodes.NotOwner)
+
+        transferToken!(selfAddress!(), owner, token, amount)
+        
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn destroymarketplace() -> () {
+
+        checkCaller!(callerAddress!() == owner, ErrorCodes.NotOwner)
+
+        destroySelf!(owner)
+        
+    }
+
+    //@using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    //pub fn upgrade(amount: U256, token: ByteVec) -> () {
+
+        //checkCaller!(callerAddress!() == owner, ErrorCodes.NotOwner)
+
+        //transferToken!(selfAddress!(), owner, token, amount)
+        
+    //}
+
+}
+
+TxScript WithdrawFees (
+    contract: Marketplace,
+    amount: U256,
+    token: ByteVec
+) {
+    contract.withdrawfees(amount, token)
+}
+
+TxScript EditMarketplaceContractFee (
+    contract: Marketplace,
+    newfee: U256
+) {
+    contract.editstoragefees(newfee)
+}
+
+TxScript EditListingFees (
+    contract: Marketplace,
+    newfee: U256
+) {
+    contract.editlistingfees(newfee)
+}
+
+TxScript BuyListing (
+    contract: Marketplace,
+    contractpath: U256,
+    priceToken: ByteVec,
+    price: U256
+) {
+    contract.buylisting{callerAddress!() -> priceToken: price}(contractpath)
+}
+
+TxScript CancelListing (
+    contract: Marketplace,
+    contractpath: U256
+) {
+    contract.cancellisting(contractpath)
+}
+
+TxScript EditListing (
+    contract: Marketplace,
+    contractpath: U256,
+    newprice: U256
+) {
+    contract.editlisting(contractpath, newprice)
+}
+
+TxScript DestroyMarketplace (
+    contract: Marketplace
+) {
+    contract.destroymarketplace()
+}
+
+TxScript CreateListing (
+    contract: Marketplace,
+    token: ByteVec,
+    tokenamount: U256,
+    price: U256,
+    priceToken: ByteVec,
+    exp: U256
+) {
+    let storagefee = contract.getStorageFee()
+
+    contract.createlisting{callerAddress!() -> token: tokenamount, ALPH: storagefee}(token, tokenamount, price, priceToken, exp)
+}

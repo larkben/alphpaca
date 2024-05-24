@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v2.12.0",
+  "fullNodeVersion": "v2.14.3",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -30,6 +30,20 @@
       "codeHashDebug": "",
       "warnings": []
     },
+    "BuyListing": {
+      "sourceFile": "marketplace/market.ral",
+      "sourceCodeHash": "daecf9983b2701d3d694d0134e14502243706c967c7e017d697be489fc4970fc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "CancelListing": {
+      "sourceFile": "marketplace/market.ral",
+      "sourceCodeHash": "daecf9983b2701d3d694d0134e14502243706c967c7e017d697be489fc4970fc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
     "CollectFees": {
       "sourceFile": "createtoken/tx_collectfees.ral",
       "sourceCodeHash": "064c03c31e64485c8f72ef99dadad4471b1967e54ce43c073114cdfed3175eb1",
@@ -51,11 +65,18 @@
       "codeHashDebug": "",
       "warnings": []
     },
+    "CreateListing": {
+      "sourceFile": "marketplace/market.ral",
+      "sourceCodeHash": "daecf9983b2701d3d694d0134e14502243706c967c7e017d697be489fc4970fc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
     "CreateStakeFactory": {
       "sourceFile": "staking/create_factory.ral",
       "sourceCodeHash": "7d996259a5e4ecc5923a0de38e1e2b2ec2af8294b339568db9aa832874d0a8d5",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "24dc3f1769fd3df869ec4a2300694bff4a8470e809d9ea9e6139c82772ff3cfe",
+      "codeHashDebug": "faee87efd3939de62184e3f13706d3b7ce65f1c8b9acfd7364ec43967b08011c",
       "warnings": []
     },
     "CreateStakeProject": {
@@ -69,12 +90,19 @@
       "sourceFile": "createtoken/createtoken.ral",
       "sourceCodeHash": "9cf9397f420f1e1f32edc4b0a9aa8ae438de14614960f14225b26cb4dacb1239",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "3446422f9d17342e692efbdf1960fec2eb2edd25bece98044f4d2b28320c0bca",
+      "codeHashDebug": "2417efe145ca648a8d8cbc37ef9bc41b7d2f28406925fe7a88725c33a61542d9",
       "warnings": []
     },
     "Destroy": {
       "sourceFile": "scripts/destroy_faucet.ral",
       "sourceCodeHash": "0447e8824afa27dc76fdcaac5fac72247eb5b4aa93d5efc87da36d1450e1c4f7",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "DestroyMarketplace": {
+      "sourceFile": "marketplace/market.ral",
+      "sourceCodeHash": "daecf9983b2701d3d694d0134e14502243706c967c7e017d697be489fc4970fc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -121,6 +149,27 @@
       "codeHashDebug": "",
       "warnings": []
     },
+    "EditListing": {
+      "sourceFile": "marketplace/market.ral",
+      "sourceCodeHash": "daecf9983b2701d3d694d0134e14502243706c967c7e017d697be489fc4970fc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "EditListingFees": {
+      "sourceFile": "marketplace/market.ral",
+      "sourceCodeHash": "daecf9983b2701d3d694d0134e14502243706c967c7e017d697be489fc4970fc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "EditMarketplaceContractFee": {
+      "sourceFile": "marketplace/market.ral",
+      "sourceCodeHash": "daecf9983b2701d3d694d0134e14502243706c967c7e017d697be489fc4970fc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
     "EditOgAlfFees": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
@@ -146,14 +195,14 @@
       "sourceFile": "paca_faucet.ral",
       "sourceCodeHash": "bdce2b9ca1b63c08b828775dddf23302f9d95a35798033bdc5262f7279ea06b5",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "8813de5a4adb21e4e0ea09357924ec19037b916ecfd6a228152238f8e9396d04",
+      "codeHashDebug": "236dc0af410205d895500f454e6acbce51ba2c88b644b47aa75d40bcf21f2ad0",
       "warnings": []
     },
     "FeeCollection": {
       "sourceFile": "test_fees.ral",
       "sourceCodeHash": "c57c6d50b3844a156c7fcf9bed5ad1e8656db4a33099ccd3771e6d9c739f34b8",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "037be2975a9253dfe116077fa5b404f46ce64a23e2ccefbf2905dce4b66a7a7c",
+      "codeHashDebug": "8671dc4d763fef38a37762180a03a69d0a42c85466d4fee89b25e8598c5645fb",
       "warnings": []
     },
     "Gettoken": {
@@ -168,6 +217,20 @@
       "sourceCodeHash": "6809cb06fb20fa7edf529461998beeebd12b1636d439612cca2f84214dbf4a20",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
+      "warnings": []
+    },
+    "Listing": {
+      "sourceFile": "marketplace/listing.ral",
+      "sourceCodeHash": "42ba8b10cd8a8e13f6428c6c97cd970f2e2371c4bb0f4e16d57d81b66548647e",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "471fe65832ce340e8e768ca6c683230139c0a82d14687bc6a8d8647160dffc70",
+      "warnings": []
+    },
+    "Marketplace": {
+      "sourceFile": "marketplace/market.ral",
+      "sourceCodeHash": "daecf9983b2701d3d694d0134e14502243706c967c7e017d697be489fc4970fc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "495527a8db09b471b378f21c2ebb81a6b07ff0675a92782ff937c1190187774f",
       "warnings": []
     },
     "MintAlf": {
@@ -195,21 +258,21 @@
       "sourceFile": "staking/stake.ral",
       "sourceCodeHash": "f0ff76e7130dc6c83004fe3b54f694936febc2e9e38bca17c7352a6db0b7f5ad",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "f2268ea846fd135c2920c13d04cfbc1d01fee64298dbdca775ec94fd22ee8cc9",
+      "codeHashDebug": "8e9db1975a5fab53eb509f7a243bfbb98cc2443349a04095ba1ca6cffbb8f9bc",
       "warnings": []
     },
     "StakeFactory": {
       "sourceFile": "staking/stake_factory.ral",
       "sourceCodeHash": "875cda6e5243ca7d2f89fe9ccbbc68219bcd5dfebf309fc989945a24898212d4",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "b50f9e19c245b1179d9f91583b070d07527e1c06bc643343cbb7640032939838",
+      "codeHashDebug": "e741c0070223ecc10dc6a3589925f858d5e0ceed2f525212a50b8dcaefb77d8a",
       "warnings": []
     },
     "Token": {
       "sourceFile": "createtoken/token.ral",
       "sourceCodeHash": "9c20c0b49bb6743d8c9182715fabf3c3976e41cb9ed4e7bf3ebcf3723450e904",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "ca6b8c08739a44b63b275e82ca2fa299d38793c1d6860d741c688e0bc352061b",
+      "codeHashDebug": "215fe6aae7ba67810780a11c1f098f7845593d41f36aa7b99c737e2021b33c7b",
       "warnings": []
     },
     "Topup": {
@@ -222,6 +285,13 @@
     "UpdateCreationFee": {
       "sourceFile": "createtoken/tx_updatefee.ral",
       "sourceCodeHash": "930ec4ac679793f934b95521e88b750e414af71820c72f9bcfd03cb747fedd15",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "WithdrawFees": {
+      "sourceFile": "marketplace/market.ral",
+      "sourceCodeHash": "daecf9983b2701d3d694d0134e14502243706c967c7e017d697be489fc4970fc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -244,7 +314,7 @@
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "c0187a6c6a8d6d541841a640ff322fa8359454ea41038a5d160e03661758dc80",
+      "codeHashDebug": "b01b6b7db2945f4a58decc02a85c64337321f852569e692aa793274740f2f626",
       "warnings": []
     }
   }

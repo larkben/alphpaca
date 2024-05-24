@@ -23,8 +23,8 @@ export function Navbar() {
           <Link className="text-white hover:text-blue-500" href="/">
             Home
           </Link>
-          <Link className="text-white hover:text-blue-500" href="/staking">
-            Staking Services
+          <Link className="text-white hover:text-blue-500" href="/createlisting">
+            Marketplace
           </Link>
           <Link className="text-white hover:text-blue-500" href="/tokencreate">
             Token Creation
