@@ -37,13 +37,13 @@ export function Hero() {
             <div className="flex justify-center">
               <ClockIcon className="h-12 w-12 text-white" />
             </div>
-            <h2 className="mt-4 text-xl font-semibold text-white">Marketplace&apos;s</h2>
-            <p className="mt-2 text-white-400"> Great Deals Awaiting a Degen like You </p>
+            <h2 className="mt-4 text-xl font-semibold text-white"> On-Chain Gaming </h2>
+            <p className="mt-2 text-white-400"> Coming Soon! </p>
             <Link
               className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-pink-300 hover:bg-pink-400 dark:border-gray-800"
-              href="/createlistings"
+              href="#"
             >
-              Create / View Listings
+              Soon!
             </Link>
           </div>
         </div>
@@ -52,13 +52,13 @@ export function Hero() {
             <div className="flex justify-center">
               <Users2Icon className="h-12 w-12 text-white" />
             </div>
-            <h2 className="mt-4 text-xl font-semibold text-white">Web3</h2>
-            <p className="mt-2 text-white-400"> Coming Soon! </p>
+            <h2 className="mt-4 text-xl font-semibold text-white"> Blockchain Eagle </h2>
+            <p className="mt-2 text-white-400"> An alpacas worst nightmare come to life. Coming Soon! </p>
             <Link
               className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-blue-300 hover:bg-blue-400 dark:border-gray-800"
               href="#"
             >
-              Connect Now
+              Soon!
             </Link>
           </div>
         </div>
