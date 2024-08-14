@@ -1,0 +1,97 @@
+import "std/nft_interface"
+
+@std(id = #0002)
+@using(methodSelector = false)
+Interface INFTCollection {
+   // Collection Uri points to a json file containing metadata for the NFT collection.
+   //
+   // The schema of the json file is:
+   // {
+   //     "title": "NFT Collection Metadata",
+   //     "type": "object",
+   //     "properties": {
+   //         "name": {
+   //             "type": "string",
+   //             "description": "Name of the NFT collection"
+   //         },
+   //         "description": {
+   //             "type": "string",
+   //             "description": "General description of the NFT collection"
+   //         },
+   //         "image": {
+   //             "type": "string",
+   //             "description": "A URI to the image that represents the NFT collection"
+   //         }
+   //     }
+   // }
+   pub fn getCollectionUri() -> ByteVec
+
+   pub fn totalSupply() -> U256
+
+   pub fn nftByIndex(index: U256) -> INFT
+
+   // Validates that the NFT is part of the collection, otherwise throws exception.
+   pub fn validateNFT(nftId: ByteVec, nftIndex: U256) -> ()
+}
+
+Contract StakingCollection (
+    mut collectionUri: ByteVec,
+    mut totalSupply: U256,
+    mut collectionOwner: Address,
+    // staking components
+    token: ByteVec                 // LP Token
+    //mut rewards: U256
+) implements INFTCollection {
+    enum ErrorCodes {
+        NFTNotFound = 1
+        NFTNotPartOfCollection = 2
+        CollectionOwnerOnly = 3
+    }
+
+    // standard implementation
+    pub fn getCollectionUri() -> ByteVec {
+        return collectionUri
+    }
+
+    pub fn totalSupply() -> U256 {
+        return totalSupply
+    }
+
+    @using(checkExternalCaller = false)
+    pub fn nftByIndex(index: U256) -> INFT {
+        let nftTokenId = subContractId!(toByteVec!(index))
+        assert!(contractExists!(nftTokenId), ErrorCodes.NFTNotFound)
+
+        return INFT(nftTokenId)
+    }
+
+    @using(checkExternalCaller = false)
+    pub fn validateNFT(nftId: ByteVec, nftIndex: U256) -> () {
+      let expectedTokenContract = nftByIndex(nftIndex)
+      assert!(nftId == contractId!(expectedTokenContract), ErrorCodes.NFTNotPartOfCollection)
+    }
+
+    @using(checkExternalCaller = true, updateFields = true) 
+    pub fn editCollectionUri(newUri: ByteVec) -> () {
+        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerOnly)
+        collectionUri = newUri
+    }
+
+    @using(checkExternalCaller = true, updateFields = true) 
+    pub fn editCollectionOwner(newOwner: Address) -> () {
+        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerOnly)
+        collectionOwner = newOwner
+    }
+
+    @using(checkExternalCaller = false, updateFields = true, assetsInContract = true)
+    pub fn stakeToken(tokenAmount: U256) -> () {
+
+        //let stakeTime = blockTimeStamp!()
+
+        transferTokenToSelf!(callerAddress!(), token, tokenAmount)
+
+        // declare the subcontract to mint the token
+
+        totalSupply = totalSupply + 1
+    }
+}

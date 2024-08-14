@@ -154,4 +154,6 @@ async function getEventsMarketplace() {
     }
 }
 
-getEventsMarketplace()
+//getEventsMarketplace()
+
+console.log(hexToString(binToHex(addressFromContractId("682436d3ba2eb65e56f10adc1639a417415c19f4389d7c2ff47d0ad4eeddf200"))))

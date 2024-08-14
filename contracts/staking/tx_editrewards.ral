@@ -1,6 +1,0 @@
-TxScript EditRewards (
-	contract: StakeFactory,
-	newreward: U256
-) {
-	contract.editrewards(newreward)
-}

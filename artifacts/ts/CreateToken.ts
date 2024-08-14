@@ -25,6 +25,9 @@ import {
   getContractEventsCurrentCount,
   TestContractParamsWithoutMaps,
   TestContractResultWithoutMaps,
+  SignExecuteContractMethodParams,
+  SignExecuteScriptTxResult,
+  signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
 } from "@alephium/web3";
@@ -53,6 +56,27 @@ export namespace CreateTokenTypes {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
+    buildtoken: {
+      params: CallContractParams<{
+        symbol: HexString;
+        name: HexString;
+        decimals: bigint;
+        tokenTotal: bigint;
+      }>;
+      result: CallContractResult<null>;
+    };
+    updatefee: {
+      params: CallContractParams<{ newfee: bigint }>;
+      result: CallContractResult<null>;
+    };
+    collectfees: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
+    destroycreator: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
     CallMethodTable[T]["params"];
@@ -66,6 +90,38 @@ export namespace CreateTokenTypes {
       ? CallMethodTable[MaybeName]["result"]
       : undefined;
   };
+
+  export interface SignExecuteMethodTable {
+    getFee: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    buildtoken: {
+      params: SignExecuteContractMethodParams<{
+        symbol: HexString;
+        name: HexString;
+        decimals: bigint;
+        tokenTotal: bigint;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    updatefee: {
+      params: SignExecuteContractMethodParams<{ newfee: bigint }>;
+      result: SignExecuteScriptTxResult;
+    };
+    collectfees: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    destroycreator: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+  }
+  export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
+    SignExecuteMethodTable[T]["params"];
+  export type SignExecuteMethodResult<T extends keyof SignExecuteMethodTable> =
+    SignExecuteMethodTable[T]["result"];
 }
 
 class Factory extends ContractFactory<
@@ -98,7 +154,7 @@ class Factory extends ContractFactory<
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "getFee", params);
+      return testMethod(this, "getFee", params, getContractByCodeHash);
     },
     buildtoken: async (
       params: TestContractParamsWithoutMaps<
@@ -111,7 +167,7 @@ class Factory extends ContractFactory<
         }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "buildtoken", params);
+      return testMethod(this, "buildtoken", params, getContractByCodeHash);
     },
     updatefee: async (
       params: TestContractParamsWithoutMaps<
@@ -119,7 +175,7 @@ class Factory extends ContractFactory<
         { newfee: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "updatefee", params);
+      return testMethod(this, "updatefee", params, getContractByCodeHash);
     },
     collectfees: async (
       params: Omit<
@@ -127,7 +183,7 @@ class Factory extends ContractFactory<
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "collectfees", params);
+      return testMethod(this, "collectfees", params, getContractByCodeHash);
     },
     destroycreator: async (
       params: Omit<
@@ -135,7 +191,7 @@ class Factory extends ContractFactory<
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "destroycreator", params);
+      return testMethod(this, "destroycreator", params, getContractByCodeHash);
     },
   };
 }
@@ -215,6 +271,80 @@ export class CreateTokenInstance extends ContractInstance {
         params === undefined ? {} : params,
         getContractByCodeHash
       );
+    },
+    buildtoken: async (
+      params: CreateTokenTypes.CallMethodParams<"buildtoken">
+    ): Promise<CreateTokenTypes.CallMethodResult<"buildtoken">> => {
+      return callMethod(
+        CreateToken,
+        this,
+        "buildtoken",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updatefee: async (
+      params: CreateTokenTypes.CallMethodParams<"updatefee">
+    ): Promise<CreateTokenTypes.CallMethodResult<"updatefee">> => {
+      return callMethod(
+        CreateToken,
+        this,
+        "updatefee",
+        params,
+        getContractByCodeHash
+      );
+    },
+    collectfees: async (
+      params?: CreateTokenTypes.CallMethodParams<"collectfees">
+    ): Promise<CreateTokenTypes.CallMethodResult<"collectfees">> => {
+      return callMethod(
+        CreateToken,
+        this,
+        "collectfees",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    destroycreator: async (
+      params?: CreateTokenTypes.CallMethodParams<"destroycreator">
+    ): Promise<CreateTokenTypes.CallMethodResult<"destroycreator">> => {
+      return callMethod(
+        CreateToken,
+        this,
+        "destroycreator",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+  };
+
+  view = this.methods;
+
+  transact = {
+    getFee: async (
+      params: CreateTokenTypes.SignExecuteMethodParams<"getFee">
+    ): Promise<CreateTokenTypes.SignExecuteMethodResult<"getFee">> => {
+      return signExecuteMethod(CreateToken, this, "getFee", params);
+    },
+    buildtoken: async (
+      params: CreateTokenTypes.SignExecuteMethodParams<"buildtoken">
+    ): Promise<CreateTokenTypes.SignExecuteMethodResult<"buildtoken">> => {
+      return signExecuteMethod(CreateToken, this, "buildtoken", params);
+    },
+    updatefee: async (
+      params: CreateTokenTypes.SignExecuteMethodParams<"updatefee">
+    ): Promise<CreateTokenTypes.SignExecuteMethodResult<"updatefee">> => {
+      return signExecuteMethod(CreateToken, this, "updatefee", params);
+    },
+    collectfees: async (
+      params: CreateTokenTypes.SignExecuteMethodParams<"collectfees">
+    ): Promise<CreateTokenTypes.SignExecuteMethodResult<"collectfees">> => {
+      return signExecuteMethod(CreateToken, this, "collectfees", params);
+    },
+    destroycreator: async (
+      params: CreateTokenTypes.SignExecuteMethodParams<"destroycreator">
+    ): Promise<CreateTokenTypes.SignExecuteMethodResult<"destroycreator">> => {
+      return signExecuteMethod(CreateToken, this, "destroycreator", params);
     },
   };
 

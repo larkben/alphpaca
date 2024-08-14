@@ -1,8 +1,0 @@
-TxScript CreateStakeProject (
-    contract: CreateStakeFactory,
-    token: ByteVec
-) {
-    let fee = contract.getFee()
-
-    contract.addproject{callerAddress!() -> ALPH: fee}(token)
-}

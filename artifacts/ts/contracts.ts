@@ -4,14 +4,11 @@
 
 import { Contract, ContractFactory } from "@alephium/web3";
 import {
-  CreateStakeFactory,
   CreateToken,
   Faucet,
   FeeCollection,
-  Listing,
-  Marketplace,
-  Stake,
-  StakeFactory,
+  PacaNFT,
+  StakingCollection,
   Token,
   WrappedOgAlfProtocol,
 } from ".";
@@ -20,14 +17,11 @@ let contracts: ContractFactory<any>[] | undefined = undefined;
 export function getContractByCodeHash(codeHash: string): Contract {
   if (contracts === undefined) {
     contracts = [
-      CreateStakeFactory,
       CreateToken,
       Faucet,
       FeeCollection,
-      Listing,
-      Marketplace,
-      Stake,
-      StakeFactory,
+      PacaNFT,
+      StakingCollection,
       Token,
       WrappedOgAlfProtocol,
     ];

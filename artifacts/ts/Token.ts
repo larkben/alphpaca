@@ -25,6 +25,9 @@ import {
   getContractEventsCurrentCount,
   TestContractParamsWithoutMaps,
   TestContractResultWithoutMaps,
+  SignExecuteContractMethodParams,
+  SignExecuteScriptTxResult,
+  signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
 } from "@alephium/web3";
@@ -77,6 +80,33 @@ export namespace TokenTypes {
       ? CallMethodTable[MaybeName]["result"]
       : undefined;
   };
+
+  export interface SignExecuteMethodTable {
+    getSymbol: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getName: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getDecimals: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getTotalSupply: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getOwner: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+  }
+  export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
+    SignExecuteMethodTable[T]["params"];
+  export type SignExecuteMethodResult<T extends keyof SignExecuteMethodTable> =
+    SignExecuteMethodTable[T]["result"];
 }
 
 class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
@@ -103,7 +133,7 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
-      return testMethod(this, "getSymbol", params);
+      return testMethod(this, "getSymbol", params, getContractByCodeHash);
     },
     getName: async (
       params: Omit<
@@ -111,7 +141,7 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
-      return testMethod(this, "getName", params);
+      return testMethod(this, "getName", params, getContractByCodeHash);
     },
     getDecimals: async (
       params: Omit<
@@ -119,7 +149,7 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "getDecimals", params);
+      return testMethod(this, "getDecimals", params, getContractByCodeHash);
     },
     getTotalSupply: async (
       params: Omit<
@@ -127,7 +157,7 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "getTotalSupply", params);
+      return testMethod(this, "getTotalSupply", params, getContractByCodeHash);
     },
     getOwner: async (
       params: Omit<
@@ -135,7 +165,7 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<Address>> => {
-      return testMethod(this, "getOwner", params);
+      return testMethod(this, "getOwner", params, getContractByCodeHash);
     },
   };
 }
@@ -215,6 +245,36 @@ export class TokenInstance extends ContractInstance {
         params === undefined ? {} : params,
         getContractByCodeHash
       );
+    },
+  };
+
+  view = this.methods;
+
+  transact = {
+    getSymbol: async (
+      params: TokenTypes.SignExecuteMethodParams<"getSymbol">
+    ): Promise<TokenTypes.SignExecuteMethodResult<"getSymbol">> => {
+      return signExecuteMethod(Token, this, "getSymbol", params);
+    },
+    getName: async (
+      params: TokenTypes.SignExecuteMethodParams<"getName">
+    ): Promise<TokenTypes.SignExecuteMethodResult<"getName">> => {
+      return signExecuteMethod(Token, this, "getName", params);
+    },
+    getDecimals: async (
+      params: TokenTypes.SignExecuteMethodParams<"getDecimals">
+    ): Promise<TokenTypes.SignExecuteMethodResult<"getDecimals">> => {
+      return signExecuteMethod(Token, this, "getDecimals", params);
+    },
+    getTotalSupply: async (
+      params: TokenTypes.SignExecuteMethodParams<"getTotalSupply">
+    ): Promise<TokenTypes.SignExecuteMethodResult<"getTotalSupply">> => {
+      return signExecuteMethod(Token, this, "getTotalSupply", params);
+    },
+    getOwner: async (
+      params: TokenTypes.SignExecuteMethodParams<"getOwner">
+    ): Promise<TokenTypes.SignExecuteMethodResult<"getOwner">> => {
+      return signExecuteMethod(Token, this, "getOwner", params);
     },
   };
 

@@ -1,0 +1,109 @@
+{
+  "version": "v3.1.2",
+  "name": "PacaNFT",
+  "bytecode": "06050914402a40404056010000000102a00002010000000203ce01ce0002010001010009d3083ea1dab4ce0177460c7b1600a100010001010009d38097fb27b4ce0177460c7b1600a101010001010009d3b15efa9eb4ce0177460c7b1600a102",
+  "codeHash": "930328883a0a73b40cdbaae570e5528690b5ca137bcc0e26f380713720dbd812",
+  "fieldsSig": {
+    "names": [
+      "tokenUri",
+      "nftIndex",
+      "collectionId",
+      "tokenStaked",
+      "timeStamp",
+      "__stdInterfaceId"
+    ],
+    "types": [
+      "ByteVec",
+      "U256",
+      "ByteVec",
+      "U256",
+      "U256",
+      "ByteVec"
+    ],
+    "isMutable": [
+      true,
+      false,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "getTokenUri",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getCollectionIndex",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec",
+        "U256"
+      ]
+    },
+    {
+      "name": "editUri",
+      "paramNames": [
+        "newUri"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editTokenStaked",
+      "paramNames": [
+        "newAmount"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editTimeStamp",
+      "paramNames": [
+        "newTime"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "MustBeCalledFromCollection",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  ],
+  "stdInterfaceId": "0003"
+}

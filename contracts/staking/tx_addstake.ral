@@ -1,8 +1,0 @@
-TxScript AddStake (
-	contract: StakeFactory,
-	amount: U256
-) {
-	let token = contract.getToken()
-
-	contract.addstake{callerAddress!() -> token: amount, ALPH: 1 alph}(amount)
-}
