@@ -11,6 +11,7 @@ import {
   SignerProvider,
   HexString,
 } from "@alephium/web3";
+import { getContractByCodeHash } from "./contracts";
 import { default as ActivateWalfProtocolScriptJson } from "../walf/ActivateWalfProtocol.ral.json";
 import { default as BuildtokenScriptJson } from "../createtoken/Buildtoken.ral.json";
 import { default as CollectFeesScriptJson } from "../createtoken/CollectFees.ral.json";
@@ -30,7 +31,10 @@ import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets
 
 export const ActivateWalfProtocol = new ExecutableScript<{
   contract: HexString;
-}>(Script.fromJson(ActivateWalfProtocolScriptJson, "", []));
+}>(
+  Script.fromJson(ActivateWalfProtocolScriptJson, "", []),
+  getContractByCodeHash
+);
 
 export const Buildtoken = new ExecutableScript<{
   contract: HexString;
@@ -38,68 +42,76 @@ export const Buildtoken = new ExecutableScript<{
   name: HexString;
   decimals: bigint;
   tokenTotal: bigint;
-}>(Script.fromJson(BuildtokenScriptJson, "", []));
+}>(Script.fromJson(BuildtokenScriptJson, "", []), getContractByCodeHash);
 
 export const CollectFees = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(CollectFeesScriptJson, "", [])
+  Script.fromJson(CollectFeesScriptJson, "", []),
+  getContractByCodeHash
 );
 
 export const CollectOgAlfFees = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(CollectOgAlfFeesScriptJson, "", [])
+  Script.fromJson(CollectOgAlfFeesScriptJson, "", []),
+  getContractByCodeHash
 );
 
 export const Destroy = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(DestroyScriptJson, "", [])
+  Script.fromJson(DestroyScriptJson, "", []),
+  getContractByCodeHash
 );
 
 export const DestroyOgAlfProtocol = new ExecutableScript<{
   contract: HexString;
-}>(Script.fromJson(DestroyOgAlfProtocolScriptJson, "", []));
+}>(
+  Script.fromJson(DestroyOgAlfProtocolScriptJson, "", []),
+  getContractByCodeHash
+);
 
 export const Destroycreator = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(DestroycreatorScriptJson, "", [])
+  Script.fromJson(DestroycreatorScriptJson, "", []),
+  getContractByCodeHash
 );
 
 export const EditOgAlfFees = new ExecutableScript<{
   contract: HexString;
   newfee: bigint;
-}>(Script.fromJson(EditOgAlfFeesScriptJson, "", []));
+}>(Script.fromJson(EditOgAlfFeesScriptJson, "", []), getContractByCodeHash);
 
 export const Editfee = new ExecutableScript<{
   contract: HexString;
   edit: bigint;
-}>(Script.fromJson(EditfeeScriptJson, "", []));
+}>(Script.fromJson(EditfeeScriptJson, "", []), getContractByCodeHash);
 
 export const Gettoken = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(GettokenScriptJson, "", []));
+}>(Script.fromJson(GettokenScriptJson, "", []), getContractByCodeHash);
 
 export const MintAlf = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(MintAlfScriptJson, "", []));
+}>(Script.fromJson(MintAlfScriptJson, "", []), getContractByCodeHash);
 
 export const MintOgAlf = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(MintOgAlfScriptJson, "", []));
+}>(Script.fromJson(MintOgAlfScriptJson, "", []), getContractByCodeHash);
 
 export const Sendout = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(SendoutScriptJson, "", []));
+}>(Script.fromJson(SendoutScriptJson, "", []), getContractByCodeHash);
 
 export const Topup = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(TopupScriptJson, "", []));
+}>(Script.fromJson(TopupScriptJson, "", []), getContractByCodeHash);
 
 export const UpdateCreationFee = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(UpdateCreationFeeScriptJson, "", []));
+}>(Script.fromJson(UpdateCreationFeeScriptJson, "", []), getContractByCodeHash);
 
 export const Withdrawlassets = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(WithdrawlassetsScriptJson, "", [])
+  Script.fromJson(WithdrawlassetsScriptJson, "", []),
+  getContractByCodeHash
 );

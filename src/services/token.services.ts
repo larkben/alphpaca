@@ -1,5 +1,5 @@
 import { DUST_AMOUNT, ExecutableScript, ExecuteScriptResult, SignerProvider, addressFromContractId, contractIdFromAddress, hexToString, stringToHex } from '@alephium/web3'
-import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, CollectFees, CreateStakeProject, CollectStakeFees, AddStake, WithdrawStake, EditRewards, Distribute, UpdateCreationFee, MintAlf, MintOgAlf, CollectOgAlfFees, EditOgAlfFees, DestroyOgAlfProtocol, ActivateWalfProtocol, CreateListing, BuyListing, DestroyMarketplace } from '../../artifacts/ts/scripts'
+import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, CollectFees, UpdateCreationFee, MintAlf, MintOgAlf, CollectOgAlfFees, EditOgAlfFees, DestroyOgAlfProtocol, ActivateWalfProtocol} from '../../artifacts/ts/scripts'
 import { TokenCreate, TokenFaucetConfig, TokenTemplate } from './utils'
 import { Faucet, Token } from '../../artifacts/ts'
 import * as web3 from '@alephium/web3'
@@ -102,132 +102,7 @@ export const FaucetWithdraw = async (
 //                                                   //
 // ------------------------------------------------- //
 
-// CreateStakeFactory Project Creation
-export const CreateStakeFactory = async (
-  signerProvider: SignerProvider,
-  tokenid: string
-): Promise<ExecuteScriptResult> => {
-  return await CreateStakeProject.execute(signerProvider, {
-    initialFields: {
-      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700",
-      token: tokenid
-    },
-    attoAlphAmount: DUST_AMOUNT
-  })
-}
-
-// CreateStakeFactory Fee Collection
-export const CollectFactoryFees = async (
-  signerProvider: SignerProvider
-): Promise<ExecuteScriptResult> => {
-  return await CollectStakeFees.execute(signerProvider, {
-    initialFields: {
-      contract: "ce74b59ef7f7c5ffdcd07fac557b791e5d8820cdc78b3c97ffd81b0c6e333700",
-    },
-    attoAlphAmount: DUST_AMOUNT
-  })
-}
-
 // End of Factory
-
-async function getProjectToken(contract: string) : Promise<string> {
-  const address = addressFromContractId(contract)
-
-  fetch(`https://wallet-v20.mainnet.alephium.org/contracts/${address}/state`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-            return response.json();
-            })
-            .then(data => {
-                console.log(data)
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
-
-  return "Hello"
-}
-
-export const CreateStake = async (
-  signerProvider: SignerProvider,
-  contract: string,
-  amount: string
-): Promise<ExecuteScriptResult> => {
-  return await AddStake.execute(signerProvider, {
-    initialFields: {
-      contract: contract,
-      amount: BigInt(amount)
-    },
-    attoAlphAmount: DUST_AMOUNT,
-    tokens: [{id: await getProjectToken(contract), amount: 5000000000000000000n}]
-  })
-}
-
-export const RemoveStake = async (
-  signerProvider: SignerProvider,
-  contract: string,
-  amount: string
-): Promise<ExecuteScriptResult> => {
-  return await WithdrawStake.execute(signerProvider, {
-    initialFields: {
-      contract: contract,
-      amount: BigInt(amount)
-    },
-    attoAlphAmount: DUST_AMOUNT
-  })
-}
-
-// we can fetch contract state here to get the staking value
-export const EditStakeRewards = async (
-  signerProvider: SignerProvider,
-  contract: string,
-  newreward: string
-): Promise<ExecuteScriptResult> => {
-  return await EditRewards.execute(signerProvider, {
-    initialFields: {
-      contract: contract,
-      newreward: BigInt(newreward)
-    },
-    attoAlphAmount: DUST_AMOUNT
-  })
-}
-
-async function calculateRewards(contract: string) : Promise<string> {
-  const address = addressFromContractId(contract)
-
-  fetch(`https://wallet-v20.mainnet.alephium.org/contracts/${address}/state`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-            return response.json();
-            })
-            .then(data => {
-                console.log(data)
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
-
-  return "Hello"
-}
-
-// generate contract formula to fetch desired token expectations
-export const DistributeRewards = async (
-  signerProvider: SignerProvider,
-  contract: string,
-  newreward: string
-): Promise<ExecuteScriptResult> => {
-  return await Distribute.execute(signerProvider, {
-    initialFields: {
-      contract: contract
-    },
-    attoAlphAmount: DUST_AMOUNT,
-    tokens: [{id: await getProjectToken(contract), amount: 5000000000000000000n}]
-  })
-}
 
 // ------------------------------------------------- //
 //                                                   //

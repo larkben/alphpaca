@@ -1,195 +1,146 @@
 {
-  "fullNodeVersion": "v3.1.2",
+  "fullNodeVersion": "v3.5.0",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
     "ignoreUnusedFieldsWarnings": false,
     "ignoreUnusedPrivateFunctionsWarnings": false,
     "ignoreUpdateFieldsCheckWarnings": false,
-    "ignoreCheckExternalCallerWarnings": false
+    "ignoreCheckExternalCallerWarnings": false,
+    "ignoreUnusedFunctionReturnWarnings": false
   },
   "infos": {
     "ActivateWalfProtocol": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "Buildtoken": {
       "sourceFile": "createtoken/tx_make_token_alph.ral",
       "sourceCodeHash": "ce9de973033c53adde5b0f4758b34dfa3da12a439ad684d5f6b48e6830f71f08",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "CollectFees": {
       "sourceFile": "createtoken/tx_collectfees.ral",
       "sourceCodeHash": "064c03c31e64485c8f72ef99dadad4471b1967e54ce43c073114cdfed3175eb1",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "CollectOgAlfFees": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "CreateToken": {
       "sourceFile": "createtoken/createtoken.ral",
       "sourceCodeHash": "9cf9397f420f1e1f32edc4b0a9aa8ae438de14614960f14225b26cb4dacb1239",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "2417efe145ca648a8d8cbc37ef9bc41b7d2f28406925fe7a88725c33a61542d9",
-      "warnings": []
+      "codeHashDebug": "2417efe145ca648a8d8cbc37ef9bc41b7d2f28406925fe7a88725c33a61542d9"
     },
     "Destroy": {
       "sourceFile": "scripts/destroy_faucet.ral",
       "sourceCodeHash": "0447e8824afa27dc76fdcaac5fac72247eb5b4aa93d5efc87da36d1450e1c4f7",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "DestroyOgAlfProtocol": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "Destroycreator": {
       "sourceFile": "createtoken/tx_destroy.ral",
       "sourceCodeHash": "0181b19d66c8aa817f466b2a360f40eac7e4557e101666bde9b10039ccf4ea05",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "EditOgAlfFees": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "Editfee": {
       "sourceFile": "scripts/editfee.ral",
       "sourceCodeHash": "9cdeae542bc4274f07cc34f10ac8142a5cfad433a84eeb6e5ed35f7c6b6edc09",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "Faucet": {
       "sourceFile": "paca_faucet.ral",
       "sourceCodeHash": "bdce2b9ca1b63c08b828775dddf23302f9d95a35798033bdc5262f7279ea06b5",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "236dc0af410205d895500f454e6acbce51ba2c88b644b47aa75d40bcf21f2ad0",
-      "warnings": []
+      "codeHashDebug": "236dc0af410205d895500f454e6acbce51ba2c88b644b47aa75d40bcf21f2ad0"
     },
     "FeeCollection": {
       "sourceFile": "test_fees.ral",
       "sourceCodeHash": "c57c6d50b3844a156c7fcf9bed5ad1e8656db4a33099ccd3771e6d9c739f34b8",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "8671dc4d763fef38a37762180a03a69d0a42c85466d4fee89b25e8598c5645fb",
-      "warnings": []
+      "codeHashDebug": "8671dc4d763fef38a37762180a03a69d0a42c85466d4fee89b25e8598c5645fb"
     },
     "Gettoken": {
       "sourceFile": "scripts/tokentest.ral",
       "sourceCodeHash": "3e20a0e7e5ce052d940807ee059265d115a136931f0d38aea4484b5b29b4859b",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "IFungibleToken": {
       "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
-    },
-    "INFT": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_interface.ral",
-      "sourceCodeHash": "acff0211f936d18d3f4a01ddd8f4fe8fbdf0dba9e8b9204b233a48cba1c80d8b",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
-    },
-    "INFTCollection": {
-      "sourceFile": "staking/staking_collection.ral",
-      "sourceCodeHash": "f151271bea100094738cf0df41e9d880fc7d2c168bbc2dc14eadf6fc45b99ee9",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "MintAlf": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "MintOgAlf": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
-    },
-    "PacaNFT": {
-      "sourceFile": "staking/nft.ral",
-      "sourceCodeHash": "0608f49e5635b50a7573b29f5a7a798fca47a55f2a77614afc8aaa978df92b1b",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "930328883a0a73b40cdbaae570e5528690b5ca137bcc0e26f380713720dbd812",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "Sendout": {
       "sourceFile": "scripts/withdraw.ral",
       "sourceCodeHash": "bf59ec6bec02c4215901434da53d8078a0dad0909ba40d83042fcf298fa9b87f",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
-    },
-    "StakingCollection": {
-      "sourceFile": "staking/staking_collection.ral",
-      "sourceCodeHash": "f151271bea100094738cf0df41e9d880fc7d2c168bbc2dc14eadf6fc45b99ee9",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "50d16d8428e8e2875b95907fcc847faad14c2786fbcdd625c5e8ed28a85007b1",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "Token": {
       "sourceFile": "createtoken/token.ral",
       "sourceCodeHash": "9c20c0b49bb6743d8c9182715fabf3c3976e41cb9ed4e7bf3ebcf3723450e904",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "215fe6aae7ba67810780a11c1f098f7845593d41f36aa7b99c737e2021b33c7b",
-      "warnings": []
+      "codeHashDebug": "215fe6aae7ba67810780a11c1f098f7845593d41f36aa7b99c737e2021b33c7b"
     },
     "Topup": {
       "sourceFile": "scripts/deposit.ral",
       "sourceCodeHash": "135b04fe1d2f2159f536e686fddff9fa5e33119faea0c4ad766a1c91cb82cefe",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "UpdateCreationFee": {
       "sourceFile": "createtoken/tx_updatefee.ral",
       "sourceCodeHash": "930ec4ac679793f934b95521e88b750e414af71820c72f9bcfd03cb747fedd15",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "Withdrawlassets": {
       "sourceFile": "scripts/tokentesttwo.ral",
       "sourceCodeHash": "5f365d681775d5ef7a91db608b378978177c127b14a6835538487a7956f3d61f",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "",
-      "warnings": []
+      "codeHashDebug": ""
     },
     "WrappedOgAlfProtocol": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "b01b6b7db2945f4a58decc02a85c64337321f852569e692aa793274740f2f626",
-      "warnings": []
+      "codeHashDebug": "b01b6b7db2945f4a58decc02a85c64337321f852569e692aa793274740f2f626"
     }
   }
 }

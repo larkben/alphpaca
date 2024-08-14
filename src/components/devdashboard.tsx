@@ -8,7 +8,7 @@ import { FC, useState, useEffect } from 'react'
 // Import Alephium Services
 import { TokenCreate } from "../services/utils"
 import { useWallet } from "@alephium/web3-react"
-import { BuildToken, CollectCreatorFees, CollectFactoryFees, DestroyTokenCreator, EditCreatorFees, ServiceCollectOgAlfFees, ServiceDestroyMarketplace, ServiceDestroyWrappedAlfProtocol, ServiceTopupWalf } from "../services/token.services"
+import { BuildToken, CollectCreatorFees, DestroyTokenCreator, EditCreatorFees, ServiceCollectOgAlfFees, ServiceDestroyWrappedAlfProtocol, ServiceTopupWalf } from "../services/token.services"
 import { NodeProvider } from "@alephium/web3"
 import { CollectOgAlfFees, DestroyOgAlfProtocol } from "../../artifacts/ts"
 

@@ -90,6 +90,10 @@ export namespace FaucetTypes {
       ? CallMethodTable[MaybeName]["result"]
       : undefined;
   };
+  export type MulticallReturnType<Callss extends MultiCallParams[]> =
+    Callss["length"] extends 1
+      ? MultiCallResults<Callss[0]>
+      : { [index in keyof Callss]: MultiCallResults<Callss[index]> };
 
   export interface SignExecuteMethodTable {
     getTokenId: {
@@ -136,16 +140,12 @@ class Factory extends ContractFactory<FaucetInstance, FaucetTypes.Fields> {
     );
   }
 
-  getInitialFieldsWithDefaultValues() {
-    return this.contract.getInitialFieldsWithDefaultValues() as FaucetTypes.Fields;
-  }
-
   eventIndex = { Topup: 0, Sendout: 1, Destroy: 2 };
   consts = {
     ErrorCodes: {
-      InvalidWithdraw: BigInt(1),
-      InvalidTopup: BigInt(2),
-      InvalidCaller: BigInt(3),
+      InvalidWithdraw: BigInt("1"),
+      InvalidTopup: BigInt("2"),
+      InvalidCaller: BigInt("3"),
     },
   };
 
@@ -287,7 +287,7 @@ export class FaucetInstance extends ContractInstance {
     return subscribeContractEvents(Faucet.contract, this, options, fromCount);
   }
 
-  methods = {
+  view = {
     getTokenId: async (
       params?: FaucetTypes.CallMethodParams<"getTokenId">
     ): Promise<FaucetTypes.CallMethodResult<"getTokenId">> => {
@@ -355,8 +355,6 @@ export class FaucetInstance extends ContractInstance {
     },
   };
 
-  view = this.methods;
-
   transact = {
     getTokenId: async (
       params: FaucetTypes.SignExecuteMethodParams<"getTokenId">
@@ -395,14 +393,14 @@ export class FaucetInstance extends ContractInstance {
     },
   };
 
-  async multicall<Calls extends FaucetTypes.MultiCallParams>(
-    calls: Calls
-  ): Promise<FaucetTypes.MultiCallResults<Calls>> {
+  async multicall<Callss extends FaucetTypes.MultiCallParams[]>(
+    ...callss: Callss
+  ): Promise<FaucetTypes.MulticallReturnType<Callss>> {
     return (await multicallMethods(
       Faucet,
       this,
-      calls,
+      callss,
       getContractByCodeHash
-    )) as FaucetTypes.MultiCallResults<Calls>;
+    )) as FaucetTypes.MulticallReturnType<Callss>;
   }
 }

@@ -115,6 +115,10 @@ export namespace WrappedOgAlfProtocolTypes {
       ? CallMethodTable[MaybeName]["result"]
       : undefined;
   };
+  export type MulticallReturnType<Callss extends MultiCallParams[]> =
+    Callss["length"] extends 1
+      ? MultiCallResults<Callss[0]>
+      : { [index in keyof Callss]: MultiCallResults<Callss[index]> };
 
   export interface SignExecuteMethodTable {
     getWalfToken: {
@@ -180,17 +184,13 @@ class Factory extends ContractFactory<
     );
   }
 
-  getInitialFieldsWithDefaultValues() {
-    return this.contract.getInitialFieldsWithDefaultValues() as WrappedOgAlfProtocolTypes.Fields;
-  }
-
   eventIndex = { WrappedAlfMinted: 0, OgAlfRedeemed: 1 };
   consts = {
     ErrorCodes: {
-      InvalidOgAlf: BigInt(0),
-      InvalidWrappedAlf: BigInt(1),
-      OgAlfInContract: BigInt(2),
-      InvalidCaller: BigInt(3),
+      InvalidOgAlf: BigInt("0"),
+      InvalidWrappedAlf: BigInt("1"),
+      OgAlfInContract: BigInt("2"),
+      InvalidCaller: BigInt("3"),
     },
   };
 
@@ -355,7 +355,7 @@ export class WrappedOgAlfProtocolInstance extends ContractInstance {
     );
   }
 
-  methods = {
+  view = {
     getWalfToken: async (
       params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getWalfToken">
     ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getWalfToken">> => {
@@ -481,8 +481,6 @@ export class WrappedOgAlfProtocolInstance extends ContractInstance {
     },
   };
 
-  view = this.methods;
-
   transact = {
     getWalfToken: async (
       params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"getWalfToken">
@@ -581,14 +579,14 @@ export class WrappedOgAlfProtocolInstance extends ContractInstance {
     },
   };
 
-  async multicall<Calls extends WrappedOgAlfProtocolTypes.MultiCallParams>(
-    calls: Calls
-  ): Promise<WrappedOgAlfProtocolTypes.MultiCallResults<Calls>> {
+  async multicall<Callss extends WrappedOgAlfProtocolTypes.MultiCallParams[]>(
+    ...callss: Callss
+  ): Promise<WrappedOgAlfProtocolTypes.MulticallReturnType<Callss>> {
     return (await multicallMethods(
       WrappedOgAlfProtocol,
       this,
-      calls,
+      callss,
       getContractByCodeHash
-    )) as WrappedOgAlfProtocolTypes.MultiCallResults<Calls>;
+    )) as WrappedOgAlfProtocolTypes.MulticallReturnType<Callss>;
   }
 }

@@ -1,5 +1,5 @@
 {
-  "version": "v2.14.3",
+  "version": "v3.5.0",
   "name": "CollectFees",
   "bytecodeTemplate": "010103000000040c0c{0}0103",
   "fieldsSig": {
@@ -16,9 +16,6 @@
   "functions": [
     {
       "name": "main",
-      "usePreapprovedAssets": true,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],

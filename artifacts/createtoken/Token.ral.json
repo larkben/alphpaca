@@ -1,5 +1,5 @@
 {
-  "version": "v2.14.3",
+  "version": "v3.5.0",
   "name": "Token",
   "bytecode": "060509121b40244032010000000102ce0002010000000102ce0102010000000102ce0202010000000102ce0302010000000103d34ffef083ce0402",
   "codeHash": "215fe6aae7ba67810780a11c1f098f7845593d41f36aa7b99c737e2021b33c7b",
@@ -33,9 +33,6 @@
   "functions": [
     {
       "name": "getSymbol",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -45,9 +42,6 @@
     },
     {
       "name": "getName",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -57,9 +51,6 @@
     },
     {
       "name": "getDecimals",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -69,9 +60,6 @@
     },
     {
       "name": "getTotalSupply",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -81,9 +69,6 @@
     },
     {
       "name": "getOwner",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],

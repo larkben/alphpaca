@@ -1,5 +1,5 @@
 {
-  "version": "v2.14.3",
+  "version": "v3.5.0",
   "name": "FeeCollection",
   "bytecode": "060a0e1c402a4038404640544062409640cd40ea010000000103d32b0cdc07ce0002010000000103d3761bb57fce0102010000000103d332f2150ca00002010000000103d3adfaa184a00102010000000103d36638d1f4a00202010000000103d30a0263bace0002010000000103d3f4544ae5ce000201010101001dd3fdfc616516000c330d7bb4b200001600aab4b200010004aaa00016002aa100a00116002aa10105b4160000006001020001001dd34ea6735cb41700ce021600450f7bb2160000000002aab2160000010003aaa000a0002ba100a001a0012ba1010816005e01000102000dd36f682d7ab41701ce021601450f7b1600a1020916015e",
   "codeHash": "8671dc4d763fef38a37762180a03a69d0a42c85466d4fee89b25e8598c5645fb",
@@ -87,9 +87,6 @@
   "functions": [
     {
       "name": "getTokenOne",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -99,9 +96,6 @@
     },
     {
       "name": "getTokenTwo",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -111,9 +105,6 @@
     },
     {
       "name": "getBalanceOne",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -123,9 +114,6 @@
     },
     {
       "name": "getBalanceTwo",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -135,9 +123,6 @@
     },
     {
       "name": "getFee",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -147,9 +132,6 @@
     },
     {
       "name": "getSymbol",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -159,9 +141,6 @@
     },
     {
       "name": "getName",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -171,9 +150,6 @@
     },
     {
       "name": "gettoken",
-      "usePreapprovedAssets": true,
-      "useAssetsInContract": true,
-      "isPublic": true,
       "paramNames": [
         "amount"
       ],
@@ -187,9 +163,6 @@
     },
     {
       "name": "withdrawalassets",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": true,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -197,9 +170,6 @@
     },
     {
       "name": "editfee",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [
         "edit"
       ],

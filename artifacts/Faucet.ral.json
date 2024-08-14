@@ -1,5 +1,5 @@
 {
-  "version": "v2.14.3",
+  "version": "v3.5.0",
   "name": "Faucet",
   "bytecode": "03070e1c402a4038405c4080409c010000000103d307175852ce0002010000000103d3c3401fcaa00002010000000103d30a0263bace0002010000000103d3f4544ae5ce0002010101010013d39c519ffc16000c330e7bb4b200001600aaa00016002aa10005b416005f010201010013d3a9e5048616000d320d7bb2b400001600aaa00016002ba10006b416005f01020001000dd38e18691cb41700ce011600450f7bce01b007ce015e",
   "codeHash": "236dc0af410205d895500f454e6acbce51ba2c88b644b47aa75d40bcf21f2ad0",
@@ -56,9 +56,6 @@
   "functions": [
     {
       "name": "getTokenId",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -68,9 +65,6 @@
     },
     {
       "name": "getBalance",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -80,9 +74,6 @@
     },
     {
       "name": "getSymbol",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -92,9 +83,6 @@
     },
     {
       "name": "getName",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -104,9 +92,6 @@
     },
     {
       "name": "topup",
-      "usePreapprovedAssets": true,
-      "useAssetsInContract": true,
-      "isPublic": true,
       "paramNames": [
         "amount"
       ],
@@ -120,9 +105,6 @@
     },
     {
       "name": "sendout",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": true,
-      "isPublic": true,
       "paramNames": [
         "amount"
       ],
@@ -136,9 +118,6 @@
     },
     {
       "name": "destroy",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": true,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],

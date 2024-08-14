@@ -7,8 +7,6 @@ import {
   CreateToken,
   Faucet,
   FeeCollection,
-  PacaNFT,
-  StakingCollection,
   Token,
   WrappedOgAlfProtocol,
 } from ".";
@@ -20,8 +18,6 @@ export function getContractByCodeHash(codeHash: string): Contract {
       CreateToken,
       Faucet,
       FeeCollection,
-      PacaNFT,
-      StakingCollection,
       Token,
       WrappedOgAlfProtocol,
     ];

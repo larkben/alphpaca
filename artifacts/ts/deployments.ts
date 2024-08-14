@@ -9,18 +9,8 @@ import {
   TokenInstance,
   CreateToken,
   CreateTokenInstance,
-  StakeFactory,
-  StakeFactoryInstance,
-  Stake,
-  StakeInstance,
-  CreateStakeFactory,
-  CreateStakeFactoryInstance,
   WrappedOgAlfProtocol,
   WrappedOgAlfProtocolInstance,
-  Listing,
-  ListingInstance,
-  Marketplace,
-  MarketplaceInstance,
 } from ".";
 import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
@@ -30,12 +20,7 @@ export type Deployments = {
   contracts: {
     Token: DeployContractExecutionResult<TokenInstance>;
     CreateToken: DeployContractExecutionResult<CreateTokenInstance>;
-    StakeFactory?: DeployContractExecutionResult<StakeFactoryInstance>;
-    Stake?: DeployContractExecutionResult<StakeInstance>;
-    CreateStakeFactory?: DeployContractExecutionResult<CreateStakeFactoryInstance>;
     WrappedOgAlfProtocol?: DeployContractExecutionResult<WrappedOgAlfProtocolInstance>;
-    Listing?: DeployContractExecutionResult<ListingInstance>;
-    Marketplace?: DeployContractExecutionResult<MarketplaceInstance>;
   };
 };
 
@@ -53,33 +38,6 @@ function toDeployments(json: any): Deployments {
         json.contracts["CreateToken"].contractInstance.address
       ),
     },
-    StakeFactory:
-      json.contracts["StakeFactory"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["StakeFactory"],
-            contractInstance: StakeFactory.at(
-              json.contracts["StakeFactory"].contractInstance.address
-            ),
-          },
-    Stake:
-      json.contracts["Stake"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["Stake"],
-            contractInstance: Stake.at(
-              json.contracts["Stake"].contractInstance.address
-            ),
-          },
-    CreateStakeFactory:
-      json.contracts["CreateStakeFactory"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["CreateStakeFactory"],
-            contractInstance: CreateStakeFactory.at(
-              json.contracts["CreateStakeFactory"].contractInstance.address
-            ),
-          },
     WrappedOgAlfProtocol:
       json.contracts["WrappedOgAlfProtocol"] === undefined
         ? undefined
@@ -87,24 +45,6 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["WrappedOgAlfProtocol"],
             contractInstance: WrappedOgAlfProtocol.at(
               json.contracts["WrappedOgAlfProtocol"].contractInstance.address
-            ),
-          },
-    Listing:
-      json.contracts["Listing"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["Listing"],
-            contractInstance: Listing.at(
-              json.contracts["Listing"].contractInstance.address
-            ),
-          },
-    Marketplace:
-      json.contracts["Marketplace"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["Marketplace"],
-            contractInstance: Marketplace.at(
-              json.contracts["Marketplace"].contractInstance.address
             ),
           },
   };

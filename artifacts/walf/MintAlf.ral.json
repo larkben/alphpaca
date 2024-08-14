@@ -1,5 +1,5 @@
 {
-  "version": "v2.14.3",
+  "version": "v3.5.0",
   "name": "MintAlf",
   "bytecodeTemplate": "010103000200160c0d{0}010317000c0d{0}01041701b47a1600{1}a31601a2{1}0d0c{0}0105",
   "fieldsSig": {
@@ -19,9 +19,6 @@
   "functions": [
     {
       "name": "main",
-      "usePreapprovedAssets": true,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],

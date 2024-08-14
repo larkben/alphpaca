@@ -115,6 +115,10 @@ export namespace FeeCollectionTypes {
       ? CallMethodTable[MaybeName]["result"]
       : undefined;
   };
+  export type MulticallReturnType<Callss extends MultiCallParams[]> =
+    Callss["length"] extends 1
+      ? MultiCallResults<Callss[0]>
+      : { [index in keyof Callss]: MultiCallResults<Callss[index]> };
 
   export interface SignExecuteMethodTable {
     getTokenOne: {
@@ -176,10 +180,6 @@ class Factory extends ContractFactory<
     );
   }
 
-  getInitialFieldsWithDefaultValues() {
-    return this.contract.getInitialFieldsWithDefaultValues() as FeeCollectionTypes.Fields;
-  }
-
   eventIndex = {
     RecievedToken: 0,
     FeeRecieved: 1,
@@ -188,7 +188,7 @@ class Factory extends ContractFactory<
     Success: 4,
   };
   consts = {
-    ErrorCodes: { InvalidRecieve: BigInt(1), InvalidCaller: BigInt(3) },
+    ErrorCodes: { InvalidRecieve: BigInt("1"), InvalidCaller: BigInt("3") },
   };
 
   at(address: string): FeeCollectionInstance {
@@ -391,7 +391,7 @@ export class FeeCollectionInstance extends ContractInstance {
     );
   }
 
-  methods = {
+  view = {
     getTokenOne: async (
       params?: FeeCollectionTypes.CallMethodParams<"getTokenOne">
     ): Promise<FeeCollectionTypes.CallMethodResult<"getTokenOne">> => {
@@ -504,8 +504,6 @@ export class FeeCollectionInstance extends ContractInstance {
     },
   };
 
-  view = this.methods;
-
   transact = {
     getTokenOne: async (
       params: FeeCollectionTypes.SignExecuteMethodParams<"getTokenOne">
@@ -561,14 +559,14 @@ export class FeeCollectionInstance extends ContractInstance {
     },
   };
 
-  async multicall<Calls extends FeeCollectionTypes.MultiCallParams>(
-    calls: Calls
-  ): Promise<FeeCollectionTypes.MultiCallResults<Calls>> {
+  async multicall<Callss extends FeeCollectionTypes.MultiCallParams[]>(
+    ...callss: Callss
+  ): Promise<FeeCollectionTypes.MulticallReturnType<Callss>> {
     return (await multicallMethods(
       FeeCollection,
       this,
-      calls,
+      callss,
       getContractByCodeHash
-    )) as FeeCollectionTypes.MultiCallResults<Calls>;
+    )) as FeeCollectionTypes.MulticallReturnType<Callss>;
   }
 }

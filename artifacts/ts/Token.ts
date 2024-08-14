@@ -80,6 +80,10 @@ export namespace TokenTypes {
       ? CallMethodTable[MaybeName]["result"]
       : undefined;
   };
+  export type MulticallReturnType<Callss extends MultiCallParams[]> =
+    Callss["length"] extends 1
+      ? MultiCallResults<Callss[0]>
+      : { [index in keyof Callss]: MultiCallResults<Callss[index]> };
 
   export interface SignExecuteMethodTable {
     getSymbol: {
@@ -116,10 +120,6 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
       this.contract.fieldsSig,
       []
     );
-  }
-
-  getInitialFieldsWithDefaultValues() {
-    return this.contract.getInitialFieldsWithDefaultValues() as TokenTypes.Fields;
   }
 
   at(address: string): TokenInstance {
@@ -190,7 +190,7 @@ export class TokenInstance extends ContractInstance {
     return fetchContractState(Token, this);
   }
 
-  methods = {
+  view = {
     getSymbol: async (
       params?: TokenTypes.CallMethodParams<"getSymbol">
     ): Promise<TokenTypes.CallMethodResult<"getSymbol">> => {
@@ -248,8 +248,6 @@ export class TokenInstance extends ContractInstance {
     },
   };
 
-  view = this.methods;
-
   transact = {
     getSymbol: async (
       params: TokenTypes.SignExecuteMethodParams<"getSymbol">
@@ -278,14 +276,14 @@ export class TokenInstance extends ContractInstance {
     },
   };
 
-  async multicall<Calls extends TokenTypes.MultiCallParams>(
-    calls: Calls
-  ): Promise<TokenTypes.MultiCallResults<Calls>> {
+  async multicall<Callss extends TokenTypes.MultiCallParams[]>(
+    ...callss: Callss
+  ): Promise<TokenTypes.MulticallReturnType<Callss>> {
     return (await multicallMethods(
       Token,
       this,
-      calls,
+      callss,
       getContractByCodeHash
-    )) as TokenTypes.MultiCallResults<Calls>;
+    )) as TokenTypes.MulticallReturnType<Callss>;
   }
 }

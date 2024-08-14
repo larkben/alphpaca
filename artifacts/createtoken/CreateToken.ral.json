@@ -1,5 +1,5 @@
 {
-  "version": "v2.14.3",
+  "version": "v3.5.0",
   "name": "CreateToken",
   "bytecode": "04050e4066407f40a140bd010000000103d36638d1f4a0000201010408004025d38634c20fb417041604b2a000a7a001a0002aa101160016011602160316041406414c5048000113066413006417061705160413c40de0b6b3a7640000a2ce011605160616031604c7170706160416075f01000102000ad3fd135817b41701ce001601450d7b1600a100010200010010d3d6607dbbb41700ce001600450d7bb2ce00a001a7a001a0012ba10101020001000dd36b50b06cb41700ce001600450d7bce00b005ce005e",
   "codeHash": "2417efe145ca648a8d8cbc37ef9bc41b7d2f28406925fe7a88725c33a61542d9",
@@ -48,9 +48,6 @@
   "functions": [
     {
       "name": "getFee",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -60,9 +57,6 @@
     },
     {
       "name": "buildtoken",
-      "usePreapprovedAssets": true,
-      "useAssetsInContract": true,
-      "isPublic": true,
       "paramNames": [
         "symbol",
         "name",
@@ -85,9 +79,6 @@
     },
     {
       "name": "updatefee",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
       "paramNames": [
         "newfee"
       ],
@@ -101,9 +92,6 @@
     },
     {
       "name": "collectfees",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": true,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
@@ -111,9 +99,6 @@
     },
     {
       "name": "destroycreator",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": true,
-      "isPublic": true,
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
