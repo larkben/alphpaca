@@ -1,0 +1,16 @@
+Contract ALPHpaca(
+    mut owner: Address,
+    projectToken: ByteVec,
+    oldCollection: ByteVec      // current ALPHpacas
+) extends AdminTools(owner, projectToken, oldCollection) {
+
+    // Events
+
+    // Error Codes
+
+    // Helper Functions
+
+    // Contract Functions
+
+
+}
