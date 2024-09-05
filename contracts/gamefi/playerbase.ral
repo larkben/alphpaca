@@ -5,8 +5,12 @@ Contract PlayerBase(
     mut collectionUri: ByteVec,
     mut totalSupply: U256,
     alphpacaId: ByteVec,
-    parentContractId: ByteVec
+    parentContractId: ByteVec,
+    baseuri: ByteVec,
+    playerContractId: ByteVec
 ) implements INFTCollection {
+    event Mint(minter: Address, fromIndex: U256)
+
     enum ErrorCodes {
         NFTNotFound = 0
         CollectionOwnerAllowedOnly = 1
@@ -45,17 +49,38 @@ Contract PlayerBase(
 
     // validation ? ~ not being used
     @using(checkExternalCaller = false)
-    pub fn validateNFT(nftId: ByteVec, nftIndex: U256) -> () {
-      let expectedTokenContract = nftByIndex(nftIndex)
+    pub fn validateNFT(nftId: ByteVec, index: U256) -> () {
+      let expectedTokenContract = nftByIndex(index)
       assert!(nftId == contractId!(expectedTokenContract), ErrorCodes.NFTNotPartOfCollection)
     }
 
-    // genehash
-    @using(checkExternalCaller = true)
-    pub fn editNFTHash(newHash: U256, subContract: ByteVec) -> () {
-        checkCaller!(callerContractId!() == parentContractId, ErrorCodes.NotCalledFromGame)
+    // mint player
+    @using(preapprovedAssets = true)
+    pub fn mint(tokenSelected: ByteVec, index: U256) -> () {
 
-        Player(subContract).editGeneHash(newHash)
+        burnToken!(callerAddress!(), tokenSelected, 1)
+
+        let nftIndex = index
+
+        // gets the index of the selected nft and then sets to the index of the new nft
+        let nftUri = baseuri ++ u256ToString!(index)
+
+        let c = #
+
+        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(nftIndex, nftUri, selfContractId!(), c, callerAddress!())
+
+        let contractId = copyCreateSubContractWithToken!{callerAddress!() -> ALPH: minimalContractDeposit!()}(
+            toByteVec!(nftIndex),
+            playerContractId,
+            encodeImmutableFields,
+            encodeMutableFields,
+            1,
+            callerAddress!()
+        )
+
+        totalSupply = totalSupply + 1
+
+        emit Mint(callerAddress!(), nftIndex)
     }
 
     // edit

@@ -2,13 +2,12 @@ import "std/nft_interface"
 
 Contract Player(
   // basic params
+  nftIndex: U256,
   mut tokenUri: ByteVec,    // allows the tokenUri to be edited
   collectionId: ByteVec,
-  nftIndex: U256,
   // the paca functionality suite
   nickname: ByteVec,
-  linkedAddress: Address,    // name service functionality
-  mut geneHash: U256
+  linkedAddress: Address
 ) implements INFT {
   enum ErrorCodes {
     NotCalledFromCollection = 0
@@ -32,12 +31,5 @@ Contract Player(
 
     checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
     tokenUri = newUri
-  }
-
-  @using(checkExternalCaller = true, updateFields = true)
-  pub fn editGeneHash(newHash: U256) -> () {
-    checkCaller!(callerContractId!() == collectionId, ErrorCodes.NotCalledFromCollection)
-
-    geneHash = newHash
   }
 }
