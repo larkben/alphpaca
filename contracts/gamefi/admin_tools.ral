@@ -1,7 +1,7 @@
 Abstract Contract AdminTools(
     mut owner: Address,
     projectToken: ByteVec,
-    oldCollection: ByteVec      // current ALPHpacas
+    collectionId: ByteVec
 ) {
     // Events
     

@@ -3,13 +3,11 @@ import "std/nft_collection_interface"
 Contract PlayerBase(
     collectionOwner: Address,
     mut collectionUri: ByteVec,
-    mut totalSupply: U256,
-    alphpacaId: ByteVec,
-    parentContractId: ByteVec,
+    mut totalSupply: U256,    
     baseuri: ByteVec,
     playerContractId: ByteVec
 ) implements INFTCollection {
-    event Mint(minter: Address, fromIndex: U256)
+    event Mint(minter: Address, fromIndex: U256, contract: ByteVec)
 
     enum ErrorCodes {
         NFTNotFound = 0
@@ -55,7 +53,7 @@ Contract PlayerBase(
     }
 
     // mint player
-    @using(preapprovedAssets = true)
+    @using(preapprovedAssets = true, checkExternalCaller = false, updateFields = true)
     pub fn mint(tokenSelected: ByteVec, index: U256) -> () {
 
         burnToken!(callerAddress!(), tokenSelected, 1)
@@ -67,7 +65,7 @@ Contract PlayerBase(
 
         let c = #
 
-        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(nftIndex, nftUri, selfContractId!(), c, callerAddress!())
+        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(nftIndex, nftUri, selfContractId!(), c, callerAddress!(), 10, 10, 10, 0)
 
         let contractId = copyCreateSubContractWithToken!{callerAddress!() -> ALPH: minimalContractDeposit!()}(
             toByteVec!(nftIndex),
@@ -80,11 +78,11 @@ Contract PlayerBase(
 
         totalSupply = totalSupply + 1
 
-        emit Mint(callerAddress!(), nftIndex)
+        emit Mint(callerAddress!(), nftIndex, contractId)
     }
 
     // edit
-    @using(checkExternalCaller = true)
+    @using(checkExternalCaller = true, updateFields = true)
     pub fn editCollectionUri(newCollectionUri: ByteVec) -> () {
         checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
 
@@ -92,7 +90,7 @@ Contract PlayerBase(
     }
 
     // upgrades
-    @using(checkExternalCaller = true, updateFields = true)
+    @using(checkExternalCaller = true)
     pub fn updatePlayerBase(newCode: ByteVec) -> () {
         checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
 
