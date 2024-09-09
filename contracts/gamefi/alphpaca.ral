@@ -1,8 +1,8 @@
 Contract ALPHpaca(
-    mut owner: Address,
-    projectToken: ByteVec,
-    collectionId: ByteVec
-) extends AdminTools(owner, projectToken, collectionId) {
+    mut owner: Address
+    //projectToken: ByteVec,
+    //collectionId: ByteVec
+) extends AdminTools(owner) {
 
     // Events
 
@@ -10,8 +10,10 @@ Contract ALPHpaca(
 
     // Helper Functions
 
-    // Contract Functions
-    
+    // Contract Functions - calls the collection contract functions
+    pub fn updateNickname() -> () {
+        
+    }    
 
 
 }

@@ -5,10 +5,12 @@ Contract Player(
   nftIndex: U256,
   mut tokenUri: ByteVec,    // allows the tokenUri to be edited
   collectionId: ByteVec,
+  gameContract: ByteVec,
   // the paca functionality suite
   mut nickname: ByteVec,
   mut linkedAddress: Address,
   // stats
+  mut level: [U256; 3],     // health lv, attack lv, defense lv
   mut stats: [U256; 4],     // health, attack, defense, xp
   // item held (hay)
   mut hay: ByteVec,         // this equipped item is meant to increase 1/3 skills by a factor of * at the cost of another
@@ -16,9 +18,11 @@ Contract Player(
   // calls a function to checkLinked nft and then asserts, moves will cause bonuses and or defects
   mut moves: [ByteVec; 4]
 ) implements INFT {
+
   enum ErrorCodes {
     NotCalledFromCollection = 0
     InvalidSkill = 1
+    InvalidXp = 2
   }
 
   pub fn getTokenUri() -> ByteVec {
@@ -60,21 +64,93 @@ Contract Player(
 
   // Assign Moves - maybe a better data structure for the moveSets
   @using(checkExternalCaller = true, updateFields = true)
-  pub fn assignMoveOne(move: ByteVec) -> () {
-    let addressCalled = contractIdToAddress!(collectionId)
+  pub fn assignMove(whichMove: U256, newMove: ByteVec) -> () {
+    let addressCalled = contractIdToAddress!(gameContract)
 
     checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
     
     // check that nft id has a linked function called checkLink to the nft id of this nft
 
-    moveOne = move
+    moves[whichMove] = newMove
   }
 
   // Upgrade Skills
+  @using(checkExternalCaller = true, updateFields = true)
   pub fn upgradeSkill(whichSkill: U256) -> () {
-    
-    assert!(whichSkill <= 3, Error.InvalidSkill)
 
-    let difficulty = (stats[whichSkill] * 1) / 2 // (statsValue * 1) / 2
+    let addressCalled = contractIdToAddress!(gameContract)
+
+    checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
+    
+    assert!(whichSkill < 3, ErrorCodes.InvalidSkill)
+
+    let difficulty = level[whichSkill] * 10
+
+    // check xp
+    assert!(stats[3] > difficulty, ErrorCodes.InvalidXp) // xp > difficulty
+    stats[3] = stats[3] - difficulty
+
+    stats[whichSkill] = stats[whichSkill] * 2 // stats upgraded
+    level[whichSkill] = level[whichSkill] + 1
+  }
+
+  // Edit Item Held
+  @using(checkExternalCaller = true, updateFields = true)
+  pub fn editHeldHay(newHay: ByteVec) -> () {
+
+    let addressCalled = contractIdToAddress!(gameContract)
+
+    checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
+    
+    // run check NFT link function
+
+    hay = newHay
+  }
+
+  // Battle Mechanics
+  @using(checkExternalCaller = true, updateFields = true)
+  pub fn removeHealth(damage: U256) -> (Bool) {
+
+    let addressCalled = contractIdToAddress!(gameContract)
+
+    checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
+
+    // check calculation
+    if (stats[0] > damage) {
+      stats[0] = stats[0] - damage
+      return true  // alive
+    }
+    else {
+      return false // faint
+    }
+  }
+
+  @using(checkExternalCaller = true, updateFields = true)
+  pub fn addXp(xp: U256) -> () {
+
+    let addressCalled = contractIdToAddress!(gameContract)
+
+    checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
+
+    stats[3] = stats[3] + xp
+  }
+
+  // Upgrade Scripts
+  @using(checkExternalCaller = true, updateFields = false)
+  pub fn updatePlayerCode(newCode: ByteVec) -> () {
+    let addressCalled = contractIdToAddress!(collectionId)
+
+    checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
+
+    migrate!(newCode)
+  }
+
+  @using(checkExternalCaller = true, updateFields = true)
+  pub fn updatePlayerFields(newCode: ByteVec, encodedImmutableFields: ByteVec, encodedMutableFields: ByteVec) -> () {
+    let addressCalled = contractIdToAddress!(collectionId)
+
+    checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
+
+    migrateWithFields!(newCode, encodedImmutableFields, encodedMutableFields)
   }
 }
