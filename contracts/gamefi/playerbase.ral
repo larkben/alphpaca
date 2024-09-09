@@ -1,5 +1,6 @@
 import "std/nft_collection_interface"
 
+// the nft collection contract for players
 Contract PlayerBase(
     collectionOwner: Address,
     mut collectionUri: ByteVec,
@@ -20,33 +21,23 @@ Contract PlayerBase(
         NFTNotPartOfCollection = 2
     }
 
+    // base uri
     pub fn getCollectionUri() -> ByteVec {
         return collectionUri
     }
 
+    // total supply at runtime
     pub fn totalSupply() -> U256 {
         return totalSupply
     }
 
+    // get the nft by index
     @using(checkExternalCaller = false)
     pub fn nftByIndex(index: U256) -> INFT {
         let nftTokenId = subContractId!(toByteVec!(index))
         assert!(contractExists!(nftTokenId), ErrorCodes.NFTNotFound)
 
         return INFT(nftTokenId)
-    }
-
-    @using(assetsInContract = true)
-    pub fn withdraw(to: Address, amount: U256) -> () {
-        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
-        transferTokenFromSelf!(to, ALPH, amount)
-    }
-
-    @using(assetsInContract = true)
-    pub fn withdrawNonNative(to: Address, token: ByteVec, amount: U256) -> () {
-        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
-        
-        transferTokenFromSelf!(to, token, amount)
     }
 
     // validation ? ~ not being used
@@ -58,21 +49,25 @@ Contract PlayerBase(
 
     // mint player
     @using(preapprovedAssets = true, checkExternalCaller = false, updateFields = true)
-    pub fn mint(tokenSelected: ByteVec, index: ByteVec) -> () {
+    pub fn mint(tokenSelected: ByteVec) -> () {
 
         burnToken!(callerAddress!(), tokenSelected, 1)
 
-        let nftIndex = index
+        // get the data associated with the NFT
+        let (id, tempIndex) = INFT(tokenSelected).getCollectionIndex()
+
+        // verify that the nft is legitmate
+        INFTCollection(id).validateNFT(tokenSelected, tempIndex)
 
         // gets the index of the selected nft and then sets to the index of the new nft
-        let nftUri = baseuri ++ u256ToString!(index)
+        let nftUri = baseuri ++ u256ToString!(tempIndex)
 
         let c = #
 
-        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(nftIndex, nftUri, selfContractId!(), gameContract, c, callerAddress!(), [1,1,1], [5,5,5,0], c, [c,c,c,c])
+        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(tempIndex, nftUri, selfContractId!(), gameContract, c, callerAddress!(), [1,1,1], [5,5,5,0], c, [c,c,c,c])
 
         let contractId = copyCreateSubContractWithToken!{callerAddress!() -> ALPH: minimalContractDeposit!()}(
-            toByteVec!(nftIndex),
+            toByteVec!(tempIndex),
             playerContractId,
             encodeImmutableFields,
             encodeMutableFields,
@@ -82,7 +77,7 @@ Contract PlayerBase(
 
         totalSupply = totalSupply + 1
 
-        emit Mint(callerAddress!(), nftIndex, contractId)
+        emit Mint(callerAddress!(), tempIndex, contractId)
     }
 
     // edit
@@ -110,9 +105,16 @@ Contract PlayerBase(
 
     // upgrade nfts
     @using(checkExternalCaller = false)
-    pub fn updateALPHpacaCode(newCode: ByteVec, nft: ByteVec) -> () {
+    pub fn updateALPHpacaCode(nft: ByteVec) -> () {
         // approve nft asset as if they were to be spent (certifies ownership)
 
-        Player(nft).updatePlayerCode(newCode)
+        Player(nft).updatePlayerCode(code)
+    }
+
+    @using(checkExternalCaller = false)
+    pub fn updateALPHpacaFields(nft: ByteVec) -> () {
+        // approve nft asset as if they were to be spent (certifies ownership)
+
+        Player(nft).updatePlayerFields(code, encodedImmutableFields, encodedMutableFields)
     }
 }

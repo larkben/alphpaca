@@ -43,6 +43,9 @@ export namespace PlayerBaseTypes {
     totalSupply: bigint;
     baseuri: HexString;
     playerContractId: HexString;
+    code: HexString;
+    encodedImmutableFields: HexString;
+    encodedMutableFields: HexString;
   };
 
   export type State = ContractState<Fields>;
@@ -70,20 +73,8 @@ export namespace PlayerBaseTypes {
       params: CallContractParams<{ nftId: HexString; index: bigint }>;
       result: CallContractResult<null>;
     };
-    withdraw: {
-      params: CallContractParams<{ to: Address; amount: bigint }>;
-      result: CallContractResult<null>;
-    };
-    withdrawNonNative: {
-      params: CallContractParams<{
-        to: Address;
-        token: HexString;
-        amount: bigint;
-      }>;
-      result: CallContractResult<null>;
-    };
     mint: {
-      params: CallContractParams<{ tokenSelected: HexString; index: bigint }>;
+      params: CallContractParams<{ tokenSelected: HexString }>;
       result: CallContractResult<null>;
     };
     editCollectionUri: {
@@ -100,6 +91,14 @@ export namespace PlayerBaseTypes {
         newImmFieldsEncoded: HexString;
         newMutFieldsEncoded: HexString;
       }>;
+      result: CallContractResult<null>;
+    };
+    updateALPHpacaCode: {
+      params: CallContractParams<{ nft: HexString }>;
+      result: CallContractResult<null>;
+    };
+    updateALPHpacaFields: {
+      params: CallContractParams<{ nft: HexString }>;
       result: CallContractResult<null>;
     };
   }
@@ -139,23 +138,8 @@ export namespace PlayerBaseTypes {
       }>;
       result: SignExecuteScriptTxResult;
     };
-    withdraw: {
-      params: SignExecuteContractMethodParams<{ to: Address; amount: bigint }>;
-      result: SignExecuteScriptTxResult;
-    };
-    withdrawNonNative: {
-      params: SignExecuteContractMethodParams<{
-        to: Address;
-        token: HexString;
-        amount: bigint;
-      }>;
-      result: SignExecuteScriptTxResult;
-    };
     mint: {
-      params: SignExecuteContractMethodParams<{
-        tokenSelected: HexString;
-        index: bigint;
-      }>;
+      params: SignExecuteContractMethodParams<{ tokenSelected: HexString }>;
       result: SignExecuteScriptTxResult;
     };
     editCollectionUri: {
@@ -172,6 +156,14 @@ export namespace PlayerBaseTypes {
         newImmFieldsEncoded: HexString;
         newMutFieldsEncoded: HexString;
       }>;
+      result: SignExecuteScriptTxResult;
+    };
+    updateALPHpacaCode: {
+      params: SignExecuteContractMethodParams<{ nft: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    updateALPHpacaFields: {
+      params: SignExecuteContractMethodParams<{ nft: HexString }>;
       result: SignExecuteScriptTxResult;
     };
   }
@@ -244,31 +236,10 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "validateNFT", params, getContractByCodeHash);
     },
-    withdraw: async (
-      params: TestContractParamsWithoutMaps<
-        PlayerBaseTypes.Fields,
-        { to: Address; amount: bigint }
-      >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "withdraw", params, getContractByCodeHash);
-    },
-    withdrawNonNative: async (
-      params: TestContractParamsWithoutMaps<
-        PlayerBaseTypes.Fields,
-        { to: Address; token: HexString; amount: bigint }
-      >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(
-        this,
-        "withdrawNonNative",
-        params,
-        getContractByCodeHash
-      );
-    },
     mint: async (
       params: TestContractParamsWithoutMaps<
         PlayerBaseTypes.Fields,
-        { tokenSelected: HexString; index: bigint }
+        { tokenSelected: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "mint", params, getContractByCodeHash);
@@ -316,6 +287,32 @@ class Factory extends ContractFactory<
         getContractByCodeHash
       );
     },
+    updateALPHpacaCode: async (
+      params: TestContractParamsWithoutMaps<
+        PlayerBaseTypes.Fields,
+        { nft: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "updateALPHpacaCode",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updateALPHpacaFields: async (
+      params: TestContractParamsWithoutMaps<
+        PlayerBaseTypes.Fields,
+        { nft: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "updateALPHpacaFields",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 }
 
@@ -324,7 +321,7 @@ export const PlayerBase = new Factory(
   Contract.fromJson(
     PlayerBaseContractJson,
     "",
-    "b48eaa750e0ca54a57bf00c1b505fa617ef5d07461188399ad6003c2d21e9d85",
+    "45d8a03bfcd63810d8d740e21a7e6610ef2dac9fe19b83a4e362dc91c2d14f25",
     []
   )
 );
@@ -401,28 +398,6 @@ export class PlayerBaseInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
-    withdraw: async (
-      params: PlayerBaseTypes.CallMethodParams<"withdraw">
-    ): Promise<PlayerBaseTypes.CallMethodResult<"withdraw">> => {
-      return callMethod(
-        PlayerBase,
-        this,
-        "withdraw",
-        params,
-        getContractByCodeHash
-      );
-    },
-    withdrawNonNative: async (
-      params: PlayerBaseTypes.CallMethodParams<"withdrawNonNative">
-    ): Promise<PlayerBaseTypes.CallMethodResult<"withdrawNonNative">> => {
-      return callMethod(
-        PlayerBase,
-        this,
-        "withdrawNonNative",
-        params,
-        getContractByCodeHash
-      );
-    },
     mint: async (
       params: PlayerBaseTypes.CallMethodParams<"mint">
     ): Promise<PlayerBaseTypes.CallMethodResult<"mint">> => {
@@ -467,6 +442,28 @@ export class PlayerBaseInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    updateALPHpacaCode: async (
+      params: PlayerBaseTypes.CallMethodParams<"updateALPHpacaCode">
+    ): Promise<PlayerBaseTypes.CallMethodResult<"updateALPHpacaCode">> => {
+      return callMethod(
+        PlayerBase,
+        this,
+        "updateALPHpacaCode",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updateALPHpacaFields: async (
+      params: PlayerBaseTypes.CallMethodParams<"updateALPHpacaFields">
+    ): Promise<PlayerBaseTypes.CallMethodResult<"updateALPHpacaFields">> => {
+      return callMethod(
+        PlayerBase,
+        this,
+        "updateALPHpacaFields",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
@@ -489,18 +486,6 @@ export class PlayerBaseInstance extends ContractInstance {
       params: PlayerBaseTypes.SignExecuteMethodParams<"validateNFT">
     ): Promise<PlayerBaseTypes.SignExecuteMethodResult<"validateNFT">> => {
       return signExecuteMethod(PlayerBase, this, "validateNFT", params);
-    },
-    withdraw: async (
-      params: PlayerBaseTypes.SignExecuteMethodParams<"withdraw">
-    ): Promise<PlayerBaseTypes.SignExecuteMethodResult<"withdraw">> => {
-      return signExecuteMethod(PlayerBase, this, "withdraw", params);
-    },
-    withdrawNonNative: async (
-      params: PlayerBaseTypes.SignExecuteMethodParams<"withdrawNonNative">
-    ): Promise<
-      PlayerBaseTypes.SignExecuteMethodResult<"withdrawNonNative">
-    > => {
-      return signExecuteMethod(PlayerBase, this, "withdrawNonNative", params);
     },
     mint: async (
       params: PlayerBaseTypes.SignExecuteMethodParams<"mint">
@@ -528,6 +513,25 @@ export class PlayerBaseInstance extends ContractInstance {
         PlayerBase,
         this,
         "updatePlayerBaseFields",
+        params
+      );
+    },
+    updateALPHpacaCode: async (
+      params: PlayerBaseTypes.SignExecuteMethodParams<"updateALPHpacaCode">
+    ): Promise<
+      PlayerBaseTypes.SignExecuteMethodResult<"updateALPHpacaCode">
+    > => {
+      return signExecuteMethod(PlayerBase, this, "updateALPHpacaCode", params);
+    },
+    updateALPHpacaFields: async (
+      params: PlayerBaseTypes.SignExecuteMethodParams<"updateALPHpacaFields">
+    ): Promise<
+      PlayerBaseTypes.SignExecuteMethodResult<"updateALPHpacaFields">
+    > => {
+      return signExecuteMethod(
+        PlayerBase,
+        this,
+        "updateALPHpacaFields",
         params
       );
     },

@@ -7,13 +7,15 @@ Contract ALPHpaca(
     // Events
 
     // Error Codes
+    //enum ALPHpacaCodes {
+    //    OwnerOnly = 0
+    //}
 
     // Helper Functions
 
     // Contract Functions - calls the collection contract functions
-    pub fn updateNickname() -> () {
+    //pub fn updateNickname() -> () {
         
-    }    
-
+    //}    
 
 }

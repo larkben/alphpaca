@@ -96,6 +96,18 @@ export namespace PlayerTypes {
       params: CallContractParams<{ xp: bigint }>;
       result: CallContractResult<null>;
     };
+    updatePlayerCode: {
+      params: CallContractParams<{ newCode: HexString }>;
+      result: CallContractResult<null>;
+    };
+    updatePlayerFields: {
+      params: CallContractParams<{
+        newCode: HexString;
+        encodedImmutableFields: HexString;
+        encodedMutableFields: HexString;
+      }>;
+      result: CallContractResult<null>;
+    };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
     CallMethodTable[T]["params"];
@@ -159,6 +171,18 @@ export namespace PlayerTypes {
     };
     addXp: {
       params: SignExecuteContractMethodParams<{ xp: bigint }>;
+      result: SignExecuteScriptTxResult;
+    };
+    updatePlayerCode: {
+      params: SignExecuteContractMethodParams<{ newCode: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    updatePlayerFields: {
+      params: SignExecuteContractMethodParams<{
+        newCode: HexString;
+        encodedImmutableFields: HexString;
+        encodedMutableFields: HexString;
+      }>;
       result: SignExecuteScriptTxResult;
     };
   }
@@ -285,6 +309,36 @@ class Factory extends ContractFactory<PlayerInstance, PlayerTypes.Fields> {
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "addXp", params, getContractByCodeHash);
     },
+    updatePlayerCode: async (
+      params: TestContractParamsWithoutMaps<
+        PlayerTypes.Fields,
+        { newCode: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "updatePlayerCode",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updatePlayerFields: async (
+      params: TestContractParamsWithoutMaps<
+        PlayerTypes.Fields,
+        {
+          newCode: HexString;
+          encodedImmutableFields: HexString;
+          encodedMutableFields: HexString;
+        }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "updatePlayerFields",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 }
 
@@ -293,7 +347,7 @@ export const Player = new Factory(
   Contract.fromJson(
     PlayerContractJson,
     "",
-    "e70d5394c375cd4455fb2bb23c335e7407712d64be83680a1348e5378c9dcab4",
+    "5e2852c2b5bc4fd5270bebd30ec3f210170497ab0004d1b4dc8be68c63092fa7",
     []
   )
 );
@@ -418,6 +472,28 @@ export class PlayerInstance extends ContractInstance {
     ): Promise<PlayerTypes.CallMethodResult<"addXp">> => {
       return callMethod(Player, this, "addXp", params, getContractByCodeHash);
     },
+    updatePlayerCode: async (
+      params: PlayerTypes.CallMethodParams<"updatePlayerCode">
+    ): Promise<PlayerTypes.CallMethodResult<"updatePlayerCode">> => {
+      return callMethod(
+        Player,
+        this,
+        "updatePlayerCode",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updatePlayerFields: async (
+      params: PlayerTypes.CallMethodParams<"updatePlayerFields">
+    ): Promise<PlayerTypes.CallMethodResult<"updatePlayerFields">> => {
+      return callMethod(
+        Player,
+        this,
+        "updatePlayerFields",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
@@ -475,6 +551,16 @@ export class PlayerInstance extends ContractInstance {
       params: PlayerTypes.SignExecuteMethodParams<"addXp">
     ): Promise<PlayerTypes.SignExecuteMethodResult<"addXp">> => {
       return signExecuteMethod(Player, this, "addXp", params);
+    },
+    updatePlayerCode: async (
+      params: PlayerTypes.SignExecuteMethodParams<"updatePlayerCode">
+    ): Promise<PlayerTypes.SignExecuteMethodResult<"updatePlayerCode">> => {
+      return signExecuteMethod(Player, this, "updatePlayerCode", params);
+    },
+    updatePlayerFields: async (
+      params: PlayerTypes.SignExecuteMethodParams<"updatePlayerFields">
+    ): Promise<PlayerTypes.SignExecuteMethodResult<"updatePlayerFields">> => {
+      return signExecuteMethod(Player, this, "updatePlayerFields", params);
     },
   };
 

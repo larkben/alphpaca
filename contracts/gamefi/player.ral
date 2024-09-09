@@ -37,6 +37,7 @@ Contract Player(
     return collectionId, nftIndex
   }
 
+  // need function calls from parent collection contract
   @using(checkExternalCaller = true, updateFields = true)
   pub fn editUri(newUri: ByteVec) -> () {
     let addressCalled = contractIdToAddress!(collectionId)
