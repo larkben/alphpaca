@@ -12,7 +12,7 @@ export const MintPlayerService = async (
         collection: "69aa088239e6f6cbe376a98fff39a1cc1271c80003fa58b11b1d09edc86e9100",
         tokenSelected: nftId
       },
-      attoAlphAmount: DUST_AMOUNT + ONE_ALPH,
+      attoAlphAmount: DUST_AMOUNT,
       tokens: [{id: ALPH_TOKEN_ID, amount: 100000000000000000n}, {id: nftId, amount: 1n}]
       
     })
