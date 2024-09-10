@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v3.5.0",
+  "fullNodeVersion": "v3.6.0",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -10,9 +10,21 @@
     "ignoreUnusedFunctionReturnWarnings": false
   },
   "infos": {
+    "ALPHpaca": {
+      "sourceFile": "gamefi/alphpaca.ral",
+      "sourceCodeHash": "449e51480cc4a8f57e2e20d4cf96811e76dd157cf3e925c0bb4958e22d9f9778",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "c334278365b7b79574fb13664b9f64430a53833357e6e2d2eb423df1980f4a7d"
+    },
     "ActivateWalfProtocol": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "AdminTools": {
+      "sourceFile": "gamefi/admin_tools.ral",
+      "sourceCodeHash": "d4321e5de0286f517718d371f65bb814917cf210bb192d958ab8569732b4fd73",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -58,6 +70,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "EditCollectionUri": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "EditOgAlfFees": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
@@ -89,8 +107,20 @@
       "codeHashDebug": ""
     },
     "IFungibleToken": {
-      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "INFT": {
+      "sourceFile": "../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_interface.ral",
+      "sourceCodeHash": "92956f4e61c198f011b48dbda2ed76193ffc79ac9c39f60bf1763a34e02f2c41",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "INFTCollection": {
+      "sourceFile": "../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_collection_interface.ral",
+      "sourceCodeHash": "9b199426ea89c188ce858b48ab809f13b9fc1ed0d64ca91e3d600eda8fbf6c42",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -105,6 +135,24 @@
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
+    },
+    "MintPlayer": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "Player": {
+      "sourceFile": "gamefi/player.ral",
+      "sourceCodeHash": "332501fad256195897266de3f96b786f0cb0eb0829e318b2e28f3d7c49fdfd27",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "5e2852c2b5bc4fd5270bebd30ec3f210170497ab0004d1b4dc8be68c63092fa7"
+    },
+    "PlayerBase": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "0f3bb0c6908b57d20d25ed7112d3b6f3ec154adedd2f37d283d11bf0b21511d7"
     },
     "Sendout": {
       "sourceFile": "scripts/withdraw.ral",
@@ -127,6 +175,30 @@
     "UpdateCreationFee": {
       "sourceFile": "createtoken/tx_updatefee.ral",
       "sourceCodeHash": "930ec4ac679793f934b95521e88b750e414af71820c72f9bcfd03cb747fedd15",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpdateNFT": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpdateNFTFields": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpgradeCollectionCode": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpgradeCollectionFields": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },

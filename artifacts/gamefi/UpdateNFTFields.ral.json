@@ -1,15 +1,18 @@
 {
   "version": "v3.6.0",
-  "name": "Destroycreator",
-  "bytecodeTemplate": "010103000000040c0c{0}0104",
+  "name": "UpdateNFTFields",
+  "bytecodeTemplate": "01010300000009b4{1}0da3{1}0d0c{0}0109",
   "fieldsSig": {
     "names": [
-      "contract"
+      "collection",
+      "nft"
     ],
     "types": [
-      "CreateToken"
+      "PlayerBase",
+      "ByteVec"
     ],
     "isMutable": [
+      false,
       false
     ]
   },

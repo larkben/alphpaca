@@ -2,9 +2,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export * from "./ALPHpaca";
 export * from "./CreateToken";
 export * from "./Faucet";
 export * from "./FeeCollection";
+export * from "./Player";
+export * from "./PlayerBase";
 export * from "./Token";
 export * from "./WrappedOgAlfProtocol";
 export * from "./scripts";

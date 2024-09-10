@@ -1,0 +1,20 @@
+Abstract Contract AdminTools(
+    mut owner: Address
+    //projectToken: ByteVec,
+    //collectionId: ByteVec
+) {
+    // Events
+    
+    // Error Codes
+    enum ToolErrors {
+        InvalidCaller = 0
+    }
+
+    // Contract Functions
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn editAdmin(newAdmin: Address) -> () {
+        checkCaller!(callerAddress!() == owner, ToolErrors.InvalidCaller)
+
+        owner = newAdmin
+    }
+}

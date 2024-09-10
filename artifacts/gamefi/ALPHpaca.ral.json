@@ -1,0 +1,48 @@
+{
+  "version": "v3.6.0",
+  "name": "ALPHpaca",
+  "bytecode": "010115010001010008d3c06fa1e7b4a000450c7b1600a100",
+  "codeHash": "c334278365b7b79574fb13664b9f64430a53833357e6e2d2eb423df1980f4a7d",
+  "fieldsSig": {
+    "names": [
+      "owner"
+    ],
+    "types": [
+      "Address"
+    ],
+    "isMutable": [
+      true
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "editAdmin",
+      "paramNames": [
+        "newAdmin"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "ToolErrors",
+      "fields": [
+        {
+          "name": "InvalidCaller",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  ]
+}

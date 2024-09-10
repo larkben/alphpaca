@@ -4,9 +4,12 @@
 
 import { Contract, ContractFactory } from "@alephium/web3";
 import {
+  ALPHpaca,
   CreateToken,
   Faucet,
   FeeCollection,
+  Player,
+  PlayerBase,
   Token,
   WrappedOgAlfProtocol,
 } from ".";
@@ -15,9 +18,12 @@ let contracts: ContractFactory<any>[] | undefined = undefined;
 export function getContractByCodeHash(codeHash: string): Contract {
   if (contracts === undefined) {
     contracts = [
+      ALPHpaca,
       CreateToken,
       Faucet,
       FeeCollection,
+      Player,
+      PlayerBase,
       Token,
       WrappedOgAlfProtocol,
     ];
