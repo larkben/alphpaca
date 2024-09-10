@@ -47,10 +47,6 @@ export namespace ALPHpacaTypes {
       params: CallContractParams<{ newAdmin: Address }>;
       result: CallContractResult<null>;
     };
-    updateNickname: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<null>;
-    };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
     CallMethodTable[T]["params"];
@@ -71,10 +67,6 @@ export namespace ALPHpacaTypes {
   export interface SignExecuteMethodTable {
     editAdmin: {
       params: SignExecuteContractMethodParams<{ newAdmin: Address }>;
-      result: SignExecuteScriptTxResult;
-    };
-    updateNickname: {
-      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
   }
@@ -108,14 +100,6 @@ class Factory extends ContractFactory<ALPHpacaInstance, ALPHpacaTypes.Fields> {
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "editAdmin", params, getContractByCodeHash);
     },
-    updateNickname: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<ALPHpacaTypes.Fields, never>,
-        "testArgs"
-      >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "updateNickname", params, getContractByCodeHash);
-    },
   };
 }
 
@@ -124,7 +108,7 @@ export const ALPHpaca = new Factory(
   Contract.fromJson(
     ALPHpacaContractJson,
     "",
-    "dc339412589d12e819a73d37f5191232927c304a4c392bda3b79c055d371d638",
+    "c334278365b7b79574fb13664b9f64430a53833357e6e2d2eb423df1980f4a7d",
     []
   )
 );
@@ -151,17 +135,6 @@ export class ALPHpacaInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
-    updateNickname: async (
-      params?: ALPHpacaTypes.CallMethodParams<"updateNickname">
-    ): Promise<ALPHpacaTypes.CallMethodResult<"updateNickname">> => {
-      return callMethod(
-        ALPHpaca,
-        this,
-        "updateNickname",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
-    },
   };
 
   transact = {
@@ -169,11 +142,6 @@ export class ALPHpacaInstance extends ContractInstance {
       params: ALPHpacaTypes.SignExecuteMethodParams<"editAdmin">
     ): Promise<ALPHpacaTypes.SignExecuteMethodResult<"editAdmin">> => {
       return signExecuteMethod(ALPHpaca, this, "editAdmin", params);
-    },
-    updateNickname: async (
-      params: ALPHpacaTypes.SignExecuteMethodParams<"updateNickname">
-    ): Promise<ALPHpacaTypes.SignExecuteMethodResult<"updateNickname">> => {
-      return signExecuteMethod(ALPHpaca, this, "updateNickname", params);
     },
   };
 }

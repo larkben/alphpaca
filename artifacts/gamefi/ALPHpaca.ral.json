@@ -1,8 +1,8 @@
 {
   "version": "v3.6.0",
   "name": "ALPHpaca",
-  "bytecode": "0102154020010001010008d3c06fa1e7b4a000450c7b1600a100010000000001d369e3f3bb",
-  "codeHash": "dc339412589d12e819a73d37f5191232927c304a4c392bda3b79c055d371d638",
+  "bytecode": "010115010001010008d3c06fa1e7b4a000450c7b1600a100",
+  "codeHash": "c334278365b7b79574fb13664b9f64430a53833357e6e2d2eb423df1980f4a7d",
   "fieldsSig": {
     "names": [
       "owner"
@@ -27,13 +27,6 @@
       "paramIsMutable": [
         false
       ],
-      "returnTypes": []
-    },
-    {
-      "name": "updateNickname",
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
       "returnTypes": []
     }
   ],

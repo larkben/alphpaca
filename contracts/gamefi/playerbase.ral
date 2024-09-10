@@ -8,6 +8,7 @@ Contract PlayerBase(
     mut totalSupply: U256,    
     baseuri: ByteVec,
     playerContractId: ByteVec,
+    oldcollection: ByteVec,
     // nft upgrades
     code: ByteVec,
     encodedImmutableFields: ByteVec,
@@ -19,6 +20,7 @@ Contract PlayerBase(
         NFTNotFound = 0
         CollectionOwnerAllowedOnly = 1
         NFTNotPartOfCollection = 2
+        NotValidNFT = 3
     }
 
     // base uri
@@ -55,6 +57,8 @@ Contract PlayerBase(
 
         // get the data associated with the NFT
         let (id, tempIndex) = INFT(tokenSelected).getCollectionIndex()
+
+        assert!(id == oldcollection, ErrorCodes.NotValidNFT)
 
         // verify that the nft is legitmate
         INFTCollection(id).validateNFT(tokenSelected, tempIndex)
@@ -104,17 +108,77 @@ Contract PlayerBase(
     }
 
     // upgrade nfts
-    @using(checkExternalCaller = false)
+    @using(checkExternalCaller = false, preapprovedAssets =  true)
     pub fn updateALPHpacaCode(nft: ByteVec) -> () {
-        // approve nft asset as if they were to be spent (certifies ownership)
+        // get the data associated with the NFT
+        let (id, tempIndex) = INFT(nft).getCollectionIndex()
+
+        assert!(id == oldcollection, ErrorCodes.NotValidNFT)
+
+        // verify that the nft is legitmate
+        INFTCollection(id).validateNFT(nft, tempIndex)
 
         Player(nft).updatePlayerCode(code)
     }
 
-    @using(checkExternalCaller = false)
+    @using(checkExternalCaller = false, preapprovedAssets =  true)
     pub fn updateALPHpacaFields(nft: ByteVec) -> () {
-        // approve nft asset as if they were to be spent (certifies ownership)
+        // get the data associated with the NFT
+        let (id, tempIndex) = INFT(nft).getCollectionIndex()
+
+        assert!(id == oldcollection, ErrorCodes.NotValidNFT)
+
+        // verify that the nft is legitmate
+        INFTCollection(id).validateNFT(nft, tempIndex)
 
         Player(nft).updatePlayerFields(code, encodedImmutableFields, encodedMutableFields)
     }
+
+}
+
+// upgrade nft scripts
+TxScript UpdateNFT(
+    collection: PlayerBase,
+    nft: ByteVec
+) {
+    collection.updateALPHpacaCode{callerAddress!() -> nft: 1}(nft)
+}
+
+TxScript UpdateNFTFields(
+    collection: PlayerBase,
+    nft: ByteVec
+) {
+    collection.updateALPHpacaFields{callerAddress!() -> nft: 1}(nft)
+}
+
+// upgrade collection
+TxScript UpgradeCollectionCode(
+    collection: PlayerBase,
+    newCode: ByteVec
+) {
+    collection.updatePlayerBase(newCode)
+}
+
+TxScript UpgradeCollectionFields(
+    collection: PlayerBase,
+    newCode: ByteVec,
+    newImmFieldsEncoded: ByteVec, 
+    newMutFieldsEncoded: ByteVec
+) {
+    collection.updatePlayerBaseFields(newCode, newImmFieldsEncoded, newMutFieldsEncoded)
+}
+
+// nft collection functions
+TxScript MintPlayer(
+    collection: PlayerBase,
+    tokenSelected: ByteVec
+) {
+    collection.mint{callerAddress!() -> tokenSelected: 1, ALPH: minimalContractDeposit!()}(tokenSelected)
+}
+
+TxScript EditCollectionUri(
+    collection: PlayerBase,
+    newCollectionUri: ByteVec
+) {
+    collection.editCollectionUri(newCollectionUri)
 }

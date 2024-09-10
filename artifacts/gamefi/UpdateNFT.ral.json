@@ -1,0 +1,28 @@
+{
+  "version": "v3.6.0",
+  "name": "UpdateNFT",
+  "bytecodeTemplate": "01010300000009b4{1}0da3{1}0d0c{0}0108",
+  "fieldsSig": {
+    "names": [
+      "collection",
+      "nft"
+    ],
+    "types": [
+      "PlayerBase",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

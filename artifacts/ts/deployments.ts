@@ -11,6 +11,10 @@ import {
   CreateTokenInstance,
   WrappedOgAlfProtocol,
   WrappedOgAlfProtocolInstance,
+  Player,
+  PlayerInstance,
+  PlayerBase,
+  PlayerBaseInstance,
 } from ".";
 import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
@@ -21,6 +25,8 @@ export type Deployments = {
     Token: DeployContractExecutionResult<TokenInstance>;
     CreateToken: DeployContractExecutionResult<CreateTokenInstance>;
     WrappedOgAlfProtocol?: DeployContractExecutionResult<WrappedOgAlfProtocolInstance>;
+    Player?: DeployContractExecutionResult<PlayerInstance>;
+    PlayerBase?: DeployContractExecutionResult<PlayerBaseInstance>;
   };
 };
 
@@ -47,6 +53,24 @@ function toDeployments(json: any): Deployments {
               json.contracts["WrappedOgAlfProtocol"].contractInstance.address
             ),
           },
+    Player:
+      json.contracts["Player"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["Player"],
+            contractInstance: Player.at(
+              json.contracts["Player"].contractInstance.address
+            ),
+          },
+    PlayerBase:
+      json.contracts["PlayerBase"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["PlayerBase"],
+            contractInstance: PlayerBase.at(
+              json.contracts["PlayerBase"].contractInstance.address
+            ),
+          },
   };
   return {
     ...json,
@@ -67,7 +91,7 @@ export function loadDeployments(
   if (deployments === undefined) {
     throw Error("The contract has not been deployed to the " + networkId);
   }
-  const allDeployments = Array.isArray(deployments)
+  const allDeployments: any[] = Array.isArray(deployments)
     ? deployments
     : [deployments];
   if (deployerAddress === undefined) {

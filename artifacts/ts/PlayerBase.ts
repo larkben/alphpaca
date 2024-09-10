@@ -43,6 +43,7 @@ export namespace PlayerBaseTypes {
     totalSupply: bigint;
     baseuri: HexString;
     playerContractId: HexString;
+    oldcollection: HexString;
     code: HexString;
     encodedImmutableFields: HexString;
     encodedMutableFields: HexString;
@@ -191,6 +192,7 @@ class Factory extends ContractFactory<
       NFTNotFound: BigInt("0"),
       CollectionOwnerAllowedOnly: BigInt("1"),
       NFTNotPartOfCollection: BigInt("2"),
+      NotValidNFT: BigInt("3"),
     },
   };
 
@@ -321,7 +323,7 @@ export const PlayerBase = new Factory(
   Contract.fromJson(
     PlayerBaseContractJson,
     "",
-    "45d8a03bfcd63810d8d740e21a7e6610ef2dac9fe19b83a4e362dc91c2d14f25",
+    "0f3bb0c6908b57d20d25ed7112d3b6f3ec154adedd2f37d283d11bf0b21511d7",
     []
   )
 );

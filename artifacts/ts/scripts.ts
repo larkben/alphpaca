@@ -19,14 +19,20 @@ import { default as CollectOgAlfFeesScriptJson } from "../walf/CollectOgAlfFees.
 import { default as DestroyScriptJson } from "../scripts/Destroy.ral.json";
 import { default as DestroyOgAlfProtocolScriptJson } from "../walf/DestroyOgAlfProtocol.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
+import { default as EditCollectionUriScriptJson } from "../gamefi/EditCollectionUri.ral.json";
 import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
 import { default as GettokenScriptJson } from "../scripts/Gettoken.ral.json";
 import { default as MintAlfScriptJson } from "../walf/MintAlf.ral.json";
 import { default as MintOgAlfScriptJson } from "../walf/MintOgAlf.ral.json";
+import { default as MintPlayerScriptJson } from "../gamefi/MintPlayer.ral.json";
 import { default as SendoutScriptJson } from "../scripts/Sendout.ral.json";
 import { default as TopupScriptJson } from "../scripts/Topup.ral.json";
 import { default as UpdateCreationFeeScriptJson } from "../createtoken/UpdateCreationFee.ral.json";
+import { default as UpdateNFTScriptJson } from "../gamefi/UpdateNFT.ral.json";
+import { default as UpdateNFTFieldsScriptJson } from "../gamefi/UpdateNFTFields.ral.json";
+import { default as UpgradeCollectionCodeScriptJson } from "../gamefi/UpgradeCollectionCode.ral.json";
+import { default as UpgradeCollectionFieldsScriptJson } from "../gamefi/UpgradeCollectionFields.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
 
 export const ActivateWalfProtocol = new ExecutableScript<{
@@ -71,6 +77,11 @@ export const Destroycreator = new ExecutableScript<{ contract: HexString }>(
   getContractByCodeHash
 );
 
+export const EditCollectionUri = new ExecutableScript<{
+  collection: HexString;
+  newCollectionUri: HexString;
+}>(Script.fromJson(EditCollectionUriScriptJson, "", []), getContractByCodeHash);
+
 export const EditOgAlfFees = new ExecutableScript<{
   contract: HexString;
   newfee: bigint;
@@ -96,6 +107,11 @@ export const MintOgAlf = new ExecutableScript<{
   amount: bigint;
 }>(Script.fromJson(MintOgAlfScriptJson, "", []), getContractByCodeHash);
 
+export const MintPlayer = new ExecutableScript<{
+  collection: HexString;
+  tokenSelected: HexString;
+}>(Script.fromJson(MintPlayerScriptJson, "", []), getContractByCodeHash);
+
 export const Sendout = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
@@ -110,6 +126,34 @@ export const UpdateCreationFee = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
 }>(Script.fromJson(UpdateCreationFeeScriptJson, "", []), getContractByCodeHash);
+
+export const UpdateNFT = new ExecutableScript<{
+  collection: HexString;
+  nft: HexString;
+}>(Script.fromJson(UpdateNFTScriptJson, "", []), getContractByCodeHash);
+
+export const UpdateNFTFields = new ExecutableScript<{
+  collection: HexString;
+  nft: HexString;
+}>(Script.fromJson(UpdateNFTFieldsScriptJson, "", []), getContractByCodeHash);
+
+export const UpgradeCollectionCode = new ExecutableScript<{
+  collection: HexString;
+  newCode: HexString;
+}>(
+  Script.fromJson(UpgradeCollectionCodeScriptJson, "", []),
+  getContractByCodeHash
+);
+
+export const UpgradeCollectionFields = new ExecutableScript<{
+  collection: HexString;
+  newCode: HexString;
+  newImmFieldsEncoded: HexString;
+  newMutFieldsEncoded: HexString;
+}>(
+  Script.fromJson(UpgradeCollectionFieldsScriptJson, "", []),
+  getContractByCodeHash
+);
 
 export const Withdrawlassets = new ExecutableScript<{ contract: HexString }>(
   Script.fromJson(WithdrawlassetsScriptJson, "", []),

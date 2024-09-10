@@ -26,6 +26,9 @@ export function Navbar() {
           <Link className="text-white hover:text-blue-500" href="/tokencreate">
             Token Creation
           </Link>
+          <Link className="text-white hover:text-blue-500" href="/migrate">
+            Migrate ALPHpaca
+          </Link>
           <Link className="text-white hover:text-blue-500" href="/walf">
             Wrapped Alf Protocol
           </Link>
