@@ -14,11 +14,11 @@ export function Terminal() {
         <p className="text-sm">alphpaca-stats</p>
       </div>
       <div className="mt-4">
-        <p className="text-green-400">$ npm run stats       </p>
-        <p className="text-white">$ PACA staked:            </p>
-        <p className="text-white">$ alphpaca nft volume:    </p>
-        <p className="text-white">$ total fees collected:   </p>
-        <p className="text-white">$ dapps: 2                </p>
+        <p className="text-green-400">$ npm run information </p>
+        <p className="text-white">$ 11 Million PACA         </p>
+        <p className="text-white">$ 333 ALPHpacas           </p>
+        <p className="text-white">$ 7 ALPH Mint             </p>
+        <p className="text-white">$ NO ICO; AIRDROPPED      </p>
         <p className="text-green-400">$                     </p>
       </div>
     </aside>

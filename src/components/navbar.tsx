@@ -4,6 +4,7 @@
  * @see https://v0.dev/t/SEn9IZdCVXz
  */
 import Link from "next/link";
+import { useState } from "react"; // Import useState hook
 import { JSX, SVGProps } from "react";
 import { TokenCreateAutomation } from "./token-create";
 import {
@@ -13,6 +14,14 @@ import {
 import { TokenCreate } from "../services/utils";
 
 export function Navbar() {
+  // State to control dropdown visibility
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Function to toggle dropdown visibility
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <div className="bg-gray-800">
       <header className="flex items-center justify-between bg-gray-800 px-6 py-4 text-white">
@@ -26,9 +35,34 @@ export function Navbar() {
           <Link className="text-white hover:text-blue-500" href="/tokencreate">
             Token Creation
           </Link>
-          <Link className="text-white hover:text-blue-500" href="/migrate">
-            Migrate ALPHpaca
-          </Link>
+
+          {/* Migrate ALPHpaca with Dropdown */}
+          <div className="relative">
+            <button
+              className="text-white hover:text-blue-500 focus:outline-none"
+              onClick={toggleDropdown}
+            >
+              ALPHpaca
+            </button>
+
+            {isDropdownOpen && (
+              <div className="absolute mt-2 w-48 bg-white rounded-lg shadow-lg z-50">
+                <Link
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                  href="/migrate"
+                >
+                  Migrate ALPHpaca
+                </Link>
+                <Link
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                  href="/profile"
+                >
+                  Profile
+                </Link>
+              </div>
+            )}
+          </div>
+
           <Link className="text-white hover:text-blue-500" href="/walf">
             Wrapped Alf Protocol
           </Link>
@@ -46,7 +80,7 @@ export function Navbar() {
           >
             &lt;/&gt;
           </Link>
-          <AlephiumConnectButton/>
+          <AlephiumConnectButton />
         </div>
       </header>
       <div className="absolute inset-0 overflow-hidden">
@@ -74,3 +108,4 @@ function TwitterIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+

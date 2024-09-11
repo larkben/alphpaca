@@ -160,7 +160,7 @@ export const MintPlayerAutomation: FC<{ config: TokenCreate }> = ({ config }) =>
             <h3 className="text-xl font-semibold text-blue-500">Matching Contract IDs:</h3>
             <ul className="list-disc pl-5 mt-4 text-gray-300">
               {results.map((address, index) => (
-                <li key={index} className="mb-4 flex items-center space-x-4">
+                <li key={index} className="mb-4 items-center space-x-4">
                   <span>{address}</span>
                   <Button
                     onClick={() => handleMintForId(computeHexString(address))}
