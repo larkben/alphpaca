@@ -59,6 +59,12 @@ export function Navbar() {
                 >
                   Profile
                 </Link>
+                <Link
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                  href="/"
+                >
+                  Coming Soon!
+                </Link>
               </div>
             )}
           </div>
