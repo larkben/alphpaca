@@ -136,7 +136,7 @@ export const MintPlayerAutomation: FC<{ config: TokenCreate }> = ({ config }) =>
           <div>
               <label className="text-white" htmlFor="supply">V1 PACA ID</label>
               <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 border-gray-700 placeholder-gray-500 text-blue-500 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
+                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-200 placeholder-gray-500 text-blue-500 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
                 id="id"
                 name="id"
                 value={id}
