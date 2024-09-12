@@ -1,14 +1,13 @@
 import "std/nft_collection_interface"
 
 // the nft collection contract for players
-Contract PlayerBase(
+Contract AllMoves(
     collectionOwner: Address,
     mut collectionUri: ByteVec,
-    gameContract: ByteVec,
+    gameContract: ByteVec,          // allows the battle to mint the item on completetion
     mut totalSupply: U256,    
     baseuri: ByteVec,
     playerContractId: ByteVec,
-    oldcollection: ByteVec,
     // nft upgrades
     code: ByteVec,
     encodedImmutableFields: ByteVec,
@@ -55,23 +54,15 @@ Contract PlayerBase(
 
         burnToken!(callerAddress!(), tokenSelected, 1)
 
-        // get the data associated with the NFT
-        let (id, tempIndex) = INFT(tokenSelected).getCollectionIndex()
-
-        assert!(id == oldcollection, ErrorCodes.NotValidNFT)
-
-        // verify that the nft is legitmate
-        INFTCollection(id).validateNFT(tokenSelected, tempIndex)
-
         // gets the index of the selected nft and then sets to the index of the new nft
-        let nftUri = baseuri ++ u256ToString!(tempIndex)
+        let nftUri = baseuri ++ u256ToString!(totalSupply)
 
         let c = #
 
-        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(tempIndex, nftUri, selfContractId!(), gameContract, c, callerAddress!(), [1,1,1], [5,5,5,0], c, [c,c,c,c])
+        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(totalSupply, nftUri, selfContractId!(), gameContract, c, callerAddress!(), [1,1,1], [5,5,5,0], c, [c,c,c,c])
 
         let contractId = copyCreateSubContractWithToken!{callerAddress!() -> ALPH: minimalContractDeposit!()}(
-            toByteVec!(tempIndex),
+            toByteVec!(totalSupply),
             playerContractId,
             encodeImmutableFields,
             encodeMutableFields,
@@ -81,7 +72,7 @@ Contract PlayerBase(
 
         totalSupply = totalSupply + 1
 
-        emit Mint(callerAddress!(), tempIndex, contractId)
+        emit Mint(callerAddress!(), totalSupply, contractId)
     }
 
     // edit
@@ -94,14 +85,14 @@ Contract PlayerBase(
 
     // upgrades
     @using(checkExternalCaller = true)
-    pub fn updatePlayerBase(newCode: ByteVec) -> () {
+    pub fn updateAllMoves(newCode: ByteVec) -> () {
         checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
 
         migrate!(newCode)
     }
 
     @using(checkExternalCaller = true, updateFields = true)
-    pub fn updatePlayerBaseFields(newCode: ByteVec, newImmFieldsEncoded: ByteVec, newMutFieldsEncoded: ByteVec) -> () {
+    pub fn updateAllMovesFields(newCode: ByteVec, newImmFieldsEncoded: ByteVec, newMutFieldsEncoded: ByteVec) -> () {
         checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
 
         migrateWithFields!(newCode, newImmFieldsEncoded, newMutFieldsEncoded)
@@ -109,7 +100,7 @@ Contract PlayerBase(
 
     // upgrade nfts
     @using(checkExternalCaller = false, preapprovedAssets =  true)
-    pub fn updateALPHpacaCode(nft: ByteVec) -> () {
+    pub fn updateMoveCode(nft: ByteVec) -> () {
         // get the data associated with the NFT
         let (id, tempIndex) = INFT(nft).getCollectionIndex()
 
@@ -122,7 +113,7 @@ Contract PlayerBase(
     }
 
     @using(checkExternalCaller = false, preapprovedAssets =  true)
-    pub fn updateALPHpacaFields(nft: ByteVec) -> () {
+    pub fn updateMoveFields(nft: ByteVec) -> () {
         // get the data associated with the NFT
         let (id, tempIndex) = INFT(nft).getCollectionIndex()
 
@@ -134,51 +125,4 @@ Contract PlayerBase(
         Player(nft).updatePlayerFields(code, encodedImmutableFields, encodedMutableFields)
     }
 
-}
-
-// upgrade nft scripts
-TxScript UpdateNFT(
-    collection: PlayerBase,
-    nft: ByteVec
-) {
-    collection.updateALPHpacaCode{callerAddress!() -> nft: 1}(nft)
-}
-
-TxScript UpdateNFTFields(
-    collection: PlayerBase,
-    nft: ByteVec
-) {
-    collection.updateALPHpacaFields{callerAddress!() -> nft: 1}(nft)
-}
-
-// upgrade collection
-TxScript UpgradeCollectionCode(
-    collection: PlayerBase,
-    newCode: ByteVec
-) {
-    collection.updatePlayerBase(newCode)
-}
-
-TxScript UpgradeCollectionFields(
-    collection: PlayerBase,
-    newCode: ByteVec,
-    newImmFieldsEncoded: ByteVec, 
-    newMutFieldsEncoded: ByteVec
-) {
-    collection.updatePlayerBaseFields(newCode, newImmFieldsEncoded, newMutFieldsEncoded)
-}
-
-// nft collection functions
-TxScript MintPlayer(
-    collection: PlayerBase,
-    tokenSelected: ByteVec
-) {
-    collection.mint{callerAddress!() -> tokenSelected: 1, ALPH: minimalContractDeposit!()}(tokenSelected)
-}
-
-TxScript EditCollectionUri(
-    collection: PlayerBase,
-    newCollectionUri: ByteVec
-) {
-    collection.editCollectionUri(newCollectionUri)
 }

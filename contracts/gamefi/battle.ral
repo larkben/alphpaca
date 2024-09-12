@@ -1,0 +1,41 @@
+Contract PvpBattle(
+    // pvp players
+    owner: Address,
+    alphpacaOwner: ByteVec,
+    mut challenger: Address,
+    mut alphpacaChallenger: ByteVec,
+    // utils
+    mut isActive: Bool,
+    mut turn: U256,         // either 1(owner) or 0(opponent)
+    // wagered assets
+    wageredAsset: ByteVec,
+    wageredAmount: U256
+) {
+    enum Codes {
+        PvpNotActive = 0
+    }
+
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn acceptBattle(who: Address, alphpaca: ByteVec) -> () {
+        assert!(isActive == false, Codes.PvpNotActive)
+
+        challenger = who
+    }
+
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn attack(who: Address, move: U256) -> () {
+        assert!(isActive == true, Codes.PvpNotActive)
+    }
+
+    // chance based - random amount (for fairness)
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn heal() -> () {
+        assert!(isActive == true, Codes.PvpNotActive)
+    }
+
+    // chance based - random amount (for fairness)
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn defend() -> () {
+        assert!(isActive == true, Codes.PvpNotActive)
+    }
+}

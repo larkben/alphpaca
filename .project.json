@@ -72,7 +72,7 @@
     },
     "EditCollectionUri": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -106,6 +106,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "HeldItems": {
+      "sourceFile": "gamefi/helditem/helditems.ral",
+      "sourceCodeHash": "8b7305190c707d12d6eb66756d52c5b2a875afece63c80ed35d6835c84316e73",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "30a31a7652cd30e43102600ff03da201166d6548eec921129f94f0e23e59a9b6"
+    },
     "IFungibleToken": {
       "sourceFile": "../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
@@ -124,6 +130,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "Item": {
+      "sourceFile": "gamefi/helditem/item.ral",
+      "sourceCodeHash": "7ca89add68ed9a5d247138d11540447cde41e060b03e1b9961305d72440554cc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "52477ea85904f714a088d0eb44252f6970eb47c6b4d208b80fb031491f9c5aa6"
+    },
     "MintAlf": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
@@ -138,21 +150,21 @@
     },
     "MintPlayer": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "Player": {
       "sourceFile": "gamefi/player.ral",
-      "sourceCodeHash": "332501fad256195897266de3f96b786f0cb0eb0829e318b2e28f3d7c49fdfd27",
+      "sourceCodeHash": "f29461eccdc09c1ae2ebf823425fe73aa6249477f1518de15600ee454dfac62f",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "5e2852c2b5bc4fd5270bebd30ec3f210170497ab0004d1b4dc8be68c63092fa7"
     },
     "PlayerBase": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "0f3bb0c6908b57d20d25ed7112d3b6f3ec154adedd2f37d283d11bf0b21511d7"
+      "codeHashDebug": "b20c9c9f121be7c7a1d1c41d9a09b55bd99b81998ab58a84029628b21c4f10f0"
     },
     "Sendout": {
       "sourceFile": "scripts/withdraw.ral",
@@ -180,25 +192,25 @@
     },
     "UpdateNFT": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpdateNFTFields": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpgradeCollectionCode": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpgradeCollectionFields": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "514980199a03b6ed36a217e579a210a0d69ad31042daf1f01178ae0cc680643a",
+      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },

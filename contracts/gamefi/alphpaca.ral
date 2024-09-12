@@ -1,4 +1,4 @@
-Contract ALPHpaca(
+Contract ALPHpacaBattles(
     mut owner: Address
     //projectToken: ByteVec,
     //collectionId: ByteVec

@@ -21,6 +21,7 @@ import {
   callMethod,
   multicallMethods,
   fetchContractState,
+  Asset,
   ContractInstance,
   getContractEventsCurrentCount,
   TestContractParamsWithoutMaps,
@@ -101,6 +102,14 @@ class Factory extends ContractFactory<ALPHpacaInstance, ALPHpacaTypes.Fields> {
       return testMethod(this, "editAdmin", params, getContractByCodeHash);
     },
   };
+
+  stateForTest(
+    initFields: ALPHpacaTypes.Fields,
+    asset?: Asset,
+    address?: string
+  ) {
+    return this.stateForTest_(initFields, asset, address, undefined);
+  }
 }
 
 // Use this object to test and deploy the contract

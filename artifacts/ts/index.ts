@@ -6,6 +6,8 @@ export * from "./ALPHpaca";
 export * from "./CreateToken";
 export * from "./Faucet";
 export * from "./FeeCollection";
+export * from "./HeldItems";
+export * from "./Item";
 export * from "./Player";
 export * from "./PlayerBase";
 export * from "./Token";

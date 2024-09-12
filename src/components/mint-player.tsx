@@ -1,7 +1,7 @@
 'use client'
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import React, { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect } from 'react';
 
 // Import Alephium Services
 import { TokenCreate } from "../services/utils";

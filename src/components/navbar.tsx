@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { AlephiumConnectButton, useBalance, useWallet } from '@alephium/web3-react';
 import { ANS } from '@alph-name-service/ans-sdk';

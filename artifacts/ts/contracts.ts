@@ -8,6 +8,8 @@ import {
   CreateToken,
   Faucet,
   FeeCollection,
+  HeldItems,
+  Item,
   Player,
   PlayerBase,
   Token,
@@ -22,16 +24,15 @@ export function getContractByCodeHash(codeHash: string): Contract {
       CreateToken,
       Faucet,
       FeeCollection,
+      HeldItems,
+      Item,
       Player,
       PlayerBase,
       Token,
       WrappedOgAlfProtocol,
     ];
   }
-  const c = contracts.find(
-    (c) =>
-      c.contract.codeHash === codeHash || c.contract.codeHashDebug === codeHash
-  );
+  const c = contracts.find((c) => c.contract.hasCodeHash(codeHash));
   if (c === undefined) {
     throw new Error("Unknown code with code hash: " + codeHash);
   }
