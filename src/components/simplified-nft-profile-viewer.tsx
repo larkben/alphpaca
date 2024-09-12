@@ -18,6 +18,7 @@ import {
   Grid 
 } from "@mui/material";
 import { DollarSign, RefreshCw } from "lucide-react";
+import React from "react";
 
 type NFT = {
   id: number;

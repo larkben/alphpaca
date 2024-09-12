@@ -12,6 +12,7 @@ import {
   AlephiumWalletProvider,
 } from "@alephium/web3-react";
 import { TokenCreate } from "../services/utils";
+import React from "react";
 
 export function Navbar() {
   // State to control dropdown visibility
@@ -61,7 +62,7 @@ export function Navbar() {
                 </Link>
                 <Link
                   className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                  href="/"
+                  href="/battle"
                 >
                   Coming Soon!
                 </Link>

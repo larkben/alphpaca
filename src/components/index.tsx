@@ -7,6 +7,7 @@ import Link from "next/link"
 import { JSX, SVGProps } from "react"
 import { AlephiumConnectButton, AlephiumWalletProvider } from '@alephium/web3-react'
 import { Terminal } from "./terminal"
+import React from "react"
 
 export function Hero() {
   return (

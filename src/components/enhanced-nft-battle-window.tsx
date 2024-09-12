@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button, Card, CardContent, Typography, Box, IconButton } from "@mui/material";
 import { Sword, Shield, Zap, Heart } from "lucide-react";
+import React from "react";
 
 type Move = {
   name: string;
