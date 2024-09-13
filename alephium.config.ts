@@ -8,7 +8,7 @@ dotenv.config()
 export type Settings = {
   issueTokenAmount: Number256
 }
-const defaultSettings: Settings = { issueTokenAmount: 100n }
+const defaultSettings: Settings = { issueTokenAmount: BigInt(100) }
 
 const configuration: Configuration<Settings> = {
   networks: {

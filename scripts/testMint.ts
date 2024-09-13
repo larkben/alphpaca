@@ -26,7 +26,7 @@ const testMint: DeployFunction<Settings> = async (
           tokenSelected: nftToken
       },
       attoAlphAmount: DUST_AMOUNT,
-      tokens: [{id: nftToken, amount: 1n }, {id: ALPH_TOKEN_ID, amount: 100000000000000000n}]
+      tokens: [{id: nftToken, amount: BigInt(1) }, {id: ALPH_TOKEN_ID, amount: BigInt(100000000000000000)}]
     })
   }
   
