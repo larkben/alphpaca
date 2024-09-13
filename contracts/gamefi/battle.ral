@@ -6,30 +6,79 @@ Contract PvpBattle(
     mut alphpacaChallenger: ByteVec,
     // utils
     mut isActive: Bool,
-    mut turn: U256,         // either 1(owner) or 0(opponent)
+    mut turn: Bool,         // true = owner, false = challenger
+    mut battleFinished: Bool,
     // wagered assets
     wageredAsset: ByteVec,
     wageredAmount: U256
 ) {
+    // important to add a time component / forfeit options
+    // reward mechanism / prevent spoofing (spin a bale for chance (0.1 alph) 50% chance)
+
     enum Codes {
         PvpNotActive = 0
+        NotYourTurn = 1
+    }
+
+    fn checkTurn(caller: Address) -> () {
+        if (turn == false) {
+            assert!(caller == challenger, Codes.NotYourTurn)
+        }
+        else {
+            assert!(caller == owner, Codes.NotYourTurn)
+        }
+    }
+
+    fn whichPaca() -> ByteVec {
+        if (turn == false) {
+            return alphpacaChallenger
+        }
+        else {
+            return alphpacaOwner
+        }
+    }
+
+    fn randomAttack() -> (U256) {
+        let paca = whichPaca()
+
+        let maxAttack = Player(paca).getAttackStat()
+
+        let seed = u256From32Byte!(blake2b!(toByteVec!(blockTarget!()) ++ toByteVec!(blockTimeStamp!())))
+
+        return addModN!(1, seed, maxAttack)
     }
 
     @using(checkExternalCaller = true, updateFields = true)
     pub fn acceptBattle(who: Address, alphpaca: ByteVec) -> () {
         assert!(isActive == false, Codes.PvpNotActive)
 
-        challenger = who
+        challenger = who                // assigns challenger
+        alphpacaChallenger = alphpaca
+
+        isActive = true                 // the battle is marked as started
+        turn =  false                   // challenger goes first
     }
 
-    @using(checkExternalCaller = true, updateFields = true)
+    @using(checkExternalCaller = true, updateFields = true) // need to figure out how to integrate moves into chance
     pub fn attack(who: Address, move: U256) -> () {
         assert!(isActive == true, Codes.PvpNotActive)
-    }
+        checkTurn(who)
+
+        let damage = randomAttack()
+        let paca = whichPaca()
+
+        let status = Player(paca).removeHealth(damage)
+        if (status == false) {
+            battleFinished = true
+        } else {
+            // paca is still alive
+            turn = !turn
+        }
+    }   
 
     // chance based - random amount (for fairness)
     @using(checkExternalCaller = true, updateFields = true)
-    pub fn heal() -> () {
+    pub fn heal(who: Address) -> () {
         assert!(isActive == true, Codes.PvpNotActive)
     }
 
@@ -37,5 +86,10 @@ Contract PvpBattle(
     @using(checkExternalCaller = true, updateFields = true)
     pub fn defend() -> () {
         assert!(isActive == true, Codes.PvpNotActive)
+    }
+
+    // forfeit options
+    pub fn forfeit() -> () {
+
     }
 }

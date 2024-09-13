@@ -1,12 +1,12 @@
 import "std/nft_interface"
 
-Contract Move(
+Contract PowerMove(
   // basic params
   nftIndex: U256,
   mut tokenUri: ByteVec,    // allows the tokenUri to be edited
-  collectionId: ByteVec
-  //selectStat: U256,
-  //selectBonus: U256
+  collectionId: ByteVec,
+  damage: U256,
+  accuracy: U256
 ) implements INFT {
 
   enum ErrorCodes {
@@ -32,5 +32,9 @@ Contract Move(
 
     checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
     tokenUri = newUri
+  }
+
+  pub fn useMove() -> () {
+
   }
 }
