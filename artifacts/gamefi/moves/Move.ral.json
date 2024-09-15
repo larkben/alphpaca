@@ -1,24 +1,36 @@
 {
   "version": "v3.6.0",
-  "name": "Item",
-  "bytecode": "040409144022403c010000000102a00002010000000203ce01ce0002010000000103d310a20164ce000201000102000bd3083ea1dace01771701b41601450c7b1600a100",
-  "codeHash": "52477ea85904f714a088d0eb44252f6970eb47c6b4d208b80fb031491f9c5aa6",
+  "name": "Move",
+  "bytecode": "080509144022403c4060010000000102a00002010000000203ce01ce0002010000000103d310a20164ce000201000102000bd3083ea1dace01771701b41601450c7b1600a10001000004040ed3493580d0ce02ce03ce04ce051703170217011700160016011602160302",
+  "codeHash": "68b49b05181edd5590bc2c7d9eb0a58325c4d49d00b556d1e8e3aaf9e8f3ba0e",
   "fieldsSig": {
     "names": [
       "nftIndex",
       "tokenUri",
       "collectionId",
+      "power",
+      "accuracy",
+      "recoil",
+      "gain",
       "__stdInterfaceId"
     ],
     "types": [
       "U256",
       "ByteVec",
       "ByteVec",
+      "U256",
+      "U256",
+      "U256",
+      "U256",
       "ByteVec"
     ],
     "isMutable": [
       false,
       true,
+      false,
+      false,
+      false,
+      false,
       false,
       false
     ]
@@ -65,6 +77,15 @@
         false
       ],
       "returnTypes": []
+    },
+    {
+      "name": "performMove",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "MoveReturn"
+      ]
     }
   ],
   "constants": [],

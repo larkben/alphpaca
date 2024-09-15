@@ -1,3 +1,5 @@
+struct PacaFlip {active: ByteVec, waiting: ByteVec}
+
 Contract PvpBattle(
     // pvp players
     owner: Address,
@@ -9,8 +11,8 @@ Contract PvpBattle(
     mut turn: Bool,         // true = owner, false = challenger
     mut battleFinished: Bool,
     // wagered assets
-    wageredAsset: ByteVec,
-    wageredAmount: U256,
+    //wageredAsset: ByteVec,
+    //wageredAmount: U256,
     oracle: IDIAOracle      // oracle integration
 ) extends BattleTools(oracle) {
     // important to add a time component / forfeit options
@@ -30,16 +32,18 @@ Contract PvpBattle(
         }
     }
 
-    fn whichPaca() -> ByteVec {
+    fn whichPaca() -> PacaFlip {
         if (turn == false) {
-            return alphpacaChallenger
+            let c = PacaFlip {active: alphpacaChallenger, waiting: alphpacaOwner}
+            return c
         }
         else {
-            return alphpacaOwner
+            let o = PacaFlip {active: alphpacaOwner, waiting: alphpacaChallenger}
+            return o
         }
     }
 
-    @using(checkExternalCaller = true, updateFields = true)
+    @using(checkExternalCaller = false, updateFields = true)
     pub fn acceptBattle(who: Address, alphpaca: ByteVec) -> () {
         assert!(isActive == false, Codes.PvpNotActive)
 
@@ -51,36 +55,33 @@ Contract PvpBattle(
     }
 
     @using(checkExternalCaller = false, updateFields = true) // need to figure out how to integrate moves into chance
-    pub fn attack(who: Address, move: U256) -> () {
+    pub fn attack(who: Address, move: ByteVec) -> () {
         assert!(isActive == true, Codes.PvpNotActive)
         checkTurn(who)
 
-        let damage = randomAttack()
+        let moveStats = Move(move).performMove()
+
         let paca = whichPaca()
 
-        let status = Player(paca).removeHealth(damage)
+        let damage = damageFormula(
+            Player(paca.active).getLevel(), 
+            moveStats.a, 
+            Player(paca.active).getAttackStat(),
+            Player(paca.waiting).getDefense()
+        )
+
+        let status = Player(paca.waiting).removeHealth(damage)
+
         if (status == false) {
             battleFinished = true
         } else {
             // paca is still alive
             turn = !turn
         }
-    }   
-
-    // chance based - random amount (for fairness)
-    @using(checkExternalCaller = true, updateFields = true)
-    pub fn heal(who: Address) -> () {
-        assert!(isActive == true, Codes.PvpNotActive)
-    }
-
-    // chance based - random amount (for fairness)
-    @using(checkExternalCaller = true, updateFields = true)
-    pub fn defend() -> () {
-        assert!(isActive == true, Codes.PvpNotActive)
     }
 
     // forfeit options
-    pub fn forfeit() -> () {
+    //pub fn forfeit() -> () {
 
-    }
+    //}
 }

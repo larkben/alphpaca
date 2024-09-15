@@ -68,7 +68,7 @@ Contract PlayerBase(
 
         let c = #
 
-        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(tempIndex, nftUri, selfContractId!(), gameContract, c, callerAddress!(), [1,1,1], [5,5,5,0], c, [c,c,c,c])
+        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(tempIndex, nftUri, selfContractId!(), gameContract, c, callerAddress!(), [1,1,1,1], [5,5,5,0], c, [c,c,c,c])
 
         let contractId = copyCreateSubContractWithToken!{callerAddress!() -> ALPH: minimalContractDeposit!()}(
             toByteVec!(tempIndex),

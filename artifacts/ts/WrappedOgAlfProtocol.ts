@@ -34,6 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as WrappedOgAlfProtocolContractJson } from "../walf/WrappedOgAlfProtocol.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { DIAOracleValue, MoveReturn, PacaFlip, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace WrappedOgAlfProtocolTypes {
@@ -180,7 +181,7 @@ class Factory extends ContractFactory<
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
@@ -304,7 +305,7 @@ export const WrappedOgAlfProtocol = new Factory(
     WrappedOgAlfProtocolContractJson,
     "",
     "b01b6b7db2945f4a58decc02a85c64337321f852569e692aa793274740f2f626",
-    []
+    AllStructs
   )
 );
 

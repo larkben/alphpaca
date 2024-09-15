@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
     "devnet:build": "NEXT_PUBLIC_NETWORK=devnet next build",
     "testnet:build": "NEXT_PUBLIC_NETWORK=testnet next build",
     "mainnet:build": "NEXT_PUBLIC_NETWORK=mainnet next build",
@@ -14,7 +13,10 @@
     "deploy": "npm run devnet:deploy",
     "devnet:deploy": "npx --yes @alephium/cli@latest deploy -n devnet",
     "testnet:deploy": "npx --yes @alephium/cli@latest deploy -n testnet",
-    "mainnet:deploy": "npx --yes @alephium/cli@latest deploy -n mainnet"
+    "mainnet:deploy": "npx --yes @alephium/cli@latest deploy -n mainnet",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "test": "jest -i --config ./jest-config.json"
   },
   "dependencies": {
     "@alephium/cli": "^1.7.3",

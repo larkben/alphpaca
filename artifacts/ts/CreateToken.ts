@@ -34,6 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as CreateTokenContractJson } from "../createtoken/CreateToken.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { DIAOracleValue, MoveReturn, PacaFlip, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace CreateTokenTypes {
@@ -136,7 +137,7 @@ class Factory extends ContractFactory<
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
@@ -210,7 +211,7 @@ export const CreateToken = new Factory(
     CreateTokenContractJson,
     "",
     "2417efe145ca648a8d8cbc37ef9bc41b7d2f28406925fe7a88725c33a61542d9",
-    []
+    AllStructs
   )
 );
 

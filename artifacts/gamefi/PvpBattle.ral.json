@@ -1,0 +1,165 @@
+{
+  "version": "v3.6.0",
+  "name": "PvpBattle",
+  "bytecode": "080740514070408640a240ca40e9414501000005014022d35d6ccec5574056404414074254432f5553440d0ece02d4a0e6c231170217011601404414074254432f5553440d0ece02d4a0e6c23117041703160440444e7117000c1600134064880201000405010fd33eb38c2516000e2c0d2d160116022d16032d2c1704160402010001020109d312b7870316000f2c0e2c170116010200000101000fa003041c4c061600a000450d7b4a051600ce00450d7b000000040213a003041c4c08a001ce011701170016001601024a07ce01a00117031702160216030201000202000ed33f062682a002041c0c7b1600a1001601a10103a10204a1030100020a004032d35140b46ea002031c0c7b160000030c101601010417051704170317020004170717060c0d1606010616030c0d160601040c0d160701050001170816080d0d1607010d17091609041c4c0303a1044a03a00319a103",
+  "codeHash": "d546303a7023bb7199f787cc08d1141fcdcf56f771eb3a8a6648ddf675d360d8",
+  "fieldsSig": {
+    "names": [
+      "owner",
+      "alphpacaOwner",
+      "challenger",
+      "alphpacaChallenger",
+      "isActive",
+      "turn",
+      "battleFinished",
+      "oracle"
+    ],
+    "types": [
+      "Address",
+      "ByteVec",
+      "Address",
+      "ByteVec",
+      "Bool",
+      "Bool",
+      "Bool",
+      "IDIAOracle"
+    ],
+    "isMutable": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "random",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "damageFormula",
+      "paramNames": [
+        "level",
+        "bp",
+        "as",
+        "ds"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "xpReward",
+      "paramNames": [
+        "level"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "checkTurn",
+      "paramNames": [
+        "caller"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "whichPaca",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "PacaFlip"
+      ]
+    },
+    {
+      "name": "acceptBattle",
+      "paramNames": [
+        "who",
+        "alphpaca"
+      ],
+      "paramTypes": [
+        "Address",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "attack",
+      "paramNames": [
+        "who",
+        "move"
+      ],
+      "paramTypes": [
+        "Address",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "Codes",
+      "fields": [
+        {
+          "name": "PvpNotActive",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "NotYourTurn",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  ]
+}

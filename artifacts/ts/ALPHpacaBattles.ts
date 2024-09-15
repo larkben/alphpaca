@@ -32,11 +32,12 @@ import {
   addStdIdToFields,
   encodeContractFields,
 } from "@alephium/web3";
-import { default as ALPHpacaContractJson } from "../gamefi/ALPHpaca.ral.json";
+import { default as ALPHpacaBattlesContractJson } from "../gamefi/ALPHpacaBattles.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { DIAOracleValue, MoveReturn, PacaFlip, AllStructs } from "./types";
 
 // Custom types for the contract
-export namespace ALPHpacaTypes {
+export namespace ALPHpacaBattlesTypes {
   export type Fields = {
     owner: Address;
   };
@@ -77,25 +78,28 @@ export namespace ALPHpacaTypes {
     SignExecuteMethodTable[T]["result"];
 }
 
-class Factory extends ContractFactory<ALPHpacaInstance, ALPHpacaTypes.Fields> {
-  encodeFields(fields: ALPHpacaTypes.Fields) {
+class Factory extends ContractFactory<
+  ALPHpacaBattlesInstance,
+  ALPHpacaBattlesTypes.Fields
+> {
+  encodeFields(fields: ALPHpacaBattlesTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
   consts = { ToolErrors: { InvalidCaller: BigInt("0") } };
 
-  at(address: string): ALPHpacaInstance {
-    return new ALPHpacaInstance(address);
+  at(address: string): ALPHpacaBattlesInstance {
+    return new ALPHpacaBattlesInstance(address);
   }
 
   tests = {
     editAdmin: async (
       params: TestContractParamsWithoutMaps<
-        ALPHpacaTypes.Fields,
+        ALPHpacaBattlesTypes.Fields,
         { newAdmin: Address }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -104,7 +108,7 @@ class Factory extends ContractFactory<ALPHpacaInstance, ALPHpacaTypes.Fields> {
   };
 
   stateForTest(
-    initFields: ALPHpacaTypes.Fields,
+    initFields: ALPHpacaBattlesTypes.Fields,
     asset?: Asset,
     address?: string
   ) {
@@ -113,31 +117,31 @@ class Factory extends ContractFactory<ALPHpacaInstance, ALPHpacaTypes.Fields> {
 }
 
 // Use this object to test and deploy the contract
-export const ALPHpaca = new Factory(
+export const ALPHpacaBattles = new Factory(
   Contract.fromJson(
-    ALPHpacaContractJson,
+    ALPHpacaBattlesContractJson,
     "",
     "c334278365b7b79574fb13664b9f64430a53833357e6e2d2eb423df1980f4a7d",
-    []
+    AllStructs
   )
 );
 
 // Use this class to interact with the blockchain
-export class ALPHpacaInstance extends ContractInstance {
+export class ALPHpacaBattlesInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<ALPHpacaTypes.State> {
-    return fetchContractState(ALPHpaca, this);
+  async fetchState(): Promise<ALPHpacaBattlesTypes.State> {
+    return fetchContractState(ALPHpacaBattles, this);
   }
 
   view = {
     editAdmin: async (
-      params: ALPHpacaTypes.CallMethodParams<"editAdmin">
-    ): Promise<ALPHpacaTypes.CallMethodResult<"editAdmin">> => {
+      params: ALPHpacaBattlesTypes.CallMethodParams<"editAdmin">
+    ): Promise<ALPHpacaBattlesTypes.CallMethodResult<"editAdmin">> => {
       return callMethod(
-        ALPHpaca,
+        ALPHpacaBattles,
         this,
         "editAdmin",
         params,
@@ -148,9 +152,9 @@ export class ALPHpacaInstance extends ContractInstance {
 
   transact = {
     editAdmin: async (
-      params: ALPHpacaTypes.SignExecuteMethodParams<"editAdmin">
-    ): Promise<ALPHpacaTypes.SignExecuteMethodResult<"editAdmin">> => {
-      return signExecuteMethod(ALPHpaca, this, "editAdmin", params);
+      params: ALPHpacaBattlesTypes.SignExecuteMethodParams<"editAdmin">
+    ): Promise<ALPHpacaBattlesTypes.SignExecuteMethodResult<"editAdmin">> => {
+      return signExecuteMethod(ALPHpacaBattles, this, "editAdmin", params);
     },
   };
 }

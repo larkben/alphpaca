@@ -10,7 +10,7 @@ Contract Player(
   mut nickname: ByteVec,
   mut linkedAddress: Address,
   // stats
-  mut level: [U256; 3],     // health lv, attack lv, defense lv
+  mut level: [U256; 4],     // health lv, attack lv, defense lv, overall level
   mut stats: [U256; 4],     // health, attack, defense, xp
   // item held (hay)
   mut hay: ByteVec,         // this equipped item is meant to increase 1/3 skills by a factor of * at the cost of another
@@ -49,6 +49,10 @@ Contract Player(
 
   pub fn getDefense() -> U256 {
     return stats[2]
+  }
+
+  pub fn getLevel() -> U256 {
+    return level[3]
   }
 
   // need function calls from parent collection contract
