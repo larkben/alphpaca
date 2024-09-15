@@ -1,0 +1,34 @@
+struct DIAOracleValue {
+    mut value: U256,
+    mut timestamp: U256
+}
+
+Interface IDIAOracle {
+    pub fn getValue(key: ByteVec) -> DIAOracleValue
+}
+
+Abstract Contract BattleTools (
+    oracle: IDIAOracle      // oracle integration
+) {
+
+    fn random() -> (U256) {
+
+        // uses the BTC value / timestamp as entrophy for random
+        let seed = u256From32Byte!(blake2b!(
+            toByteVec!(blockTarget!()) ++ 
+            toByteVec!(blockTimeStamp!()) ++ 
+            toByteVec!(oracle.getValue(b`BTC/USD`).value) ++ 
+            toByteVec!(oracle.getValue(b`BTC/USD`).timestamp)
+        ))
+
+        return addModN!(0, seed, 100) // range of 0 - 100
+    }
+
+    pub fn damageFormula() -> U256 {
+
+    }
+
+    pub fn xpReward() -> U256 {
+
+    }
+}

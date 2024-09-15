@@ -5,8 +5,8 @@ Contract RecoilMove(
   nftIndex: U256,
   mut tokenUri: ByteVec,    // allows the tokenUri to be edited
   collectionId: ByteVec,
-  damage: U256,
-  recoilchance: U256
+  power: U256,
+  recoil: U256
 ) implements INFT {
 
   enum ErrorCodes {
@@ -34,7 +34,8 @@ Contract RecoilMove(
     tokenUri = newUri
   }
 
-  pub fn useMove() -> () {
-
+  pub fn performMove() -> MoveReturn {
+    let a = MoveReturn { p: power, a: 100, r: recoil }
+    return a
   }
 }

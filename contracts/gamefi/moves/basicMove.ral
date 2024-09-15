@@ -1,11 +1,13 @@
 import "std/nft_interface"
 
+struct MoveReturn { p: U256, a: U256, r: U256 }
+
 Contract BasicMove(
   // basic params
   nftIndex: U256,
   mut tokenUri: ByteVec,    // allows the tokenUri to be edited
   collectionId: ByteVec,
-  damage: U256
+  power: U256
 ) implements INFT {
 
   enum ErrorCodes {
@@ -33,7 +35,8 @@ Contract BasicMove(
     tokenUri = newUri
   }
 
-  pub fn useMove() -> () {
-
+  pub fn performMove() -> MoveReturn {
+    let a = MoveReturn { p: power, a: 100, r: 0 }
+    return a
   }
 }

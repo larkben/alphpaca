@@ -5,8 +5,8 @@ Contract PowerMove(
   nftIndex: U256,
   mut tokenUri: ByteVec,    // allows the tokenUri to be edited
   collectionId: ByteVec,
-  damage: U256,
-  accuracy: U256
+  power: U256,              // power is stronger
+  accuracy: U256            // accuracy is not 100%
 ) implements INFT {
 
   enum ErrorCodes {
@@ -34,7 +34,8 @@ Contract PowerMove(
     tokenUri = newUri
   }
 
-  pub fn useMove() -> () {
-
+  pub fn performMove() -> MoveReturn {
+    let a = MoveReturn { p: power, a: accuracy, r: 0 }
+    return a
   }
 }

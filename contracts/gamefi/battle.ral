@@ -10,8 +10,9 @@ Contract PvpBattle(
     mut battleFinished: Bool,
     // wagered assets
     wageredAsset: ByteVec,
-    wageredAmount: U256
-) {
+    wageredAmount: U256,
+    oracle: IDIAOracle      // oracle integration
+) extends BattleTools(oracle) {
     // important to add a time component / forfeit options
     // reward mechanism / prevent spoofing (spin a bale for chance (0.1 alph) 50% chance)
 
@@ -38,16 +39,6 @@ Contract PvpBattle(
         }
     }
 
-    fn randomAttack() -> (U256) {
-        let paca = whichPaca()
-
-        let maxAttack = Player(paca).getAttackStat()
-
-        let seed = u256From32Byte!(blake2b!(toByteVec!(blockTarget!()) ++ toByteVec!(blockTimeStamp!())))
-
-        return addModN!(1, seed, maxAttack)
-    }
-
     @using(checkExternalCaller = true, updateFields = true)
     pub fn acceptBattle(who: Address, alphpaca: ByteVec) -> () {
         assert!(isActive == false, Codes.PvpNotActive)
@@ -59,7 +50,7 @@ Contract PvpBattle(
         turn =  false                   // challenger goes first
     }
 
-    @using(checkExternalCaller = true, updateFields = true) // need to figure out how to integrate moves into chance
+    @using(checkExternalCaller = false, updateFields = true) // need to figure out how to integrate moves into chance
     pub fn attack(who: Address, move: U256) -> () {
         assert!(isActive == true, Codes.PvpNotActive)
         checkTurn(who)

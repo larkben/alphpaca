@@ -6,7 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "devnet:build": "NEXT_PUBLIC_NETWORK=devnet next build",
+    "testnet:build": "NEXT_PUBLIC_NETWORK=testnet next build",
+    "mainnet:build": "NEXT_PUBLIC_NETWORK=mainnet next build",
+    "compile": "npx --yes @alephium/cli@latest compile",
+    "deploy": "npm run devnet:deploy",
+    "devnet:deploy": "npx --yes @alephium/cli@latest deploy -n devnet",
+    "testnet:deploy": "npx --yes @alephium/cli@latest deploy -n testnet",
+    "mainnet:deploy": "npx --yes @alephium/cli@latest deploy -n mainnet"
   },
   "dependencies": {
     "@alephium/cli": "^1.7.3",
@@ -24,6 +32,7 @@
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "dotenv": "^16.4.5",
     "lucide-react": "^0.284.0",
     "next": "^14.2.11",
     "react": "^18",
