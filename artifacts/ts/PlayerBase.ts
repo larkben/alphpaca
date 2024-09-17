@@ -34,6 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as PlayerBaseContractJson } from "../gamefi/PlayerBase.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace PlayerBaseTypes {
@@ -183,7 +184,7 @@ class Factory extends ContractFactory<
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
@@ -333,7 +334,7 @@ export const PlayerBase = new Factory(
     PlayerBaseContractJson,
     "",
     "b20c9c9f121be7c7a1d1c41d9a09b55bd99b81998ab58a84029628b21c4f10f0",
-    []
+    AllStructs
   )
 );
 

@@ -34,6 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as FaucetContractJson } from "../Faucet.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace FaucetTypes {
@@ -136,7 +137,7 @@ class Factory extends ContractFactory<FaucetInstance, FaucetTypes.Fields> {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
@@ -227,7 +228,7 @@ export const Faucet = new Factory(
     FaucetContractJson,
     "",
     "236dc0af410205d895500f454e6acbce51ba2c88b644b47aa75d40bcf21f2ad0",
-    []
+    AllStructs
   )
 );
 

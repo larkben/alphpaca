@@ -32,16 +32,18 @@ import {
   addStdIdToFields,
   encodeContractFields,
 } from "@alephium/web3";
-import { default as ItemContractJson } from "../gamefi/helditem/Item.ral.json";
+import { default as RecoilMoveContractJson } from "../gamefi/moves/RecoilMove.ral.json";
 import { getContractByCodeHash } from "./contracts";
 import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
-export namespace ItemTypes {
+export namespace RecoilMoveTypes {
   export type Fields = {
     nftIndex: bigint;
     tokenUri: HexString;
     collectionId: HexString;
+    power: bigint;
+    recoil: bigint;
   };
 
   export type State = ContractState<Fields>;
@@ -62,6 +64,10 @@ export namespace ItemTypes {
     editUri: {
       params: CallContractParams<{ newUri: HexString }>;
       result: CallContractResult<null>;
+    };
+    performMove: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<MoveReturn>;
     };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
@@ -97,6 +103,10 @@ export namespace ItemTypes {
       params: SignExecuteContractMethodParams<{ newUri: HexString }>;
       result: SignExecuteScriptTxResult;
     };
+    performMove: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
   }
   export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["params"];
@@ -104,8 +114,11 @@ export namespace ItemTypes {
     SignExecuteMethodTable[T]["result"];
 }
 
-class Factory extends ContractFactory<ItemInstance, ItemTypes.Fields> {
-  encodeFields(fields: ItemTypes.Fields) {
+class Factory extends ContractFactory<
+  RecoilMoveInstance,
+  RecoilMoveTypes.Fields
+> {
+  encodeFields(fields: RecoilMoveTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -115,14 +128,14 @@ class Factory extends ContractFactory<ItemInstance, ItemTypes.Fields> {
 
   consts = { ErrorCodes: { NotCalledFromCollection: BigInt("0") } };
 
-  at(address: string): ItemInstance {
-    return new ItemInstance(address);
+  at(address: string): RecoilMoveInstance {
+    return new RecoilMoveInstance(address);
   }
 
   tests = {
     getTokenUri: async (
       params: Omit<
-        TestContractParamsWithoutMaps<ItemTypes.Fields, never>,
+        TestContractParamsWithoutMaps<RecoilMoveTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
@@ -130,7 +143,7 @@ class Factory extends ContractFactory<ItemInstance, ItemTypes.Fields> {
     },
     getCollectionIndex: async (
       params: Omit<
-        TestContractParamsWithoutMaps<ItemTypes.Fields, never>,
+        TestContractParamsWithoutMaps<RecoilMoveTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<[HexString, bigint]>> => {
@@ -143,7 +156,7 @@ class Factory extends ContractFactory<ItemInstance, ItemTypes.Fields> {
     },
     getNFTIndex: async (
       params: Omit<
-        TestContractParamsWithoutMaps<ItemTypes.Fields, never>,
+        TestContractParamsWithoutMaps<RecoilMoveTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -151,45 +164,57 @@ class Factory extends ContractFactory<ItemInstance, ItemTypes.Fields> {
     },
     editUri: async (
       params: TestContractParamsWithoutMaps<
-        ItemTypes.Fields,
+        RecoilMoveTypes.Fields,
         { newUri: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "editUri", params, getContractByCodeHash);
     },
+    performMove: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<RecoilMoveTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<MoveReturn>> => {
+      return testMethod(this, "performMove", params, getContractByCodeHash);
+    },
   };
 
-  stateForTest(initFields: ItemTypes.Fields, asset?: Asset, address?: string) {
+  stateForTest(
+    initFields: RecoilMoveTypes.Fields,
+    asset?: Asset,
+    address?: string
+  ) {
     return this.stateForTest_(initFields, asset, address, undefined);
   }
 }
 
 // Use this object to test and deploy the contract
-export const Item = new Factory(
+export const RecoilMove = new Factory(
   Contract.fromJson(
-    ItemContractJson,
+    RecoilMoveContractJson,
     "",
-    "52477ea85904f714a088d0eb44252f6970eb47c6b4d208b80fb031491f9c5aa6",
+    "242d9272a7499afd4ec3718aa114c33aa18fb47aa64ccd94655f860935c650c3",
     AllStructs
   )
 );
 
 // Use this class to interact with the blockchain
-export class ItemInstance extends ContractInstance {
+export class RecoilMoveInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<ItemTypes.State> {
-    return fetchContractState(Item, this);
+  async fetchState(): Promise<RecoilMoveTypes.State> {
+    return fetchContractState(RecoilMove, this);
   }
 
   view = {
     getTokenUri: async (
-      params?: ItemTypes.CallMethodParams<"getTokenUri">
-    ): Promise<ItemTypes.CallMethodResult<"getTokenUri">> => {
+      params?: RecoilMoveTypes.CallMethodParams<"getTokenUri">
+    ): Promise<RecoilMoveTypes.CallMethodResult<"getTokenUri">> => {
       return callMethod(
-        Item,
+        RecoilMove,
         this,
         "getTokenUri",
         params === undefined ? {} : params,
@@ -197,10 +222,10 @@ export class ItemInstance extends ContractInstance {
       );
     },
     getCollectionIndex: async (
-      params?: ItemTypes.CallMethodParams<"getCollectionIndex">
-    ): Promise<ItemTypes.CallMethodResult<"getCollectionIndex">> => {
+      params?: RecoilMoveTypes.CallMethodParams<"getCollectionIndex">
+    ): Promise<RecoilMoveTypes.CallMethodResult<"getCollectionIndex">> => {
       return callMethod(
-        Item,
+        RecoilMove,
         this,
         "getCollectionIndex",
         params === undefined ? {} : params,
@@ -208,10 +233,10 @@ export class ItemInstance extends ContractInstance {
       );
     },
     getNFTIndex: async (
-      params?: ItemTypes.CallMethodParams<"getNFTIndex">
-    ): Promise<ItemTypes.CallMethodResult<"getNFTIndex">> => {
+      params?: RecoilMoveTypes.CallMethodParams<"getNFTIndex">
+    ): Promise<RecoilMoveTypes.CallMethodResult<"getNFTIndex">> => {
       return callMethod(
-        Item,
+        RecoilMove,
         this,
         "getNFTIndex",
         params === undefined ? {} : params,
@@ -219,43 +244,67 @@ export class ItemInstance extends ContractInstance {
       );
     },
     editUri: async (
-      params: ItemTypes.CallMethodParams<"editUri">
-    ): Promise<ItemTypes.CallMethodResult<"editUri">> => {
-      return callMethod(Item, this, "editUri", params, getContractByCodeHash);
+      params: RecoilMoveTypes.CallMethodParams<"editUri">
+    ): Promise<RecoilMoveTypes.CallMethodResult<"editUri">> => {
+      return callMethod(
+        RecoilMove,
+        this,
+        "editUri",
+        params,
+        getContractByCodeHash
+      );
+    },
+    performMove: async (
+      params?: RecoilMoveTypes.CallMethodParams<"performMove">
+    ): Promise<RecoilMoveTypes.CallMethodResult<"performMove">> => {
+      return callMethod(
+        RecoilMove,
+        this,
+        "performMove",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
     },
   };
 
   transact = {
     getTokenUri: async (
-      params: ItemTypes.SignExecuteMethodParams<"getTokenUri">
-    ): Promise<ItemTypes.SignExecuteMethodResult<"getTokenUri">> => {
-      return signExecuteMethod(Item, this, "getTokenUri", params);
+      params: RecoilMoveTypes.SignExecuteMethodParams<"getTokenUri">
+    ): Promise<RecoilMoveTypes.SignExecuteMethodResult<"getTokenUri">> => {
+      return signExecuteMethod(RecoilMove, this, "getTokenUri", params);
     },
     getCollectionIndex: async (
-      params: ItemTypes.SignExecuteMethodParams<"getCollectionIndex">
-    ): Promise<ItemTypes.SignExecuteMethodResult<"getCollectionIndex">> => {
-      return signExecuteMethod(Item, this, "getCollectionIndex", params);
+      params: RecoilMoveTypes.SignExecuteMethodParams<"getCollectionIndex">
+    ): Promise<
+      RecoilMoveTypes.SignExecuteMethodResult<"getCollectionIndex">
+    > => {
+      return signExecuteMethod(RecoilMove, this, "getCollectionIndex", params);
     },
     getNFTIndex: async (
-      params: ItemTypes.SignExecuteMethodParams<"getNFTIndex">
-    ): Promise<ItemTypes.SignExecuteMethodResult<"getNFTIndex">> => {
-      return signExecuteMethod(Item, this, "getNFTIndex", params);
+      params: RecoilMoveTypes.SignExecuteMethodParams<"getNFTIndex">
+    ): Promise<RecoilMoveTypes.SignExecuteMethodResult<"getNFTIndex">> => {
+      return signExecuteMethod(RecoilMove, this, "getNFTIndex", params);
     },
     editUri: async (
-      params: ItemTypes.SignExecuteMethodParams<"editUri">
-    ): Promise<ItemTypes.SignExecuteMethodResult<"editUri">> => {
-      return signExecuteMethod(Item, this, "editUri", params);
+      params: RecoilMoveTypes.SignExecuteMethodParams<"editUri">
+    ): Promise<RecoilMoveTypes.SignExecuteMethodResult<"editUri">> => {
+      return signExecuteMethod(RecoilMove, this, "editUri", params);
+    },
+    performMove: async (
+      params: RecoilMoveTypes.SignExecuteMethodParams<"performMove">
+    ): Promise<RecoilMoveTypes.SignExecuteMethodResult<"performMove">> => {
+      return signExecuteMethod(RecoilMove, this, "performMove", params);
     },
   };
 
-  async multicall<Callss extends ItemTypes.MultiCallParams[]>(
+  async multicall<Callss extends RecoilMoveTypes.MultiCallParams[]>(
     ...callss: Callss
-  ): Promise<ItemTypes.MulticallReturnType<Callss>> {
+  ): Promise<RecoilMoveTypes.MulticallReturnType<Callss>> {
     return (await multicallMethods(
-      Item,
+      RecoilMove,
       this,
       callss,
       getContractByCodeHash
-    )) as ItemTypes.MulticallReturnType<Callss>;
+    )) as RecoilMoveTypes.MulticallReturnType<Callss>;
   }
 }

@@ -32,16 +32,17 @@ import {
   addStdIdToFields,
   encodeContractFields,
 } from "@alephium/web3";
-import { default as ItemContractJson } from "../gamefi/helditem/Item.ral.json";
+import { default as BasicMoveContractJson } from "../gamefi/moves/BasicMove.ral.json";
 import { getContractByCodeHash } from "./contracts";
 import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
-export namespace ItemTypes {
+export namespace BasicMoveTypes {
   export type Fields = {
     nftIndex: bigint;
     tokenUri: HexString;
     collectionId: HexString;
+    power: bigint;
   };
 
   export type State = ContractState<Fields>;
@@ -62,6 +63,10 @@ export namespace ItemTypes {
     editUri: {
       params: CallContractParams<{ newUri: HexString }>;
       result: CallContractResult<null>;
+    };
+    performMove: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<MoveReturn>;
     };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
@@ -97,6 +102,10 @@ export namespace ItemTypes {
       params: SignExecuteContractMethodParams<{ newUri: HexString }>;
       result: SignExecuteScriptTxResult;
     };
+    performMove: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
   }
   export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["params"];
@@ -104,8 +113,11 @@ export namespace ItemTypes {
     SignExecuteMethodTable[T]["result"];
 }
 
-class Factory extends ContractFactory<ItemInstance, ItemTypes.Fields> {
-  encodeFields(fields: ItemTypes.Fields) {
+class Factory extends ContractFactory<
+  BasicMoveInstance,
+  BasicMoveTypes.Fields
+> {
+  encodeFields(fields: BasicMoveTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -115,14 +127,14 @@ class Factory extends ContractFactory<ItemInstance, ItemTypes.Fields> {
 
   consts = { ErrorCodes: { NotCalledFromCollection: BigInt("0") } };
 
-  at(address: string): ItemInstance {
-    return new ItemInstance(address);
+  at(address: string): BasicMoveInstance {
+    return new BasicMoveInstance(address);
   }
 
   tests = {
     getTokenUri: async (
       params: Omit<
-        TestContractParamsWithoutMaps<ItemTypes.Fields, never>,
+        TestContractParamsWithoutMaps<BasicMoveTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
@@ -130,7 +142,7 @@ class Factory extends ContractFactory<ItemInstance, ItemTypes.Fields> {
     },
     getCollectionIndex: async (
       params: Omit<
-        TestContractParamsWithoutMaps<ItemTypes.Fields, never>,
+        TestContractParamsWithoutMaps<BasicMoveTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<[HexString, bigint]>> => {
@@ -143,7 +155,7 @@ class Factory extends ContractFactory<ItemInstance, ItemTypes.Fields> {
     },
     getNFTIndex: async (
       params: Omit<
-        TestContractParamsWithoutMaps<ItemTypes.Fields, never>,
+        TestContractParamsWithoutMaps<BasicMoveTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -151,45 +163,57 @@ class Factory extends ContractFactory<ItemInstance, ItemTypes.Fields> {
     },
     editUri: async (
       params: TestContractParamsWithoutMaps<
-        ItemTypes.Fields,
+        BasicMoveTypes.Fields,
         { newUri: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "editUri", params, getContractByCodeHash);
     },
+    performMove: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<BasicMoveTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<MoveReturn>> => {
+      return testMethod(this, "performMove", params, getContractByCodeHash);
+    },
   };
 
-  stateForTest(initFields: ItemTypes.Fields, asset?: Asset, address?: string) {
+  stateForTest(
+    initFields: BasicMoveTypes.Fields,
+    asset?: Asset,
+    address?: string
+  ) {
     return this.stateForTest_(initFields, asset, address, undefined);
   }
 }
 
 // Use this object to test and deploy the contract
-export const Item = new Factory(
+export const BasicMove = new Factory(
   Contract.fromJson(
-    ItemContractJson,
+    BasicMoveContractJson,
     "",
-    "52477ea85904f714a088d0eb44252f6970eb47c6b4d208b80fb031491f9c5aa6",
+    "64999dc96de4d67708ed525228a98425ecca3a3b0626d66b3cb6475e03ac3f5a",
     AllStructs
   )
 );
 
 // Use this class to interact with the blockchain
-export class ItemInstance extends ContractInstance {
+export class BasicMoveInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<ItemTypes.State> {
-    return fetchContractState(Item, this);
+  async fetchState(): Promise<BasicMoveTypes.State> {
+    return fetchContractState(BasicMove, this);
   }
 
   view = {
     getTokenUri: async (
-      params?: ItemTypes.CallMethodParams<"getTokenUri">
-    ): Promise<ItemTypes.CallMethodResult<"getTokenUri">> => {
+      params?: BasicMoveTypes.CallMethodParams<"getTokenUri">
+    ): Promise<BasicMoveTypes.CallMethodResult<"getTokenUri">> => {
       return callMethod(
-        Item,
+        BasicMove,
         this,
         "getTokenUri",
         params === undefined ? {} : params,
@@ -197,10 +221,10 @@ export class ItemInstance extends ContractInstance {
       );
     },
     getCollectionIndex: async (
-      params?: ItemTypes.CallMethodParams<"getCollectionIndex">
-    ): Promise<ItemTypes.CallMethodResult<"getCollectionIndex">> => {
+      params?: BasicMoveTypes.CallMethodParams<"getCollectionIndex">
+    ): Promise<BasicMoveTypes.CallMethodResult<"getCollectionIndex">> => {
       return callMethod(
-        Item,
+        BasicMove,
         this,
         "getCollectionIndex",
         params === undefined ? {} : params,
@@ -208,10 +232,10 @@ export class ItemInstance extends ContractInstance {
       );
     },
     getNFTIndex: async (
-      params?: ItemTypes.CallMethodParams<"getNFTIndex">
-    ): Promise<ItemTypes.CallMethodResult<"getNFTIndex">> => {
+      params?: BasicMoveTypes.CallMethodParams<"getNFTIndex">
+    ): Promise<BasicMoveTypes.CallMethodResult<"getNFTIndex">> => {
       return callMethod(
-        Item,
+        BasicMove,
         this,
         "getNFTIndex",
         params === undefined ? {} : params,
@@ -219,43 +243,67 @@ export class ItemInstance extends ContractInstance {
       );
     },
     editUri: async (
-      params: ItemTypes.CallMethodParams<"editUri">
-    ): Promise<ItemTypes.CallMethodResult<"editUri">> => {
-      return callMethod(Item, this, "editUri", params, getContractByCodeHash);
+      params: BasicMoveTypes.CallMethodParams<"editUri">
+    ): Promise<BasicMoveTypes.CallMethodResult<"editUri">> => {
+      return callMethod(
+        BasicMove,
+        this,
+        "editUri",
+        params,
+        getContractByCodeHash
+      );
+    },
+    performMove: async (
+      params?: BasicMoveTypes.CallMethodParams<"performMove">
+    ): Promise<BasicMoveTypes.CallMethodResult<"performMove">> => {
+      return callMethod(
+        BasicMove,
+        this,
+        "performMove",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
     },
   };
 
   transact = {
     getTokenUri: async (
-      params: ItemTypes.SignExecuteMethodParams<"getTokenUri">
-    ): Promise<ItemTypes.SignExecuteMethodResult<"getTokenUri">> => {
-      return signExecuteMethod(Item, this, "getTokenUri", params);
+      params: BasicMoveTypes.SignExecuteMethodParams<"getTokenUri">
+    ): Promise<BasicMoveTypes.SignExecuteMethodResult<"getTokenUri">> => {
+      return signExecuteMethod(BasicMove, this, "getTokenUri", params);
     },
     getCollectionIndex: async (
-      params: ItemTypes.SignExecuteMethodParams<"getCollectionIndex">
-    ): Promise<ItemTypes.SignExecuteMethodResult<"getCollectionIndex">> => {
-      return signExecuteMethod(Item, this, "getCollectionIndex", params);
+      params: BasicMoveTypes.SignExecuteMethodParams<"getCollectionIndex">
+    ): Promise<
+      BasicMoveTypes.SignExecuteMethodResult<"getCollectionIndex">
+    > => {
+      return signExecuteMethod(BasicMove, this, "getCollectionIndex", params);
     },
     getNFTIndex: async (
-      params: ItemTypes.SignExecuteMethodParams<"getNFTIndex">
-    ): Promise<ItemTypes.SignExecuteMethodResult<"getNFTIndex">> => {
-      return signExecuteMethod(Item, this, "getNFTIndex", params);
+      params: BasicMoveTypes.SignExecuteMethodParams<"getNFTIndex">
+    ): Promise<BasicMoveTypes.SignExecuteMethodResult<"getNFTIndex">> => {
+      return signExecuteMethod(BasicMove, this, "getNFTIndex", params);
     },
     editUri: async (
-      params: ItemTypes.SignExecuteMethodParams<"editUri">
-    ): Promise<ItemTypes.SignExecuteMethodResult<"editUri">> => {
-      return signExecuteMethod(Item, this, "editUri", params);
+      params: BasicMoveTypes.SignExecuteMethodParams<"editUri">
+    ): Promise<BasicMoveTypes.SignExecuteMethodResult<"editUri">> => {
+      return signExecuteMethod(BasicMove, this, "editUri", params);
+    },
+    performMove: async (
+      params: BasicMoveTypes.SignExecuteMethodParams<"performMove">
+    ): Promise<BasicMoveTypes.SignExecuteMethodResult<"performMove">> => {
+      return signExecuteMethod(BasicMove, this, "performMove", params);
     },
   };
 
-  async multicall<Callss extends ItemTypes.MultiCallParams[]>(
+  async multicall<Callss extends BasicMoveTypes.MultiCallParams[]>(
     ...callss: Callss
-  ): Promise<ItemTypes.MulticallReturnType<Callss>> {
+  ): Promise<BasicMoveTypes.MulticallReturnType<Callss>> {
     return (await multicallMethods(
-      Item,
+      BasicMove,
       this,
       callss,
       getContractByCodeHash
-    )) as ItemTypes.MulticallReturnType<Callss>;
+    )) as BasicMoveTypes.MulticallReturnType<Callss>;
   }
 }

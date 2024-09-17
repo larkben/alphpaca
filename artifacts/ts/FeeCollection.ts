@@ -34,6 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as FeeCollectionContractJson } from "../FeeCollection.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace FeeCollectionTypes {
@@ -176,7 +177,7 @@ class Factory extends ContractFactory<
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
@@ -298,7 +299,7 @@ export const FeeCollection = new Factory(
     FeeCollectionContractJson,
     "",
     "8671dc4d763fef38a37762180a03a69d0a42c85466d4fee89b25e8598c5645fb",
-    []
+    AllStructs
   )
 );
 
