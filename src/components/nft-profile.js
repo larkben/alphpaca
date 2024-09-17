@@ -7,6 +7,7 @@ import { formatNFTPrice } from '../lib/utils';
 import { web3, NodeProvider, ExplorerProvider } from "@alephium/web3";
 import { InfiniteScroll } from "../lib/InfiniteScroll";
 import { MintPlayerService } from "../services/nft.services";
+import NFTPopup from './nft-popup';
 
 const NFTGallery = () => {
   const wallet = useWallet();
@@ -18,6 +19,7 @@ const NFTGallery = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState(null);
   const [mintingResults, setMintingResults] = useState(new Map());
+  const [selectedNFT, setSelectedNFT] = useState(null);
 
   const userAddress = wallet?.account?.address ?? "";
   const isWalletConnected = wallet?.connectionStatus === 'connected' && wallet.account;
@@ -94,6 +96,14 @@ const NFTGallery = () => {
     }
   };
 
+  const handleNFTClick = (nft) => {
+    setSelectedNFT(nft);
+  };
+
+  const closePopup = () => {
+    setSelectedNFT(null);
+  };
+
   if (!isWalletConnected) {
     return <p>You must be connected to your wallet</p>;
   }
@@ -109,7 +119,11 @@ const NFTGallery = () => {
               <div className="flex items-center justify-center mt-3">
                 <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[30px]">
                   {displayedNFTs.map((nft, index) => (
-                    <div key={`${nft.tokenId}-${index}`} className="group relative p-4 rounded-2xl bg-slate-700 border border-gray-800 shadow-lg cursor-pointer hover:shadow-gray-700 transition-all duration-500 h-fit">
+                    <div 
+                      key={`${nft.tokenId}-${index}`} 
+                      className="group relative p-4 rounded-2xl bg-slate-700 border border-gray-800 shadow-lg cursor-pointer hover:shadow-gray-700 transition-all duration-500 h-fit"
+                      onClick={() => handleNFTClick(nft)}
+                    >
                       <div className="relative overflow-hidden rounded-t-lg">
                         <img
                           src={nft.image}
@@ -158,6 +172,9 @@ const NFTGallery = () => {
         <div className="mt-6">
           <h5 className="text-xl font-semibold">No NFTs owned</h5>
         </div>
+      )}
+      {selectedNFT && (
+        <NFTPopup nft={selectedNFT} onClose={closePopup} />
       )}
     </div>
   );

@@ -4,7 +4,9 @@ import {
   addressFromContractId,
   NodeProvider,
   ExplorerProvider,
+  hexToString,
 } from "@alephium/web3"
+import { Player, PlayerTypes } from "../../artifacts/ts"
 import axios from "axios"
 
 export interface NFT {
@@ -15,7 +17,11 @@ export interface NFT {
   minted: boolean,
   nftIndex: number
   collectionId: string,
+  attack?: bigint,
+  defense?: bigint,
+  health?: bigint,
   price?: bigint,
+  level?: bigint,
   isOld?: boolean,
 }
 
@@ -26,6 +32,96 @@ export async function fetchNFTListingByTokenId(tokenId: string): Promise<NFT | n
   } catch (error) {
     console.error(`Failed to fetch NFT listing for token ID: ${tokenId}`, error);
     return null;
+  }
+}
+
+function safeToString(value: any): string {
+  if (typeof value === 'string') {
+    return value;
+  } else if (typeof value === 'boolean' || typeof value === 'number') {
+    return value.toString();
+  } else if (Array.isArray(value)) {
+    return value.join(',');
+  } else if (value && typeof value === 'object') {
+    return JSON.stringify(value);
+  }
+  return '';
+}
+
+export async function fetchNFTMetadata(
+  tokenId: string
+): Promise<NFT | undefined> {
+  const nodeProvider = new NodeProvider('https://node.alphaga.app')
+  const collectionAddress = addressFromContractId(tokenId)
+
+  try {
+    const state = await nodeProvider.contracts.getContractsAddressState(collectionAddress)
+
+    let contractState: any
+    let metadataUri: string
+    let metadata: any
+    let contractBalance: { balance: string }
+    let baseMetadata: NFT | undefined
+
+    switch (state.codeHash) {
+      case Player.contract.codeHash:
+          try {
+            contractState = Player.contract.fromApiContractState(state) as PlayerTypes.State
+            console.log("Player Contract State:", contractState)
+            metadataUri = hexToString(contractState.tokenUri)
+            metadata = (await axios.get(metadataUri)).data
+            console.log("Metadata:", metadata)
+            contractBalance = await nodeProvider.addresses.getAddressesAddressBalance(collectionAddress)
+            baseMetadata = {
+              name: contractState.nickname,
+              description: metadata.description,
+              image: metadata.image,
+              tokenId: tokenId,
+              minted: true,
+              nftIndex: Number(metadata.nftIndex),
+              collectionId: contractState.collectionId,
+              attack: contractState.stats[0],
+              defense: contractState.stats[1],
+              health: contractState.stats[2],
+              level: contractState.level,
+              isOld: false
+            }
+          } catch (error) {
+            console.error(`Error processing metadata for Token ID: ${tokenId}`, error)
+            throw new Error(`Failed to process metadata: ${error instanceof Error ? error.message : 'Unknown error'}`)
+          }
+        break
+        default:
+            metadataUri = hexToString(safeToString(state.mutFields[0].value))
+
+            console.log("Non-Player Contract State:", state)
+            try {
+              metadata = (await axios.get(metadataUri)).data
+              contractBalance = await nodeProvider.addresses.getAddressesAddressBalance(collectionAddress)
+            
+              baseMetadata = {
+                name: metadata.name,
+                description: metadata.description,
+                image: metadata.image,
+                tokenId: tokenId,
+                minted: true,
+                nftIndex: Number(metadata.nftIndex),
+                collectionId: "collectionId",
+                isOld: false
+              }
+            } catch (error) {
+              console.error(`Error fetching metadata from URI: ${metadataUri}`, error)
+              throw new Error(`Failed to fetch metadata: ${error instanceof Error ? error.message : 'Unknown error'}`)
+            }
+          break;
+    }
+    return baseMetadata
+  } catch (error) {
+    console.error(`Error fetching NFT metadata for Token ID ${tokenId}:`, error)
+    if (axios.isAxiosError(error)) {
+      console.error('Axios error details:', error.response?.data)
+    }
+    throw new Error(`Failed to fetch NFT collection metadata: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 

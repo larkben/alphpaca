@@ -8,19 +8,10 @@ import NFTGallery from './nft-profile';
 
 const PacaDashboard = () => {
   const [selectedTab, setSelectedTab] = useState('SEE PACAS');
-  const [selectedPaca, setSelectedPaca] = useState(null);
   const wallet = useWallet();
-  const { balance } = useBalance();
   const [ansName, setAnsName] = useState('');
   const [ansUri, setAnsUri] = useState('');
   const [pacaBalance, setPacaBalance] = useState(0);
-
-  const pacas = [
-    { id: 1, name: 'Paca #1', image: '/api/placeholder/150/150' },
-    { id: 2, name: 'Paca #2', image: '/api/placeholder/150/150' },
-    { id: 3, name: 'Paca #3', image: '/api/placeholder/150/150' },
-    { id: 4, name: 'Paca #4', image: '/api/placeholder/150/150' },
-  ];
 
   const tabs = ['SEE PACAS', 'IN BATTLE', 'UPGRADE PACA', 'MOVES'];
 
@@ -47,9 +38,6 @@ const PacaDashboard = () => {
     }
   }, [wallet?.account?.address]);
 
-  const handlePacaClick = (pacaId) => {
-    setSelectedPaca(pacaId);
-  };
 
   const renderTabContent = () => {
     switch (selectedTab) {
@@ -76,7 +64,7 @@ const PacaDashboard = () => {
 
   return (
     <div className="relative">
-      <div className={`bg-slate-800 p-6 ${selectedPaca ? 'opacity-50' : ''}`}>
+      <div className={`bg-slate-800`}>
         <div className="flex flex-col items-center mb-6">
           <div className="w-24 h-24 bg-slate-700 rounded-2xl overflow-hidden mb-4">
             {ansUri ? (
@@ -118,35 +106,6 @@ const PacaDashboard = () => {
         </div>
         {renderTabContent()}
       </div>
-      
-      {selectedPaca && (
-        <div className="fixed inset-0 flex items-center justify-center z-10">
-          <div className="bg-slate-700 p-6 rounded-3xl w-11/12 max-w-lg text-white">
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <div className="text-xl font-bold">#{selectedPaca}</div>
-                <div className="text-sm text-slate-300">ALPHpaca {selectedPaca}</div>
-              </div>
-              <button
-                className="bg-slate-600 p-2 rounded-full hover:bg-slate-500 transition-colors"
-                onClick={() => setSelectedPaca(null)}
-              >
-                <X size={24} />
-              </button>
-            </div>
-            <div className="flex mb-4">
-              <img src="/api/placeholder/150/150" alt="Selected Paca" className="w-32 h-32 object-cover rounded-2xl mr-4" />
-              <div className="bg-slate-600 px-4 py-2 rounded-full text-sm self-start hover:bg-slate-500 cursor-pointer transition-colors">Stats</div>
-            </div>
-            <div className="text-sm font-semibold mb-2">Linked Moves</div>
-            <div className="grid grid-cols-2 gap-2">
-              {[1, 2, 3, 4].map((move) => (
-                <div key={move} className="bg-slate-600 p-4 rounded-xl"></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
