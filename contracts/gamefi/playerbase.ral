@@ -21,6 +21,7 @@ Contract PlayerBase(
         CollectionOwnerAllowedOnly = 1
         NFTNotPartOfCollection = 2
         NotValidNFT = 3
+        InvalidMoveSlot = 4
     }
 
     // base uri
@@ -84,6 +85,38 @@ Contract PlayerBase(
         emit Mint(callerAddress!(), tempIndex, contractId)
     }
 
+    // ANS functionality ~ need scripts
+    @using(preapprovedAssets = true, checkExternalCaller = false, updateFields = false)
+    pub fn updateNickname(paca: ByteVec, newNickName: ByteVec) -> () {
+
+        Player(paca).editNick(newNickName)
+
+    }
+
+    @using(preapprovedAssets = true, checkExternalCaller = false, updateFields = false)
+    pub fn updateLinkedAddress(paca: ByteVec, newAddress: Address) -> () {
+
+        Player(paca).editLinkedAddress(newAddress)
+
+    }
+
+    // send asset function to specific paca
+
+    // PACA Move Assignment ~ need scripts
+    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = true)
+    pub fn assignPacaMove(paca: ByteVec, slot: U256, move: ByteVec) -> () {
+        assert!(slot < 4, ErrorCodes.InvalidMoveSlot)
+
+        Player(paca).assignMove{callerAddress!() -> move: 1}(callerAddress!(), slot, move)
+    }
+
+    @using(assetsInContract = enforced, checkExternalCaller = false, updateFields = false)
+    pub fn unlinkMove(paca: ByteVec, slot: U256) -> () {
+        assert!(slot < 4, ErrorCodes.InvalidMoveSlot)
+
+        Player(paca).unAssignMove(callerAddress!(), slot)
+    }
+
     // edit
     @using(checkExternalCaller = true, updateFields = true)
     pub fn editCollectionUri(newCollectionUri: ByteVec) -> () {
@@ -108,8 +141,9 @@ Contract PlayerBase(
     }
 
     // upgrade nfts
-    @using(checkExternalCaller = false, preapprovedAssets =  true)
+    @using(checkExternalCaller = false)
     pub fn updateALPHpacaCode(nft: ByteVec) -> () {
+        assert!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
         // get the data associated with the NFT
         let (id, tempIndex) = INFT(nft).getCollectionIndex()
 
@@ -121,8 +155,9 @@ Contract PlayerBase(
         Player(nft).updatePlayerCode(code)
     }
 
-    @using(checkExternalCaller = false, preapprovedAssets =  true)
+    @using(checkExternalCaller = false)
     pub fn updateALPHpacaFields(nft: ByteVec) -> () {
+        assert!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
         // get the data associated with the NFT
         let (id, tempIndex) = INFT(nft).getCollectionIndex()
 
@@ -141,14 +176,14 @@ TxScript UpdateNFT(
     collection: PlayerBase,
     nft: ByteVec
 ) {
-    collection.updateALPHpacaCode{callerAddress!() -> nft: 1}(nft)
+    collection.updateALPHpacaCode(nft)
 }
 
 TxScript UpdateNFTFields(
     collection: PlayerBase,
     nft: ByteVec
 ) {
-    collection.updateALPHpacaFields{callerAddress!() -> nft: 1}(nft)
+    collection.updateALPHpacaFields(nft)
 }
 
 // upgrade collection

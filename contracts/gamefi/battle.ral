@@ -8,19 +8,22 @@ Contract PvpBattle(
     mut alphpacaChallenger: ByteVec,
     // utils
     mut isActive: Bool,
-    mut turn: Bool,         // true = owner, false = challenger
+    mut turn: Bool,                 // true = owner, false = challenger
     mut battleFinished: Bool,
+    mut timeSinceLastMove: U256,
     // wagered assets
-    //wageredAsset: ByteVec,
-    //wageredAmount: U256,
-    oracle: IDIAOracle      // oracle integration
+    wageredAsset: ByteVec,
+    mut wageredAmount: U256,
+    oracle: IDIAOracle              // oracle integration
 ) extends BattleTools(oracle) {
-    // important to add a time component / forfeit options
-    // reward mechanism / prevent spoofing (spin a bale for chance (0.1 alph) 50% chance)
+                                    // important to add a time component / forfeit options
+                                    // reward mechanism / prevent spoofing (spin a bale for chance (0.1 alph) 50% chance)
 
     enum Codes {
         PvpNotActive = 0
         NotYourTurn = 1
+        BattleFinished = 2
+        TimeLimitExceeded = 3
     }
 
     fn checkTurn(caller: Address) -> () {
@@ -43,20 +46,33 @@ Contract PvpBattle(
         }
     }
 
-    @using(checkExternalCaller = false, updateFields = true)
+    @using(checkExternalCaller = false, updateFields = true, preapprovedAssets = true)
     pub fn acceptBattle(who: Address, alphpaca: ByteVec) -> () {
         assert!(isActive == false, Codes.PvpNotActive)
 
-        challenger = who                // assigns challenger
+        challenger = who                      // assigns challenger
         alphpacaChallenger = alphpaca
 
-        isActive = true                 // the battle is marked as started
-        turn =  false                   // challenger goes first
+        isActive = true                       // the battle is marked as started
+        turn =  false                         // challenger goes first
+
+        transferToken!(callerAddress!(), selfAddress!(), wageredAsset, wageredAmount)
+
+                                              // challenger and their bet is added to pool
+        wageredAmount = wageredAmount * 2
+
+        timeSinceLastMove = blockTimeStamp!() // the battle has begun
     }
 
-    @using(checkExternalCaller = false, updateFields = true) // need to figure out how to integrate moves into chance
+    @using(checkExternalCaller = false, updateFields = true)    // need to figure out how to integrate moves into chance
     pub fn attack(who: Address, move: ByteVec) -> () {
         assert!(isActive == true, Codes.PvpNotActive)
+        assert!(battleFinished == false, Codes.BattleFinished)
+
+        let deltaTime = blockTimeStamp!() - timeSinceLastMove   // deltaTime  
+
+        assert!(deltaTime < 172800000, Codes.TimeLimitExceeded)
+
         checkTurn(who)
 
         let moveStats = Move(move).performMove()
@@ -80,8 +96,8 @@ Contract PvpBattle(
         }
     }
 
-    // forfeit options
-    //pub fn forfeit() -> () {
-
-    //}
+    // forfeit options - player may not want to continue (therefore this clause exists)
+    pub fn forfeit() -> () {
+        
+    }
 }

@@ -13,9 +13,6 @@ Contract ALPHpacaBattles(
 
     // Helper Functions
 
-    // Contract Functions - calls the collection contract functions
-    //pub fn updateNickname() -> () {
-        
-    //}    
+    // Contract Functions    
 
 }

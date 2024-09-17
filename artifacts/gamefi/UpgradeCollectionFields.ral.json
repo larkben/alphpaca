@@ -1,7 +1,7 @@
 {
   "version": "v3.6.0",
   "name": "UpgradeCollectionFields",
-  "bytecodeTemplate": "01010300000007{1}{2}{3}0f0c{0}0107",
+  "bytecodeTemplate": "01010300000007{1}{2}{3}0f0c{0}010b",
   "fieldsSig": {
     "names": [
       "collection",

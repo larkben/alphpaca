@@ -12,7 +12,7 @@
   "infos": {
     "ALPHpacaBattles": {
       "sourceFile": "gamefi/alphpaca.ral",
-      "sourceCodeHash": "d3158ca327bc2229a0fba29c5935b8bc49019ee041efce1681708bf38ca9f361",
+      "sourceCodeHash": "b257a67336d35b19626fab7b9ed77a7a49d9cbae425c6cec45814979f8d855ac",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "c334278365b7b79574fb13664b9f64430a53833357e6e2d2eb423df1980f4a7d"
     },
@@ -90,7 +90,7 @@
     },
     "EditCollectionUri": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "c71aa1ac9f33dc863515cf3140a4823405de7f78a5bd062958fec4e8862b2e4e",
+      "sourceCodeHash": "95665cfa3ee74a26bb8da13ad19949872f793a021c918f5f8635d59fc7523ec4",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -162,7 +162,7 @@
     },
     "MintPlayer": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "c71aa1ac9f33dc863515cf3140a4823405de7f78a5bd062958fec4e8862b2e4e",
+      "sourceCodeHash": "95665cfa3ee74a26bb8da13ad19949872f793a021c918f5f8635d59fc7523ec4",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -180,27 +180,27 @@
     },
     "PacaFlip": {
       "sourceFile": "gamefi/battle.ral",
-      "sourceCodeHash": "7d3b58bbc595d9ac712e5812c4330db04510cc57e004c82202c3e1a13910a9db",
+      "sourceCodeHash": "009d765d78334df3529adce5e3258b44f6d5b2ca6e3ac3d4d1eeea00eac32083",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "Player": {
       "sourceFile": "gamefi/player.ral",
-      "sourceCodeHash": "c52744f20a093489d66d79d6997bc487a250c26d9fc77439424020b26100ed9d",
+      "sourceCodeHash": "a385b6aa87262c447e01aa26b0e1514c3d74063bf90161645dbd1e6b4fba72ab",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "127d779771427f35bfb1b9f25c67c053ad3d8a4a3af36fa1afceeda3f1d79743"
+      "codeHashDebug": "bc5a6455e8a4f786b59ec87aa1f0784db845f91125e62154677812725f31a285"
     },
     "PlayerBase": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "c71aa1ac9f33dc863515cf3140a4823405de7f78a5bd062958fec4e8862b2e4e",
+      "sourceCodeHash": "95665cfa3ee74a26bb8da13ad19949872f793a021c918f5f8635d59fc7523ec4",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "d0fa0923002fc989136cb2d2c8af2fac0d11f379590603a7645e825b9785cb28"
+      "codeHashDebug": "cdc37bc3cd1f8a1438e7269fb7abaee64a1d246e97768fa43168687fe998de3e"
     },
     "PvpBattle": {
       "sourceFile": "gamefi/battle.ral",
-      "sourceCodeHash": "7d3b58bbc595d9ac712e5812c4330db04510cc57e004c82202c3e1a13910a9db",
+      "sourceCodeHash": "009d765d78334df3529adce5e3258b44f6d5b2ca6e3ac3d4d1eeea00eac32083",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "d546303a7023bb7199f787cc08d1141fcdcf56f771eb3a8a6648ddf675d360d8"
+      "codeHashDebug": "426c23bf1ebe22fc8290019a58db5ba2975632dd344d8d0fe9fbfbad74dd78ab"
     },
     "Sendout": {
       "sourceFile": "scripts/withdraw.ral",
@@ -228,25 +228,25 @@
     },
     "UpdateNFT": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "c71aa1ac9f33dc863515cf3140a4823405de7f78a5bd062958fec4e8862b2e4e",
+      "sourceCodeHash": "95665cfa3ee74a26bb8da13ad19949872f793a021c918f5f8635d59fc7523ec4",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpdateNFTFields": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "c71aa1ac9f33dc863515cf3140a4823405de7f78a5bd062958fec4e8862b2e4e",
+      "sourceCodeHash": "95665cfa3ee74a26bb8da13ad19949872f793a021c918f5f8635d59fc7523ec4",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpgradeCollectionCode": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "c71aa1ac9f33dc863515cf3140a4823405de7f78a5bd062958fec4e8862b2e4e",
+      "sourceCodeHash": "95665cfa3ee74a26bb8da13ad19949872f793a021c918f5f8635d59fc7523ec4",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpgradeCollectionFields": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "c71aa1ac9f33dc863515cf3140a4823405de7f78a5bd062958fec4e8862b2e4e",
+      "sourceCodeHash": "95665cfa3ee74a26bb8da13ad19949872f793a021c918f5f8635d59fc7523ec4",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },

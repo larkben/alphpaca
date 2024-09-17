@@ -21,7 +21,7 @@ const deployNFTTemplate: DeployFunction<Settings> = async (
         gameContract: '',
         nickname: '',
         linkedAddress: ZERO_ADDRESS,
-        level: [BigInt(0),BigInt(0),BigInt(0)],
+        level: [BigInt(1),BigInt(1),BigInt(1), BigInt(1)],
         stats: [BigInt(5), BigInt(5), BigInt(5), BigInt(0)],
         hay: '',
         moves: ["", "", "", ""]

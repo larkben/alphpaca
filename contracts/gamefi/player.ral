@@ -82,15 +82,28 @@ Contract Player(
   }
 
   // Assign Moves - maybe a better data structure for the moveSets
-  @using(checkExternalCaller = true, updateFields = true)
-  pub fn assignMove(whichMove: U256, newMove: ByteVec) -> () {
+  @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true)
+  pub fn assignMove(caller: Address, whichMove: U256, newMove: ByteVec) -> () {
     let addressCalled = contractIdToAddress!(gameContract)
 
     checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
     
-    // check that nft id has a linked function called checkLink to the nft id of this nft
+    transferToken!(caller, selfAddress!(), newMove, 1) // send the move to the nft contract address
 
     moves[whichMove] = newMove
+  }
+
+  @using(checkExternalCaller = true, updateFields = true, assetsInContract = true)
+  pub fn unAssignMove(caller: Address, whichMove: U256) -> () {
+    let addressCalled = contractIdToAddress!(gameContract)
+
+    checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
+
+    let c = #
+
+    moves[whichMove] = c  // unassigned to null
+
+    transferToken!(selfAddress!(), caller, moves[whichMove], 1)
   }
 
   // Upgrade Skills
