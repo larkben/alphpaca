@@ -80,6 +80,26 @@ export namespace PlayerBaseTypes {
       params: CallContractParams<{ tokenSelected: HexString }>;
       result: CallContractResult<null>;
     };
+    updateNickname: {
+      params: CallContractParams<{ paca: HexString; newNickName: HexString }>;
+      result: CallContractResult<null>;
+    };
+    updateLinkedAddress: {
+      params: CallContractParams<{ paca: HexString; newAddress: Address }>;
+      result: CallContractResult<null>;
+    };
+    assignPacaMove: {
+      params: CallContractParams<{
+        paca: HexString;
+        slot: bigint;
+        move: HexString;
+      }>;
+      result: CallContractResult<null>;
+    };
+    unlinkMove: {
+      params: CallContractParams<{ paca: HexString; slot: bigint }>;
+      result: CallContractResult<null>;
+    };
     editCollectionUri: {
       params: CallContractParams<{ newCollectionUri: HexString }>;
       result: CallContractResult<null>;
@@ -145,6 +165,35 @@ export namespace PlayerBaseTypes {
       params: SignExecuteContractMethodParams<{ tokenSelected: HexString }>;
       result: SignExecuteScriptTxResult;
     };
+    updateNickname: {
+      params: SignExecuteContractMethodParams<{
+        paca: HexString;
+        newNickName: HexString;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    updateLinkedAddress: {
+      params: SignExecuteContractMethodParams<{
+        paca: HexString;
+        newAddress: Address;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    assignPacaMove: {
+      params: SignExecuteContractMethodParams<{
+        paca: HexString;
+        slot: bigint;
+        move: HexString;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    unlinkMove: {
+      params: SignExecuteContractMethodParams<{
+        paca: HexString;
+        slot: bigint;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
     editCollectionUri: {
       params: SignExecuteContractMethodParams<{ newCollectionUri: HexString }>;
       result: SignExecuteScriptTxResult;
@@ -195,6 +244,7 @@ class Factory extends ContractFactory<
       CollectionOwnerAllowedOnly: BigInt("1"),
       NFTNotPartOfCollection: BigInt("2"),
       NotValidNFT: BigInt("3"),
+      InvalidMoveSlot: BigInt("4"),
     },
   };
 
@@ -247,6 +297,43 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "mint", params, getContractByCodeHash);
+    },
+    updateNickname: async (
+      params: TestContractParamsWithoutMaps<
+        PlayerBaseTypes.Fields,
+        { paca: HexString; newNickName: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "updateNickname", params, getContractByCodeHash);
+    },
+    updateLinkedAddress: async (
+      params: TestContractParamsWithoutMaps<
+        PlayerBaseTypes.Fields,
+        { paca: HexString; newAddress: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "updateLinkedAddress",
+        params,
+        getContractByCodeHash
+      );
+    },
+    assignPacaMove: async (
+      params: TestContractParamsWithoutMaps<
+        PlayerBaseTypes.Fields,
+        { paca: HexString; slot: bigint; move: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "assignPacaMove", params, getContractByCodeHash);
+    },
+    unlinkMove: async (
+      params: TestContractParamsWithoutMaps<
+        PlayerBaseTypes.Fields,
+        { paca: HexString; slot: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "unlinkMove", params, getContractByCodeHash);
     },
     editCollectionUri: async (
       params: TestContractParamsWithoutMaps<
@@ -333,7 +420,7 @@ export const PlayerBase = new Factory(
   Contract.fromJson(
     PlayerBaseContractJson,
     "",
-    "d0fa0923002fc989136cb2d2c8af2fac0d11f379590603a7645e825b9785cb28",
+    "cdc37bc3cd1f8a1438e7269fb7abaee64a1d246e97768fa43168687fe998de3e",
     AllStructs
   )
 );
@@ -421,6 +508,50 @@ export class PlayerBaseInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    updateNickname: async (
+      params: PlayerBaseTypes.CallMethodParams<"updateNickname">
+    ): Promise<PlayerBaseTypes.CallMethodResult<"updateNickname">> => {
+      return callMethod(
+        PlayerBase,
+        this,
+        "updateNickname",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updateLinkedAddress: async (
+      params: PlayerBaseTypes.CallMethodParams<"updateLinkedAddress">
+    ): Promise<PlayerBaseTypes.CallMethodResult<"updateLinkedAddress">> => {
+      return callMethod(
+        PlayerBase,
+        this,
+        "updateLinkedAddress",
+        params,
+        getContractByCodeHash
+      );
+    },
+    assignPacaMove: async (
+      params: PlayerBaseTypes.CallMethodParams<"assignPacaMove">
+    ): Promise<PlayerBaseTypes.CallMethodResult<"assignPacaMove">> => {
+      return callMethod(
+        PlayerBase,
+        this,
+        "assignPacaMove",
+        params,
+        getContractByCodeHash
+      );
+    },
+    unlinkMove: async (
+      params: PlayerBaseTypes.CallMethodParams<"unlinkMove">
+    ): Promise<PlayerBaseTypes.CallMethodResult<"unlinkMove">> => {
+      return callMethod(
+        PlayerBase,
+        this,
+        "unlinkMove",
+        params,
+        getContractByCodeHash
+      );
+    },
     editCollectionUri: async (
       params: PlayerBaseTypes.CallMethodParams<"editCollectionUri">
     ): Promise<PlayerBaseTypes.CallMethodResult<"editCollectionUri">> => {
@@ -503,6 +634,28 @@ export class PlayerBaseInstance extends ContractInstance {
       params: PlayerBaseTypes.SignExecuteMethodParams<"mint">
     ): Promise<PlayerBaseTypes.SignExecuteMethodResult<"mint">> => {
       return signExecuteMethod(PlayerBase, this, "mint", params);
+    },
+    updateNickname: async (
+      params: PlayerBaseTypes.SignExecuteMethodParams<"updateNickname">
+    ): Promise<PlayerBaseTypes.SignExecuteMethodResult<"updateNickname">> => {
+      return signExecuteMethod(PlayerBase, this, "updateNickname", params);
+    },
+    updateLinkedAddress: async (
+      params: PlayerBaseTypes.SignExecuteMethodParams<"updateLinkedAddress">
+    ): Promise<
+      PlayerBaseTypes.SignExecuteMethodResult<"updateLinkedAddress">
+    > => {
+      return signExecuteMethod(PlayerBase, this, "updateLinkedAddress", params);
+    },
+    assignPacaMove: async (
+      params: PlayerBaseTypes.SignExecuteMethodParams<"assignPacaMove">
+    ): Promise<PlayerBaseTypes.SignExecuteMethodResult<"assignPacaMove">> => {
+      return signExecuteMethod(PlayerBase, this, "assignPacaMove", params);
+    },
+    unlinkMove: async (
+      params: PlayerBaseTypes.SignExecuteMethodParams<"unlinkMove">
+    ): Promise<PlayerBaseTypes.SignExecuteMethodResult<"unlinkMove">> => {
+      return signExecuteMethod(PlayerBase, this, "unlinkMove", params);
     },
     editCollectionUri: async (
       params: PlayerBaseTypes.SignExecuteMethodParams<"editCollectionUri">

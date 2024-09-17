@@ -46,6 +46,9 @@ export namespace PvpBattleTypes {
     isActive: boolean;
     turn: boolean;
     battleFinished: boolean;
+    timeSinceLastMove: bigint;
+    wageredAsset: HexString;
+    wageredAmount: bigint;
     oracle: HexString;
   };
 
@@ -83,6 +86,10 @@ export namespace PvpBattleTypes {
     };
     attack: {
       params: CallContractParams<{ who: Address; move: HexString }>;
+      result: CallContractResult<null>;
+    };
+    forfeit: {
+      params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<null>;
     };
   }
@@ -142,6 +149,10 @@ export namespace PvpBattleTypes {
       }>;
       result: SignExecuteScriptTxResult;
     };
+    forfeit: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
   }
   export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["params"];
@@ -161,7 +172,14 @@ class Factory extends ContractFactory<
     );
   }
 
-  consts = { Codes: { PvpNotActive: BigInt("0"), NotYourTurn: BigInt("1") } };
+  consts = {
+    Codes: {
+      PvpNotActive: BigInt("0"),
+      NotYourTurn: BigInt("1"),
+      BattleFinished: BigInt("2"),
+      TimeLimitExceeded: BigInt("3"),
+    },
+  };
 
   at(address: string): PvpBattleInstance {
     return new PvpBattleInstance(address);
@@ -224,6 +242,14 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "attack", params, getContractByCodeHash);
     },
+    forfeit: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<PvpBattleTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "forfeit", params, getContractByCodeHash);
+    },
   };
 
   stateForTest(
@@ -240,7 +266,7 @@ export const PvpBattle = new Factory(
   Contract.fromJson(
     PvpBattleContractJson,
     "",
-    "d546303a7023bb7199f787cc08d1141fcdcf56f771eb3a8a6648ddf675d360d8",
+    "426c23bf1ebe22fc8290019a58db5ba2975632dd344d8d0fe9fbfbad74dd78ab",
     AllStructs
   )
 );
@@ -333,6 +359,17 @@ export class PvpBattleInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    forfeit: async (
+      params?: PvpBattleTypes.CallMethodParams<"forfeit">
+    ): Promise<PvpBattleTypes.CallMethodResult<"forfeit">> => {
+      return callMethod(
+        PvpBattle,
+        this,
+        "forfeit",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
@@ -370,6 +407,11 @@ export class PvpBattleInstance extends ContractInstance {
       params: PvpBattleTypes.SignExecuteMethodParams<"attack">
     ): Promise<PvpBattleTypes.SignExecuteMethodResult<"attack">> => {
       return signExecuteMethod(PvpBattle, this, "attack", params);
+    },
+    forfeit: async (
+      params: PvpBattleTypes.SignExecuteMethodParams<"forfeit">
+    ): Promise<PvpBattleTypes.SignExecuteMethodResult<"forfeit">> => {
+      return signExecuteMethod(PvpBattle, this, "forfeit", params);
     },
   };
 

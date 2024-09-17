@@ -95,7 +95,15 @@ export namespace PlayerTypes {
       result: CallContractResult<null>;
     };
     assignMove: {
-      params: CallContractParams<{ whichMove: bigint; newMove: HexString }>;
+      params: CallContractParams<{
+        caller: Address;
+        whichMove: bigint;
+        newMove: HexString;
+      }>;
+      result: CallContractResult<null>;
+    };
+    unAssignMove: {
+      params: CallContractParams<{ caller: Address; whichMove: bigint }>;
       result: CallContractResult<null>;
     };
     upgradeSkill: {
@@ -186,8 +194,16 @@ export namespace PlayerTypes {
     };
     assignMove: {
       params: SignExecuteContractMethodParams<{
+        caller: Address;
         whichMove: bigint;
         newMove: HexString;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    unAssignMove: {
+      params: SignExecuteContractMethodParams<{
+        caller: Address;
+        whichMove: bigint;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -341,10 +357,18 @@ class Factory extends ContractFactory<PlayerInstance, PlayerTypes.Fields> {
     assignMove: async (
       params: TestContractParamsWithoutMaps<
         PlayerTypes.Fields,
-        { whichMove: bigint; newMove: HexString }
+        { caller: Address; whichMove: bigint; newMove: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "assignMove", params, getContractByCodeHash);
+    },
+    unAssignMove: async (
+      params: TestContractParamsWithoutMaps<
+        PlayerTypes.Fields,
+        { caller: Address; whichMove: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "unAssignMove", params, getContractByCodeHash);
     },
     upgradeSkill: async (
       params: TestContractParamsWithoutMaps<
@@ -421,7 +445,7 @@ export const Player = new Factory(
   Contract.fromJson(
     PlayerContractJson,
     "",
-    "127d779771427f35bfb1b9f25c67c053ad3d8a4a3af36fa1afceeda3f1d79743",
+    "bc5a6455e8a4f786b59ec87aa1f0784db845f91125e62154677812725f31a285",
     AllStructs
   )
 );
@@ -552,6 +576,17 @@ export class PlayerInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    unAssignMove: async (
+      params: PlayerTypes.CallMethodParams<"unAssignMove">
+    ): Promise<PlayerTypes.CallMethodResult<"unAssignMove">> => {
+      return callMethod(
+        Player,
+        this,
+        "unAssignMove",
+        params,
+        getContractByCodeHash
+      );
+    },
     upgradeSkill: async (
       params: PlayerTypes.CallMethodParams<"upgradeSkill">
     ): Promise<PlayerTypes.CallMethodResult<"upgradeSkill">> => {
@@ -669,6 +704,11 @@ export class PlayerInstance extends ContractInstance {
       params: PlayerTypes.SignExecuteMethodParams<"assignMove">
     ): Promise<PlayerTypes.SignExecuteMethodResult<"assignMove">> => {
       return signExecuteMethod(Player, this, "assignMove", params);
+    },
+    unAssignMove: async (
+      params: PlayerTypes.SignExecuteMethodParams<"unAssignMove">
+    ): Promise<PlayerTypes.SignExecuteMethodResult<"unAssignMove">> => {
+      return signExecuteMethod(Player, this, "unAssignMove", params);
     },
     upgradeSkill: async (
       params: PlayerTypes.SignExecuteMethodParams<"upgradeSkill">

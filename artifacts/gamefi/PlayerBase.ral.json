@@ -1,8 +1,8 @@
 {
   "version": "v3.6.0",
   "name": "PlayerBase",
-  "bytecode": "0b0a09124026403940ed41024116412e415b418c010000000102a00002010000000102a0010201000102010a160040cb17011601c50c7b16010201000203000816010002170216001602410e7b01030114004064d380a9d53cb416000dbd0c0e16000101170217011601ce04410f7b160016020e0c16010103ce02160289441703140017040d0d0d0d170b170a170917081111110c170f170e170d170c160416041604160417131712171117101602b1ce011406414c5048000313046416031604b416081609160a160b160c160d160e160f1604161016111612161313106417061705b4d1a2160240ce03160516060db4c91707a0010d2aa10105b41602160760010001010008d3024d01c6b4ce00450d7b1600a100010001040008d34ece61afb4ce00450d7b1600ba01000303000ad3c8ef5982b4ce00450d7b160016011602bb010301030017d3d34f94dc0c0e16000101170217011601b1410f7b160016020e0c16010103ce050d0c1600010f010301030019d3a79653f80c0e16000101170217011601b1410f7b160016020e0c16010103ce05ce06ce070f0c16000110",
-  "codeHash": "d0fa0923002fc989136cb2d2c8af2fac0d11f379590603a7645e825b9785cb28",
+  "bytecode": "0b0e09124026403940ed410041134134414e41634177418f41c241f9010000000102a00002010000000102a0010201000102010a160040cb17011601c50c7b16010201000203000816010002170216001602410e7b01030114004064d380a9d53cb416000dbd0c0e16000101170217011601ce04410f7b160016020e0c16010103ce02160289441703140017040d0d0d0d170b170a170917081111110c170f170e170d170c160416041604160417131712171117101602b1ce011406414c5048000313046416031604b416081609160a160b160c160d160e160f1604161016111612161313106417061705b4d1a2160240ce03160516060db4c91707a0010d2aa10105b41602160760010302020006d31b73ff4b16010d0c16000108010302020006d31e60069616010d0c16000109010303030011d31b5fd91116011031107bb416020da3b4160116020f0c1600010a01020202000cd3cd38aa4a16011031107bb416010e0c1600010b010001010008d3024d01c6b4ce00450d7b1600a100010001040008d34ece61afb4ce00450d7b1600ba01000303000ad3c8ef5982b4ce00450d7b160016011602bb01000103001cd3d34f94dcb4ce00450d7b0c0e16000101170217011601b1410f7b160016020e0c16010103ce050d0c1600011001000103001ed3a79653f8b4ce00450d7b0c0e16000101170217011601b1410f7b160016020e0c16010103ce05ce06ce070f0c16000111",
+  "codeHash": "cdc37bc3cd1f8a1438e7269fb7abaee64a1d246e97768fa43168687fe998de3e",
   "fieldsSig": {
     "names": [
       "collectionOwner",
@@ -123,6 +123,73 @@
       "returnTypes": []
     },
     {
+      "name": "updateNickname",
+      "paramNames": [
+        "paca",
+        "newNickName"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "updateLinkedAddress",
+      "paramNames": [
+        "paca",
+        "newAddress"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "assignPacaMove",
+      "paramNames": [
+        "paca",
+        "slot",
+        "move"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "unlinkMove",
+      "paramNames": [
+        "paca",
+        "slot"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
       "name": "editCollectionUri",
       "paramNames": [
         "newCollectionUri"
@@ -225,6 +292,13 @@
           "value": {
             "type": "U256",
             "value": "3"
+          }
+        },
+        {
+          "name": "InvalidMoveSlot",
+          "value": {
+            "type": "U256",
+            "value": "4"
           }
         }
       ]
