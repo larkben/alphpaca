@@ -4,6 +4,7 @@ import { X, Copy } from 'lucide-react';
 import { useWallet, useBalance } from '@alephium/web3-react';
 import { ANS } from '@alph-name-service/ans-sdk';
 import { balanceOf } from "../lib/utils";
+import NFTGallery from './nft-profile';
 
 const PacaDashboard = () => {
   const [selectedTab, setSelectedTab] = useState('SEE PACAS');
@@ -53,20 +54,7 @@ const PacaDashboard = () => {
   const renderTabContent = () => {
     switch (selectedTab) {
       case 'SEE PACAS':
-        return (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {pacas.map((paca) => (
-              <div
-                key={paca.id}
-                className="bg-slate-700 p-4 rounded-2xl cursor-pointer shadow-md hover:shadow-lg transition-shadow"
-                onClick={() => handlePacaClick(paca.id)}
-              >
-                <img src={paca.image} alt={paca.name} className="w-full h-auto mb-2 rounded-xl" />
-                <div className="text-center font-semibold text-white">{paca.name}</div>
-              </div>
-            ))}
-          </div>
-        );
+        return (<NFTGallery />);
       case 'IN BATTLE':
         return <div className="text-center py-8 text-white">In Battle content goes here</div>;
       case 'UPGRADE PACA':
@@ -109,7 +97,7 @@ const PacaDashboard = () => {
               </button>
             </div>
             <div className="text-sm">
-              {(parseFloat(pacaBalance) / 1e18).toFixed(2)} $PACA
+              {(parseFloat(pacaBalance) / 1e18).toFixed(2)} PACA
             </div>
           </div>
         </div>
@@ -118,7 +106,7 @@ const PacaDashboard = () => {
             {tabs.map((tab) => (
               <button
                 key={tab}
-                className={`px-4 py-2 rounded-full transition-colors ${
+                className={`px-4 py-2 rounded-full transition-all duration-500 ${
                   selectedTab === tab ? 'bg-slate-900 text-white' : 'text-slate-300 hover:text-white'
                 }`}
                 onClick={() => setSelectedTab(tab)}
