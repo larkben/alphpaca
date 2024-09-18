@@ -1,5 +1,4 @@
-'use client'
-
+"use client";
 import React, { useState, useEffect, useCallback } from 'react';
 import { useWallet } from '@alephium/web3-react';
 import Link from "next/link";
