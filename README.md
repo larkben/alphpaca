@@ -1,11 +1,23 @@
 ## ALPHPACAS ##
 
-<h3> Making your own localhost site </h3>
-`clone repo` </br>
-`cd nonchalant` </br>
-`npm install` - must have node installed </br>
-`npm run dev` </br>
+### What is ALPHpacas?
+`alphpacas` - is a passion project founded by myself and built up by various developers that have come onto Alephium to build. 
 
-<h3> $PACA Token Supply </h3>
-100 Million initial supply, burned 89 Million and now the total circulating supply is 11 Million. 
+ALPHpacas is a token with roughly ~11 million circulating with no inital ICO (all airdropped or giveaways); our main attractions are:
+
+`Token Creator` - create a token on Alephium (depreciating) <br/>
+`Walf Protocol` - convert 1 OG ALF into its wrapped variant <br/>
+`Paca Punch 🥊` - a Pvp game built entirely on the Alephium blockchain using smart contracts (developing)
+
+### What can I do with them?
+
+Besides being cute, cuddly and collectible ALPHpacas represent being an early member of the Alephium community and will always be the first priority with any of the games we make.
+
+### Who is the team?
+
+Current Team as Stands:
+
+larkben - smart contract developer and average web developer (cofounder of ALPHaga NFT Marketplace)
+overgames - talented backend and frontend web developer (cofounder of ALPHaga NFT Marketplace)
+
 
