@@ -1,6 +1,0 @@
-TxScript Sendout(
-    contract: Faucet,
-    amount: U256
-) {
-    contract.sendout(amount)
-}

@@ -1,6 +1,0 @@
-TxScript Topup(
-    contract: Faucet, 
-    amount: U256
-) {
-    contract.topup{callerAddress!() -> contract.getTokenId() : amount}(amount)
-}

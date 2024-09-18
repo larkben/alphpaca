@@ -1,5 +1,0 @@
-TxScript CollectFees (
-    contract: CreateToken
-) {
-    contract.collectfees()
-}
