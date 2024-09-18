@@ -84,7 +84,7 @@
     },
     "EditCollectionUri": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -125,19 +125,19 @@
       "codeHashDebug": "30a31a7652cd30e43102600ff03da201166d6548eec921129f94f0e23e59a9b6"
     },
     "IFungibleToken": {
-      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFT": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_interface.ral",
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_interface.ral",
       "sourceCodeHash": "92956f4e61c198f011b48dbda2ed76193ffc79ac9c39f60bf1763a34e02f2c41",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFTCollection": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_collection_interface.ral",
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_collection_interface.ral",
       "sourceCodeHash": "9b199426ea89c188ce858b48ab809f13b9fc1ed0d64ca91e3d600eda8fbf6c42",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
@@ -162,7 +162,7 @@
     },
     "MintPlayer": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -180,9 +180,9 @@
     },
     "PlayerBase": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "b20c9c9f121be7c7a1d1c41d9a09b55bd99b81998ab58a84029628b21c4f10f0"
+      "codeHashDebug": "6f4fa43ffea4e9f9a3d960b35d913adce653c501ebcac64d150092b2948c3a45"
     },
     "PowerMove": {
       "sourceFile": "gamefi/moves/powerMove.ral",
@@ -222,25 +222,25 @@
     },
     "UpdateNFT": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpdateNFTFields": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpgradeCollectionCode": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpgradeCollectionFields": {
       "sourceFile": "gamefi/playerbase.ral",
-      "sourceCodeHash": "f76ba1558d0500c0769221b093c5c2ef2df67f146d4bf9daaae9d571f90fa10a",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },

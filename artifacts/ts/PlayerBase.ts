@@ -333,7 +333,7 @@ export const PlayerBase = new Factory(
   Contract.fromJson(
     PlayerBaseContractJson,
     "",
-    "b20c9c9f121be7c7a1d1c41d9a09b55bd99b81998ab58a84029628b21c4f10f0",
+    "6f4fa43ffea4e9f9a3d960b35d913adce653c501ebcac64d150092b2948c3a45",
     AllStructs
   )
 );
