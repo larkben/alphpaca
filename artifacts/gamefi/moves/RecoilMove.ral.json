@@ -1,0 +1,101 @@
+{
+  "version": "v3.6.0",
+  "name": "RecoilMove",
+  "bytecode": "060509144022403c405b010000000102a00002010000000203ce01ce0002010000000103d310a20164ce000201000102000bd3083ea1dace01771701b41601450c7b1600a10001000003030bd398046d52ce02134064ce0317021701170016001601160202",
+  "codeHash": "242d9272a7499afd4ec3718aa114c33aa18fb47aa64ccd94655f860935c650c3",
+  "fieldsSig": {
+    "names": [
+      "nftIndex",
+      "tokenUri",
+      "collectionId",
+      "power",
+      "recoil",
+      "__stdInterfaceId"
+    ],
+    "types": [
+      "U256",
+      "ByteVec",
+      "ByteVec",
+      "U256",
+      "U256",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "getTokenUri",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getCollectionIndex",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec",
+        "U256"
+      ]
+    },
+    {
+      "name": "getNFTIndex",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "editUri",
+      "paramNames": [
+        "newUri"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "performMove",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "MoveReturn"
+      ]
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "NotCalledFromCollection",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  ],
+  "stdInterfaceId": "0003"
+}

@@ -34,11 +34,12 @@ import { default as UpdateNFTFieldsScriptJson } from "../gamefi/UpdateNFTFields.
 import { default as UpgradeCollectionCodeScriptJson } from "../gamefi/UpgradeCollectionCode.ral.json";
 import { default as UpgradeCollectionFieldsScriptJson } from "../gamefi/UpgradeCollectionFields.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
+import { MoveReturn, AllStructs } from "./types";
 
 export const ActivateWalfProtocol = new ExecutableScript<{
   contract: HexString;
 }>(
-  Script.fromJson(ActivateWalfProtocolScriptJson, "", []),
+  Script.fromJson(ActivateWalfProtocolScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
@@ -48,100 +49,118 @@ export const Buildtoken = new ExecutableScript<{
   name: HexString;
   decimals: bigint;
   tokenTotal: bigint;
-}>(Script.fromJson(BuildtokenScriptJson, "", []), getContractByCodeHash);
+}>(
+  Script.fromJson(BuildtokenScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const CollectFees = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(CollectFeesScriptJson, "", []),
+  Script.fromJson(CollectFeesScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
 export const CollectOgAlfFees = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(CollectOgAlfFeesScriptJson, "", []),
+  Script.fromJson(CollectOgAlfFeesScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
 export const Destroy = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(DestroyScriptJson, "", []),
+  Script.fromJson(DestroyScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
 export const DestroyOgAlfProtocol = new ExecutableScript<{
   contract: HexString;
 }>(
-  Script.fromJson(DestroyOgAlfProtocolScriptJson, "", []),
+  Script.fromJson(DestroyOgAlfProtocolScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
 export const Destroycreator = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(DestroycreatorScriptJson, "", []),
+  Script.fromJson(DestroycreatorScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
 export const EditCollectionUri = new ExecutableScript<{
   collection: HexString;
   newCollectionUri: HexString;
-}>(Script.fromJson(EditCollectionUriScriptJson, "", []), getContractByCodeHash);
+}>(
+  Script.fromJson(EditCollectionUriScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const EditOgAlfFees = new ExecutableScript<{
   contract: HexString;
   newfee: bigint;
-}>(Script.fromJson(EditOgAlfFeesScriptJson, "", []), getContractByCodeHash);
+}>(
+  Script.fromJson(EditOgAlfFeesScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const Editfee = new ExecutableScript<{
   contract: HexString;
   edit: bigint;
-}>(Script.fromJson(EditfeeScriptJson, "", []), getContractByCodeHash);
+}>(Script.fromJson(EditfeeScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const Gettoken = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(GettokenScriptJson, "", []), getContractByCodeHash);
+}>(Script.fromJson(GettokenScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const MintAlf = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(MintAlfScriptJson, "", []), getContractByCodeHash);
+}>(Script.fromJson(MintAlfScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const MintOgAlf = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(MintOgAlfScriptJson, "", []), getContractByCodeHash);
+}>(Script.fromJson(MintOgAlfScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const MintPlayer = new ExecutableScript<{
   collection: HexString;
   tokenSelected: HexString;
-}>(Script.fromJson(MintPlayerScriptJson, "", []), getContractByCodeHash);
+}>(
+  Script.fromJson(MintPlayerScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const Sendout = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(SendoutScriptJson, "", []), getContractByCodeHash);
+}>(Script.fromJson(SendoutScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const Topup = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(TopupScriptJson, "", []), getContractByCodeHash);
+}>(Script.fromJson(TopupScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const UpdateCreationFee = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
-}>(Script.fromJson(UpdateCreationFeeScriptJson, "", []), getContractByCodeHash);
+}>(
+  Script.fromJson(UpdateCreationFeeScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const UpdateNFT = new ExecutableScript<{
   collection: HexString;
   nft: HexString;
-}>(Script.fromJson(UpdateNFTScriptJson, "", []), getContractByCodeHash);
+}>(Script.fromJson(UpdateNFTScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const UpdateNFTFields = new ExecutableScript<{
   collection: HexString;
   nft: HexString;
-}>(Script.fromJson(UpdateNFTFieldsScriptJson, "", []), getContractByCodeHash);
+}>(
+  Script.fromJson(UpdateNFTFieldsScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const UpgradeCollectionCode = new ExecutableScript<{
   collection: HexString;
   newCode: HexString;
 }>(
-  Script.fromJson(UpgradeCollectionCodeScriptJson, "", []),
+  Script.fromJson(UpgradeCollectionCodeScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
@@ -151,11 +170,11 @@ export const UpgradeCollectionFields = new ExecutableScript<{
   newImmFieldsEncoded: HexString;
   newMutFieldsEncoded: HexString;
 }>(
-  Script.fromJson(UpgradeCollectionFieldsScriptJson, "", []),
+  Script.fromJson(UpgradeCollectionFieldsScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
 export const Withdrawlassets = new ExecutableScript<{ contract: HexString }>(
-  Script.fromJson(WithdrawlassetsScriptJson, "", []),
+  Script.fromJson(WithdrawlassetsScriptJson, "", AllStructs),
   getContractByCodeHash
 );

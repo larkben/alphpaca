@@ -1,0 +1,231 @@
+{
+  "version": "v3.6.0",
+  "name": "HeldItems",
+  "bytecode": "0a0a09124026403940cd40e240f6410e413b416c010000000102a00002010000000102a0010201000102010a160040cb17011601c50c7b16010201000203000816010002170216001602410e7b01030111004050d380a9d53cb416000dbdce02a00189441701140017020d0d0d1708170717061111110c170c170b170a170916021602160216021710170f170e170da001b1ce011406414c5048000313046416011602b41606160716081609160a160b160c1602160d160e160f1610130f6417041703b4d1a2a00140ce03160316040db4c91705a0010d2aa10105b4a001160560010001010008d3024d01c6b4ce00450d7b1600a100010001040008d35f9c7346b4ce00450d7b1600ba01000303000ad33f68ce59b4ce00450d7b160016011602bb010301030017d39a2cb6d10c0e16000101170217011601b1410f7b160016020e0c16010103ce040d0c1600010b010301030019d39a43c72d0c0e16000101170217011601b1410f7b160016020e0c16010103ce04ce05ce060f0c1600010c",
+  "codeHash": "30a31a7652cd30e43102600ff03da201166d6548eec921129f94f0e23e59a9b6",
+  "fieldsSig": {
+    "names": [
+      "collectionOwner",
+      "collectionUri",
+      "gameContract",
+      "totalSupply",
+      "baseuri",
+      "playerContractId",
+      "code",
+      "encodedImmutableFields",
+      "encodedMutableFields",
+      "__stdInterfaceId"
+    ],
+    "types": [
+      "Address",
+      "ByteVec",
+      "ByteVec",
+      "U256",
+      "ByteVec",
+      "ByteVec",
+      "ByteVec",
+      "ByteVec",
+      "ByteVec",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "eventsSig": [
+    {
+      "name": "Mint",
+      "fieldNames": [
+        "minter",
+        "fromIndex",
+        "contract"
+      ],
+      "fieldTypes": [
+        "Address",
+        "U256",
+        "ByteVec"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "getCollectionUri",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "totalSupply",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "nftByIndex",
+      "paramNames": [
+        "index"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "INFT"
+      ]
+    },
+    {
+      "name": "validateNFT",
+      "paramNames": [
+        "nftId",
+        "index"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "mint",
+      "paramNames": [
+        "tokenSelected"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editCollectionUri",
+      "paramNames": [
+        "newCollectionUri"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "updateHeldItems",
+      "paramNames": [
+        "newCode"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "updateHeldItemsFields",
+      "paramNames": [
+        "newCode",
+        "newImmFieldsEncoded",
+        "newMutFieldsEncoded"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "updateItemCode",
+      "paramNames": [
+        "nft"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "updateItemFields",
+      "paramNames": [
+        "nft"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "NFTNotFound",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "CollectionOwnerAllowedOnly",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        },
+        {
+          "name": "NFTNotPartOfCollection",
+          "value": {
+            "type": "U256",
+            "value": "2"
+          }
+        },
+        {
+          "name": "NotValidNFT",
+          "value": {
+            "type": "U256",
+            "value": "3"
+          }
+        }
+      ]
+    }
+  ],
+  "stdInterfaceId": "0002"
+}

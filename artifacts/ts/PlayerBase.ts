@@ -21,6 +21,7 @@ import {
   callMethod,
   multicallMethods,
   fetchContractState,
+  Asset,
   ContractInstance,
   getContractEventsCurrentCount,
   TestContractParamsWithoutMaps,
@@ -33,6 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as PlayerBaseContractJson } from "../gamefi/PlayerBase.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace PlayerBaseTypes {
@@ -182,7 +184,7 @@ class Factory extends ContractFactory<
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
@@ -316,6 +318,14 @@ class Factory extends ContractFactory<
       );
     },
   };
+
+  stateForTest(
+    initFields: PlayerBaseTypes.Fields,
+    asset?: Asset,
+    address?: string
+  ) {
+    return this.stateForTest_(initFields, asset, address, undefined);
+  }
 }
 
 // Use this object to test and deploy the contract
@@ -323,8 +333,8 @@ export const PlayerBase = new Factory(
   Contract.fromJson(
     PlayerBaseContractJson,
     "",
-    "0f3bb0c6908b57d20d25ed7112d3b6f3ec154adedd2f37d283d11bf0b21511d7",
-    []
+    "6f4fa43ffea4e9f9a3d960b35d913adce653c501ebcac64d150092b2948c3a45",
+    AllStructs
   )
 );
 

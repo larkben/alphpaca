@@ -21,6 +21,7 @@ import {
   callMethod,
   multicallMethods,
   fetchContractState,
+  Asset,
   ContractInstance,
   getContractEventsCurrentCount,
   TestContractParamsWithoutMaps,
@@ -33,6 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as FeeCollectionContractJson } from "../FeeCollection.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace FeeCollectionTypes {
@@ -175,7 +177,7 @@ class Factory extends ContractFactory<
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
@@ -281,6 +283,14 @@ class Factory extends ContractFactory<
       return testMethod(this, "editfee", params, getContractByCodeHash);
     },
   };
+
+  stateForTest(
+    initFields: FeeCollectionTypes.Fields,
+    asset?: Asset,
+    address?: string
+  ) {
+    return this.stateForTest_(initFields, asset, address, undefined);
+  }
 }
 
 // Use this object to test and deploy the contract
@@ -289,7 +299,7 @@ export const FeeCollection = new Factory(
     FeeCollectionContractJson,
     "",
     "8671dc4d763fef38a37762180a03a69d0a42c85466d4fee89b25e8598c5645fb",
-    []
+    AllStructs
   )
 );
 

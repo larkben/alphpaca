@@ -21,6 +21,7 @@ import {
   callMethod,
   multicallMethods,
   fetchContractState,
+  Asset,
   ContractInstance,
   getContractEventsCurrentCount,
   TestContractParamsWithoutMaps,
@@ -33,6 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as PlayerContractJson } from "../gamefi/Player.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace PlayerTypes {
@@ -61,6 +63,18 @@ export namespace PlayerTypes {
       result: CallContractResult<[HexString, bigint]>;
     };
     getNFTIndex: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getHealthStat: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getAttackStat: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getDefense: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
@@ -138,6 +152,18 @@ export namespace PlayerTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
+    getHealthStat: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getAttackStat: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getDefense: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
     editUri: {
       params: SignExecuteContractMethodParams<{ newUri: HexString }>;
       result: SignExecuteScriptTxResult;
@@ -197,7 +223,7 @@ class Factory extends ContractFactory<PlayerInstance, PlayerTypes.Fields> {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
@@ -242,6 +268,30 @@ class Factory extends ContractFactory<PlayerInstance, PlayerTypes.Fields> {
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getNFTIndex", params, getContractByCodeHash);
+    },
+    getHealthStat: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<PlayerTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "getHealthStat", params, getContractByCodeHash);
+    },
+    getAttackStat: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<PlayerTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "getAttackStat", params, getContractByCodeHash);
+    },
+    getDefense: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<PlayerTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "getDefense", params, getContractByCodeHash);
     },
     editUri: async (
       params: TestContractParamsWithoutMaps<
@@ -340,6 +390,14 @@ class Factory extends ContractFactory<PlayerInstance, PlayerTypes.Fields> {
       );
     },
   };
+
+  stateForTest(
+    initFields: PlayerTypes.Fields,
+    asset?: Asset,
+    address?: string
+  ) {
+    return this.stateForTest_(initFields, asset, address, undefined);
+  }
 }
 
 // Use this object to test and deploy the contract
@@ -347,8 +405,8 @@ export const Player = new Factory(
   Contract.fromJson(
     PlayerContractJson,
     "",
-    "5e2852c2b5bc4fd5270bebd30ec3f210170497ab0004d1b4dc8be68c63092fa7",
-    []
+    "d4a2e646b9fc117314caf74cff0a3743119f629a76bdb425e73b35d1327aaa93",
+    AllStructs
   )
 );
 
@@ -392,6 +450,39 @@ export class PlayerInstance extends ContractInstance {
         Player,
         this,
         "getNFTIndex",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getHealthStat: async (
+      params?: PlayerTypes.CallMethodParams<"getHealthStat">
+    ): Promise<PlayerTypes.CallMethodResult<"getHealthStat">> => {
+      return callMethod(
+        Player,
+        this,
+        "getHealthStat",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getAttackStat: async (
+      params?: PlayerTypes.CallMethodParams<"getAttackStat">
+    ): Promise<PlayerTypes.CallMethodResult<"getAttackStat">> => {
+      return callMethod(
+        Player,
+        this,
+        "getAttackStat",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getDefense: async (
+      params?: PlayerTypes.CallMethodParams<"getDefense">
+    ): Promise<PlayerTypes.CallMethodResult<"getDefense">> => {
+      return callMethod(
+        Player,
+        this,
+        "getDefense",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
@@ -511,6 +602,21 @@ export class PlayerInstance extends ContractInstance {
       params: PlayerTypes.SignExecuteMethodParams<"getNFTIndex">
     ): Promise<PlayerTypes.SignExecuteMethodResult<"getNFTIndex">> => {
       return signExecuteMethod(Player, this, "getNFTIndex", params);
+    },
+    getHealthStat: async (
+      params: PlayerTypes.SignExecuteMethodParams<"getHealthStat">
+    ): Promise<PlayerTypes.SignExecuteMethodResult<"getHealthStat">> => {
+      return signExecuteMethod(Player, this, "getHealthStat", params);
+    },
+    getAttackStat: async (
+      params: PlayerTypes.SignExecuteMethodParams<"getAttackStat">
+    ): Promise<PlayerTypes.SignExecuteMethodResult<"getAttackStat">> => {
+      return signExecuteMethod(Player, this, "getAttackStat", params);
+    },
+    getDefense: async (
+      params: PlayerTypes.SignExecuteMethodParams<"getDefense">
+    ): Promise<PlayerTypes.SignExecuteMethodResult<"getDefense">> => {
+      return signExecuteMethod(Player, this, "getDefense", params);
     },
     editUri: async (
       params: PlayerTypes.SignExecuteMethodParams<"editUri">

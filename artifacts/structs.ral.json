@@ -1,0 +1,20 @@
+[
+  {
+    "name": "MoveReturn",
+    "fieldNames": [
+      "p",
+      "a",
+      "r"
+    ],
+    "fieldTypes": [
+      "U256",
+      "U256",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false
+    ]
+  }
+]

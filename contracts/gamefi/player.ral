@@ -37,6 +37,20 @@ Contract Player(
     return collectionId, nftIndex
   }
 
+  // get battle info
+
+  pub fn getHealthStat() -> U256 {
+    return stats[0]
+  }
+
+  pub fn getAttackStat() -> U256 {
+    return stats[1]
+  }
+
+  pub fn getDefense() -> U256 {
+    return stats[2]
+  }
+
   // need function calls from parent collection contract
   @using(checkExternalCaller = true, updateFields = true)
   pub fn editUri(newUri: ByteVec) -> () {
@@ -126,6 +140,7 @@ Contract Player(
     }
   }
 
+  // complete - 10% of enemy HP
   @using(checkExternalCaller = true, updateFields = true)
   pub fn addXp(xp: U256) -> () {
 
@@ -136,7 +151,7 @@ Contract Player(
     stats[3] = stats[3] + xp
   }
 
-  // Upgrade Scripts
+  // Upgrade Scripts - complete
   @using(checkExternalCaller = true, updateFields = false)
   pub fn updatePlayerCode(newCode: ByteVec) -> () {
     let addressCalled = contractIdToAddress!(collectionId)

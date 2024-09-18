@@ -15,7 +15,7 @@ const deployNFTTemplate: DeployFunction<Settings> = async (
 
   const result = await deployer.deployContract(Player, {
     initialFields: {
-        nftIndex: 0n,
+        nftIndex: BigInt(0),
         tokenUri: '',
         collectionId: '',
         gameContract: '',

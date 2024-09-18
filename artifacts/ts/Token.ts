@@ -21,6 +21,7 @@ import {
   callMethod,
   multicallMethods,
   fetchContractState,
+  Asset,
   ContractInstance,
   getContractEventsCurrentCount,
   TestContractParamsWithoutMaps,
@@ -33,6 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as TokenContractJson } from "../createtoken/Token.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace TokenTypes {
@@ -117,7 +119,7 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
@@ -167,6 +169,10 @@ class Factory extends ContractFactory<TokenInstance, TokenTypes.Fields> {
       return testMethod(this, "getOwner", params, getContractByCodeHash);
     },
   };
+
+  stateForTest(initFields: TokenTypes.Fields, asset?: Asset, address?: string) {
+    return this.stateForTest_(initFields, asset, address, undefined);
+  }
 }
 
 // Use this object to test and deploy the contract
@@ -175,7 +181,7 @@ export const Token = new Factory(
     TokenContractJson,
     "",
     "215fe6aae7ba67810780a11c1f098f7845593d41f36aa7b99c737e2021b33c7b",
-    []
+    AllStructs
   )
 );
 

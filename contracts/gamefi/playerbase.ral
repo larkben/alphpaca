@@ -107,13 +107,15 @@ Contract PlayerBase(
         migrateWithFields!(newCode, newImmFieldsEncoded, newMutFieldsEncoded)
     }
 
-    // upgrade nfts
-    @using(checkExternalCaller = false, preapprovedAssets =  true)
+    // upgrade nfts, collection owner only for now
+
+    @using(checkExternalCaller = false, preapprovedAssets = false)
     pub fn updateALPHpacaCode(nft: ByteVec) -> () {
+        assert!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
         // get the data associated with the NFT
         let (id, tempIndex) = INFT(nft).getCollectionIndex()
 
-        assert!(id == oldcollection, ErrorCodes.NotValidNFT)
+        assert!(id == selfContractId!(), ErrorCodes.NotValidNFT)
 
         // verify that the nft is legitmate
         INFTCollection(id).validateNFT(nft, tempIndex)
@@ -121,12 +123,13 @@ Contract PlayerBase(
         Player(nft).updatePlayerCode(code)
     }
 
-    @using(checkExternalCaller = false, preapprovedAssets =  true)
+    @using(checkExternalCaller = false, preapprovedAssets =  false)
     pub fn updateALPHpacaFields(nft: ByteVec) -> () {
+        assert!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
         // get the data associated with the NFT
         let (id, tempIndex) = INFT(nft).getCollectionIndex()
 
-        assert!(id == oldcollection, ErrorCodes.NotValidNFT)
+        assert!(id == selfContractId!(), ErrorCodes.NotValidNFT)
 
         // verify that the nft is legitmate
         INFTCollection(id).validateNFT(nft, tempIndex)
@@ -141,14 +144,14 @@ TxScript UpdateNFT(
     collection: PlayerBase,
     nft: ByteVec
 ) {
-    collection.updateALPHpacaCode{callerAddress!() -> nft: 1}(nft)
+    collection.updateALPHpacaCode(nft)
 }
 
 TxScript UpdateNFTFields(
     collection: PlayerBase,
     nft: ByteVec
 ) {
-    collection.updateALPHpacaFields{callerAddress!() -> nft: 1}(nft)
+    collection.updateALPHpacaFields(nft)
 }
 
 // upgrade collection

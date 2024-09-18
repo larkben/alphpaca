@@ -21,6 +21,7 @@ import {
   callMethod,
   multicallMethods,
   fetchContractState,
+  Asset,
   ContractInstance,
   getContractEventsCurrentCount,
   TestContractParamsWithoutMaps,
@@ -33,6 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as WrappedOgAlfProtocolContractJson } from "../walf/WrappedOgAlfProtocol.ral.json";
 import { getContractByCodeHash } from "./contracts";
+import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace WrappedOgAlfProtocolTypes {
@@ -179,7 +181,7 @@ class Factory extends ContractFactory<
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
-      []
+      AllStructs
     );
   }
 
@@ -287,6 +289,14 @@ class Factory extends ContractFactory<
       return testMethod(this, "editfee", params, getContractByCodeHash);
     },
   };
+
+  stateForTest(
+    initFields: WrappedOgAlfProtocolTypes.Fields,
+    asset?: Asset,
+    address?: string
+  ) {
+    return this.stateForTest_(initFields, asset, address, undefined);
+  }
 }
 
 // Use this object to test and deploy the contract
@@ -295,7 +305,7 @@ export const WrappedOgAlfProtocol = new Factory(
     WrappedOgAlfProtocolContractJson,
     "",
     "b01b6b7db2945f4a58decc02a85c64337321f852569e692aa793274740f2f626",
-    []
+    AllStructs
   )
 );
 
