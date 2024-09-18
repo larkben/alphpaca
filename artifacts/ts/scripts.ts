@@ -34,7 +34,7 @@ import { default as UpdateNFTFieldsScriptJson } from "../gamefi/UpdateNFTFields.
 import { default as UpgradeCollectionCodeScriptJson } from "../gamefi/UpgradeCollectionCode.ral.json";
 import { default as UpgradeCollectionFieldsScriptJson } from "../gamefi/UpgradeCollectionFields.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
-import { DIAOracleValue, MoveReturn, PacaFlip, AllStructs } from "./types";
+import { MoveReturn, AllStructs } from "./types";
 
 export const ActivateWalfProtocol = new ExecutableScript<{
   contract: HexString;

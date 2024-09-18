@@ -34,7 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as PlayerContractJson } from "../gamefi/Player.ral.json";
 import { getContractByCodeHash } from "./contracts";
-import { DIAOracleValue, MoveReturn, PacaFlip, AllStructs } from "./types";
+import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace PlayerTypes {
@@ -45,7 +45,7 @@ export namespace PlayerTypes {
     gameContract: HexString;
     nickname: HexString;
     linkedAddress: Address;
-    level: [bigint, bigint, bigint, bigint];
+    level: [bigint, bigint, bigint];
     stats: [bigint, bigint, bigint, bigint];
     hay: HexString;
     moves: [HexString, HexString, HexString, HexString];
@@ -78,10 +78,6 @@ export namespace PlayerTypes {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
-    getLevel: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<bigint>;
-    };
     editUri: {
       params: CallContractParams<{ newUri: HexString }>;
       result: CallContractResult<null>;
@@ -95,15 +91,7 @@ export namespace PlayerTypes {
       result: CallContractResult<null>;
     };
     assignMove: {
-      params: CallContractParams<{
-        caller: Address;
-        whichMove: bigint;
-        newMove: HexString;
-      }>;
-      result: CallContractResult<null>;
-    };
-    unAssignMove: {
-      params: CallContractParams<{ caller: Address; whichMove: bigint }>;
+      params: CallContractParams<{ whichMove: bigint; newMove: HexString }>;
       result: CallContractResult<null>;
     };
     upgradeSkill: {
@@ -176,10 +164,6 @@ export namespace PlayerTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
-    getLevel: {
-      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
-      result: SignExecuteScriptTxResult;
-    };
     editUri: {
       params: SignExecuteContractMethodParams<{ newUri: HexString }>;
       result: SignExecuteScriptTxResult;
@@ -194,16 +178,8 @@ export namespace PlayerTypes {
     };
     assignMove: {
       params: SignExecuteContractMethodParams<{
-        caller: Address;
         whichMove: bigint;
         newMove: HexString;
-      }>;
-      result: SignExecuteScriptTxResult;
-    };
-    unAssignMove: {
-      params: SignExecuteContractMethodParams<{
-        caller: Address;
-        whichMove: bigint;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -317,14 +293,6 @@ class Factory extends ContractFactory<PlayerInstance, PlayerTypes.Fields> {
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getDefense", params, getContractByCodeHash);
     },
-    getLevel: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<PlayerTypes.Fields, never>,
-        "testArgs"
-      >
-    ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "getLevel", params, getContractByCodeHash);
-    },
     editUri: async (
       params: TestContractParamsWithoutMaps<
         PlayerTypes.Fields,
@@ -357,18 +325,10 @@ class Factory extends ContractFactory<PlayerInstance, PlayerTypes.Fields> {
     assignMove: async (
       params: TestContractParamsWithoutMaps<
         PlayerTypes.Fields,
-        { caller: Address; whichMove: bigint; newMove: HexString }
+        { whichMove: bigint; newMove: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "assignMove", params, getContractByCodeHash);
-    },
-    unAssignMove: async (
-      params: TestContractParamsWithoutMaps<
-        PlayerTypes.Fields,
-        { caller: Address; whichMove: bigint }
-      >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "unAssignMove", params, getContractByCodeHash);
     },
     upgradeSkill: async (
       params: TestContractParamsWithoutMaps<
@@ -445,7 +405,7 @@ export const Player = new Factory(
   Contract.fromJson(
     PlayerContractJson,
     "",
-    "bc5a6455e8a4f786b59ec87aa1f0784db845f91125e62154677812725f31a285",
+    "d4a2e646b9fc117314caf74cff0a3743119f629a76bdb425e73b35d1327aaa93",
     AllStructs
   )
 );
@@ -527,17 +487,6 @@ export class PlayerInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
-    getLevel: async (
-      params?: PlayerTypes.CallMethodParams<"getLevel">
-    ): Promise<PlayerTypes.CallMethodResult<"getLevel">> => {
-      return callMethod(
-        Player,
-        this,
-        "getLevel",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
-    },
     editUri: async (
       params: PlayerTypes.CallMethodParams<"editUri">
     ): Promise<PlayerTypes.CallMethodResult<"editUri">> => {
@@ -572,17 +521,6 @@ export class PlayerInstance extends ContractInstance {
         Player,
         this,
         "assignMove",
-        params,
-        getContractByCodeHash
-      );
-    },
-    unAssignMove: async (
-      params: PlayerTypes.CallMethodParams<"unAssignMove">
-    ): Promise<PlayerTypes.CallMethodResult<"unAssignMove">> => {
-      return callMethod(
-        Player,
-        this,
-        "unAssignMove",
         params,
         getContractByCodeHash
       );
@@ -680,11 +618,6 @@ export class PlayerInstance extends ContractInstance {
     ): Promise<PlayerTypes.SignExecuteMethodResult<"getDefense">> => {
       return signExecuteMethod(Player, this, "getDefense", params);
     },
-    getLevel: async (
-      params: PlayerTypes.SignExecuteMethodParams<"getLevel">
-    ): Promise<PlayerTypes.SignExecuteMethodResult<"getLevel">> => {
-      return signExecuteMethod(Player, this, "getLevel", params);
-    },
     editUri: async (
       params: PlayerTypes.SignExecuteMethodParams<"editUri">
     ): Promise<PlayerTypes.SignExecuteMethodResult<"editUri">> => {
@@ -704,11 +637,6 @@ export class PlayerInstance extends ContractInstance {
       params: PlayerTypes.SignExecuteMethodParams<"assignMove">
     ): Promise<PlayerTypes.SignExecuteMethodResult<"assignMove">> => {
       return signExecuteMethod(Player, this, "assignMove", params);
-    },
-    unAssignMove: async (
-      params: PlayerTypes.SignExecuteMethodParams<"unAssignMove">
-    ): Promise<PlayerTypes.SignExecuteMethodResult<"unAssignMove">> => {
-      return signExecuteMethod(Player, this, "unAssignMove", params);
     },
     upgradeSkill: async (
       params: PlayerTypes.SignExecuteMethodParams<"upgradeSkill">

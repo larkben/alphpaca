@@ -32,20 +32,18 @@ import {
   addStdIdToFields,
   encodeContractFields,
 } from "@alephium/web3";
-import { default as MoveContractJson } from "../gamefi/moves/Move.ral.json";
+import { default as RecoilMoveContractJson } from "../gamefi/moves/RecoilMove.ral.json";
 import { getContractByCodeHash } from "./contracts";
-import { DIAOracleValue, MoveReturn, PacaFlip, AllStructs } from "./types";
+import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
-export namespace MoveTypes {
+export namespace RecoilMoveTypes {
   export type Fields = {
     nftIndex: bigint;
     tokenUri: HexString;
     collectionId: HexString;
     power: bigint;
-    accuracy: bigint;
     recoil: bigint;
-    gain: bigint;
   };
 
   export type State = ContractState<Fields>;
@@ -116,8 +114,11 @@ export namespace MoveTypes {
     SignExecuteMethodTable[T]["result"];
 }
 
-class Factory extends ContractFactory<MoveInstance, MoveTypes.Fields> {
-  encodeFields(fields: MoveTypes.Fields) {
+class Factory extends ContractFactory<
+  RecoilMoveInstance,
+  RecoilMoveTypes.Fields
+> {
+  encodeFields(fields: RecoilMoveTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -127,14 +128,14 @@ class Factory extends ContractFactory<MoveInstance, MoveTypes.Fields> {
 
   consts = { ErrorCodes: { NotCalledFromCollection: BigInt("0") } };
 
-  at(address: string): MoveInstance {
-    return new MoveInstance(address);
+  at(address: string): RecoilMoveInstance {
+    return new RecoilMoveInstance(address);
   }
 
   tests = {
     getTokenUri: async (
       params: Omit<
-        TestContractParamsWithoutMaps<MoveTypes.Fields, never>,
+        TestContractParamsWithoutMaps<RecoilMoveTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
@@ -142,7 +143,7 @@ class Factory extends ContractFactory<MoveInstance, MoveTypes.Fields> {
     },
     getCollectionIndex: async (
       params: Omit<
-        TestContractParamsWithoutMaps<MoveTypes.Fields, never>,
+        TestContractParamsWithoutMaps<RecoilMoveTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<[HexString, bigint]>> => {
@@ -155,7 +156,7 @@ class Factory extends ContractFactory<MoveInstance, MoveTypes.Fields> {
     },
     getNFTIndex: async (
       params: Omit<
-        TestContractParamsWithoutMaps<MoveTypes.Fields, never>,
+        TestContractParamsWithoutMaps<RecoilMoveTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -163,7 +164,7 @@ class Factory extends ContractFactory<MoveInstance, MoveTypes.Fields> {
     },
     editUri: async (
       params: TestContractParamsWithoutMaps<
-        MoveTypes.Fields,
+        RecoilMoveTypes.Fields,
         { newUri: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -171,7 +172,7 @@ class Factory extends ContractFactory<MoveInstance, MoveTypes.Fields> {
     },
     performMove: async (
       params: Omit<
-        TestContractParamsWithoutMaps<MoveTypes.Fields, never>,
+        TestContractParamsWithoutMaps<RecoilMoveTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<MoveReturn>> => {
@@ -179,37 +180,41 @@ class Factory extends ContractFactory<MoveInstance, MoveTypes.Fields> {
     },
   };
 
-  stateForTest(initFields: MoveTypes.Fields, asset?: Asset, address?: string) {
+  stateForTest(
+    initFields: RecoilMoveTypes.Fields,
+    asset?: Asset,
+    address?: string
+  ) {
     return this.stateForTest_(initFields, asset, address, undefined);
   }
 }
 
 // Use this object to test and deploy the contract
-export const Move = new Factory(
+export const RecoilMove = new Factory(
   Contract.fromJson(
-    MoveContractJson,
+    RecoilMoveContractJson,
     "",
-    "68b49b05181edd5590bc2c7d9eb0a58325c4d49d00b556d1e8e3aaf9e8f3ba0e",
+    "242d9272a7499afd4ec3718aa114c33aa18fb47aa64ccd94655f860935c650c3",
     AllStructs
   )
 );
 
 // Use this class to interact with the blockchain
-export class MoveInstance extends ContractInstance {
+export class RecoilMoveInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<MoveTypes.State> {
-    return fetchContractState(Move, this);
+  async fetchState(): Promise<RecoilMoveTypes.State> {
+    return fetchContractState(RecoilMove, this);
   }
 
   view = {
     getTokenUri: async (
-      params?: MoveTypes.CallMethodParams<"getTokenUri">
-    ): Promise<MoveTypes.CallMethodResult<"getTokenUri">> => {
+      params?: RecoilMoveTypes.CallMethodParams<"getTokenUri">
+    ): Promise<RecoilMoveTypes.CallMethodResult<"getTokenUri">> => {
       return callMethod(
-        Move,
+        RecoilMove,
         this,
         "getTokenUri",
         params === undefined ? {} : params,
@@ -217,10 +222,10 @@ export class MoveInstance extends ContractInstance {
       );
     },
     getCollectionIndex: async (
-      params?: MoveTypes.CallMethodParams<"getCollectionIndex">
-    ): Promise<MoveTypes.CallMethodResult<"getCollectionIndex">> => {
+      params?: RecoilMoveTypes.CallMethodParams<"getCollectionIndex">
+    ): Promise<RecoilMoveTypes.CallMethodResult<"getCollectionIndex">> => {
       return callMethod(
-        Move,
+        RecoilMove,
         this,
         "getCollectionIndex",
         params === undefined ? {} : params,
@@ -228,10 +233,10 @@ export class MoveInstance extends ContractInstance {
       );
     },
     getNFTIndex: async (
-      params?: MoveTypes.CallMethodParams<"getNFTIndex">
-    ): Promise<MoveTypes.CallMethodResult<"getNFTIndex">> => {
+      params?: RecoilMoveTypes.CallMethodParams<"getNFTIndex">
+    ): Promise<RecoilMoveTypes.CallMethodResult<"getNFTIndex">> => {
       return callMethod(
-        Move,
+        RecoilMove,
         this,
         "getNFTIndex",
         params === undefined ? {} : params,
@@ -239,15 +244,21 @@ export class MoveInstance extends ContractInstance {
       );
     },
     editUri: async (
-      params: MoveTypes.CallMethodParams<"editUri">
-    ): Promise<MoveTypes.CallMethodResult<"editUri">> => {
-      return callMethod(Move, this, "editUri", params, getContractByCodeHash);
+      params: RecoilMoveTypes.CallMethodParams<"editUri">
+    ): Promise<RecoilMoveTypes.CallMethodResult<"editUri">> => {
+      return callMethod(
+        RecoilMove,
+        this,
+        "editUri",
+        params,
+        getContractByCodeHash
+      );
     },
     performMove: async (
-      params?: MoveTypes.CallMethodParams<"performMove">
-    ): Promise<MoveTypes.CallMethodResult<"performMove">> => {
+      params?: RecoilMoveTypes.CallMethodParams<"performMove">
+    ): Promise<RecoilMoveTypes.CallMethodResult<"performMove">> => {
       return callMethod(
-        Move,
+        RecoilMove,
         this,
         "performMove",
         params === undefined ? {} : params,
@@ -258,40 +269,42 @@ export class MoveInstance extends ContractInstance {
 
   transact = {
     getTokenUri: async (
-      params: MoveTypes.SignExecuteMethodParams<"getTokenUri">
-    ): Promise<MoveTypes.SignExecuteMethodResult<"getTokenUri">> => {
-      return signExecuteMethod(Move, this, "getTokenUri", params);
+      params: RecoilMoveTypes.SignExecuteMethodParams<"getTokenUri">
+    ): Promise<RecoilMoveTypes.SignExecuteMethodResult<"getTokenUri">> => {
+      return signExecuteMethod(RecoilMove, this, "getTokenUri", params);
     },
     getCollectionIndex: async (
-      params: MoveTypes.SignExecuteMethodParams<"getCollectionIndex">
-    ): Promise<MoveTypes.SignExecuteMethodResult<"getCollectionIndex">> => {
-      return signExecuteMethod(Move, this, "getCollectionIndex", params);
+      params: RecoilMoveTypes.SignExecuteMethodParams<"getCollectionIndex">
+    ): Promise<
+      RecoilMoveTypes.SignExecuteMethodResult<"getCollectionIndex">
+    > => {
+      return signExecuteMethod(RecoilMove, this, "getCollectionIndex", params);
     },
     getNFTIndex: async (
-      params: MoveTypes.SignExecuteMethodParams<"getNFTIndex">
-    ): Promise<MoveTypes.SignExecuteMethodResult<"getNFTIndex">> => {
-      return signExecuteMethod(Move, this, "getNFTIndex", params);
+      params: RecoilMoveTypes.SignExecuteMethodParams<"getNFTIndex">
+    ): Promise<RecoilMoveTypes.SignExecuteMethodResult<"getNFTIndex">> => {
+      return signExecuteMethod(RecoilMove, this, "getNFTIndex", params);
     },
     editUri: async (
-      params: MoveTypes.SignExecuteMethodParams<"editUri">
-    ): Promise<MoveTypes.SignExecuteMethodResult<"editUri">> => {
-      return signExecuteMethod(Move, this, "editUri", params);
+      params: RecoilMoveTypes.SignExecuteMethodParams<"editUri">
+    ): Promise<RecoilMoveTypes.SignExecuteMethodResult<"editUri">> => {
+      return signExecuteMethod(RecoilMove, this, "editUri", params);
     },
     performMove: async (
-      params: MoveTypes.SignExecuteMethodParams<"performMove">
-    ): Promise<MoveTypes.SignExecuteMethodResult<"performMove">> => {
-      return signExecuteMethod(Move, this, "performMove", params);
+      params: RecoilMoveTypes.SignExecuteMethodParams<"performMove">
+    ): Promise<RecoilMoveTypes.SignExecuteMethodResult<"performMove">> => {
+      return signExecuteMethod(RecoilMove, this, "performMove", params);
     },
   };
 
-  async multicall<Callss extends MoveTypes.MultiCallParams[]>(
+  async multicall<Callss extends RecoilMoveTypes.MultiCallParams[]>(
     ...callss: Callss
-  ): Promise<MoveTypes.MulticallReturnType<Callss>> {
+  ): Promise<RecoilMoveTypes.MulticallReturnType<Callss>> {
     return (await multicallMethods(
-      Move,
+      RecoilMove,
       this,
       callss,
       getContractByCodeHash
-    )) as MoveTypes.MulticallReturnType<Callss>;
+    )) as RecoilMoveTypes.MulticallReturnType<Callss>;
   }
 }

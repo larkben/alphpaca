@@ -1,17 +1,15 @@
 {
   "version": "v3.6.0",
-  "name": "Move",
-  "bytecode": "080509144022403c4060010000000102a00002010000000203ce01ce0002010000000103d310a20164ce000201000102000bd3083ea1dace01771701b41601450c7b1600a10001000004040ed3493580d0ce02ce03ce04ce051703170217011700160016011602160302",
-  "codeHash": "68b49b05181edd5590bc2c7d9eb0a58325c4d49d00b556d1e8e3aaf9e8f3ba0e",
+  "name": "RecoilMove",
+  "bytecode": "060509144022403c405b010000000102a00002010000000203ce01ce0002010000000103d310a20164ce000201000102000bd3083ea1dace01771701b41601450c7b1600a10001000003030bd398046d52ce02134064ce0317021701170016001601160202",
+  "codeHash": "242d9272a7499afd4ec3718aa114c33aa18fb47aa64ccd94655f860935c650c3",
   "fieldsSig": {
     "names": [
       "nftIndex",
       "tokenUri",
       "collectionId",
       "power",
-      "accuracy",
       "recoil",
-      "gain",
       "__stdInterfaceId"
     ],
     "types": [
@@ -20,15 +18,11 @@
       "ByteVec",
       "U256",
       "U256",
-      "U256",
-      "U256",
       "ByteVec"
     ],
     "isMutable": [
       false,
       true,
-      false,
-      false,
       false,
       false,
       false,

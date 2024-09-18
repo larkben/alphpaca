@@ -32,12 +32,12 @@ import {
   addStdIdToFields,
   encodeContractFields,
 } from "@alephium/web3";
-import { default as AllMovesContractJson } from "../gamefi/moves/AllMoves.ral.json";
+import { default as HeldItemsContractJson } from "../gamefi/helditem/HeldItems.ral.json";
 import { getContractByCodeHash } from "./contracts";
 import { MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
-export namespace AllMovesTypes {
+export namespace HeldItemsTypes {
   export type Fields = {
     collectionOwner: Address;
     collectionUri: HexString;
@@ -83,11 +83,11 @@ export namespace AllMovesTypes {
       params: CallContractParams<{ newCollectionUri: HexString }>;
       result: CallContractResult<null>;
     };
-    updateAllMoves: {
+    updateHeldItems: {
       params: CallContractParams<{ newCode: HexString }>;
       result: CallContractResult<null>;
     };
-    updateAllMovesFields: {
+    updateHeldItemsFields: {
       params: CallContractParams<{
         newCode: HexString;
         newImmFieldsEncoded: HexString;
@@ -95,11 +95,11 @@ export namespace AllMovesTypes {
       }>;
       result: CallContractResult<null>;
     };
-    updateMoveCode: {
+    updateItemCode: {
       params: CallContractParams<{ nft: HexString }>;
       result: CallContractResult<null>;
     };
-    updateMoveFields: {
+    updateItemFields: {
       params: CallContractParams<{ nft: HexString }>;
       result: CallContractResult<null>;
     };
@@ -148,11 +148,11 @@ export namespace AllMovesTypes {
       params: SignExecuteContractMethodParams<{ newCollectionUri: HexString }>;
       result: SignExecuteScriptTxResult;
     };
-    updateAllMoves: {
+    updateHeldItems: {
       params: SignExecuteContractMethodParams<{ newCode: HexString }>;
       result: SignExecuteScriptTxResult;
     };
-    updateAllMovesFields: {
+    updateHeldItemsFields: {
       params: SignExecuteContractMethodParams<{
         newCode: HexString;
         newImmFieldsEncoded: HexString;
@@ -160,11 +160,11 @@ export namespace AllMovesTypes {
       }>;
       result: SignExecuteScriptTxResult;
     };
-    updateMoveCode: {
+    updateItemCode: {
       params: SignExecuteContractMethodParams<{ nft: HexString }>;
       result: SignExecuteScriptTxResult;
     };
-    updateMoveFields: {
+    updateItemFields: {
       params: SignExecuteContractMethodParams<{ nft: HexString }>;
       result: SignExecuteScriptTxResult;
     };
@@ -175,8 +175,11 @@ export namespace AllMovesTypes {
     SignExecuteMethodTable[T]["result"];
 }
 
-class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
-  encodeFields(fields: AllMovesTypes.Fields) {
+class Factory extends ContractFactory<
+  HeldItemsInstance,
+  HeldItemsTypes.Fields
+> {
+  encodeFields(fields: HeldItemsTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -194,14 +197,14 @@ class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
     },
   };
 
-  at(address: string): AllMovesInstance {
-    return new AllMovesInstance(address);
+  at(address: string): HeldItemsInstance {
+    return new HeldItemsInstance(address);
   }
 
   tests = {
     getCollectionUri: async (
       params: Omit<
-        TestContractParamsWithoutMaps<AllMovesTypes.Fields, never>,
+        TestContractParamsWithoutMaps<HeldItemsTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
@@ -214,7 +217,7 @@ class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
     },
     totalSupply: async (
       params: Omit<
-        TestContractParamsWithoutMaps<AllMovesTypes.Fields, never>,
+        TestContractParamsWithoutMaps<HeldItemsTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
@@ -222,7 +225,7 @@ class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
     },
     nftByIndex: async (
       params: TestContractParamsWithoutMaps<
-        AllMovesTypes.Fields,
+        HeldItemsTypes.Fields,
         { index: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
@@ -230,7 +233,7 @@ class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
     },
     validateNFT: async (
       params: TestContractParamsWithoutMaps<
-        AllMovesTypes.Fields,
+        HeldItemsTypes.Fields,
         { nftId: HexString; index: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -238,7 +241,7 @@ class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
     },
     mint: async (
       params: TestContractParamsWithoutMaps<
-        AllMovesTypes.Fields,
+        HeldItemsTypes.Fields,
         { tokenSelected: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -246,7 +249,7 @@ class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
     },
     editCollectionUri: async (
       params: TestContractParamsWithoutMaps<
-        AllMovesTypes.Fields,
+        HeldItemsTypes.Fields,
         { newCollectionUri: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -257,17 +260,17 @@ class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
         getContractByCodeHash
       );
     },
-    updateAllMoves: async (
+    updateHeldItems: async (
       params: TestContractParamsWithoutMaps<
-        AllMovesTypes.Fields,
+        HeldItemsTypes.Fields,
         { newCode: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "updateAllMoves", params, getContractByCodeHash);
+      return testMethod(this, "updateHeldItems", params, getContractByCodeHash);
     },
-    updateAllMovesFields: async (
+    updateHeldItemsFields: async (
       params: TestContractParamsWithoutMaps<
-        AllMovesTypes.Fields,
+        HeldItemsTypes.Fields,
         {
           newCode: HexString;
           newImmFieldsEncoded: HexString;
@@ -277,28 +280,28 @@ class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(
         this,
-        "updateAllMovesFields",
+        "updateHeldItemsFields",
         params,
         getContractByCodeHash
       );
     },
-    updateMoveCode: async (
+    updateItemCode: async (
       params: TestContractParamsWithoutMaps<
-        AllMovesTypes.Fields,
+        HeldItemsTypes.Fields,
         { nft: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "updateMoveCode", params, getContractByCodeHash);
+      return testMethod(this, "updateItemCode", params, getContractByCodeHash);
     },
-    updateMoveFields: async (
+    updateItemFields: async (
       params: TestContractParamsWithoutMaps<
-        AllMovesTypes.Fields,
+        HeldItemsTypes.Fields,
         { nft: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(
         this,
-        "updateMoveFields",
+        "updateItemFields",
         params,
         getContractByCodeHash
       );
@@ -306,7 +309,7 @@ class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
   };
 
   stateForTest(
-    initFields: AllMovesTypes.Fields,
+    initFields: HeldItemsTypes.Fields,
     asset?: Asset,
     address?: string
   ) {
@@ -315,23 +318,23 @@ class Factory extends ContractFactory<AllMovesInstance, AllMovesTypes.Fields> {
 }
 
 // Use this object to test and deploy the contract
-export const AllMoves = new Factory(
+export const HeldItems = new Factory(
   Contract.fromJson(
-    AllMovesContractJson,
+    HeldItemsContractJson,
     "",
-    "d1d9c26d11ced31c371b000bf4c382299633378ae3f4503ea5cb3122727d6122",
+    "30a31a7652cd30e43102600ff03da201166d6548eec921129f94f0e23e59a9b6",
     AllStructs
   )
 );
 
 // Use this class to interact with the blockchain
-export class AllMovesInstance extends ContractInstance {
+export class HeldItemsInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<AllMovesTypes.State> {
-    return fetchContractState(AllMoves, this);
+  async fetchState(): Promise<HeldItemsTypes.State> {
+    return fetchContractState(HeldItems, this);
   }
 
   async getContractEventsCurrentCount(): Promise<number> {
@@ -339,11 +342,11 @@ export class AllMovesInstance extends ContractInstance {
   }
 
   subscribeMintEvent(
-    options: EventSubscribeOptions<AllMovesTypes.MintEvent>,
+    options: EventSubscribeOptions<HeldItemsTypes.MintEvent>,
     fromCount?: number
   ): EventSubscription {
     return subscribeContractEvent(
-      AllMoves.contract,
+      HeldItems.contract,
       this,
       options,
       "Mint",
@@ -353,10 +356,10 @@ export class AllMovesInstance extends ContractInstance {
 
   view = {
     getCollectionUri: async (
-      params?: AllMovesTypes.CallMethodParams<"getCollectionUri">
-    ): Promise<AllMovesTypes.CallMethodResult<"getCollectionUri">> => {
+      params?: HeldItemsTypes.CallMethodParams<"getCollectionUri">
+    ): Promise<HeldItemsTypes.CallMethodResult<"getCollectionUri">> => {
       return callMethod(
-        AllMoves,
+        HeldItems,
         this,
         "getCollectionUri",
         params === undefined ? {} : params,
@@ -364,10 +367,10 @@ export class AllMovesInstance extends ContractInstance {
       );
     },
     totalSupply: async (
-      params?: AllMovesTypes.CallMethodParams<"totalSupply">
-    ): Promise<AllMovesTypes.CallMethodResult<"totalSupply">> => {
+      params?: HeldItemsTypes.CallMethodParams<"totalSupply">
+    ): Promise<HeldItemsTypes.CallMethodResult<"totalSupply">> => {
       return callMethod(
-        AllMoves,
+        HeldItems,
         this,
         "totalSupply",
         params === undefined ? {} : params,
@@ -375,10 +378,10 @@ export class AllMovesInstance extends ContractInstance {
       );
     },
     nftByIndex: async (
-      params: AllMovesTypes.CallMethodParams<"nftByIndex">
-    ): Promise<AllMovesTypes.CallMethodResult<"nftByIndex">> => {
+      params: HeldItemsTypes.CallMethodParams<"nftByIndex">
+    ): Promise<HeldItemsTypes.CallMethodResult<"nftByIndex">> => {
       return callMethod(
-        AllMoves,
+        HeldItems,
         this,
         "nftByIndex",
         params,
@@ -386,10 +389,10 @@ export class AllMovesInstance extends ContractInstance {
       );
     },
     validateNFT: async (
-      params: AllMovesTypes.CallMethodParams<"validateNFT">
-    ): Promise<AllMovesTypes.CallMethodResult<"validateNFT">> => {
+      params: HeldItemsTypes.CallMethodParams<"validateNFT">
+    ): Promise<HeldItemsTypes.CallMethodResult<"validateNFT">> => {
       return callMethod(
-        AllMoves,
+        HeldItems,
         this,
         "validateNFT",
         params,
@@ -397,61 +400,61 @@ export class AllMovesInstance extends ContractInstance {
       );
     },
     mint: async (
-      params: AllMovesTypes.CallMethodParams<"mint">
-    ): Promise<AllMovesTypes.CallMethodResult<"mint">> => {
-      return callMethod(AllMoves, this, "mint", params, getContractByCodeHash);
+      params: HeldItemsTypes.CallMethodParams<"mint">
+    ): Promise<HeldItemsTypes.CallMethodResult<"mint">> => {
+      return callMethod(HeldItems, this, "mint", params, getContractByCodeHash);
     },
     editCollectionUri: async (
-      params: AllMovesTypes.CallMethodParams<"editCollectionUri">
-    ): Promise<AllMovesTypes.CallMethodResult<"editCollectionUri">> => {
+      params: HeldItemsTypes.CallMethodParams<"editCollectionUri">
+    ): Promise<HeldItemsTypes.CallMethodResult<"editCollectionUri">> => {
       return callMethod(
-        AllMoves,
+        HeldItems,
         this,
         "editCollectionUri",
         params,
         getContractByCodeHash
       );
     },
-    updateAllMoves: async (
-      params: AllMovesTypes.CallMethodParams<"updateAllMoves">
-    ): Promise<AllMovesTypes.CallMethodResult<"updateAllMoves">> => {
+    updateHeldItems: async (
+      params: HeldItemsTypes.CallMethodParams<"updateHeldItems">
+    ): Promise<HeldItemsTypes.CallMethodResult<"updateHeldItems">> => {
       return callMethod(
-        AllMoves,
+        HeldItems,
         this,
-        "updateAllMoves",
+        "updateHeldItems",
         params,
         getContractByCodeHash
       );
     },
-    updateAllMovesFields: async (
-      params: AllMovesTypes.CallMethodParams<"updateAllMovesFields">
-    ): Promise<AllMovesTypes.CallMethodResult<"updateAllMovesFields">> => {
+    updateHeldItemsFields: async (
+      params: HeldItemsTypes.CallMethodParams<"updateHeldItemsFields">
+    ): Promise<HeldItemsTypes.CallMethodResult<"updateHeldItemsFields">> => {
       return callMethod(
-        AllMoves,
+        HeldItems,
         this,
-        "updateAllMovesFields",
+        "updateHeldItemsFields",
         params,
         getContractByCodeHash
       );
     },
-    updateMoveCode: async (
-      params: AllMovesTypes.CallMethodParams<"updateMoveCode">
-    ): Promise<AllMovesTypes.CallMethodResult<"updateMoveCode">> => {
+    updateItemCode: async (
+      params: HeldItemsTypes.CallMethodParams<"updateItemCode">
+    ): Promise<HeldItemsTypes.CallMethodResult<"updateItemCode">> => {
       return callMethod(
-        AllMoves,
+        HeldItems,
         this,
-        "updateMoveCode",
+        "updateItemCode",
         params,
         getContractByCodeHash
       );
     },
-    updateMoveFields: async (
-      params: AllMovesTypes.CallMethodParams<"updateMoveFields">
-    ): Promise<AllMovesTypes.CallMethodResult<"updateMoveFields">> => {
+    updateItemFields: async (
+      params: HeldItemsTypes.CallMethodParams<"updateItemFields">
+    ): Promise<HeldItemsTypes.CallMethodResult<"updateItemFields">> => {
       return callMethod(
-        AllMoves,
+        HeldItems,
         this,
-        "updateMoveFields",
+        "updateItemFields",
         params,
         getContractByCodeHash
       );
@@ -460,67 +463,72 @@ export class AllMovesInstance extends ContractInstance {
 
   transact = {
     getCollectionUri: async (
-      params: AllMovesTypes.SignExecuteMethodParams<"getCollectionUri">
-    ): Promise<AllMovesTypes.SignExecuteMethodResult<"getCollectionUri">> => {
-      return signExecuteMethod(AllMoves, this, "getCollectionUri", params);
+      params: HeldItemsTypes.SignExecuteMethodParams<"getCollectionUri">
+    ): Promise<HeldItemsTypes.SignExecuteMethodResult<"getCollectionUri">> => {
+      return signExecuteMethod(HeldItems, this, "getCollectionUri", params);
     },
     totalSupply: async (
-      params: AllMovesTypes.SignExecuteMethodParams<"totalSupply">
-    ): Promise<AllMovesTypes.SignExecuteMethodResult<"totalSupply">> => {
-      return signExecuteMethod(AllMoves, this, "totalSupply", params);
+      params: HeldItemsTypes.SignExecuteMethodParams<"totalSupply">
+    ): Promise<HeldItemsTypes.SignExecuteMethodResult<"totalSupply">> => {
+      return signExecuteMethod(HeldItems, this, "totalSupply", params);
     },
     nftByIndex: async (
-      params: AllMovesTypes.SignExecuteMethodParams<"nftByIndex">
-    ): Promise<AllMovesTypes.SignExecuteMethodResult<"nftByIndex">> => {
-      return signExecuteMethod(AllMoves, this, "nftByIndex", params);
+      params: HeldItemsTypes.SignExecuteMethodParams<"nftByIndex">
+    ): Promise<HeldItemsTypes.SignExecuteMethodResult<"nftByIndex">> => {
+      return signExecuteMethod(HeldItems, this, "nftByIndex", params);
     },
     validateNFT: async (
-      params: AllMovesTypes.SignExecuteMethodParams<"validateNFT">
-    ): Promise<AllMovesTypes.SignExecuteMethodResult<"validateNFT">> => {
-      return signExecuteMethod(AllMoves, this, "validateNFT", params);
+      params: HeldItemsTypes.SignExecuteMethodParams<"validateNFT">
+    ): Promise<HeldItemsTypes.SignExecuteMethodResult<"validateNFT">> => {
+      return signExecuteMethod(HeldItems, this, "validateNFT", params);
     },
     mint: async (
-      params: AllMovesTypes.SignExecuteMethodParams<"mint">
-    ): Promise<AllMovesTypes.SignExecuteMethodResult<"mint">> => {
-      return signExecuteMethod(AllMoves, this, "mint", params);
+      params: HeldItemsTypes.SignExecuteMethodParams<"mint">
+    ): Promise<HeldItemsTypes.SignExecuteMethodResult<"mint">> => {
+      return signExecuteMethod(HeldItems, this, "mint", params);
     },
     editCollectionUri: async (
-      params: AllMovesTypes.SignExecuteMethodParams<"editCollectionUri">
-    ): Promise<AllMovesTypes.SignExecuteMethodResult<"editCollectionUri">> => {
-      return signExecuteMethod(AllMoves, this, "editCollectionUri", params);
+      params: HeldItemsTypes.SignExecuteMethodParams<"editCollectionUri">
+    ): Promise<HeldItemsTypes.SignExecuteMethodResult<"editCollectionUri">> => {
+      return signExecuteMethod(HeldItems, this, "editCollectionUri", params);
     },
-    updateAllMoves: async (
-      params: AllMovesTypes.SignExecuteMethodParams<"updateAllMoves">
-    ): Promise<AllMovesTypes.SignExecuteMethodResult<"updateAllMoves">> => {
-      return signExecuteMethod(AllMoves, this, "updateAllMoves", params);
+    updateHeldItems: async (
+      params: HeldItemsTypes.SignExecuteMethodParams<"updateHeldItems">
+    ): Promise<HeldItemsTypes.SignExecuteMethodResult<"updateHeldItems">> => {
+      return signExecuteMethod(HeldItems, this, "updateHeldItems", params);
     },
-    updateAllMovesFields: async (
-      params: AllMovesTypes.SignExecuteMethodParams<"updateAllMovesFields">
+    updateHeldItemsFields: async (
+      params: HeldItemsTypes.SignExecuteMethodParams<"updateHeldItemsFields">
     ): Promise<
-      AllMovesTypes.SignExecuteMethodResult<"updateAllMovesFields">
+      HeldItemsTypes.SignExecuteMethodResult<"updateHeldItemsFields">
     > => {
-      return signExecuteMethod(AllMoves, this, "updateAllMovesFields", params);
+      return signExecuteMethod(
+        HeldItems,
+        this,
+        "updateHeldItemsFields",
+        params
+      );
     },
-    updateMoveCode: async (
-      params: AllMovesTypes.SignExecuteMethodParams<"updateMoveCode">
-    ): Promise<AllMovesTypes.SignExecuteMethodResult<"updateMoveCode">> => {
-      return signExecuteMethod(AllMoves, this, "updateMoveCode", params);
+    updateItemCode: async (
+      params: HeldItemsTypes.SignExecuteMethodParams<"updateItemCode">
+    ): Promise<HeldItemsTypes.SignExecuteMethodResult<"updateItemCode">> => {
+      return signExecuteMethod(HeldItems, this, "updateItemCode", params);
     },
-    updateMoveFields: async (
-      params: AllMovesTypes.SignExecuteMethodParams<"updateMoveFields">
-    ): Promise<AllMovesTypes.SignExecuteMethodResult<"updateMoveFields">> => {
-      return signExecuteMethod(AllMoves, this, "updateMoveFields", params);
+    updateItemFields: async (
+      params: HeldItemsTypes.SignExecuteMethodParams<"updateItemFields">
+    ): Promise<HeldItemsTypes.SignExecuteMethodResult<"updateItemFields">> => {
+      return signExecuteMethod(HeldItems, this, "updateItemFields", params);
     },
   };
 
-  async multicall<Callss extends AllMovesTypes.MultiCallParams[]>(
+  async multicall<Callss extends HeldItemsTypes.MultiCallParams[]>(
     ...callss: Callss
-  ): Promise<AllMovesTypes.MulticallReturnType<Callss>> {
+  ): Promise<HeldItemsTypes.MulticallReturnType<Callss>> {
     return (await multicallMethods(
-      AllMoves,
+      HeldItems,
       this,
       callss,
       getContractByCodeHash
-    )) as AllMovesTypes.MulticallReturnType<Callss>;
+    )) as HeldItemsTypes.MulticallReturnType<Callss>;
   }
 }

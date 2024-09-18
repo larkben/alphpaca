@@ -1,7 +1,7 @@
 import "std/nft_collection_interface"
 
 // the nft collection contract for players
-Contract AllMoves(
+Contract HeldItems(
     collectionOwner: Address,
     mut collectionUri: ByteVec,
     gameContract: ByteVec,          // allows the battle to mint the item on completetion
@@ -85,14 +85,14 @@ Contract AllMoves(
 
     // upgrades
     @using(checkExternalCaller = true)
-    pub fn updateAllMoves(newCode: ByteVec) -> () {
+    pub fn updateHeldItems(newCode: ByteVec) -> () {
         checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
 
         migrate!(newCode)
     }
 
     @using(checkExternalCaller = true, updateFields = true)
-    pub fn updateAllMovesFields(newCode: ByteVec, newImmFieldsEncoded: ByteVec, newMutFieldsEncoded: ByteVec) -> () {
+    pub fn updateHeldItemsFields(newCode: ByteVec, newImmFieldsEncoded: ByteVec, newMutFieldsEncoded: ByteVec) -> () {
         checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
 
         migrateWithFields!(newCode, newImmFieldsEncoded, newMutFieldsEncoded)
@@ -100,7 +100,7 @@ Contract AllMoves(
 
     // upgrade nfts
     @using(checkExternalCaller = false, preapprovedAssets =  true)
-    pub fn updateMoveCode(nft: ByteVec) -> () {
+    pub fn updateItemCode(nft: ByteVec) -> () {
         // get the data associated with the NFT
         let (id, tempIndex) = INFT(nft).getCollectionIndex()
 
@@ -113,7 +113,7 @@ Contract AllMoves(
     }
 
     @using(checkExternalCaller = false, preapprovedAssets =  true)
-    pub fn updateMoveFields(nft: ByteVec) -> () {
+    pub fn updateItemFields(nft: ByteVec) -> () {
         // get the data associated with the NFT
         let (id, tempIndex) = INFT(nft).getCollectionIndex()
 

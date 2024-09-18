@@ -1,53 +1,20 @@
 [
   {
-    "name": "PacaFlip",
-    "fieldNames": [
-      "active",
-      "waiting"
-    ],
-    "fieldTypes": [
-      "ByteVec",
-      "ByteVec"
-    ],
-    "isMutable": [
-      false,
-      false
-    ]
-  },
-  {
     "name": "MoveReturn",
     "fieldNames": [
       "p",
       "a",
-      "r",
-      "g"
+      "r"
     ],
     "fieldTypes": [
-      "U256",
       "U256",
       "U256",
       "U256"
     ],
     "isMutable": [
-      false,
       false,
       false,
       false
-    ]
-  },
-  {
-    "name": "DIAOracleValue",
-    "fieldNames": [
-      "value",
-      "timestamp"
-    ],
-    "fieldTypes": [
-      "U256",
-      "U256"
-    ],
-    "isMutable": [
-      true,
-      true
     ]
   }
 ]

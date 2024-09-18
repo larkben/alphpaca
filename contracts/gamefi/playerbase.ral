@@ -21,7 +21,6 @@ Contract PlayerBase(
         CollectionOwnerAllowedOnly = 1
         NFTNotPartOfCollection = 2
         NotValidNFT = 3
-        InvalidMoveSlot = 4
     }
 
     // base uri
@@ -69,7 +68,7 @@ Contract PlayerBase(
 
         let c = #
 
-        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(tempIndex, nftUri, selfContractId!(), gameContract, c, callerAddress!(), [1,1,1,1], [5,5,5,0], c, [c,c,c,c])
+        let (encodeImmutableFields, encodeMutableFields) = Player.encodeFields!(tempIndex, nftUri, selfContractId!(), gameContract, c, callerAddress!(), [1,1,1], [5,5,5,0], c, [c,c,c,c])
 
         let contractId = copyCreateSubContractWithToken!{callerAddress!() -> ALPH: minimalContractDeposit!()}(
             toByteVec!(tempIndex),
@@ -83,38 +82,6 @@ Contract PlayerBase(
         totalSupply = totalSupply + 1
 
         emit Mint(callerAddress!(), tempIndex, contractId)
-    }
-
-    // ANS functionality ~ need scripts
-    @using(preapprovedAssets = true, checkExternalCaller = false, updateFields = false)
-    pub fn updateNickname(paca: ByteVec, newNickName: ByteVec) -> () {
-
-        Player(paca).editNick(newNickName)
-
-    }
-
-    @using(preapprovedAssets = true, checkExternalCaller = false, updateFields = false)
-    pub fn updateLinkedAddress(paca: ByteVec, newAddress: Address) -> () {
-
-        Player(paca).editLinkedAddress(newAddress)
-
-    }
-
-    // send asset function to specific paca
-
-    // PACA Move Assignment ~ need scripts
-    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = true)
-    pub fn assignPacaMove(paca: ByteVec, slot: U256, move: ByteVec) -> () {
-        assert!(slot < 4, ErrorCodes.InvalidMoveSlot)
-
-        Player(paca).assignMove{callerAddress!() -> move: 1}(callerAddress!(), slot, move)
-    }
-
-    @using(assetsInContract = enforced, checkExternalCaller = false, updateFields = false)
-    pub fn unlinkMove(paca: ByteVec, slot: U256) -> () {
-        assert!(slot < 4, ErrorCodes.InvalidMoveSlot)
-
-        Player(paca).unAssignMove(callerAddress!(), slot)
     }
 
     // edit
@@ -140,8 +107,9 @@ Contract PlayerBase(
         migrateWithFields!(newCode, newImmFieldsEncoded, newMutFieldsEncoded)
     }
 
-    // upgrade nfts
-    @using(checkExternalCaller = false)
+    // upgrade nfts, collection owner only for now
+
+    @using(checkExternalCaller = false, preapprovedAssets = false)
     pub fn updateALPHpacaCode(nft: ByteVec) -> () {
         assert!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
         // get the data associated with the NFT
@@ -155,7 +123,7 @@ Contract PlayerBase(
         Player(nft).updatePlayerCode(code)
     }
 
-    @using(checkExternalCaller = false)
+    @using(checkExternalCaller = false, preapprovedAssets =  false)
     pub fn updateALPHpacaFields(nft: ByteVec) -> () {
         assert!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
         // get the data associated with the NFT
