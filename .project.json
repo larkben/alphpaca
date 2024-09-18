@@ -1,1 +1,260 @@
-
+{
+  "fullNodeVersion": "v3.6.0",
+  "compilerOptionsUsed": {
+    "ignoreUnusedConstantsWarnings": false,
+    "ignoreUnusedVariablesWarnings": false,
+    "ignoreUnusedFieldsWarnings": false,
+    "ignoreUnusedPrivateFunctionsWarnings": false,
+    "ignoreUpdateFieldsCheckWarnings": false,
+    "ignoreCheckExternalCallerWarnings": false,
+    "ignoreUnusedFunctionReturnWarnings": false
+  },
+  "infos": {
+    "ALPHpacaBattles": {
+      "sourceFile": "gamefi/alphpaca.ral",
+      "sourceCodeHash": "d3158ca327bc2229a0fba29c5935b8bc49019ee041efce1681708bf38ca9f361",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "c334278365b7b79574fb13664b9f64430a53833357e6e2d2eb423df1980f4a7d"
+    },
+    "ActivateWalfProtocol": {
+      "sourceFile": "walf/walf.ral",
+      "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "AdminTools": {
+      "sourceFile": "gamefi/admin_tools.ral",
+      "sourceCodeHash": "d4321e5de0286f517718d371f65bb814917cf210bb192d958ab8569732b4fd73",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "AllMoves": {
+      "sourceFile": "gamefi/moves/allmoves.ral",
+      "sourceCodeHash": "bb1c347670e24a9e9948b61c1bd1133f3e096108bdd14808632a7181f75fc918",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "d1d9c26d11ced31c371b000bf4c382299633378ae3f4503ea5cb3122727d6122"
+    },
+    "BasicMove": {
+      "sourceFile": "gamefi/moves/basicMove.ral",
+      "sourceCodeHash": "32a050a5d79198962cc71e334cf17d1e3a056d87cc770ca3ab377bab81d649e9",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "64999dc96de4d67708ed525228a98425ecca3a3b0626d66b3cb6475e03ac3f5a"
+    },
+    "Buildtoken": {
+      "sourceFile": "createtoken/tx_make_token_alph.ral",
+      "sourceCodeHash": "ce9de973033c53adde5b0f4758b34dfa3da12a439ad684d5f6b48e6830f71f08",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "CollectFees": {
+      "sourceFile": "createtoken/tx_collectfees.ral",
+      "sourceCodeHash": "064c03c31e64485c8f72ef99dadad4471b1967e54ce43c073114cdfed3175eb1",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "CollectOgAlfFees": {
+      "sourceFile": "walf/walf.ral",
+      "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "CreateToken": {
+      "sourceFile": "createtoken/createtoken.ral",
+      "sourceCodeHash": "9cf9397f420f1e1f32edc4b0a9aa8ae438de14614960f14225b26cb4dacb1239",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "2417efe145ca648a8d8cbc37ef9bc41b7d2f28406925fe7a88725c33a61542d9"
+    },
+    "Destroy": {
+      "sourceFile": "scripts/destroy_faucet.ral",
+      "sourceCodeHash": "0447e8824afa27dc76fdcaac5fac72247eb5b4aa93d5efc87da36d1450e1c4f7",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "DestroyOgAlfProtocol": {
+      "sourceFile": "walf/walf.ral",
+      "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "Destroycreator": {
+      "sourceFile": "createtoken/tx_destroy.ral",
+      "sourceCodeHash": "0181b19d66c8aa817f466b2a360f40eac7e4557e101666bde9b10039ccf4ea05",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "EditCollectionUri": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "EditOgAlfFees": {
+      "sourceFile": "walf/walf.ral",
+      "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "Editfee": {
+      "sourceFile": "scripts/editfee.ral",
+      "sourceCodeHash": "9cdeae542bc4274f07cc34f10ac8142a5cfad433a84eeb6e5ed35f7c6b6edc09",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "Faucet": {
+      "sourceFile": "paca_faucet.ral",
+      "sourceCodeHash": "bdce2b9ca1b63c08b828775dddf23302f9d95a35798033bdc5262f7279ea06b5",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "236dc0af410205d895500f454e6acbce51ba2c88b644b47aa75d40bcf21f2ad0"
+    },
+    "FeeCollection": {
+      "sourceFile": "test_fees.ral",
+      "sourceCodeHash": "c57c6d50b3844a156c7fcf9bed5ad1e8656db4a33099ccd3771e6d9c739f34b8",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "8671dc4d763fef38a37762180a03a69d0a42c85466d4fee89b25e8598c5645fb"
+    },
+    "Gettoken": {
+      "sourceFile": "scripts/tokentest.ral",
+      "sourceCodeHash": "3e20a0e7e5ce052d940807ee059265d115a136931f0d38aea4484b5b29b4859b",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "HeldItems": {
+      "sourceFile": "gamefi/helditem/helditems.ral",
+      "sourceCodeHash": "8b7305190c707d12d6eb66756d52c5b2a875afece63c80ed35d6835c84316e73",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "30a31a7652cd30e43102600ff03da201166d6548eec921129f94f0e23e59a9b6"
+    },
+    "IFungibleToken": {
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "INFT": {
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_interface.ral",
+      "sourceCodeHash": "92956f4e61c198f011b48dbda2ed76193ffc79ac9c39f60bf1763a34e02f2c41",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "INFTCollection": {
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_collection_interface.ral",
+      "sourceCodeHash": "9b199426ea89c188ce858b48ab809f13b9fc1ed0d64ca91e3d600eda8fbf6c42",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "Item": {
+      "sourceFile": "gamefi/helditem/item.ral",
+      "sourceCodeHash": "7ca89add68ed9a5d247138d11540447cde41e060b03e1b9961305d72440554cc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "52477ea85904f714a088d0eb44252f6970eb47c6b4d208b80fb031491f9c5aa6"
+    },
+    "MintAlf": {
+      "sourceFile": "walf/walf.ral",
+      "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "MintOgAlf": {
+      "sourceFile": "walf/walf.ral",
+      "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "MintPlayer": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "MoveReturn": {
+      "sourceFile": "gamefi/moves/basicMove.ral",
+      "sourceCodeHash": "32a050a5d79198962cc71e334cf17d1e3a056d87cc770ca3ab377bab81d649e9",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "Player": {
+      "sourceFile": "gamefi/player.ral",
+      "sourceCodeHash": "6fb4e4595e8d33df53c1edceb6679705784ebc0a3b1deeb2dbd90e9d4ae4d77f",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "d4a2e646b9fc117314caf74cff0a3743119f629a76bdb425e73b35d1327aaa93"
+    },
+    "PlayerBase": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "6f4fa43ffea4e9f9a3d960b35d913adce653c501ebcac64d150092b2948c3a45"
+    },
+    "PowerMove": {
+      "sourceFile": "gamefi/moves/powerMove.ral",
+      "sourceCodeHash": "a82537fd4c644d7cbcaf183a07e5d9d04f9379c841eb6e1b8c51cc3d1876b8b1",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "e4b8b71d6658f7d964db2e2dad368ee721f5182cc7a4df7dd2b2bf71c97f8bb4"
+    },
+    "RecoilMove": {
+      "sourceFile": "gamefi/moves/recoilMove.ral",
+      "sourceCodeHash": "fc0f9bcd0f9154dd5f36109205ffa1904b0e66df8a4f80e6c820166b83147b3f",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "242d9272a7499afd4ec3718aa114c33aa18fb47aa64ccd94655f860935c650c3"
+    },
+    "Sendout": {
+      "sourceFile": "scripts/withdraw.ral",
+      "sourceCodeHash": "bf59ec6bec02c4215901434da53d8078a0dad0909ba40d83042fcf298fa9b87f",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "Token": {
+      "sourceFile": "createtoken/token.ral",
+      "sourceCodeHash": "9c20c0b49bb6743d8c9182715fabf3c3976e41cb9ed4e7bf3ebcf3723450e904",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "215fe6aae7ba67810780a11c1f098f7845593d41f36aa7b99c737e2021b33c7b"
+    },
+    "Topup": {
+      "sourceFile": "scripts/deposit.ral",
+      "sourceCodeHash": "135b04fe1d2f2159f536e686fddff9fa5e33119faea0c4ad766a1c91cb82cefe",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpdateCreationFee": {
+      "sourceFile": "createtoken/tx_updatefee.ral",
+      "sourceCodeHash": "930ec4ac679793f934b95521e88b750e414af71820c72f9bcfd03cb747fedd15",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpdateNFT": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpdateNFTFields": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpgradeCollectionCode": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpgradeCollectionFields": {
+      "sourceFile": "gamefi/playerbase.ral",
+      "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "Withdrawlassets": {
+      "sourceFile": "scripts/tokentesttwo.ral",
+      "sourceCodeHash": "5f365d681775d5ef7a91db608b378978177c127b14a6835538487a7956f3d61f",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "WrappedOgAlfProtocol": {
+      "sourceFile": "walf/walf.ral",
+      "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "b01b6b7db2945f4a58decc02a85c64337321f852569e692aa793274740f2f626"
+    }
+  }
+}

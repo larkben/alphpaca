@@ -1,0 +1,74 @@
+Contract CreateToken(
+    owner: Address,          //* Creator
+    contract: ByteVec,       //* Token Contract
+    mut alphfee: U256,
+    mut alphcollected: U256
+) {
+
+    event Destroy(user: Address)
+    event CreateToken(user: Address, contract: ByteVec)
+
+    enum ErrorCodes {
+        InvalidCaller = 1
+    }
+
+    pub fn getFee() -> U256 {
+        return alphfee
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn buildtoken(symbol: ByteVec, name: ByteVec, decimals: U256, tokenTotal: U256) -> () {
+
+        let minter = callerAddress!()
+
+        transferToken!(minter, selfAddress!(), ALPH, alphfee)
+
+        alphcollected = alphcollected + alphfee
+
+        let (encodeImmutableFields, encodeMutableFields) = Token.encodeFields!(symbol, name, decimals, tokenTotal, minter)
+
+        let contractID = copyCreateContractWithToken!{minter -> ALPH: 1 alph}(
+            contract,                                                                                  
+            encodeImmutableFields,
+            encodeMutableFields,
+            tokenTotal,
+            minter
+        )
+
+        emit CreateToken(minter, contractID)
+    }
+    
+    @using(updateFields = true, checkExternalCaller = true)
+    pub fn updatefee(newfee: U256) -> () {
+
+        let caller = callerAddress!()
+
+        checkCaller!(owner == caller, ErrorCodes.InvalidCaller)
+
+        alphfee = newfee
+    }
+
+    @using(assetsInContract = true, updateFields = true, checkExternalCaller = true)
+    pub fn collectfees() -> () {
+
+        let caller = callerAddress!()
+
+        checkCaller!(owner == caller, ErrorCodes.InvalidCaller)
+
+        transferToken!(selfAddress!(), owner, ALPH, alphcollected)
+
+        alphcollected = alphcollected - alphcollected
+    }
+
+    @using(assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn destroycreator() -> () {
+
+        let caller = callerAddress!()
+
+        checkCaller!(owner == caller, ErrorCodes.InvalidCaller)
+
+        destroySelf!(owner)
+
+        emit Destroy(owner)
+    }
+}

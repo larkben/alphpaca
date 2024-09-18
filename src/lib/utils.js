@@ -1,6 +1,6 @@
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { addressFromContractId, NodeProvider, ExplorerProvider, web3, hexToString, number256ToBigint, prettifyNumber, prettifyNumberConfig } from '@alephium/web3'
+import { addressFromContractId, NodeProvider, node, web3, hexToString, number256ToBigint, prettifyNumber, prettifyNumberConfig } from '@alephium/web3'
 import axios from 'axios';
 
 const TOKEN_LIST_URL = 'https://raw.githubusercontent.com/alephium/token-list/master/tokens/mainnet.json';
@@ -71,14 +71,6 @@ export async function waitTxConfirmed(provider, txId) {
 const prettifyConfig = {
   ...prettifyNumberConfig['ALPH'],
   maxDecimalPlaces: 2
-}
-
-export function getNodeProvider() {
-  return new NodeProvider("https://node.alphaga.app")
-}
-
-export function getExplorerProvider() {
-  return new ExplorerProvider("https://backend.mainnet.alephium.org")
 }
 
 export function formatNFTPrice(price) {

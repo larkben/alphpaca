@@ -1,0 +1,41 @@
+import "std/nft_interface"
+
+Contract RecoilMove(
+  // basic params
+  nftIndex: U256,
+  mut tokenUri: ByteVec,    // allows the tokenUri to be edited
+  collectionId: ByteVec,
+  power: U256,
+  recoil: U256
+) implements INFT {
+
+  enum ErrorCodes {
+    NotCalledFromCollection = 0
+  }
+
+  pub fn getTokenUri() -> ByteVec {
+    return tokenUri
+  }
+
+  pub fn getNFTIndex() -> U256 {
+    return nftIndex
+  }
+
+  pub fn getCollectionIndex() -> (ByteVec, U256) {
+    return collectionId, nftIndex
+  }
+
+  // need function calls from parent collection contract
+  @using(checkExternalCaller = true, updateFields = true)
+  pub fn editUri(newUri: ByteVec) -> () {
+    let addressCalled = contractIdToAddress!(collectionId)
+
+    checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
+    tokenUri = newUri
+  }
+
+  pub fn performMove() -> MoveReturn {
+    let a = MoveReturn { p: power, a: 100, r: recoil }
+    return a
+  }
+}

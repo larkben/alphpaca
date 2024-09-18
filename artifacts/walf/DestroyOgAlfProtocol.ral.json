@@ -1,0 +1,25 @@
+{
+  "version": "v3.6.0",
+  "name": "DestroyOgAlfProtocol",
+  "bytecodeTemplate": "010103000000040c0c{0}0107",
+  "fieldsSig": {
+    "names": [
+      "contract"
+    ],
+    "types": [
+      "WrappedOgAlfProtocol"
+    ],
+    "isMutable": [
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

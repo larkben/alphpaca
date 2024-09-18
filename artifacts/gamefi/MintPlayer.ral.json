@@ -1,0 +1,28 @@
+{
+  "version": "v3.6.0",
+  "name": "MintPlayer",
+  "bytecodeTemplate": "0101030000000cb47a{1}0da3d1a2{1}0d0c{0}0104",
+  "fieldsSig": {
+    "names": [
+      "collection",
+      "tokenSelected"
+    ],
+    "types": [
+      "PlayerBase",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

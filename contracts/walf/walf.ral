@@ -1,0 +1,180 @@
+Contract WrappedOgAlfProtocol (
+    walf: ByteVec,
+    mut walfamount: U256,
+    owner: Address,
+    //
+    ogalf: ByteVec,
+    mut ogalfamount: U256,
+    //
+    mut fee: U256,
+    mut feescollected: U256
+) {
+
+    event WrappedAlfMinted(who: Address, amount: U256)
+    event OgAlfRedeemed(who: Address, amount: U256)
+
+    enum ErrorCodes {
+        InvalidOgAlf = 0
+        InvalidWrappedAlf = 1
+        OgAlfInContract = 2
+        InvalidCaller = 3
+    }
+
+    pub fn getWalfToken() -> ByteVec {
+        return walf
+    }
+
+    pub fn getWalfAmount() -> U256 {
+        return walfamount
+    }
+
+    pub fn getOwner() -> Address {
+        return owner
+    }
+
+    pub fn getOgAlf() -> ByteVec {
+        return ogalf
+    }
+
+    pub fn getFee() -> U256 {
+        return fee
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn mintalf(amount: U256) -> () {
+
+        assert!(amount > 0, ErrorCodes.InvalidOgAlf)
+
+        ogalfamount = ogalfamount + amount
+
+        let minter = callerAddress!()
+
+        let mintedamount = amount * 1000000000000000000 // 1 with 18 decimals
+
+        transferToken!(minter, selfAddress!(), ALPH, fee)
+        transferToken!(minter, selfAddress!(), getOgAlf(), amount)
+
+        transferToken!(selfAddress!(), minter, getWalfToken(), mintedamount) 
+
+        walfamount = walfamount - amount
+
+        feescollected = feescollected + fee
+
+        emit WrappedAlfMinted(minter, mintedamount)
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn mintogalf(amount: U256) -> () {
+
+        assert!(amount > 999999999999999999, ErrorCodes.InvalidWrappedAlf) // 9999 w/ 4 decimals
+
+        walfamount = walfamount + amount
+
+        let minter = callerAddress!()
+
+        let mintedamount = amount / 1000000000000000000 // 1 w/ 18 decimals
+
+        transferToken!(minter, selfAddress!(), ALPH, fee)
+        transferToken!(minter, selfAddress!(), getWalfToken(), amount)
+
+        transferToken!(selfAddress!(), minter, ogalf, mintedamount)
+        
+        ogalfamount = ogalfamount - mintedamount
+
+        feescollected = feescollected + fee
+
+        emit OgAlfRedeemed(minter, mintedamount)
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = false, checkExternalCaller = true)
+    pub fn destroyprotocol() -> () {
+
+        assert!(ogalfamount < 5, ErrorCodes.OgAlfInContract) // 5 is a saftey net here
+
+        transferToken!(selfAddress!(), owner, getOgAlf(), ogalfamount)
+
+        transferToken!(selfAddress!(), owner, getWalfToken(), walfamount)
+
+        checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
+
+        destroySelf!(owner)
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = true, updateFields = true, checkExternalCaller = true)
+    pub fn collectfees() -> () {
+
+        checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
+
+        transferToken!(selfAddress!(), owner, ALPH, feescollected)
+
+        feescollected = feescollected - feescollected
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = true)
+    pub fn topupwalf() -> () {
+
+        checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
+
+        transferToken!(callerAddress!(), selfAddress!(), getWalfToken(), 99000000000000000000)
+
+        walfamount = walfamount + 99000000000000000000
+    }
+
+    @using(preapprovedAssets = false, assetsInContract = false, updateFields = true, checkExternalCaller = true)
+    pub fn editfee(newfee: U256) -> () {
+
+        checkCaller!(owner == callerAddress!(), ErrorCodes.InvalidCaller)
+
+        fee = newfee
+    }
+    
+}
+
+TxScript MintOgAlf(
+    contract: WrappedOgAlfProtocol,
+    amount: U256
+) {
+    let wrappedalph = contract.getWalfToken()
+
+    let fee = contract.getFee()
+
+    contract.mintogalf{callerAddress!() -> wrappedalph: amount, ALPH: fee}(amount)
+}
+
+TxScript MintAlf(
+    contract: WrappedOgAlfProtocol,
+    amount: U256
+) {
+    let ogalph = contract.getOgAlf()
+
+    let fee = contract.getFee()
+
+    contract.mintalf{callerAddress!() -> ogalph: amount, ALPH: fee}(amount)
+}
+
+TxScript CollectOgAlfFees(
+    contract: WrappedOgAlfProtocol
+) {
+    contract.collectfees()
+}
+
+TxScript EditOgAlfFees(
+    contract: WrappedOgAlfProtocol,
+    newfee: U256
+) {
+    contract.editfee(newfee)
+}
+
+TxScript DestroyOgAlfProtocol(
+    contract: WrappedOgAlfProtocol
+) {
+    contract.destroyprotocol()
+}
+
+TxScript ActivateWalfProtocol(
+    contract: WrappedOgAlfProtocol
+) {
+    let walf = contract.getWalfToken()
+
+    contract.topupwalf{callerAddress!() -> walf: 99000000000000000000}()
+}

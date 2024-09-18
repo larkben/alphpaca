@@ -1,0 +1,6 @@
+TxScript UpdateCreationFee (
+    contract: CreateToken,
+    amount: U256
+) {
+    contract.updatefee(amount)
+}
