@@ -1,8 +1,8 @@
 {
   "version": "v3.6.3",
   "name": "FindBattle",
-  "bytecode": "02024037404b01030105001ed3ce9049b416001701b41600130264130fca0d65130f0313056417031702b4d1a21601ce0116021603bf170405b416045f010001010008d3caa32a2cb4ce00450c7b1600ba",
-  "codeHash": "6b200b448476b04263c3503a9546c58e93cdf8984632eef618f3c985bad56dd0",
+  "bytecode": "0208403740524067407c409140a640ba40d201030105001ed3ce9049b416001701b41600130264130fca0d65130f0313056417031702b4d1a21601ce0116021603bf170405b416045f01000203000bd3dd105cf01600170216010d0c160201040616005e010001020007d3aac0c91c160017010c0c16010105010001020007d35b9c889b160017010c0c16010106010001020007d3bbffa38d160017010c0c16010107010001020007d389ef220a160017010c0c16010108010001040008d3caa32a2cb4ce00450c7b1600ba01000303000ad3a1f8a5bfb4ce00450c7b160016011602bb",
+  "codeHash": "42ad007606a100169a3471de6201a75a2e168d43cb545afb7683b48e1de1e674",
   "fieldsSig": {
     "names": [
       "admin",
@@ -28,6 +28,15 @@
         "Address",
         "ByteVec"
       ]
+    },
+    {
+      "name": "BattleStart",
+      "fieldNames": [
+        "id"
+      ],
+      "fieldTypes": [
+        "ByteVec"
+      ]
     }
   ],
   "functions": [
@@ -35,6 +44,74 @@
       "name": "createBattle",
       "paramNames": [
         "paca"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "start",
+      "paramNames": [
+        "contractId",
+        "paca"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "attack",
+      "paramNames": [
+        "contractId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "end",
+      "paramNames": [
+        "contractId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "leavebattle",
+      "paramNames": [
+        "contractId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "cancel",
+      "paramNames": [
+        "contractId"
       ],
       "paramTypes": [
         "ByteVec"
@@ -53,6 +130,25 @@
         "ByteVec"
       ],
       "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "upgradeFields",
+      "paramNames": [
+        "newCode",
+        "immutable",
+        "mutable"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
         false
       ],
       "returnTypes": []

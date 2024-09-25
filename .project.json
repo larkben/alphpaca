@@ -34,6 +34,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": "d1d9c26d11ced31c371b000bf4c382299633378ae3f4503ea5cb3122727d6122"
     },
+    "Attack": {
+      "sourceFile": "gamefi/battle/findbattle.ral",
+      "sourceCodeHash": "721792157e3d553b04bce5e3ca10c45b106c5e2889742a33e169185760cedd58",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "BasicMove": {
       "sourceFile": "gamefi/moves/basicMove.ral",
       "sourceCodeHash": "32a050a5d79198962cc71e334cf17d1e3a056d87cc770ca3ab377bab81d649e9",
@@ -42,13 +48,19 @@
     },
     "Battle": {
       "sourceFile": "gamefi/battle/pvp.ral",
-      "sourceCodeHash": "00347e8e874e225f1cc87dae23759d04c2aa766e0a05781c1bccdf43b64d3be9",
+      "sourceCodeHash": "22e57363b3d65594b49ecc9596cf8483f7935e0901ffd9aba0ef371befee2c2d",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "a5a2b218da4446e4d7068c8a3d638ab11fa2055be57661b53c8e409bb23f1a45"
+      "codeHashDebug": "fca01f50a68a370af36c825f20238c33e5465dcc366f175a5e6c8c0790a76e88"
     },
     "Buildtoken": {
       "sourceFile": "createtoken/tx_make_token_alph.ral",
       "sourceCodeHash": "ce9de973033c53adde5b0f4758b34dfa3da12a439ad684d5f6b48e6830f71f08",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "Cancel": {
+      "sourceFile": "gamefi/battle/findbattle.ral",
+      "sourceCodeHash": "721792157e3d553b04bce5e3ca10c45b106c5e2889742a33e169185760cedd58",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -61,6 +73,12 @@
     "CollectOgAlfFees": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "CreatePvp": {
+      "sourceFile": "gamefi/battle/findbattle.ral",
+      "sourceCodeHash": "721792157e3d553b04bce5e3ca10c45b106c5e2889742a33e169185760cedd58",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -106,6 +124,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "End": {
+      "sourceFile": "gamefi/battle/findbattle.ral",
+      "sourceCodeHash": "721792157e3d553b04bce5e3ca10c45b106c5e2889742a33e169185760cedd58",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "Faucet": {
       "sourceFile": "paca_faucet.ral",
       "sourceCodeHash": "bdce2b9ca1b63c08b828775dddf23302f9d95a35798033bdc5262f7279ea06b5",
@@ -120,9 +144,9 @@
     },
     "FindBattle": {
       "sourceFile": "gamefi/battle/findbattle.ral",
-      "sourceCodeHash": "c5bc6ed5ff59973bc73b11b532bded092320049fb002dab80b72d49085a62eed",
+      "sourceCodeHash": "721792157e3d553b04bce5e3ca10c45b106c5e2889742a33e169185760cedd58",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "6b200b448476b04263c3503a9546c58e93cdf8984632eef618f3c985bad56dd0"
+      "codeHashDebug": "42ad007606a100169a3471de6201a75a2e168d43cb545afb7683b48e1de1e674"
     },
     "Gettoken": {
       "sourceFile": "scripts/tokentest.ral",
@@ -159,6 +183,12 @@
       "sourceCodeHash": "7ca89add68ed9a5d247138d11540447cde41e060b03e1b9961305d72440554cc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "52477ea85904f714a088d0eb44252f6970eb47c6b4d208b80fb031491f9c5aa6"
+    },
+    "LeaveBattle": {
+      "sourceFile": "gamefi/battle/findbattle.ral",
+      "sourceCodeHash": "721792157e3d553b04bce5e3ca10c45b106c5e2889742a33e169185760cedd58",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
     },
     "MintAlf": {
       "sourceFile": "walf/walf.ral",
@@ -214,6 +244,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "Start": {
+      "sourceFile": "gamefi/battle/findbattle.ral",
+      "sourceCodeHash": "721792157e3d553b04bce5e3ca10c45b106c5e2889742a33e169185760cedd58",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "Token": {
       "sourceFile": "createtoken/token.ral",
       "sourceCodeHash": "9c20c0b49bb6743d8c9182715fabf3c3976e41cb9ed4e7bf3ebcf3723450e904",
@@ -253,6 +289,18 @@
     "UpgradeCollectionFields": {
       "sourceFile": "gamefi/playerbase.ral",
       "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpgradeFindBattle": {
+      "sourceFile": "gamefi/battle/findbattle.ral",
+      "sourceCodeHash": "721792157e3d553b04bce5e3ca10c45b106c5e2889742a33e169185760cedd58",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpgradeFindBattleWithFields": {
+      "sourceFile": "gamefi/battle/findbattle.ral",
+      "sourceCodeHash": "721792157e3d553b04bce5e3ca10c45b106c5e2889742a33e169185760cedd58",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },

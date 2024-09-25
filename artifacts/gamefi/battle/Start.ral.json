@@ -1,0 +1,31 @@
+{
+  "version": "v3.6.3",
+  "name": "Start",
+  "bytecodeTemplate": "01010300000006{1}{2}0e0c{0}0101",
+  "fieldsSig": {
+    "names": [
+      "market",
+      "contractId",
+      "paca"
+    ],
+    "types": [
+      "FindBattle",
+      "ByteVec",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

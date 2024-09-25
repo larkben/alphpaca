@@ -3,6 +3,7 @@ Contract FindBattle(
     pvp: ByteVec
 ) {
     event Battle(who: Address, id: ByteVec)
+    event BattleStart(id: ByteVec)
 
     enum Error {
         NotAdmin = 0
@@ -26,10 +27,116 @@ Contract FindBattle(
         emit Battle(callerAddress!(), battleId)
     }
 
+    @using(checkExternalCaller = false)
+    pub fn start(contractId: ByteVec, paca: ByteVec) -> () {
+        let battle = Battle(contractId)
+
+        battle.acceptBattle(paca)
+
+        emit BattleStart(contractId)
+    }
+
+    @using(checkExternalCaller = false)
+    pub fn attack(contractId: ByteVec) -> () {
+        let battle = Battle(contractId)
+
+        battle.attack()
+    }
+
+    @using(checkExternalCaller = false)
+    pub fn end(contractId: ByteVec) -> () {
+        let battle = Battle(contractId)
+
+        battle.endbattle()
+    }
+
+    @using(checkExternalCaller = false)
+    pub fn leavebattle(contractId: ByteVec) -> () {
+        let battle = Battle(contractId)
+
+        battle.leave()
+    }
+
+    @using(checkExternalCaller = false)
+    pub fn cancel(contractId: ByteVec) -> () {
+        let battle = Battle(contractId)
+
+        battle.cancel()
+    }
+
     @using(checkExternalCaller = true)
     pub fn upgrade(newCode: ByteVec) -> () {
         checkCaller!(callerAddress!() == admin, Error.NotAdmin)
 
         migrate!(newCode)
     }
+
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn upgradeFields(newCode: ByteVec, immutable: ByteVec, mutable: ByteVec) -> () {
+        checkCaller!(callerAddress!() == admin, Error.NotAdmin)
+
+        migrateWithFields!(newCode, immutable, mutable)
+    }
+
+}
+
+TxScript CreatePvp (
+    market: FindBattle,
+    paca: ByteVec
+) {
+    market.createBattle{callerAddress!() -> ALPH: minimalContractDeposit!()}(paca)
+}
+
+TxScript Start (
+    market: FindBattle,
+    contractId: ByteVec,
+    paca: ByteVec
+) {
+    market.start(contractId, paca)
+}
+
+TxScript Attack (
+    market: FindBattle,
+    contractId: ByteVec
+) {
+    market.attack(contractId)
+}
+
+TxScript End (
+    market: FindBattle,
+    contractId: ByteVec
+) {
+    market.end(contractId)
+}
+
+TxScript LeaveBattle (
+    market: FindBattle,
+    contractId: ByteVec
+) {
+    market.leavebattle(contractId)
+}
+
+TxScript Cancel (
+    market: FindBattle,
+    contractId: ByteVec
+) {
+    market.cancel(contractId)
+}
+
+// upgrades
+
+TxScript UpgradeFindBattle (
+    market: FindBattle,
+    newCode: ByteVec
+) {
+    market.upgrade(newCode)
+}
+
+TxScript UpgradeFindBattleWithFields (
+    market: FindBattle,
+    newCode: ByteVec,
+    immutable: ByteVec,
+    mutable: ByteVec
+) {
+    market.upgradeFields(newCode, immutable, mutable)
 }

@@ -88,7 +88,12 @@ Contract Battle (
     pub fn leave() -> () {
         checkCaller!(callerAddress!() == whoTurn(), ErrorCodes.InvalidCaller)
 
-        destroySelf!(playerOne)
+        if (whoTurn() == playerOne) {
+            destroySelf!(playerTwo)
+        }
+        else {
+            destroySelf!(playerOne)
+        }
     }
 
     @using(checkExternalCaller = true, assetsInContract = true)

@@ -46,14 +46,43 @@ export namespace FindBattleTypes {
   export type State = ContractState<Fields>;
 
   export type BattleEvent = ContractEvent<{ who: Address; id: HexString }>;
+  export type BattleStartEvent = ContractEvent<{ id: HexString }>;
 
   export interface CallMethodTable {
     createBattle: {
       params: CallContractParams<{ paca: HexString }>;
       result: CallContractResult<null>;
     };
+    start: {
+      params: CallContractParams<{ contractId: HexString; paca: HexString }>;
+      result: CallContractResult<null>;
+    };
+    attack: {
+      params: CallContractParams<{ contractId: HexString }>;
+      result: CallContractResult<null>;
+    };
+    end: {
+      params: CallContractParams<{ contractId: HexString }>;
+      result: CallContractResult<null>;
+    };
+    leavebattle: {
+      params: CallContractParams<{ contractId: HexString }>;
+      result: CallContractResult<null>;
+    };
+    cancel: {
+      params: CallContractParams<{ contractId: HexString }>;
+      result: CallContractResult<null>;
+    };
     upgrade: {
       params: CallContractParams<{ newCode: HexString }>;
+      result: CallContractResult<null>;
+    };
+    upgradeFields: {
+      params: CallContractParams<{
+        newCode: HexString;
+        immutable: HexString;
+        mutable: HexString;
+      }>;
       result: CallContractResult<null>;
     };
   }
@@ -78,8 +107,39 @@ export namespace FindBattleTypes {
       params: SignExecuteContractMethodParams<{ paca: HexString }>;
       result: SignExecuteScriptTxResult;
     };
+    start: {
+      params: SignExecuteContractMethodParams<{
+        contractId: HexString;
+        paca: HexString;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    attack: {
+      params: SignExecuteContractMethodParams<{ contractId: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    end: {
+      params: SignExecuteContractMethodParams<{ contractId: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    leavebattle: {
+      params: SignExecuteContractMethodParams<{ contractId: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    cancel: {
+      params: SignExecuteContractMethodParams<{ contractId: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
     upgrade: {
       params: SignExecuteContractMethodParams<{ newCode: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    upgradeFields: {
+      params: SignExecuteContractMethodParams<{
+        newCode: HexString;
+        immutable: HexString;
+        mutable: HexString;
+      }>;
       result: SignExecuteScriptTxResult;
     };
   }
@@ -101,7 +161,7 @@ class Factory extends ContractFactory<
     );
   }
 
-  eventIndex = { Battle: 0 };
+  eventIndex = { Battle: 0, BattleStart: 1 };
   consts = { Error: { NotAdmin: BigInt("0") } };
 
   at(address: string): FindBattleInstance {
@@ -117,6 +177,46 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "createBattle", params, getContractByCodeHash);
     },
+    start: async (
+      params: TestContractParamsWithoutMaps<
+        FindBattleTypes.Fields,
+        { contractId: HexString; paca: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "start", params, getContractByCodeHash);
+    },
+    attack: async (
+      params: TestContractParamsWithoutMaps<
+        FindBattleTypes.Fields,
+        { contractId: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "attack", params, getContractByCodeHash);
+    },
+    end: async (
+      params: TestContractParamsWithoutMaps<
+        FindBattleTypes.Fields,
+        { contractId: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "end", params, getContractByCodeHash);
+    },
+    leavebattle: async (
+      params: TestContractParamsWithoutMaps<
+        FindBattleTypes.Fields,
+        { contractId: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "leavebattle", params, getContractByCodeHash);
+    },
+    cancel: async (
+      params: TestContractParamsWithoutMaps<
+        FindBattleTypes.Fields,
+        { contractId: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "cancel", params, getContractByCodeHash);
+    },
     upgrade: async (
       params: TestContractParamsWithoutMaps<
         FindBattleTypes.Fields,
@@ -124,6 +224,14 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "upgrade", params, getContractByCodeHash);
+    },
+    upgradeFields: async (
+      params: TestContractParamsWithoutMaps<
+        FindBattleTypes.Fields,
+        { newCode: HexString; immutable: HexString; mutable: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "upgradeFields", params, getContractByCodeHash);
     },
   };
 
@@ -141,7 +249,7 @@ export const FindBattle = new Factory(
   Contract.fromJson(
     FindBattleContractJson,
     "",
-    "6b200b448476b04263c3503a9546c58e93cdf8984632eef618f3c985bad56dd0",
+    "42ad007606a100169a3471de6201a75a2e168d43cb545afb7683b48e1de1e674",
     AllStructs
   )
 );
@@ -173,6 +281,33 @@ export class FindBattleInstance extends ContractInstance {
     );
   }
 
+  subscribeBattleStartEvent(
+    options: EventSubscribeOptions<FindBattleTypes.BattleStartEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      FindBattle.contract,
+      this,
+      options,
+      "BattleStart",
+      fromCount
+    );
+  }
+
+  subscribeAllEvents(
+    options: EventSubscribeOptions<
+      FindBattleTypes.BattleEvent | FindBattleTypes.BattleStartEvent
+    >,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvents(
+      FindBattle.contract,
+      this,
+      options,
+      fromCount
+    );
+  }
+
   view = {
     createBattle: async (
       params: FindBattleTypes.CallMethodParams<"createBattle">
@@ -181,6 +316,55 @@ export class FindBattleInstance extends ContractInstance {
         FindBattle,
         this,
         "createBattle",
+        params,
+        getContractByCodeHash
+      );
+    },
+    start: async (
+      params: FindBattleTypes.CallMethodParams<"start">
+    ): Promise<FindBattleTypes.CallMethodResult<"start">> => {
+      return callMethod(
+        FindBattle,
+        this,
+        "start",
+        params,
+        getContractByCodeHash
+      );
+    },
+    attack: async (
+      params: FindBattleTypes.CallMethodParams<"attack">
+    ): Promise<FindBattleTypes.CallMethodResult<"attack">> => {
+      return callMethod(
+        FindBattle,
+        this,
+        "attack",
+        params,
+        getContractByCodeHash
+      );
+    },
+    end: async (
+      params: FindBattleTypes.CallMethodParams<"end">
+    ): Promise<FindBattleTypes.CallMethodResult<"end">> => {
+      return callMethod(FindBattle, this, "end", params, getContractByCodeHash);
+    },
+    leavebattle: async (
+      params: FindBattleTypes.CallMethodParams<"leavebattle">
+    ): Promise<FindBattleTypes.CallMethodResult<"leavebattle">> => {
+      return callMethod(
+        FindBattle,
+        this,
+        "leavebattle",
+        params,
+        getContractByCodeHash
+      );
+    },
+    cancel: async (
+      params: FindBattleTypes.CallMethodParams<"cancel">
+    ): Promise<FindBattleTypes.CallMethodResult<"cancel">> => {
+      return callMethod(
+        FindBattle,
+        this,
+        "cancel",
         params,
         getContractByCodeHash
       );
@@ -196,6 +380,17 @@ export class FindBattleInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    upgradeFields: async (
+      params: FindBattleTypes.CallMethodParams<"upgradeFields">
+    ): Promise<FindBattleTypes.CallMethodResult<"upgradeFields">> => {
+      return callMethod(
+        FindBattle,
+        this,
+        "upgradeFields",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
@@ -204,10 +399,40 @@ export class FindBattleInstance extends ContractInstance {
     ): Promise<FindBattleTypes.SignExecuteMethodResult<"createBattle">> => {
       return signExecuteMethod(FindBattle, this, "createBattle", params);
     },
+    start: async (
+      params: FindBattleTypes.SignExecuteMethodParams<"start">
+    ): Promise<FindBattleTypes.SignExecuteMethodResult<"start">> => {
+      return signExecuteMethod(FindBattle, this, "start", params);
+    },
+    attack: async (
+      params: FindBattleTypes.SignExecuteMethodParams<"attack">
+    ): Promise<FindBattleTypes.SignExecuteMethodResult<"attack">> => {
+      return signExecuteMethod(FindBattle, this, "attack", params);
+    },
+    end: async (
+      params: FindBattleTypes.SignExecuteMethodParams<"end">
+    ): Promise<FindBattleTypes.SignExecuteMethodResult<"end">> => {
+      return signExecuteMethod(FindBattle, this, "end", params);
+    },
+    leavebattle: async (
+      params: FindBattleTypes.SignExecuteMethodParams<"leavebattle">
+    ): Promise<FindBattleTypes.SignExecuteMethodResult<"leavebattle">> => {
+      return signExecuteMethod(FindBattle, this, "leavebattle", params);
+    },
+    cancel: async (
+      params: FindBattleTypes.SignExecuteMethodParams<"cancel">
+    ): Promise<FindBattleTypes.SignExecuteMethodResult<"cancel">> => {
+      return signExecuteMethod(FindBattle, this, "cancel", params);
+    },
     upgrade: async (
       params: FindBattleTypes.SignExecuteMethodParams<"upgrade">
     ): Promise<FindBattleTypes.SignExecuteMethodResult<"upgrade">> => {
       return signExecuteMethod(FindBattle, this, "upgrade", params);
+    },
+    upgradeFields: async (
+      params: FindBattleTypes.SignExecuteMethodParams<"upgradeFields">
+    ): Promise<FindBattleTypes.SignExecuteMethodResult<"upgradeFields">> => {
+      return signExecuteMethod(FindBattle, this, "upgradeFields", params);
     },
   };
 }
