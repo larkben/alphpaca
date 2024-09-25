@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v3.6.0",
+  "fullNodeVersion": "v3.6.3",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -39,6 +39,12 @@
       "sourceCodeHash": "32a050a5d79198962cc71e334cf17d1e3a056d87cc770ca3ab377bab81d649e9",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "64999dc96de4d67708ed525228a98425ecca3a3b0626d66b3cb6475e03ac3f5a"
+    },
+    "Battle": {
+      "sourceFile": "gamefi/battle/pvp.ral",
+      "sourceCodeHash": "00347e8e874e225f1cc87dae23759d04c2aa766e0a05781c1bccdf43b64d3be9",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "a5a2b218da4446e4d7068c8a3d638ab11fa2055be57661b53c8e409bb23f1a45"
     },
     "Buildtoken": {
       "sourceFile": "createtoken/tx_make_token_alph.ral",
@@ -112,6 +118,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": "8671dc4d763fef38a37762180a03a69d0a42c85466d4fee89b25e8598c5645fb"
     },
+    "FindBattle": {
+      "sourceFile": "gamefi/battle/findbattle.ral",
+      "sourceCodeHash": "c5bc6ed5ff59973bc73b11b532bded092320049fb002dab80b72d49085a62eed",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "6b200b448476b04263c3503a9546c58e93cdf8984632eef618f3c985bad56dd0"
+    },
     "Gettoken": {
       "sourceFile": "scripts/tokentest.ral",
       "sourceCodeHash": "3e20a0e7e5ce052d940807ee059265d115a136931f0d38aea4484b5b29b4859b",
@@ -125,19 +137,19 @@
       "codeHashDebug": "30a31a7652cd30e43102600ff03da201166d6548eec921129f94f0e23e59a9b6"
     },
     "IFungibleToken": {
-      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFT": {
-      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_interface.ral",
+      "sourceFile": "../node_modules/@alephium/web3/std/nft_interface.ral",
       "sourceCodeHash": "92956f4e61c198f011b48dbda2ed76193ffc79ac9c39f60bf1763a34e02f2c41",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFTCollection": {
-      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_collection_interface.ral",
+      "sourceFile": "../node_modules/@alephium/web3/std/nft_collection_interface.ral",
       "sourceCodeHash": "9b199426ea89c188ce858b48ab809f13b9fc1ed0d64ca91e3d600eda8fbf6c42",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""

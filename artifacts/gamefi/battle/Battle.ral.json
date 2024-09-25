@@ -1,0 +1,160 @@
+{
+  "version": "v3.6.3",
+  "name": "Battle",
+  "bytecode": "0709154027404a4068408040b140c940dd40f800000001010d57405640444e7117000c1600118802000000000108a004041c4c02ce0002a001020000020201111600ce00454c07a00316012ba103a002024a06a00016012ba100ce0102000000000110a0000c2f4c03a001024a09a0030c2f4c03ce00024a02ca0201000101000ad3430f6730a001ca45107bb4a1011600a10201000002001bd3352693aaa001ca450d7b000317001600ca45107b00011701b41601450d7b16010000000218a00419a104010200010009d3c8512445000317001600ca464c021600b0010200000008d38f386a7fb40001450f7bce00b001020000000ed3a7633c58b4ce00450f7ba0020d65410e7bce00b0",
+  "codeHash": "a5a2b218da4446e4d7068c8a3d638ab11fa2055be57661b53c8e409bb23f1a45",
+  "fieldsSig": {
+    "names": [
+      "playerOne",
+      "pacaOne",
+      "pacaOneHealth",
+      "playerTwo",
+      "pacaTwo",
+      "pacaTwoHealth",
+      "turn"
+    ],
+    "types": [
+      "Address",
+      "ByteVec",
+      "U256",
+      "Address",
+      "ByteVec",
+      "U256",
+      "Bool"
+    ],
+    "isMutable": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "random",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "whoTurn",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "Address"
+      ]
+    },
+    {
+      "name": "whichPaca",
+      "paramNames": [
+        "player",
+        "damage"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "checkIfPacaFainted",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "Address"
+      ]
+    },
+    {
+      "name": "acceptBattle",
+      "paramNames": [
+        "paca"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "attack",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "endbattle",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "leave",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    },
+    {
+      "name": "cancel",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "NotYourTurn",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        },
+        {
+          "name": "BattleNotDone",
+          "value": {
+            "type": "U256",
+            "value": "2"
+          }
+        },
+        {
+          "name": "InvalidCaller",
+          "value": {
+            "type": "U256",
+            "value": "3"
+          }
+        },
+        {
+          "name": "BattleIsDone",
+          "value": {
+            "type": "U256",
+            "value": "4"
+          }
+        }
+      ]
+    }
+  ]
+}

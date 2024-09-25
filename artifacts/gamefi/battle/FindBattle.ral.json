@@ -1,0 +1,76 @@
+{
+  "version": "v3.6.3",
+  "name": "FindBattle",
+  "bytecode": "02024037404b01030105001ed3ce9049b416001701b41600130264130fca0d65130f0313056417031702b4d1a21601ce0116021603bf170405b416045f010001010008d3caa32a2cb4ce00450c7b1600ba",
+  "codeHash": "6b200b448476b04263c3503a9546c58e93cdf8984632eef618f3c985bad56dd0",
+  "fieldsSig": {
+    "names": [
+      "admin",
+      "pvp"
+    ],
+    "types": [
+      "Address",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false
+    ]
+  },
+  "eventsSig": [
+    {
+      "name": "Battle",
+      "fieldNames": [
+        "who",
+        "id"
+      ],
+      "fieldTypes": [
+        "Address",
+        "ByteVec"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "createBattle",
+      "paramNames": [
+        "paca"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "upgrade",
+      "paramNames": [
+        "newCode"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "Error",
+      "fields": [
+        {
+          "name": "NotAdmin",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  ]
+}
