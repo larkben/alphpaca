@@ -16,13 +16,14 @@ const deployNFTTemplate: DeployFunction<Settings> = async (
 
   const result = await deployer.deployContract(Battle, {
     initialFields: {
-        playerOne: deployer.account.address,
-        pacaOne: '',
-        pacaOneHealth: 15n,
-        playerTwo: deployer.account.address,
-        pacaTwo: '',
-        pacaTwoHealth: 15n,
-        turn: false
+      playerOne: deployer.account.address,
+      pacaOne: '',
+      pacaOneHealth: 15n,
+      playerTwo: deployer.account.address,
+      pacaTwo: '',
+      pacaTwoHealth: 15n,
+      turn: false,
+      oracle: '285zrkZTPpUCpjKg9E3z238VmpUBQEAbESGsJT6yX7Rod'
     }
   })
   const contractId = result.contractInstance.contractId

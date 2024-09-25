@@ -34,13 +34,14 @@ import {
 } from "@alephium/web3";
 import { default as FindBattleContractJson } from "../gamefi/battle/FindBattle.ral.json";
 import { getContractByCodeHash } from "./contracts";
-import { MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace FindBattleTypes {
   export type Fields = {
     admin: Address;
     pvp: HexString;
+    oracle: HexString;
   };
 
   export type State = ContractState<Fields>;
@@ -249,7 +250,7 @@ export const FindBattle = new Factory(
   Contract.fromJson(
     FindBattleContractJson,
     "",
-    "118c41c4bbe3589e4bb1000fb4288d5ac7de8e3c79821449f73bedd511ece791",
+    "0f9b48c67c46af2be069ca87503f6642c6f18e47c33ecd015427e0ac8e43058b",
     AllStructs
   )
 );

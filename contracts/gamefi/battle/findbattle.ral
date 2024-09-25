@@ -1,6 +1,7 @@
 Contract FindBattle(
     admin: Address,
-    pvp: ByteVec
+    pvp: ByteVec,
+    oracle: IDIAOracle
 ) {
     event Battle(who: Address, id: ByteVec)
     event BattleStart(id: ByteVec)
@@ -14,7 +15,7 @@ Contract FindBattle(
 
         let path = paca
 
-        let (encodeImmutableFields, encodeMutableFields) = Battle.encodeFields!(callerAddress!(), paca, 15, callerAddress!(), zeros!(1), 15, true)
+        let (encodeImmutableFields, encodeMutableFields) = Battle.encodeFields!(callerAddress!(), paca, 15, callerAddress!(), zeros!(1), 15, true, oracle)
 
         let battleId = createSubContract!{callerAddress!() -> ALPH: minimalContractDeposit!()}
         (

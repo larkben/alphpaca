@@ -34,7 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as BattleContractJson } from "../gamefi/battle/Battle.ral.json";
 import { getContractByCodeHash } from "./contracts";
-import { MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace BattleTypes {
@@ -46,6 +46,7 @@ export namespace BattleTypes {
     pacaTwo: HexString;
     pacaTwoHealth: bigint;
     turn: boolean;
+    oracle: HexString;
   };
 
   export type State = ContractState<Fields>;
@@ -267,7 +268,7 @@ export const Battle = new Factory(
   Contract.fromJson(
     BattleContractJson,
     "",
-    "abe80bc91da1e6f530cbf1a137215fced6b8d96c673be91861d9ad4e5f9ea56c",
+    "273f3007ca75e6ee2708dd1ac2991dbe2b2f72359a0d7e7894ea1ffe868c1933",
     AllStructs
   )
 );

@@ -1,5 +1,5 @@
 {
-  "version": "v3.6.0",
+  "version": "v3.6.3",
   "name": "UpgradeFindBattle",
   "bytecodeTemplate": "01010300000005{1}0d0c{0}0106",
   "fieldsSig": {

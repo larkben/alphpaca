@@ -15,8 +15,9 @@ const deployNFTTemplate: DeployFunction<Settings> = async (
 
   const result = await deployer.deployContract(FindBattle, {
     initialFields: {
-        admin: deployer.account.address,
-        pvp: 'db667b755f6c486846f6f7436d4ac1214df9052051daa2361bec6556d3bfb000'
+      admin: deployer.account.address,
+      pvp: 'db667b755f6c486846f6f7436d4ac1214df9052051daa2361bec6556d3bfb000',
+      oracle: '285zrkZTPpUCpjKg9E3z238VmpUBQEAbESGsJT6yX7Rod'                   // mainnet oracle address
     }
   })
   const contractId = result.contractInstance.contractId

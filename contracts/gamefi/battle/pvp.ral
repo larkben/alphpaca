@@ -1,3 +1,12 @@
+struct DIAOracleValue {
+    mut value: U256,
+    mut timestamp: U256
+}
+  
+Interface IDIAOracle {
+    pub fn getValue(key: ByteVec) -> DIAOracleValue
+}
+
 Contract Battle (
     playerOne: Address,
     pacaOne: ByteVec,
@@ -5,7 +14,8 @@ Contract Battle (
     mut playerTwo: Address,
     mut pacaTwo: ByteVec,
     mut pacaTwoHealth: U256,
-    mut turn: Bool
+    mut turn: Bool,
+    oracle: IDIAOracle
 ) {
     enum ErrorCodes {
         NotYourTurn = 1
@@ -15,7 +25,7 @@ Contract Battle (
     }
 
     fn random() -> (U256) {
-        let seed = u256From32Byte!(blake2b!(toByteVec!(blockTarget!()) ++ toByteVec!(blockTimeStamp!()))) // integrate oracle here
+        let seed = u256From32Byte!(blake2b!(toByteVec!(blockTarget!()) ++ toByteVec!(blockTimeStamp!()) ++ toByteVec!(oracle.getValue(b`BTC/USD`).value))) // oracle here
         return addModN!(0, seed, 5)
     }
 
