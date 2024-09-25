@@ -1,24 +1,15 @@
 {
   "version": "v3.6.0",
-  "name": "UpgradeFindBattleWithFields",
-  "bytecodeTemplate": "01010300000007{1}{2}{3}0f0c{0}0107",
+  "name": "ForceContractCancel",
+  "bytecodeTemplate": "010103000000040c0c{0}0108",
   "fieldsSig": {
     "names": [
-      "market",
-      "newCode",
-      "immutable",
-      "mutable"
+      "pvp"
     ],
     "types": [
-      "FindBattle",
-      "ByteVec",
-      "ByteVec",
-      "ByteVec"
+      "Battle"
     ],
     "isMutable": [
-      false,
-      false,
-      false,
       false
     ]
   },

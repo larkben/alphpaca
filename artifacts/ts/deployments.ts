@@ -15,6 +15,10 @@ import {
   PlayerInstance,
   PlayerBase,
   PlayerBaseInstance,
+  Battle,
+  BattleInstance,
+  FindBattle,
+  FindBattleInstance,
 } from ".";
 import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
@@ -27,6 +31,8 @@ export type Deployments = {
     WrappedOgAlfProtocol?: DeployContractExecutionResult<WrappedOgAlfProtocolInstance>;
     Player?: DeployContractExecutionResult<PlayerInstance>;
     PlayerBase?: DeployContractExecutionResult<PlayerBaseInstance>;
+    Battle?: DeployContractExecutionResult<BattleInstance>;
+    FindBattle?: DeployContractExecutionResult<FindBattleInstance>;
   };
 };
 
@@ -69,6 +75,24 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["PlayerBase"],
             contractInstance: PlayerBase.at(
               json.contracts["PlayerBase"].contractInstance.address
+            ),
+          },
+    Battle:
+      json.contracts["Battle"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["Battle"],
+            contractInstance: Battle.at(
+              json.contracts["Battle"].contractInstance.address
+            ),
+          },
+    FindBattle:
+      json.contracts["FindBattle"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["FindBattle"],
+            contractInstance: FindBattle.at(
+              json.contracts["FindBattle"].contractInstance.address
             ),
           },
   };

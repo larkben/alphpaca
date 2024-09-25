@@ -14,7 +14,7 @@ Contract FindBattle(
 
         let path = paca
 
-        let (encodeImmutableFields, encodeMutableFields) = Battle.encodeFields!(callerAddress!(), paca, 15, nullContractAddress!(), zeros!(1), 15, true)
+        let (encodeImmutableFields, encodeMutableFields) = Battle.encodeFields!(callerAddress!(), paca, 15, callerAddress!(), zeros!(1), 15, true)
 
         let battleId = createSubContract!{callerAddress!() -> ALPH: minimalContractDeposit!()}
         (

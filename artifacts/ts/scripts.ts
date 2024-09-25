@@ -26,6 +26,7 @@ import { default as EditCollectionUriScriptJson } from "../gamefi/EditCollection
 import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
 import { default as EndScriptJson } from "../gamefi/battle/End.ral.json";
+import { default as ForceContractCancelScriptJson } from "../gamefi/battle/ForceContractCancel.ral.json";
 import { default as GettokenScriptJson } from "../scripts/Gettoken.ral.json";
 import { default as LeaveBattleScriptJson } from "../gamefi/battle/LeaveBattle.ral.json";
 import { default as MintAlfScriptJson } from "../walf/MintAlf.ral.json";
@@ -129,6 +130,11 @@ export const End = new ExecutableScript<{
   market: HexString;
   contractId: HexString;
 }>(Script.fromJson(EndScriptJson, "", AllStructs), getContractByCodeHash);
+
+export const ForceContractCancel = new ExecutableScript<{ pvp: HexString }>(
+  Script.fromJson(ForceContractCancelScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const Gettoken = new ExecutableScript<{
   contract: HexString;

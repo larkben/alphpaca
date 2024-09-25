@@ -267,7 +267,7 @@ export const Battle = new Factory(
   Contract.fromJson(
     BattleContractJson,
     "",
-    "fca01f50a68a370af36c825f20238c33e5465dcc366f175a5e6c8c0790a76e88",
+    "abe80bc91da1e6f530cbf1a137215fced6b8d96c673be91861d9ad4e5f9ea56c",
     AllStructs
   )
 );

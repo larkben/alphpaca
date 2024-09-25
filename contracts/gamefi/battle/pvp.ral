@@ -52,7 +52,7 @@ Contract Battle (
 
     @using(updateFields = true, checkExternalCaller = false)
     pub fn acceptBattle(paca: ByteVec) -> () {
-        assert!(playerTwo == nullContractAddress!(), ErrorCodes.BattleIsDone) 
+        assert!(playerTwo == playerOne, ErrorCodes.BattleIsDone) 
 
         playerTwo = callerAddress!()
         pacaTwo = paca
@@ -98,9 +98,14 @@ Contract Battle (
 
     @using(checkExternalCaller = true, assetsInContract = true)
     pub fn cancel() -> () {
-        checkCaller!(callerAddress!() == playerOne, ErrorCodes.InvalidCaller)
-        assert!(pacaTwo == zeros!(1), ErrorCodes.BattleNotDone)
+        checkCaller!(playerTwo == playerOne, ErrorCodes.BattleNotDone)
 
         destroySelf!(playerOne)
     }
+}
+
+TxScript ForceContractCancel (
+    pvp: Battle
+) {
+    pvp.cancel()
 }

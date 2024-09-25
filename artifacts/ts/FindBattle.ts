@@ -249,7 +249,7 @@ export const FindBattle = new Factory(
   Contract.fromJson(
     FindBattleContractJson,
     "",
-    "42ad007606a100169a3471de6201a75a2e168d43cb545afb7683b48e1de1e674",
+    "118c41c4bbe3589e4bb1000fb4288d5ac7de8e3c79821449f73bedd511ece791",
     AllStructs
   )
 );
