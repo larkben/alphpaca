@@ -1,0 +1,121 @@
+struct DIAOracleValue {
+    mut value: U256,
+    mut timestamp: U256
+}
+  
+Interface IDIAOracle {
+    pub fn getValue(key: ByteVec) -> DIAOracleValue
+}
+
+Contract Battle (
+    playerOne: Address,
+    pacaOne: ByteVec,
+    mut pacaOneHealth: U256,
+    mut playerTwo: Address,
+    mut pacaTwo: ByteVec,
+    mut pacaTwoHealth: U256,
+    mut turn: Bool,
+    oracle: IDIAOracle
+) {
+    enum ErrorCodes {
+        NotYourTurn = 1
+        BattleNotDone = 2
+        InvalidCaller = 3
+        BattleIsDone = 4
+    }
+
+    fn random() -> (U256) {
+        let seed = u256From32Byte!(blake2b!(toByteVec!(blockTarget!()) ++ toByteVec!(blockTimeStamp!()) ++ toByteVec!(oracle.getValue(b`BTC/USD`).value))) // oracle here
+        return addModN!(0, seed, 5)
+    }
+
+    fn whoTurn() -> Address {
+        if (turn == false) {
+            return playerOne
+        }
+        return playerTwo
+    }
+
+    @using(updateFields = true)
+    fn whichPaca(player: Address, damage: U256) -> (ByteVec) {
+        if (player == playerOne) {
+            pacaTwoHealth = pacaTwoHealth - damage
+            return pacaTwo
+        }
+        else {
+            pacaOneHealth = pacaOneHealth - damage
+            return pacaOne
+        }
+    }
+
+    fn checkIfPacaFainted() -> Address {
+        if (pacaOneHealth == 0) {
+            return playerTwo
+        }
+        else if (pacaTwoHealth == 0) {
+            return playerOne
+        }
+        else {
+            return nullContractAddress!()
+        }
+    }
+
+    @using(updateFields = true, checkExternalCaller = false)
+    pub fn acceptBattle(paca: ByteVec) -> () {
+        assert!(playerTwo == playerOne, ErrorCodes.BattleIsDone) 
+
+        playerTwo = callerAddress!()
+        pacaTwo = paca
+    }
+
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn attack() -> () {
+        assert!(playerTwo == nullContractAddress!(), ErrorCodes.NotYourTurn) 
+
+        let condition = checkIfPacaFainted()
+
+        assert!(condition == nullContractAddress!(), ErrorCodes.BattleIsDone)
+
+        let allowed = whoTurn()
+
+        checkCaller!(callerAddress!() == allowed, ErrorCodes.NotYourTurn)
+
+        let _ = whichPaca(allowed, random())
+
+        turn = !turn // switch turn
+    }
+
+    @using(checkExternalCaller = false, updateFields = false, assetsInContract = true)
+    pub fn endbattle() -> () {
+        let winner = checkIfPacaFainted()
+
+        if (winner != nullContractAddress!()) {
+            destroySelf!(winner) // gets the contract deposit
+        }
+    }
+
+    @using(checkExternalCaller = true, updateFields = false, assetsInContract = true)
+    pub fn leave() -> () {
+        checkCaller!(callerAddress!() == whoTurn(), ErrorCodes.InvalidCaller)
+
+        if (whoTurn() == playerOne) {
+            destroySelf!(playerTwo)
+        }
+        else {
+            destroySelf!(playerOne)
+        }
+    }
+
+    @using(checkExternalCaller = true, assetsInContract = true)
+    pub fn cancel() -> () {
+        checkCaller!(playerTwo == playerOne, ErrorCodes.BattleNotDone)
+
+        destroySelf!(playerOne)
+    }
+}
+
+TxScript ForceContractCancel (
+    pvp: Battle
+) {
+    pvp.cancel()
+}

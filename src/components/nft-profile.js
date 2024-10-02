@@ -1,11 +1,9 @@
-'use client'
-
+"use client";
 import React, { useState, useEffect, useCallback } from 'react';
 import { useWallet } from '@alephium/web3-react';
 import Link from "next/link";
-import { Grid, Cog  } from 'lucide-react';
+import { Cog  } from 'lucide-react';
 import { fetchNFTsByAddress } from '../lib/nfts';
-import { formatNFTPrice } from '../lib/utils';
 import { web3, NodeProvider, ExplorerProvider } from "@alephium/web3";
 import { InfiniteScroll } from "../lib/InfiniteScroll";
 import { MintPlayerService } from "../services/nft.services";
@@ -45,9 +43,10 @@ const NFTGallery = () => {
       web3.setCurrentExplorerProvider(explorerProvider);
 
       const fetchedNFTs = await fetchNFTsByAddress(userAddress);
-
+      console.log("Fetched NFTs:", fetchedNFTs);
       if (Array.isArray(fetchedNFTs)) {
         const filteredNFTs = fetchedNFTs.filter(nft => allowedCollectionIds.includes(nft.collectionId));
+        console.log("Filtered NFTs:", filteredNFTs);
         setNFTs(filteredNFTs);
         setDisplayedNFTs(filteredNFTs.slice(0, pageSize));
         setHasMore(filteredNFTs.length > pageSize);

@@ -34,7 +34,7 @@ import {
 } from "@alephium/web3";
 import { default as PlayerBaseContractJson } from "../gamefi/PlayerBase.ral.json";
 import { getContractByCodeHash } from "./contracts";
-import { MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace PlayerBaseTypes {
