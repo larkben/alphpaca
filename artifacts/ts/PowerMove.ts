@@ -31,10 +31,11 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as PowerMoveContractJson } from "../gamefi/moves/PowerMove.ral.json";
 import { getContractByCodeHash } from "./contracts";
-import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, MoveReturn, P, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace PowerMoveTypes {
@@ -297,14 +298,22 @@ export class PowerMoveInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends PowerMoveTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<PowerMoveTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends PowerMoveTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<PowerMoveTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
+    callss: Narrow<Callss>
+  ): Promise<PowerMoveTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends
+      | PowerMoveTypes.MultiCallParams
+      | PowerMoveTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(
       PowerMove,
       this,
       callss,
       getContractByCodeHash
-    )) as PowerMoveTypes.MulticallReturnType<Callss>;
+    );
   }
 }

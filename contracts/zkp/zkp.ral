@@ -3,20 +3,55 @@ struct P {
     mut y: U256 
 }
 
-struct BitArray {
-    bits: [Boolean; 256]  // Array of 256 boolean values to hold the bits
-}
-
 Contract ZeroKnowledgeProofContract(
-    admin: Address,
     curveP: U256,
     curveN: U256,
-    curveA: U256,
-    curveB: U256,
+    //curveA: U256,
+    //curveB: U256,
     curveGX: U256,
     curveGY: U256,
     oracle: IDIAOracle
 ) {
+
+    // byteVec manipulation
+    fn toByteVecFromBits(n: U256) -> ByteVec {
+        let mut bits = zeros!(32)  // 32 bytes (256 bits) initialized to zero
+        let mut value = n
+    
+        // Iterate through each bit and pack into ByteVec
+        for (let mut i = 0; i < 256; i = i + 1) {
+            let byteIndex = (255 - i) / 8    // Calculate the byte index
+            let bitIndex = (255 - i) % 8     // Calculate the bit index in the byte
+            let bit = (value & 1u == 1u)     // Check if the current bit is set
+            value = value >> 1u              // Shift value to get the next bit
+    
+            if (bit) {
+                // Get the current byte by slicing, converting it to U256, and adjusting
+                let currentByte = u256From1Byte!(byteVecSlice!(bits, byteIndex, byteIndex + 1))
+                let updatedByte = currentByte | (1 << bitIndex)  // Update the bit in the byte
+                bits = byteVecSlice!(bits, 0, byteIndex) ++ u256To1Byte!(updatedByte) ++ byteVecSlice!(bits, byteIndex + 1, size!(bits))  // Rebuild ByteVec
+            }
+        }
+    
+        return bits  // Return the packed ByteVec
+    }    
+
+    // get byteVec bit
+    fn getBit(bytes: ByteVec, index: U256) -> Bool {
+        let byteIndex = index / 8
+        let bitIndex = index % 8
+    
+        // Extract the byte at the given index
+        let byteSlice = byteVecSlice!(bytes, byteIndex, byteIndex + 1)
+        let currentByte = u256From1Byte!(byteSlice)
+    
+        // Perform bitwise operation to check if the bit at 'bitIndex' is set and return a Boolean
+        if ((currentByte & (1 << (7 - bitIndex))) != 0) {
+            return true
+        } else {
+            return false
+        }
+    }    
 
     fn hash(x: ByteVec) -> ByteVec {
         return sha256!(x)
@@ -24,10 +59,15 @@ Contract ZeroKnowledgeProofContract(
     
     // Define the commitment function
     fn commit(x: U256, r: U256) -> ByteVec {
-        //let bx = toByteVec!(x)
-        //let rx = toByteVec!(r)
 
         let xbr = x ^ r
+
+        return hash(toByteVec!(xbr))
+    }
+
+    fn commitP(p: P) -> ByteVec {
+
+        let xbr = p.x ^ p.y
 
         return hash(toByteVec!(xbr))
     }
@@ -44,71 +84,64 @@ Contract ZeroKnowledgeProofContract(
             newbase = (newbase * newbase) % modulus
         }
         return result
-    }
+    }    
 
     fn inv(a: U256, p: U256) -> U256 {
         return modPow(a, p - 2, p)
     }
     
-    fn ecAdd(p1: P, p2: P) -> (U256, U256) {
+    fn ecAdd(p1: P, p2: P) -> (P) {
         let p = curveP
+        if (p1.x == p2.x && p1.y == p2.y) {
+            return ecDouble(p1)  // Special case when points are equal
+        }
+        
         let s_numerator = (p2.y + p - p1.y) % p
         let s_denominator = (p2.x + p - p1.x) % p
         let s = (s_numerator * inv(s_denominator, p)) % p
     
         let x3 = (s * s + p - p1.x + p - p2.x) % p
         let y3 = (s * ((p1.x + p - x3) % p) + p - p1.y) % p
+        
+        let pPrime = P {x: x3, y: y3}
+        return pPrime
+    }    
     
-        return x3, y3
-    }
-    
-    fn ecDouble(p: P) -> (U256, U256) {
+    fn ecDouble(p: P) -> P {
         let f = p
-    
-        // Calculate the slope λ = (3 * f.x^2) / (2 * f.y)
         let double = 2
-        let lam = mulModN!(3 * (f.x |*| f.x), inv(double, f.y), curveP)
+        
+        // Calculate the slope λ = (3 * f.x^2) / (2 * f.y)
+        let lam = (3 * (f.x * f.x) * inv(double * f.y, curveP)) % curveP
     
         // x3 = λ^2 - 2 * x
-        let x3 = addModN!(mulModN!(lam, lam, curveP), 2 * f.x, curveP)  // λ^2 - 2x mod P
+        let x3 = (lam * lam + curveP - 2 * f.x) % curveP
     
         // y3 = λ * (x - x3) - y
-        let y3 = addModN!(mulModN!(lam, addModN!(f.x, x3, curveP), curveP), f.y, curveP)
+        let y3 = (lam * ((f.x + curveP - x3) % curveP) + curveP - f.y) % curveP
     
-        return x3, y3
-    }
-    
-    fn toBits(n: U256) -> BitArray {
-        let mut bits = [false; 256]
-    
-        let mut value = n
-        
-        // Iterate through each bit of the 256-bit number
-        for (let mut i = 0; i < 256; i = i + 1) {
-            bits[255 - i] = (value & 1u == 1u)              // Check if the least significant bit is 1
-            value = value >> 1u                             // Shift right to check the next bit
-        }
-        
-        return BitArray { bits }  // Return the struct containing the array of bits
+        return P {x: x3, y: y3}  // Return the result as a P type
     }
     
     // Define the scalar multiplication function
-    fn ecMul(p: P, n: U256) -> (U256, U256) {
+    fn ecMul(p: P, n: U256) -> (P) {
         let mut q = p  // Initialize q to the point P
-        let mut r = P {x: 0, y: 0}
-        
-        // Get the binary representation of the scalar n
-        let bitarray = toBits(n)
-        
-        // Iterate over the bits in the BitArray
+        let mut r = P {x: 0, y: 0}  // Identity point
+    
+        // Convert scalar `n` to a ByteVec
+        let bitVec = toByteVecFromBits(n)
+    
+        // Iterate over the bits in the ByteVec
         for (let mut i = 0; i < 256; i = i + 1) {
-            if (bitarray.bits[i]) {
-                r = ecAdd(r, q)                     // If the bit is 1, add q to r
+            if (getBit(bitVec, i)) {
+                let temp = ecAdd(r, q)  // If the bit is 1, add q to r
+                r.x = temp.x  // Assign the x-coordinate to r.x
+                r.y = temp.y  // Assign the y-coordinate to r.y
             }
-            q = ecDouble(q)                         // Double q at each step
+            q = ecDouble(q)  // Double q at each step
         }
-        
-        return r                                    // Return the resulting point after scalar multiplication
+    
+        return r  // Return the resulting point after scalar multiplication
     }
 
     // for true encryption we should be targeting absolute random
@@ -116,42 +149,59 @@ Contract ZeroKnowledgeProofContract(
         let seed = u256From32Byte!(blake2b!(toByteVec!(blockTarget!()) ++ toByteVec!(blockTimeStamp!()) ++ toByteVec!(oracle.getValue(b`BTC/USD`).value))) // oracle here
         return addModN!(0, seed, curveN)           // returns a very fucking large pseudo random number
     }
-
+    
     // Define the prove function for the zero-knowledge proof
     fn prove(x: U256, r: U256) -> (ByteVec, ByteVec) {
-        let gd = P {x: curveGX, y: curveGY }
-
-        // Generate random witnesses
-        let w1 = pseudoRandom()
-        let w2 = pseudoRandom()
-        let c = commit(x, r)
-        let gam = ecMul((gd), w1)
-        let delta = ecMul((gd), w2)
-        let (x_gam, _) = gam
-        let (x_delta, _) = delta
-        let tx = x ^ w1
-        let tr = r ^ w2
-        let (c_x, _) = ecAdd(gam, delta)
-        let (c_xr, _) = ecMul(c_x, curve_n)
-        let (c_r, _) = ecMul((gd), curve_n)
-        return c, c_xr
+        let gd = P {x: curveGX, y: curveGY}
+    
+        let w1 = pseudoRandom()  // Generate random value w1
+        let w2 = pseudoRandom()  // Generate random value w2
+        let c = commit(x, r)     // Commitment based on x and r
+        
+        let gam = ecMul(gd, w1)  // Calculate gamma = gd * w1
+        let delta = ecMul(gd, w2)  // Calculate delta = gd * w2
+        
+        // No need to destructure (x, y) for gamma and delta as we work with P directly
+        //let tx = x ^ w1  // XOR of x and w1
+        //let tr = r ^ w2  // XOR of r and w2
+        
+        let cx = ecAdd(gam, delta)  // c_x = gamma + delta
+        let cxr = ecMul(cx, curveN)  // c_xr = c_x * curveN (this is a P struct with x and y)
+        
+        // Convert both x and y of c_xr into ByteVec
+        let cxrx = toByteVec!(cxr.x)  // Serialize the x-coordinate of c_xr
+        let cxry = toByteVec!(cxr.y)  // Serialize the y-coordinate of c_xr
+        
+        return c, encodeToByteVec!(cxrx, cxry)  // Return the commitment and concatenated x and y as ByteVec
+    }    
+    
+    fn verify(c: ByteVec, cxrproof: ByteVec) -> Bool {
+        let gd = P {x: curveGX, y: curveGY}
+    
+        // Compute cx = ecMul(gd, curveN)
+        let cx = ecMul(gd, curveN)
+    
+        // Deserialize the proof cxr_proof into x and y coordinates
+        let cxrx = byteVecSlice!(cxrproof, 0, 32)
+        let cxry = byteVecSlice!(cxrproof, 32, 64)
+        
+        let cxrpoint = P {x: u256From32Byte!(cxrx), y: u256From32Byte!(cxry)}  // Recreate the elliptic curve point cxr
+    
+        // Perform the elliptic curve addition cxr = cx + cxr_point
+        let cxr = ecAdd(cx, cxrpoint)
+    
+        // Verify the commitment
+        return c == commitP(cxr)
     }
     
-    // Define the verify function for the zero-knowledge proof
-    fn verify(c: ByteVec, c_xr: ByteVec) -> Boolean {
-        let gd = P {x: curveGX, y: curveGY}
-
-        let (c_x, _) = ecMul((gd), curveN)
-        let (c_x_r, _) = ecAdd(c_x, c_xr)
-        return c == commit(c_x_r)
-    }
-
+    @using(checkExternalCaller = false)
     pub fn proveAlph(x: U256, r: U256) -> (ByteVec, ByteVec) {
         return prove(x, r)
     }
 
-    pub fn verifyAlph(c: ByteVec, c_xr: ByteVec) -> Boolean {
-        return verify(c, c_xr)
+    @using(checkExternalCaller = false)
+    pub fn verifyAlph(c: ByteVec, cxr: ByteVec) -> Bool {
+        return verify(c, cxr)
     }
 }
 

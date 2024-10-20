@@ -20,6 +20,7 @@ import {
   RecoilMove,
   Token,
   WrappedOgAlfProtocol,
+  ZeroKnowledgeProofContract,
 } from ".";
 
 let contracts: ContractFactory<any>[] | undefined = undefined;
@@ -42,6 +43,7 @@ export function getContractByCodeHash(codeHash: string): Contract {
       RecoilMove,
       Token,
       WrappedOgAlfProtocol,
+      ZeroKnowledgeProofContract,
     ];
   }
   const c = contracts.find((c) => c.contract.hasCodeHash(codeHash));

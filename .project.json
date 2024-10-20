@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v3.6.0",
+  "fullNodeVersion": "v3.8.4",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -179,19 +179,19 @@
       "codeHashDebug": ""
     },
     "IFungibleToken": {
-      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFT": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_interface.ral",
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_interface.ral",
       "sourceCodeHash": "92956f4e61c198f011b48dbda2ed76193ffc79ac9c39f60bf1763a34e02f2c41",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFTCollection": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_collection_interface.ral",
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_collection_interface.ral",
       "sourceCodeHash": "9b199426ea89c188ce858b48ab809f13b9fc1ed0d64ca91e3d600eda8fbf6c42",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
@@ -229,6 +229,12 @@
     "MoveReturn": {
       "sourceFile": "gamefi/moves/basicMove.ral",
       "sourceCodeHash": "32a050a5d79198962cc71e334cf17d1e3a056d87cc770ca3ab377bab81d649e9",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "P": {
+      "sourceFile": "zkp/zkp.ral",
+      "sourceCodeHash": "30d030c45d5a3b621cbe19080e70c99804bd458b7d5f4a72c09d454c34735036",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -333,6 +339,12 @@
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "b01b6b7db2945f4a58decc02a85c64337321f852569e692aa793274740f2f626"
+    },
+    "ZeroKnowledgeProofContract": {
+      "sourceFile": "zkp/zkp.ral",
+      "sourceCodeHash": "30d030c45d5a3b621cbe19080e70c99804bd458b7d5f4a72c09d454c34735036",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "427c746070172d525a8e14318aa86a829886d0a8bd009ebae3d288d8325d5238"
     }
   }
 }

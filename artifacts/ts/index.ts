@@ -18,4 +18,5 @@ export * from "./PowerMove";
 export * from "./RecoilMove";
 export * from "./Token";
 export * from "./WrappedOgAlfProtocol";
+export * from "./ZeroKnowledgeProofContract";
 export * from "./scripts";

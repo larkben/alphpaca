@@ -31,10 +31,11 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as FindBattleContractJson } from "../gamefi/battle/FindBattle.ral.json";
 import { getContractByCodeHash } from "./contracts";
-import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, MoveReturn, P, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace FindBattleTypes {

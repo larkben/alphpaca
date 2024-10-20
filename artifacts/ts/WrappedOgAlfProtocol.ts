@@ -31,10 +31,11 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as WrappedOgAlfProtocolContractJson } from "../walf/WrappedOgAlfProtocol.ral.json";
 import { getContractByCodeHash } from "./contracts";
-import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, MoveReturn, P, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace WrappedOgAlfProtocolTypes {
@@ -588,14 +589,22 @@ export class WrappedOgAlfProtocolInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends WrappedOgAlfProtocolTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<WrappedOgAlfProtocolTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends WrappedOgAlfProtocolTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<WrappedOgAlfProtocolTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
+    callss: Narrow<Callss>
+  ): Promise<WrappedOgAlfProtocolTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends
+      | WrappedOgAlfProtocolTypes.MultiCallParams
+      | WrappedOgAlfProtocolTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(
       WrappedOgAlfProtocol,
       this,
       callss,
       getContractByCodeHash
-    )) as WrappedOgAlfProtocolTypes.MulticallReturnType<Callss>;
+    );
   }
 }

@@ -1,0 +1,288 @@
+{
+  "version": "v3.8.4",
+  "name": "ZeroKnowledgeProofContract",
+  "bytecode": "050f407c40b540bf40d240e54127413841bb4213426e429e4303435243644376000001090140481320651701160017020c17031603134100314c403b1340ff16032b13082d17041340ff16032b13082e170516020d380d2f170616020d3c170216064c1e1601160416040d2a626c170716070d16053b39170816010c16046216086644160116040d2a1601436244170116030d2a17034a7fc116010200000206014021160113082d1702160113082e17031600160216020d2a62170416046c170516050d130716032b3b380c304c0303024a02040200000101010316005002000002060108160016013a1702160240000202000002030108160016013a1702160240000202000003060140250d1703160016022e17041601170516050c334c1716050e2e0d2f4c06160316042c16022e170316050e2d1705160416042c16022e17044a25160302000002020107160016010e2b16010005020000040c02404bce001704160016022f160116032f1a4c0416001601000802160316042a16012b16042e1705160216042a16002b16042e170616051606160400062c16042e1707160716072c16042a16002b16042a16022b16042e17081607160016042a16082b16042e2c16042a16012b16042e170916081609170b170a160a160b020000020802403316001601170317020e17040f160216022c2c160416032cce0000062cce002e1705160516052cce002a0e16022c2bce002e170616051602ce002a16062bce002e2cce002a16032bce002e170716061607020000030b02402d16001601170417030c0c170617051602000017070c17081608134100314c191607160800014c0b16051606160316040007170a170916091705160a17061603160400081704170316080d2a17084a231605160602000000030117574056404414074254432f5553440d0ece04d4a0e6c23117021701160140444e7117000c1600ce01880200000213024031ce02ce0317031702000a1704000a170516001601000317061602160316040009170817071602160316050009170a1709160716081609160a0007170c170b160b160cce010009170e170d160d40170f160e4017101606160f1610130264020000020e014027ce02ce031703170216021603ce0100091705170416010c1320621706160113201340406217071606711607711709170816041605160816090007170b170a1600160a160b00044102010002020205d3af2da58316001601000b02010002020105d305277ac816001601000c02",
+  "codeHash": "427c746070172d525a8e14318aa86a829886d0a8bd009ebae3d288d8325d5238",
+  "fieldsSig": {
+    "names": [
+      "curveP",
+      "curveN",
+      "curveGX",
+      "curveGY",
+      "oracle"
+    ],
+    "types": [
+      "U256",
+      "U256",
+      "U256",
+      "U256",
+      "IDIAOracle"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "toByteVecFromBits",
+      "paramNames": [
+        "n"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getBit",
+      "paramNames": [
+        "bytes",
+        "index"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "Bool"
+      ]
+    },
+    {
+      "name": "hash",
+      "paramNames": [
+        "x"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "commit",
+      "paramNames": [
+        "x",
+        "r"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "commitP",
+      "paramNames": [
+        "p"
+      ],
+      "paramTypes": [
+        "P"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "modPow",
+      "paramNames": [
+        "base",
+        "exponent",
+        "modulus"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "inv",
+      "paramNames": [
+        "a",
+        "p"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "ecAdd",
+      "paramNames": [
+        "p1",
+        "p2"
+      ],
+      "paramTypes": [
+        "P",
+        "P"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "P"
+      ]
+    },
+    {
+      "name": "ecDouble",
+      "paramNames": [
+        "p"
+      ],
+      "paramTypes": [
+        "P"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "P"
+      ]
+    },
+    {
+      "name": "ecMul",
+      "paramNames": [
+        "p",
+        "n"
+      ],
+      "paramTypes": [
+        "P",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "P"
+      ]
+    },
+    {
+      "name": "pseudoRandom",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "prove",
+      "paramNames": [
+        "x",
+        "r"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec",
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "verify",
+      "paramNames": [
+        "c",
+        "cxrproof"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "Bool"
+      ]
+    },
+    {
+      "name": "proveAlph",
+      "paramNames": [
+        "x",
+        "r"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec",
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "verifyAlph",
+      "paramNames": [
+        "c",
+        "cxr"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "Bool"
+      ]
+    }
+  ],
+  "constants": [],
+  "enums": []
+}

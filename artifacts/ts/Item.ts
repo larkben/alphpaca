@@ -31,10 +31,11 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as ItemContractJson } from "../gamefi/helditem/Item.ral.json";
 import { getContractByCodeHash } from "./contracts";
-import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, MoveReturn, P, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace ItemTypes {
@@ -248,14 +249,15 @@ export class ItemInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends ItemTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<ItemTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends ItemTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<ItemTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
-      Item,
-      this,
-      callss,
-      getContractByCodeHash
-    )) as ItemTypes.MulticallReturnType<Callss>;
+    callss: Narrow<Callss>
+  ): Promise<ItemTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends ItemTypes.MultiCallParams | ItemTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(Item, this, callss, getContractByCodeHash);
   }
 }

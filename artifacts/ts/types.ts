@@ -14,3 +14,7 @@ export interface MoveReturn extends Record<string, Val> {
   a: bigint;
   r: bigint;
 }
+export interface P extends Record<string, Val> {
+  x: bigint;
+  y: bigint;
+}

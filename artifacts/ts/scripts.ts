@@ -43,7 +43,7 @@ import { default as UpgradeCollectionFieldsScriptJson } from "../gamefi/UpgradeC
 import { default as UpgradeFindBattleScriptJson } from "../gamefi/battle/UpgradeFindBattle.ral.json";
 import { default as UpgradeFindBattleWithFieldsScriptJson } from "../gamefi/battle/UpgradeFindBattleWithFields.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
-import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, MoveReturn, P, AllStructs } from "./types";
 
 export const ActivateWalfProtocol = new ExecutableScript<{
   contract: HexString;
