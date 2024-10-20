@@ -1,0 +1,164 @@
+struct P { 
+    mut x: U256, 
+    mut y: U256 
+}
+
+struct BitArray {
+    bits: [Boolean; 256]  // Array of 256 boolean values to hold the bits
+}
+
+Contract ZeroKnowledgeProofContract(
+    admin: Address,
+    curveP: U256,
+    curveN: U256,
+    curveA: U256,
+    curveB: U256,
+    curveGX: U256,
+    curveGY: U256,
+    oracle: IDIAOracle
+) {
+
+    fn hash(x: ByteVec) -> ByteVec {
+        return sha256!(x)
+    }
+    
+    // Define the commitment function
+    fn commit(x: U256, r: U256) -> ByteVec {
+        //let bx = toByteVec!(x)
+        //let rx = toByteVec!(r)
+
+        let xbr = x ^ r
+
+        return hash(toByteVec!(xbr))
+    }
+
+    fn modPow(base: U256, exponent: U256, modulus: U256) -> U256 {
+        let mut result = 1
+        let mut newbase = base % modulus
+        let mut newexponent = exponent
+        while (newexponent > 0) {
+            if (newexponent % 2 == 1) {
+                result = (result * newbase) % modulus
+            }
+            newexponent = newexponent / 2
+            newbase = (newbase * newbase) % modulus
+        }
+        return result
+    }
+
+    fn inv(a: U256, p: U256) -> U256 {
+        return modPow(a, p - 2, p)
+    }
+    
+    fn ecAdd(p1: P, p2: P) -> (U256, U256) {
+        let p = curveP
+        let s_numerator = (p2.y + p - p1.y) % p
+        let s_denominator = (p2.x + p - p1.x) % p
+        let s = (s_numerator * inv(s_denominator, p)) % p
+    
+        let x3 = (s * s + p - p1.x + p - p2.x) % p
+        let y3 = (s * ((p1.x + p - x3) % p) + p - p1.y) % p
+    
+        return x3, y3
+    }
+    
+    fn ecDouble(p: P) -> (U256, U256) {
+        let f = p
+    
+        // Calculate the slope λ = (3 * f.x^2) / (2 * f.y)
+        let double = 2
+        let lam = mulModN!(3 * (f.x |*| f.x), inv(double, f.y), curveP)
+    
+        // x3 = λ^2 - 2 * x
+        let x3 = addModN!(mulModN!(lam, lam, curveP), 2 * f.x, curveP)  // λ^2 - 2x mod P
+    
+        // y3 = λ * (x - x3) - y
+        let y3 = addModN!(mulModN!(lam, addModN!(f.x, x3, curveP), curveP), f.y, curveP)
+    
+        return x3, y3
+    }
+    
+    fn toBits(n: U256) -> BitArray {
+        let mut bits = [false; 256]
+    
+        let mut value = n
+        
+        // Iterate through each bit of the 256-bit number
+        for (let mut i = 0; i < 256; i = i + 1) {
+            bits[255 - i] = (value & 1u == 1u)              // Check if the least significant bit is 1
+            value = value >> 1u                             // Shift right to check the next bit
+        }
+        
+        return BitArray { bits }  // Return the struct containing the array of bits
+    }
+    
+    // Define the scalar multiplication function
+    fn ecMul(p: P, n: U256) -> (U256, U256) {
+        let mut q = p  // Initialize q to the point P
+        let mut r = P {x: 0, y: 0}
+        
+        // Get the binary representation of the scalar n
+        let bitarray = toBits(n)
+        
+        // Iterate over the bits in the BitArray
+        for (let mut i = 0; i < 256; i = i + 1) {
+            if (bitarray.bits[i]) {
+                r = ecAdd(r, q)                     // If the bit is 1, add q to r
+            }
+            q = ecDouble(q)                         // Double q at each step
+        }
+        
+        return r                                    // Return the resulting point after scalar multiplication
+    }
+
+    // for true encryption we should be targeting absolute random
+    fn pseudoRandom() -> (U256) {
+        let seed = u256From32Byte!(blake2b!(toByteVec!(blockTarget!()) ++ toByteVec!(blockTimeStamp!()) ++ toByteVec!(oracle.getValue(b`BTC/USD`).value))) // oracle here
+        return addModN!(0, seed, curveN)           // returns a very fucking large pseudo random number
+    }
+
+    // Define the prove function for the zero-knowledge proof
+    fn prove(x: U256, r: U256) -> (ByteVec, ByteVec) {
+        let gd = P {x: curveGX, y: curveGY }
+
+        // Generate random witnesses
+        let w1 = pseudoRandom()
+        let w2 = pseudoRandom()
+        let c = commit(x, r)
+        let gam = ecMul((gd), w1)
+        let delta = ecMul((gd), w2)
+        let (x_gam, _) = gam
+        let (x_delta, _) = delta
+        let tx = x ^ w1
+        let tr = r ^ w2
+        let (c_x, _) = ecAdd(gam, delta)
+        let (c_xr, _) = ecMul(c_x, curve_n)
+        let (c_r, _) = ecMul((gd), curve_n)
+        return c, c_xr
+    }
+    
+    // Define the verify function for the zero-knowledge proof
+    fn verify(c: ByteVec, c_xr: ByteVec) -> Boolean {
+        let gd = P {x: curveGX, y: curveGY}
+
+        let (c_x, _) = ecMul((gd), curveN)
+        let (c_x_r, _) = ecAdd(c_x, c_xr)
+        return c == commit(c_x_r)
+    }
+
+    pub fn proveAlph(x: U256, r: U256) -> (ByteVec, ByteVec) {
+        return prove(x, r)
+    }
+
+    pub fn verifyAlph(c: ByteVec, c_xr: ByteVec) -> Boolean {
+        return verify(c, c_xr)
+    }
+}
+
+// The elliptic curve parameters (e.g., secp256k1).
+// The Hash function for commitment.
+// The elliptic curve point addition and doubling functions.
+// The scalar multiplication function.
+// The prove function for the zero-knowledge proof, which generates random witnesses and calculates the commitment, gam, and delta values.
+// The verify function for the zero-knowledge proof, which checks if the commitment is valid.
+// The ZeroKnowledgeProofContract, which provides the prove and verify functions for the zero-knowledge proof.
