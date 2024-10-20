@@ -79,6 +79,13 @@ Contract FindBattle(
         migrateWithFields!(newCode, immutable, mutable)
     }
 
+    @using(checkExternalCaller = true, assetsInContract = true)
+    pub fn delete() -> () {
+        checkCaller!(callerAddress!() == admin, Error.NotAdmin)
+
+        destroySelf!(admin)
+    }
+
 }
 
 TxScript CreatePvp (
@@ -140,4 +147,10 @@ TxScript UpgradeFindBattleWithFields (
     mutable: ByteVec
 ) {
     market.upgradeFields(newCode, immutable, mutable)
+}
+
+TxScript DeleteFindBattle (
+    market: FindBattle
+) {
+    market.delete()
 }

@@ -31,6 +31,7 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as PlayerContractJson } from "../gamefi/Player.ral.json";
 import { getContractByCodeHash } from "./contracts";
@@ -670,14 +671,15 @@ export class PlayerInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends PlayerTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<PlayerTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends PlayerTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<PlayerTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
-      Player,
-      this,
-      callss,
-      getContractByCodeHash
-    )) as PlayerTypes.MulticallReturnType<Callss>;
+    callss: Narrow<Callss>
+  ): Promise<PlayerTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends PlayerTypes.MultiCallParams | PlayerTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(Player, this, callss, getContractByCodeHash);
   }
 }

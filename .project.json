@@ -36,7 +36,7 @@
     },
     "Attack": {
       "sourceFile": "gamefi/battle/findbattle.ral",
-      "sourceCodeHash": "8544526783126e417fd11b91de5c7160424b005dc6ae30cb23c1db04434efac3",
+      "sourceCodeHash": "2247f60668891e2b53d2650cfde8d6bfa66596979852df4d6bf1c08c38fb9c22",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -47,7 +47,7 @@
       "codeHashDebug": "64999dc96de4d67708ed525228a98425ecca3a3b0626d66b3cb6475e03ac3f5a"
     },
     "Battle": {
-      "sourceFile": "gamefi/battle/pvp.ral",
+      "sourceFile": "gamefi/battle/battle.ral",
       "sourceCodeHash": "28100d8cb566b4c111a41f9725b091507f96d3f01db9bc2452664cb4c44de5e4",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "273f3007ca75e6ee2708dd1ac2991dbe2b2f72359a0d7e7894ea1ffe868c1933"
@@ -60,7 +60,7 @@
     },
     "Cancel": {
       "sourceFile": "gamefi/battle/findbattle.ral",
-      "sourceCodeHash": "8544526783126e417fd11b91de5c7160424b005dc6ae30cb23c1db04434efac3",
+      "sourceCodeHash": "2247f60668891e2b53d2650cfde8d6bfa66596979852df4d6bf1c08c38fb9c22",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -78,7 +78,7 @@
     },
     "CreatePvp": {
       "sourceFile": "gamefi/battle/findbattle.ral",
-      "sourceCodeHash": "8544526783126e417fd11b91de5c7160424b005dc6ae30cb23c1db04434efac3",
+      "sourceCodeHash": "2247f60668891e2b53d2650cfde8d6bfa66596979852df4d6bf1c08c38fb9c22",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -89,8 +89,14 @@
       "codeHashDebug": "2417efe145ca648a8d8cbc37ef9bc41b7d2f28406925fe7a88725c33a61542d9"
     },
     "DIAOracleValue": {
-      "sourceFile": "gamefi/battle/pvp.ral",
+      "sourceFile": "gamefi/battle/battle.ral",
       "sourceCodeHash": "28100d8cb566b4c111a41f9725b091507f96d3f01db9bc2452664cb4c44de5e4",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "DeleteFindBattle": {
+      "sourceFile": "gamefi/battle/findbattle.ral",
+      "sourceCodeHash": "2247f60668891e2b53d2650cfde8d6bfa66596979852df4d6bf1c08c38fb9c22",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -132,7 +138,7 @@
     },
     "End": {
       "sourceFile": "gamefi/battle/findbattle.ral",
-      "sourceCodeHash": "8544526783126e417fd11b91de5c7160424b005dc6ae30cb23c1db04434efac3",
+      "sourceCodeHash": "2247f60668891e2b53d2650cfde8d6bfa66596979852df4d6bf1c08c38fb9c22",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -150,12 +156,12 @@
     },
     "FindBattle": {
       "sourceFile": "gamefi/battle/findbattle.ral",
-      "sourceCodeHash": "8544526783126e417fd11b91de5c7160424b005dc6ae30cb23c1db04434efac3",
+      "sourceCodeHash": "2247f60668891e2b53d2650cfde8d6bfa66596979852df4d6bf1c08c38fb9c22",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "0f9b48c67c46af2be069ca87503f6642c6f18e47c33ecd015427e0ac8e43058b"
+      "codeHashDebug": "4913a7bcb9af7654076ab6668722bb28e58157f5a191585d1b60b38a5fd2cbce"
     },
     "ForceContractCancel": {
-      "sourceFile": "gamefi/battle/pvp.ral",
+      "sourceFile": "gamefi/battle/battle.ral",
       "sourceCodeHash": "28100d8cb566b4c111a41f9725b091507f96d3f01db9bc2452664cb4c44de5e4",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
@@ -173,25 +179,25 @@
       "codeHashDebug": "30a31a7652cd30e43102600ff03da201166d6548eec921129f94f0e23e59a9b6"
     },
     "IDIAOracle": {
-      "sourceFile": "gamefi/battle/pvp.ral",
+      "sourceFile": "gamefi/battle/battle.ral",
       "sourceCodeHash": "28100d8cb566b4c111a41f9725b091507f96d3f01db9bc2452664cb4c44de5e4",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "IFungibleToken": {
-      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFT": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_interface.ral",
+      "sourceFile": "../../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_interface.ral",
       "sourceCodeHash": "92956f4e61c198f011b48dbda2ed76193ffc79ac9c39f60bf1763a34e02f2c41",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFTCollection": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_collection_interface.ral",
+      "sourceFile": "../../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_collection_interface.ral",
       "sourceCodeHash": "9b199426ea89c188ce858b48ab809f13b9fc1ed0d64ca91e3d600eda8fbf6c42",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
@@ -204,7 +210,7 @@
     },
     "LeaveBattle": {
       "sourceFile": "gamefi/battle/findbattle.ral",
-      "sourceCodeHash": "8544526783126e417fd11b91de5c7160424b005dc6ae30cb23c1db04434efac3",
+      "sourceCodeHash": "2247f60668891e2b53d2650cfde8d6bfa66596979852df4d6bf1c08c38fb9c22",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -264,7 +270,7 @@
     },
     "Start": {
       "sourceFile": "gamefi/battle/findbattle.ral",
-      "sourceCodeHash": "8544526783126e417fd11b91de5c7160424b005dc6ae30cb23c1db04434efac3",
+      "sourceCodeHash": "2247f60668891e2b53d2650cfde8d6bfa66596979852df4d6bf1c08c38fb9c22",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -312,13 +318,13 @@
     },
     "UpgradeFindBattle": {
       "sourceFile": "gamefi/battle/findbattle.ral",
-      "sourceCodeHash": "8544526783126e417fd11b91de5c7160424b005dc6ae30cb23c1db04434efac3",
+      "sourceCodeHash": "2247f60668891e2b53d2650cfde8d6bfa66596979852df4d6bf1c08c38fb9c22",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpgradeFindBattleWithFields": {
       "sourceFile": "gamefi/battle/findbattle.ral",
-      "sourceCodeHash": "8544526783126e417fd11b91de5c7160424b005dc6ae30cb23c1db04434efac3",
+      "sourceCodeHash": "2247f60668891e2b53d2650cfde8d6bfa66596979852df4d6bf1c08c38fb9c22",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },

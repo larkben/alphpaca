@@ -19,6 +19,7 @@ import { default as CancelScriptJson } from "../gamefi/battle/Cancel.ral.json";
 import { default as CollectFeesScriptJson } from "../createtoken/CollectFees.ral.json";
 import { default as CollectOgAlfFeesScriptJson } from "../walf/CollectOgAlfFees.ral.json";
 import { default as CreatePvpScriptJson } from "../gamefi/battle/CreatePvp.ral.json";
+import { default as DeleteFindBattleScriptJson } from "../gamefi/battle/DeleteFindBattle.ral.json";
 import { default as DestroyScriptJson } from "../scripts/Destroy.ral.json";
 import { default as DestroyOgAlfProtocolScriptJson } from "../walf/DestroyOgAlfProtocol.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
@@ -87,6 +88,11 @@ export const CreatePvp = new ExecutableScript<{
   market: HexString;
   paca: HexString;
 }>(Script.fromJson(CreatePvpScriptJson, "", AllStructs), getContractByCodeHash);
+
+export const DeleteFindBattle = new ExecutableScript<{ market: HexString }>(
+  Script.fromJson(DeleteFindBattleScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const Destroy = new ExecutableScript<{ contract: HexString }>(
   Script.fromJson(DestroyScriptJson, "", AllStructs),

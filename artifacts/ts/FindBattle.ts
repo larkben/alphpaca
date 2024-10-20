@@ -31,6 +31,7 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as FindBattleContractJson } from "../gamefi/battle/FindBattle.ral.json";
 import { getContractByCodeHash } from "./contracts";
@@ -84,6 +85,10 @@ export namespace FindBattleTypes {
         immutable: HexString;
         mutable: HexString;
       }>;
+      result: CallContractResult<null>;
+    };
+    delete: {
+      params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<null>;
     };
   }
@@ -141,6 +146,10 @@ export namespace FindBattleTypes {
         immutable: HexString;
         mutable: HexString;
       }>;
+      result: SignExecuteScriptTxResult;
+    };
+    delete: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
   }
@@ -234,6 +243,14 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "upgradeFields", params, getContractByCodeHash);
     },
+    delete: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<FindBattleTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "delete", params, getContractByCodeHash);
+    },
   };
 
   stateForTest(
@@ -250,7 +267,7 @@ export const FindBattle = new Factory(
   Contract.fromJson(
     FindBattleContractJson,
     "",
-    "0f9b48c67c46af2be069ca87503f6642c6f18e47c33ecd015427e0ac8e43058b",
+    "4913a7bcb9af7654076ab6668722bb28e58157f5a191585d1b60b38a5fd2cbce",
     AllStructs
   )
 );
@@ -392,6 +409,17 @@ export class FindBattleInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    delete: async (
+      params?: FindBattleTypes.CallMethodParams<"delete">
+    ): Promise<FindBattleTypes.CallMethodResult<"delete">> => {
+      return callMethod(
+        FindBattle,
+        this,
+        "delete",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
@@ -434,6 +462,11 @@ export class FindBattleInstance extends ContractInstance {
       params: FindBattleTypes.SignExecuteMethodParams<"upgradeFields">
     ): Promise<FindBattleTypes.SignExecuteMethodResult<"upgradeFields">> => {
       return signExecuteMethod(FindBattle, this, "upgradeFields", params);
+    },
+    delete: async (
+      params: FindBattleTypes.SignExecuteMethodParams<"delete">
+    ): Promise<FindBattleTypes.SignExecuteMethodResult<"delete">> => {
+      return signExecuteMethod(FindBattle, this, "delete", params);
     },
   };
 }

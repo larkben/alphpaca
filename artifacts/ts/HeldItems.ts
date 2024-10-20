@@ -31,6 +31,7 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as HeldItemsContractJson } from "../gamefi/helditem/HeldItems.ral.json";
 import { getContractByCodeHash } from "./contracts";
@@ -521,14 +522,22 @@ export class HeldItemsInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends HeldItemsTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<HeldItemsTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends HeldItemsTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<HeldItemsTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
+    callss: Narrow<Callss>
+  ): Promise<HeldItemsTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends
+      | HeldItemsTypes.MultiCallParams
+      | HeldItemsTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(
       HeldItems,
       this,
       callss,
       getContractByCodeHash
-    )) as HeldItemsTypes.MulticallReturnType<Callss>;
+    );
   }
 }

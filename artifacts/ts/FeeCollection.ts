@@ -31,6 +31,7 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as FeeCollectionContractJson } from "../FeeCollection.ral.json";
 import { getContractByCodeHash } from "./contracts";
@@ -568,14 +569,22 @@ export class FeeCollectionInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends FeeCollectionTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<FeeCollectionTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends FeeCollectionTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<FeeCollectionTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
+    callss: Narrow<Callss>
+  ): Promise<FeeCollectionTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends
+      | FeeCollectionTypes.MultiCallParams
+      | FeeCollectionTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(
       FeeCollection,
       this,
       callss,
       getContractByCodeHash
-    )) as FeeCollectionTypes.MulticallReturnType<Callss>;
+    );
   }
 }

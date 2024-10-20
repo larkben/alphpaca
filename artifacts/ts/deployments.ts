@@ -17,8 +17,6 @@ import {
   PlayerBaseInstance,
   FindBattle,
   FindBattleInstance,
-  Battle,
-  BattleInstance,
 } from ".";
 import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
@@ -32,7 +30,6 @@ export type Deployments = {
     Player?: DeployContractExecutionResult<PlayerInstance>;
     PlayerBase?: DeployContractExecutionResult<PlayerBaseInstance>;
     FindBattle?: DeployContractExecutionResult<FindBattleInstance>;
-    Battle?: DeployContractExecutionResult<BattleInstance>;
   };
 };
 
@@ -84,15 +81,6 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["FindBattle"],
             contractInstance: FindBattle.at(
               json.contracts["FindBattle"].contractInstance.address
-            ),
-          },
-    Battle:
-      json.contracts["Battle"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["Battle"],
-            contractInstance: Battle.at(
-              json.contracts["Battle"].contractInstance.address
             ),
           },
   };

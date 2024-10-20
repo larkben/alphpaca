@@ -1,18 +1,15 @@
 {
   "version": "v3.8.0",
-  "name": "UpgradeFindBattle",
-  "bytecodeTemplate": "01010300000005{1}0d0c{0}0106",
+  "name": "DeleteFindBattle",
+  "bytecodeTemplate": "010103000000040c0c{0}0108",
   "fieldsSig": {
     "names": [
-      "market",
-      "newCode"
+      "market"
     ],
     "types": [
-      "FindBattle",
-      "ByteVec"
+      "FindBattle"
     ],
     "isMutable": [
-      false,
       false
     ]
   },

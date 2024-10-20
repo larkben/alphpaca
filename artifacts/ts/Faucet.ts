@@ -31,6 +31,7 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as FaucetContractJson } from "../Faucet.ral.json";
 import { getContractByCodeHash } from "./contracts";
@@ -402,14 +403,15 @@ export class FaucetInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends FaucetTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<FaucetTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends FaucetTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<FaucetTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
-      Faucet,
-      this,
-      callss,
-      getContractByCodeHash
-    )) as FaucetTypes.MulticallReturnType<Callss>;
+    callss: Narrow<Callss>
+  ): Promise<FaucetTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends FaucetTypes.MultiCallParams | FaucetTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(Faucet, this, callss, getContractByCodeHash);
   }
 }
