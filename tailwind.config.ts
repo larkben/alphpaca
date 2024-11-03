@@ -51,6 +51,12 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      boxShadow: {
+        'neumorph': '20px 20px 60px #bec3c9, -20px -20px 60px #ffffff',
+        'neumorph-inset': 'inset 6px 6px 12px #bec3c9, inset -6px -6px 12px #ffffff',
+        'neumorphDark': '5px 5px 10px #1a1a1a, -5px -5px 10px #2a2a2a',
+        'neumorphDark-inset': 'inset 5px 5px 10px #1a1a1a, inset -5px -5px 10px #2a2a2a',
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
