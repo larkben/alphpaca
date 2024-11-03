@@ -18,12 +18,15 @@ import { default as BuildtokenScriptJson } from "../createtoken/Buildtoken.ral.j
 import { default as CancelScriptJson } from "../gamefi/battle/Cancel.ral.json";
 import { default as CollectFeesScriptJson } from "../createtoken/CollectFees.ral.json";
 import { default as CollectOgAlfFeesScriptJson } from "../walf/CollectOgAlfFees.ral.json";
+import { default as CollectWangFeesScriptJson } from "../wang/CollectWangFees.ral.json";
 import { default as CreatePvpScriptJson } from "../gamefi/battle/CreatePvp.ral.json";
 import { default as DestroyScriptJson } from "../scripts/Destroy.ral.json";
 import { default as DestroyOgAlfProtocolScriptJson } from "../walf/DestroyOgAlfProtocol.ral.json";
+import { default as DestroyWangProtocolScriptJson } from "../wang/DestroyWangProtocol.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
 import { default as EditCollectionUriScriptJson } from "../gamefi/EditCollectionUri.ral.json";
 import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.json";
+import { default as EditWangFeesScriptJson } from "../wang/EditWangFees.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
 import { default as EndScriptJson } from "../gamefi/battle/End.ral.json";
 import { default as ForceContractCancelScriptJson } from "../gamefi/battle/ForceContractCancel.ral.json";
@@ -32,9 +35,12 @@ import { default as LeaveBattleScriptJson } from "../gamefi/battle/LeaveBattle.r
 import { default as MintAlfScriptJson } from "../walf/MintAlf.ral.json";
 import { default as MintOgAlfScriptJson } from "../walf/MintOgAlf.ral.json";
 import { default as MintPlayerScriptJson } from "../gamefi/MintPlayer.ral.json";
+import { default as MintWWangScriptJson } from "../wang/MintWWang.ral.json";
+import { default as MintWangScriptJson } from "../wang/MintWang.ral.json";
 import { default as SendoutScriptJson } from "../scripts/Sendout.ral.json";
 import { default as StartScriptJson } from "../gamefi/battle/Start.ral.json";
 import { default as TopupScriptJson } from "../scripts/Topup.ral.json";
+import { default as TopupWangProtocolScriptJson } from "../wang/TopupWangProtocol.ral.json";
 import { default as UpdateCreationFeeScriptJson } from "../createtoken/UpdateCreationFee.ral.json";
 import { default as UpdateNFTScriptJson } from "../gamefi/UpdateNFT.ral.json";
 import { default as UpdateNFTFieldsScriptJson } from "../gamefi/UpdateNFTFields.ral.json";
@@ -83,6 +89,11 @@ export const CollectOgAlfFees = new ExecutableScript<{ contract: HexString }>(
   getContractByCodeHash
 );
 
+export const CollectWangFees = new ExecutableScript<{ contract: HexString }>(
+  Script.fromJson(CollectWangFeesScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const CreatePvp = new ExecutableScript<{
   market: HexString;
   paca: HexString;
@@ -97,6 +108,13 @@ export const DestroyOgAlfProtocol = new ExecutableScript<{
   contract: HexString;
 }>(
   Script.fromJson(DestroyOgAlfProtocolScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const DestroyWangProtocol = new ExecutableScript<{
+  contract: HexString;
+}>(
+  Script.fromJson(DestroyWangProtocolScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
@@ -118,6 +136,14 @@ export const EditOgAlfFees = new ExecutableScript<{
   newfee: bigint;
 }>(
   Script.fromJson(EditOgAlfFeesScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const EditWangFees = new ExecutableScript<{
+  contract: HexString;
+  newfee: bigint;
+}>(
+  Script.fromJson(EditWangFeesScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
@@ -167,6 +193,16 @@ export const MintPlayer = new ExecutableScript<{
   getContractByCodeHash
 );
 
+export const MintWWang = new ExecutableScript<{
+  contract: HexString;
+  amount: bigint;
+}>(Script.fromJson(MintWWangScriptJson, "", AllStructs), getContractByCodeHash);
+
+export const MintWang = new ExecutableScript<{
+  contract: HexString;
+  amount: bigint;
+}>(Script.fromJson(MintWangScriptJson, "", AllStructs), getContractByCodeHash);
+
 export const Sendout = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
@@ -182,6 +218,14 @@ export const Topup = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
 }>(Script.fromJson(TopupScriptJson, "", AllStructs), getContractByCodeHash);
+
+export const TopupWangProtocol = new ExecutableScript<{
+  contract: HexString;
+  amount: bigint;
+}>(
+  Script.fromJson(TopupWangProtocolScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const UpdateCreationFee = new ExecutableScript<{
   contract: HexString;

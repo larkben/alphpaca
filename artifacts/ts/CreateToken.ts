@@ -31,9 +31,10 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as CreateTokenContractJson } from "../createtoken/CreateToken.ral.json";
-import { getContractByCodeHash } from "./contracts";
+import { getContractByCodeHash, registerContract } from "./contracts";
 import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
@@ -214,6 +215,7 @@ export const CreateToken = new Factory(
     AllStructs
   )
 );
+registerContract(CreateToken);
 
 // Use this class to interact with the blockchain
 export class CreateTokenInstance extends ContractInstance {
@@ -355,14 +357,22 @@ export class CreateTokenInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends CreateTokenTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<CreateTokenTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends CreateTokenTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<CreateTokenTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
+    callss: Narrow<Callss>
+  ): Promise<CreateTokenTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends
+      | CreateTokenTypes.MultiCallParams
+      | CreateTokenTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(
       CreateToken,
       this,
       callss,
       getContractByCodeHash
-    )) as CreateTokenTypes.MulticallReturnType<Callss>;
+    );
   }
 }

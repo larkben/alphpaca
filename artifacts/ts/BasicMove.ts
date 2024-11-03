@@ -31,9 +31,10 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as BasicMoveContractJson } from "../gamefi/moves/BasicMove.ral.json";
-import { getContractByCodeHash } from "./contracts";
+import { getContractByCodeHash, registerContract } from "./contracts";
 import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
@@ -197,6 +198,7 @@ export const BasicMove = new Factory(
     AllStructs
   )
 );
+registerContract(BasicMove);
 
 // Use this class to interact with the blockchain
 export class BasicMoveInstance extends ContractInstance {
@@ -296,14 +298,22 @@ export class BasicMoveInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends BasicMoveTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<BasicMoveTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends BasicMoveTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<BasicMoveTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
+    callss: Narrow<Callss>
+  ): Promise<BasicMoveTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends
+      | BasicMoveTypes.MultiCallParams
+      | BasicMoveTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(
       BasicMove,
       this,
       callss,
       getContractByCodeHash
-    )) as BasicMoveTypes.MulticallReturnType<Callss>;
+    );
   }
 }

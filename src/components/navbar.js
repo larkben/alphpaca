@@ -76,6 +76,7 @@ export function Navbar() {
             )}
           </div>
           <Link className="text-white hover:text-cyan-300" href="/walf">Wrapped Alf Protocol</Link>
+          <Link className="text-white hover:text-cyan-300" href="/wang">Wrapped Wang Protocol</Link>
         </nav>
         <div className="z-50 flex items-center space-x-2">
           <Link className="text-white hover:text-cyan-300" href="https://twitter.com/alphpacas">

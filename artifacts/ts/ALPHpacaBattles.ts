@@ -31,9 +31,10 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as ALPHpacaBattlesContractJson } from "../gamefi/ALPHpacaBattles.ral.json";
-import { getContractByCodeHash } from "./contracts";
+import { getContractByCodeHash, registerContract } from "./contracts";
 import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
@@ -125,6 +126,7 @@ export const ALPHpacaBattles = new Factory(
     AllStructs
   )
 );
+registerContract(ALPHpacaBattles);
 
 // Use this class to interact with the blockchain
 export class ALPHpacaBattlesInstance extends ContractInstance {

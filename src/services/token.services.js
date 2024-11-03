@@ -1,5 +1,27 @@
 import { DUST_AMOUNT, addressFromContractId, contractIdFromAddress, hexToString, stringToHex } from '@alephium/web3'
-import { Topup, Sendout, Destroy, Buildtoken, Gettoken, Editfee, Destroycreator, CollectFees, UpdateCreationFee, MintAlf, MintOgAlf, CollectOgAlfFees, EditOgAlfFees, DestroyOgAlfProtocol, ActivateWalfProtocol} from '../../artifacts/ts/scripts';
+import { 
+  Topup, 
+  Sendout, 
+  Destroy, 
+  Buildtoken, 
+  Gettoken, 
+  Editfee, 
+  Destroycreator, 
+  CollectFees, 
+  UpdateCreationFee, 
+  MintAlf, 
+  MintOgAlf, 
+  CollectOgAlfFees, 
+  EditOgAlfFees, 
+  DestroyOgAlfProtocol, 
+  ActivateWalfProtocol,
+  MintWWang,
+  MintWang,
+  CollectWangFees,
+  EditWangFees,
+  TopupWangProtocol,
+  DestroyWangProtocol
+} from '../../artifacts/ts/scripts';
 import * as web3 from '@alephium/web3'
 
 // Token Creation Tool
@@ -133,6 +155,89 @@ export const ServiceDestroyWrappedAlfProtocol = async (
   return await DestroyOgAlfProtocol.execute(signerProvider, {
     initialFields: {
       contract: "8a8fe3c9b1e5e8ac47363a79c0afe21b3152f6bad0e8b23de73ad0e4f434c600"
+    },
+    attoAlphAmount: DUST_AMOUNT
+  })
+}
+
+// wang wrapper
+
+const wrapper = ""
+
+// mint wrapped wang
+export const ServiceMintWrappedWang = async (
+  signerProvider,
+  amount
+) => {
+  return await MintWWang.execute(signerProvider, {
+    initialFields: {
+      contract: wrapper,
+      amount: BigInt(amount)
+    },
+    attoAlphAmount: DUST_AMOUNT,
+    tokens: [{id: "c0c0af7a481e3e50c50e418bf8ff6923dc4d878ac3744474e8c708a8adccfb00", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 1000000000000000000n}]
+  })
+}
+
+// mint wrapped wang
+export const ServiceMintWang = async (
+  signerProvider,
+  amount
+) => {
+  return await MintWang.execute(signerProvider, {
+    initialFields: {
+      contract: wrapper,
+      amount: BigInt(amount)
+    },
+    attoAlphAmount: DUST_AMOUNT,
+    tokens: [{id: "e8b7cc961cb7689649234d9e7890e134c5a6619759ea0212d6457b06cbed9c00", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 1000000000000000000n}]
+  })
+}
+
+export const ServiceCollectWangFees = async (
+  signerProvider
+) => {
+  return await CollectWangFees.execute(signerProvider, {
+    initialFields: {
+      contract: wrapper
+    },
+    attoAlphAmount: DUST_AMOUNT
+  })
+}
+
+export const ServiceEditWangFees = async (
+  signerProvider,
+  amount
+) => {
+  return await EditWangFees.execute(signerProvider, {
+    initialFields: {
+      contract: wrapper,
+      newfee: BigInt(amount)
+    },
+    attoAlphAmount: DUST_AMOUNT
+  })
+}
+
+export const ServiceTopupWang = async (
+  signerProvider,
+  amount
+) => {
+  return await TopupWangProtocol.execute(signerProvider, {
+    initialFields: {
+      contract: wrapper,
+      amount: amount
+    },
+    attoAlphAmount: DUST_AMOUNT,
+    tokens: [{id: "e8b7cc961cb7689649234d9e7890e134c5a6619759ea0212d6457b06cbed9c00", amount: BigInt(amount) }]
+  })
+}
+
+export const ServiceDestroyWangProtocol = async (
+  signerProvider
+) => {
+  return await DestroyWangProtocol.execute(signerProvider, {
+    initialFields: {
+      contract: wrapper
     },
     attoAlphAmount: DUST_AMOUNT
   })

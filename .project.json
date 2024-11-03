@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v3.6.0",
+  "fullNodeVersion": "v3.8.5",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -7,7 +7,8 @@
     "ignoreUnusedPrivateFunctionsWarnings": false,
     "ignoreUpdateFieldsCheckWarnings": false,
     "ignoreCheckExternalCallerWarnings": false,
-    "ignoreUnusedFunctionReturnWarnings": false
+    "ignoreUnusedFunctionReturnWarnings": false,
+    "skipAbstractContractCheck": false
   },
   "infos": {
     "ALPHpacaBattles": {
@@ -76,6 +77,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "CollectWangFees": {
+      "sourceFile": "wang/wang.ral",
+      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "CreatePvp": {
       "sourceFile": "gamefi/battle/findbattle.ral",
       "sourceCodeHash": "8544526783126e417fd11b91de5c7160424b005dc6ae30cb23c1db04434efac3",
@@ -106,6 +113,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "DestroyWangProtocol": {
+      "sourceFile": "wang/wang.ral",
+      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "Destroycreator": {
       "sourceFile": "createtoken/tx_destroy.ral",
       "sourceCodeHash": "0181b19d66c8aa817f466b2a360f40eac7e4557e101666bde9b10039ccf4ea05",
@@ -121,6 +134,12 @@
     "EditOgAlfFees": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "EditWangFees": {
+      "sourceFile": "wang/wang.ral",
+      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -179,19 +198,19 @@
       "codeHashDebug": ""
     },
     "IFungibleToken": {
-      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFT": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_interface.ral",
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_interface.ral",
       "sourceCodeHash": "92956f4e61c198f011b48dbda2ed76193ffc79ac9c39f60bf1763a34e02f2c41",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFTCollection": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_collection_interface.ral",
+      "sourceFile": "../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_collection_interface.ral",
       "sourceCodeHash": "9b199426ea89c188ce858b48ab809f13b9fc1ed0d64ca91e3d600eda8fbf6c42",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
@@ -223,6 +242,18 @@
     "MintPlayer": {
       "sourceFile": "gamefi/playerbase.ral",
       "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "MintWWang": {
+      "sourceFile": "wang/wang.ral",
+      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "MintWang": {
+      "sourceFile": "wang/wang.ral",
+      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -280,6 +311,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "TopupWangProtocol": {
+      "sourceFile": "wang/wang.ral",
+      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "UpdateCreationFee": {
       "sourceFile": "createtoken/tx_updatefee.ral",
       "sourceCodeHash": "930ec4ac679793f934b95521e88b750e414af71820c72f9bcfd03cb747fedd15",
@@ -333,6 +370,12 @@
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "b01b6b7db2945f4a58decc02a85c64337321f852569e692aa793274740f2f626"
+    },
+    "WrappedWangProtocol": {
+      "sourceFile": "wang/wang.ral",
+      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "69c054e7f2cd8f098e238b8374b493150389ed67f617f6e1baaa6c4c6b329e08"
     }
   }
 }
