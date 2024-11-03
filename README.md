@@ -17,7 +17,7 @@ Besides being cute, cuddly and collectible ALPHpacas represent being an early me
 
 Current Team as Stands:
 
-larkben - smart contract developer and average web developer (cofounder of ALPHaga NFT Marketplace)
+larkben - smart contract developer and average web developer (cofounder of ALPHaga NFT Marketplace) <br/>
 overgames - talented backend and frontend web developer (cofounder of ALPHaga NFT Marketplace)
 
 
