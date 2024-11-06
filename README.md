@@ -7,6 +7,7 @@ ALPHpacas is a token with roughly ~11 million circulating with no inital ICO (al
 
 `Token Creator` - create a token on Alephium (depreciating) <br/>
 `Walf Protocol` - convert 1 OG ALF into its wrapped variant <br/>
+`Wang Wrapper` - convert group 2 wang over into group 0 <br/>
 `Paca Punch 🥊` - a Pvp game built entirely on the Alephium blockchain using smart contracts (developing)
 
 ### What can I do with them?
