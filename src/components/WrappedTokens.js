@@ -11,7 +11,7 @@ import {
 import { waitTxConfirmed } from '../lib/utils'
 
 export const WrappedTokens = ({ config }) => {
-  const { signer, account } = useWallet()
+  const { signer } = useWallet()
   const [tokenType, setTokenType] = useState('alf')
   const [amountOgToken, setAmountOgToken] = useState("")
   const [amountWrappedToken, setAmountWrappedToken] = useState("")
@@ -21,19 +21,23 @@ export const WrappedTokens = ({ config }) => {
 
   useEffect(() => {
     if (amountOgToken) {
-      const multiplier = tokenType === 'alf' ? 1000000000000000000 : 100000
-      setPredictedWrappedAmount(Number(amountOgToken) * multiplier)
+      const multiplier = tokenType === 'alf' ? 1000000000000000000 : 10000
+      const amount = Number(amountOgToken) * multiplier
+      setPredictedWrappedAmount(tokenType === 'alf' 
+        ? amount.toLocaleString('fullwide', {useGrouping:false}) 
+        : Number(amountOgToken))
     } else {
       setPredictedWrappedAmount(0)
     }
   }, [amountOgToken, tokenType])
 
-
-  // both the wrapped and unwrapped wang have 5 decimals
   useEffect(() => {
     if (amountWrappedToken) {
       const divisor = tokenType === 'alf' ? 1000000000000000000 : 10000
-      setPredictedOgAmount(Number(amountWrappedToken) / divisor)
+      const amount = Number(amountWrappedToken) / divisor
+      setPredictedOgAmount(tokenType === 'alf' 
+        ? amount.toFixed(18)
+        : Number(amountWrappedToken))
     } else {
       setPredictedOgAmount(0)
     }
@@ -106,55 +110,6 @@ export const WrappedTokens = ({ config }) => {
     )
   }
 
-  const FormSection = ({ type, amount, setAmount, predictedAmount, handleSubmit }) => (
-    <motion.section 
-      className="space-y-4"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3 }}
-    >
-      <h2 className="text-2xl font-semibold text-gray-200">
-        Mint {type} {tokenType.toUpperCase()}
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">
-            {type === 'Wrapped' ? 'Original' : 'Wrapped'} {tokenType.toUpperCase()} Amount
-          </label>
-          <motion.input
-            whileFocus={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-            type="text"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 shadow-neumorphDark-inset focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Enter amount"
-          />
-          {predictedAmount > 0 && (
-            <motion.p 
-              className="text-sm text-gray-400"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-            >
-              You will receive: {predictedAmount} {type} {tokenType.toUpperCase()}
-            </motion.p>
-          )}
-        </div>
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          type="submit"
-          className="w-full px-6 py-3 rounded-xl bg-gray-800 text-green-500 shadow-neumorphDark hover:shadow-neumorphDark-inset transition-all duration-300"
-        >
-          Mint {type} Token
-        </motion.button>
-      </form>
-    </motion.section>
-  )
-
   const slideVariants = {
     enter: (direction) => ({
       x: direction > 0 ? 300 : -300,
@@ -175,105 +130,126 @@ export const WrappedTokens = ({ config }) => {
   const [[page, direction], setPage] = useState([0, 0]);
 
   const handleTokenTypeChange = (type) => {
-    const newDirection = type === 'alf' ? -1 : 1;
-    const newPage = type === 'alf' ? 0 : 1;
-    setPage([newPage, newDirection]);
-    setTokenType(type);
+    if (type !== tokenType) {
+      const newDirection = type === 'alf' ? -1 : 1;
+      const newPage = type === 'alf' ? 0 : 1;
+      setPage([newPage, newDirection]);
+      setTokenType(type);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 py-20 px-4">
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         <StatusMessage />
       </AnimatePresence>
       
-      <motion.div 
-        className="max-w-md mx-auto rounded-2xl bg-gray-800 p-8 shadow-neumorphDark overflow-hidden"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div className="max-w-md mx-auto rounded-2xl bg-gray-800 p-8 shadow-neumorphDark overflow-hidden">
         <div className="flex justify-center gap-4 mb-8">
-          <motion.button 
+          <button 
             onClick={() => handleTokenTypeChange('alf')}
-            whileHover={{ 
-              backgroundColor: tokenType === 'alf' ? '#22c55e' : '#374151',
-              transition: { duration: 0.2 }
-            }}
-            animate={{ 
-              backgroundColor: tokenType === 'alf' ? '#22c55e' : '#1f2937',
-            }}
-            whileTap={{ 
-              scale: 0.95,
-              transition: { type: "spring", stiffness: 400, damping: 10 }
-            }}
             className={`px-6 py-3 rounded-xl transition-colors duration-200 ${
-              tokenType === 'alf' ? 'text-white' : 'text-gray-300 shadow-neumorphDark'
+              tokenType === 'alf' 
+                ? 'bg-green-500 text-white' 
+                : 'bg-gray-700 text-gray-300 shadow-neumorphDark'
             }`}
           >
             Wrapped ALF
-          </motion.button>
-          <motion.button 
+          </button>
+          <button 
             onClick={() => handleTokenTypeChange('wang')}
-            whileHover={{ 
-              backgroundColor: tokenType === 'wang' ? '#22c55e' : '#374151',
-              transition: { duration: 0.2 }
-            }}
-            animate={{ 
-              backgroundColor: tokenType === 'wang' ? '#22c55e' : '#1f2937',
-            }}
-            whileTap={{ 
-              scale: 0.95,
-              transition: { type: "spring", stiffness: 400, damping: 10 }
-            }}
             className={`px-6 py-3 rounded-xl transition-colors duration-200 ${
-              tokenType === 'wang' ? 'text-white' : 'text-gray-300 shadow-neumorphDark'
+              tokenType === 'wang' 
+                ? 'bg-green-500 text-white' 
+                : 'bg-gray-700 text-gray-300 shadow-neumorphDark'
             }`}
           >
             Wrapped WANG
-          </motion.button>
+          </button>
         </div>
 
-        <motion.h1 
-          className="text-3xl font-bold text-center mb-8 text-green-500"
-          layout
-        >
-          Wrapped {tokenType.toUpperCase()} Protocol
-        </motion.h1>
-
-        <AnimatePresence mode="wait" custom={direction}>
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={tokenType}
-            custom={direction}
             variants={slideVariants}
             initial="enter"
             animate="center"
             exit="exit"
+            custom={tokenType === 'wang' ? 1 : -1}
             transition={{
-              enter: { duration: 0.2 },
-              exit: { duration: 0.3 },
-              x: { type: "spring", stiffness: 300, damping: 30 }
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 }
             }}
-            className="space-y-8"
           >
-            <FormSection 
-              type="Wrapped"
-              amount={amountOgToken}
-              setAmount={setAmountOgToken}
-              predictedAmount={predictedWrappedAmount}
-              handleSubmit={handleMintWrapped}
-            />
+            <h1 className="text-3xl font-bold text-center mb-8 text-green-500">
+              Wrapped {tokenType.toUpperCase()} Protocol
+            </h1>
 
-            <FormSection 
-              type="Original"
-              amount={amountWrappedToken}
-              setAmount={setAmountWrappedToken}
-              predictedAmount={predictedOgAmount}
-              handleSubmit={handleMintOriginal}
-            />
+            <div className="space-y-8">
+              <section className="space-y-4">
+                <h2 className="text-2xl font-semibold text-gray-200">
+                  Mint Wrapped {tokenType.toUpperCase()}
+                </h2>
+                <form onSubmit={handleMintWrapped} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">
+                      Original {tokenType.toUpperCase()} Amount
+                    </label>
+                    <input
+                      type="text"
+                      value={amountOgToken}
+                      onChange={(e) => setAmountOgToken(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 shadow-neumorphDark-inset focus:outline-none focus:ring-2 focus:ring-green-500"
+                      placeholder="Enter amount"
+                    />
+                    {predictedWrappedAmount > 0 && (
+                      <p className="text-sm text-gray-400">
+                        You will receive: {predictedWrappedAmount} Wrapped {tokenType.toUpperCase()}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full px-6 py-3 rounded-xl bg-gray-800 text-green-500 shadow-neumorphDark hover:shadow-neumorphDark-inset transition-all duration-300"
+                  >
+                    Mint Wrapped Token
+                  </button>
+                </form>
+              </section>
+              <section className="space-y-4">
+                <h2 className="text-2xl font-semibold text-gray-200">
+                  Mint Original {tokenType.toUpperCase()}
+                </h2>
+                <form onSubmit={handleMintOriginal} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">
+                      Wrapped {tokenType.toUpperCase()} Amount
+                    </label>
+                    <input
+                      type="text"
+                      value={amountWrappedToken}
+                      onChange={(e) => setAmountWrappedToken(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 shadow-neumorphDark-inset focus:outline-none focus:ring-2 focus:ring-green-500"
+                      placeholder="Enter amount"
+                    />
+                    {predictedOgAmount > 0 && (
+                      <p className="text-sm text-gray-400">
+                        You will receive: {predictedOgAmount} Original {tokenType.toUpperCase()}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full px-6 py-3 rounded-xl bg-gray-800 text-green-500 shadow-neumorphDark hover:shadow-neumorphDark-inset transition-all duration-300"
+                  >
+                    Mint Original Token
+                  </button>
+                </form>
+              </section>
+            </div>
           </motion.div>
         </AnimatePresence>
-      </motion.div>
+      </div>
     </div>
   )
 } 
