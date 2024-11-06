@@ -22,6 +22,7 @@ const deployNFTTemplate: DeployFunction<Settings> = async (
       feescollected: 0n
     }
   })
+  
   const contractId = result.contractInstance.contractId
   const contractAddress = result.contractInstance.address
   console.log(`WW address: ${contractAddress}, contract id: ${contractId}`)

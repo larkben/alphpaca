@@ -162,7 +162,7 @@ export const ServiceDestroyWrappedAlfProtocol = async (
 
 // wang wrapper
 
-const wrapper = ""
+const wrapper = "4264d30873a297c93fbc0a2b0286f8df7a16991c2618f42c34e5fc075f252300"
 
 // mint wrapped wang
 export const ServiceMintWrappedWang = async (
@@ -175,7 +175,7 @@ export const ServiceMintWrappedWang = async (
       amount: BigInt(amount)
     },
     attoAlphAmount: DUST_AMOUNT,
-    tokens: [{id: "c0c0af7a481e3e50c50e418bf8ff6923dc4d878ac3744474e8c708a8adccfb00", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 1000000000000000000n}]
+    tokens: [{id: "c1aeea313e36454f35beaf40130c9219faa40ba645aff93e16429146039f8202", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 100000000000000000n }]
   })
 }
 
@@ -190,7 +190,7 @@ export const ServiceMintWang = async (
       amount: BigInt(amount)
     },
     attoAlphAmount: DUST_AMOUNT,
-    tokens: [{id: "e8b7cc961cb7689649234d9e7890e134c5a6619759ea0212d6457b06cbed9c00", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 1000000000000000000n}]
+    tokens: [{id: "05fceaf3d6f0e5e3ebce239f6c5503d42f9595ee4dcb1c8f21965f089e4b9600", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 1000000000000000000n}]
   })
 }
 

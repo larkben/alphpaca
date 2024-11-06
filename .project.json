@@ -1,7 +1,7 @@
 {
   "fullNodeVersion": "v3.8.1",
   "compilerOptionsUsed": {
-    "ignoreUnusedConstantsWarnings": true,
+    "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
     "ignoreUnusedFieldsWarnings": false,
     "ignoreUnusedPrivateFunctionsWarnings": false,
@@ -79,7 +79,7 @@
     },
     "CollectWangFees": {
       "sourceFile": "wang/wang.ral",
-      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "sourceCodeHash": "69a924ae6c2b7db04fbb68241ce0a50c0760b66e4a20e00aadf2e5f03ed1c4d9",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -115,7 +115,7 @@
     },
     "DestroyWangProtocol": {
       "sourceFile": "wang/wang.ral",
-      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "sourceCodeHash": "69a924ae6c2b7db04fbb68241ce0a50c0760b66e4a20e00aadf2e5f03ed1c4d9",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -139,7 +139,7 @@
     },
     "EditWangFees": {
       "sourceFile": "wang/wang.ral",
-      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "sourceCodeHash": "69a924ae6c2b7db04fbb68241ce0a50c0760b66e4a20e00aadf2e5f03ed1c4d9",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -198,19 +198,19 @@
       "codeHashDebug": ""
     },
     "IFungibleToken": {
-      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFT": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_interface.ral",
+      "sourceFile": "../../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_interface.ral",
       "sourceCodeHash": "92956f4e61c198f011b48dbda2ed76193ffc79ac9c39f60bf1763a34e02f2c41",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFTCollection": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_collection_interface.ral",
+      "sourceFile": "../../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_collection_interface.ral",
       "sourceCodeHash": "9b199426ea89c188ce858b48ab809f13b9fc1ed0d64ca91e3d600eda8fbf6c42",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
@@ -247,13 +247,13 @@
     },
     "MintWWang": {
       "sourceFile": "wang/wang.ral",
-      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "sourceCodeHash": "69a924ae6c2b7db04fbb68241ce0a50c0760b66e4a20e00aadf2e5f03ed1c4d9",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "MintWang": {
       "sourceFile": "wang/wang.ral",
-      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "sourceCodeHash": "69a924ae6c2b7db04fbb68241ce0a50c0760b66e4a20e00aadf2e5f03ed1c4d9",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -313,7 +313,7 @@
     },
     "TopupWangProtocol": {
       "sourceFile": "wang/wang.ral",
-      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "sourceCodeHash": "69a924ae6c2b7db04fbb68241ce0a50c0760b66e4a20e00aadf2e5f03ed1c4d9",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -373,7 +373,7 @@
     },
     "WrappedWangProtocol": {
       "sourceFile": "wang/wang.ral",
-      "sourceCodeHash": "751f181671d14881f445e41bb4dcd471675d9cb5f6a46d3d3f1bc8328bbecd56",
+      "sourceCodeHash": "69a924ae6c2b7db04fbb68241ce0a50c0760b66e4a20e00aadf2e5f03ed1c4d9",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "69c054e7f2cd8f098e238b8374b493150389ed67f617f6e1baaa6c4c6b329e08"
     }

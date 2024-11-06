@@ -1,7 +1,7 @@
 {
-  "version": "v3.8.5",
+  "version": "v3.8.1",
   "name": "MintWWang",
-  "bytecodeTemplate": "010103000200160c0d{0}010017000c0d{0}01041701b47a1600{1}a31601a2{1}0d0c{0}0105",
+  "bytecodeTemplate": "010103000200160c0d{0}010317000c0d{0}01041701b47a1600{1}a31601a2{1}0d0c{0}0105",
   "fieldsSig": {
     "names": [
       "contract",

@@ -28,6 +28,8 @@ export const WrappedTokens = ({ config }) => {
     }
   }, [amountOgToken, tokenType])
 
+
+  // both the wrapped and unwrapped wang have 5 decimals
   useEffect(() => {
     if (amountWrappedToken) {
       const divisor = tokenType === 'alf' ? 1000000000000000000 : 10000

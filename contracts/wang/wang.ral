@@ -131,7 +131,7 @@ TxScript MintWWang(
     contract: WrappedWangProtocol,
     amount: U256
 ) {
-    let wrappedalph = contract.getWWangToken()
+    let wrappedalph = contract.getWang()
 
     let fee = contract.getFee()
 
@@ -142,7 +142,7 @@ TxScript MintWang(
     contract: WrappedWangProtocol,
     amount: U256
 ) {
-    let ogalph = contract.getWang()
+    let ogalph = contract.getWWangToken()
 
     let fee = contract.getFee()
 

@@ -1,11 +1,10 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@std/assert@1": "1.0.7",
-    "jsr:@std/internal@^1.0.5": "1.0.5",
-    "npm:@alephium/cli@^1.8.4": "1.8.4_@types+node@22.5.4",
-    "npm:@alephium/web3-react@^1.8.4": "1.8.4_react@18.3.1_react-dom@18.3.1__react@18.3.1",
-    "npm:@alephium/web3-test@^1.8.4": "1.8.4",
+    "npm:@alephium/cli@^1.8.0": "1.8.4_@types+node@22.5.4",
+    "npm:@alephium/web3-react@^1.8.0": "1.8.4_react@18.3.1_react-dom@18.3.1__react@18.3.1",
+    "npm:@alephium/web3-test@^1.8.0": "1.8.4",
+    "npm:@alephium/web3@^1.8.0": "1.8.4",
     "npm:@alephium/web3@^1.8.4": "1.8.4",
     "npm:@alph-name-service/ans-sdk@0.1": "0.1.0",
     "npm:@emotion/react@^11.13.3": "11.13.3_react@18.3.1",
@@ -34,17 +33,6 @@
     "npm:tailwind-merge@^1.14.0": "1.14.0",
     "npm:tailwindcss-animate@^1.0.7": "1.0.7_tailwindcss@3.4.14__postcss@8.4.47",
     "npm:tailwindcss@3": "3.4.14_postcss@8.4.47"
-  },
-  "jsr": {
-    "@std/assert@1.0.7": {
-      "integrity": "64ce9fac879e0b9f3042a89b3c3f8ccfc9c984391af19e2087513a79d73e28c3",
-      "dependencies": [
-        "jsr:@std/internal"
-      ]
-    },
-    "@std/internal@1.0.5": {
-      "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
-    }
   },
   "npm": {
     "@adraffy/ens-normalize@1.10.1": {
@@ -127,7 +115,7 @@
       "dependencies": [
         "@alephium/web3",
         "@noble/secp256k1",
-        "@types/node@16.18.118",
+        "@types/node@16.18.119",
         "bip32",
         "bip39",
         "elliptic@6.5.4",
@@ -1581,8 +1569,8 @@
     "@types/node@11.11.6": {
       "integrity": "sha512-Exw4yUWMBXM3X+8oqzJNRqZSwUAaS4+7NdvHqQuFi/d+synz++xmX3QIf+BFqneW8N31R8Ky+sikfZUXq07ggQ=="
     },
-    "@types/node@16.18.118": {
-      "integrity": "sha512-YgPbVGrf+mL4Qp8KTcd18OXfIsm1QYwHkldmWTNIR8aZH2EYSPNyLFFZHEXZIGYvYrwnW++xGoWyt4w279QDrQ=="
+    "@types/node@16.18.119": {
+      "integrity": "sha512-ia7V9a2FnhUFfetng4/sRPBMTwHZUkPFY736rb1cg9AgG7MZdR97q7/nLR9om+sq5f1la9C857E0l/nrI0RiFQ=="
     },
     "@types/node@22.5.4": {
       "integrity": "sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==",
@@ -6143,15 +6131,12 @@
     }
   },
   "workspace": {
-    "dependencies": [
-      "jsr:@std/assert@1"
-    ],
     "packageJson": {
       "dependencies": [
-        "npm:@alephium/cli@^1.8.4",
-        "npm:@alephium/web3-react@^1.8.4",
-        "npm:@alephium/web3-test@^1.8.4",
-        "npm:@alephium/web3@^1.8.4",
+        "npm:@alephium/cli@^1.8.0",
+        "npm:@alephium/web3-react@^1.8.0",
+        "npm:@alephium/web3-test@^1.8.0",
+        "npm:@alephium/web3@^1.8.0",
         "npm:@alph-name-service/ans-sdk@0.1",
         "npm:@emotion/react@^11.13.3",
         "npm:@emotion/styled@^11.13.0",
