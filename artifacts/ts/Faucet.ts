@@ -31,9 +31,10 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as FaucetContractJson } from "../Faucet.ral.json";
-import { getContractByCodeHash } from "./contracts";
+import { getContractByCodeHash, registerContract } from "./contracts";
 import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
@@ -231,6 +232,7 @@ export const Faucet = new Factory(
     AllStructs
   )
 );
+registerContract(Faucet);
 
 // Use this class to interact with the blockchain
 export class FaucetInstance extends ContractInstance {
@@ -402,14 +404,15 @@ export class FaucetInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends FaucetTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<FaucetTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends FaucetTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<FaucetTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
-      Faucet,
-      this,
-      callss,
-      getContractByCodeHash
-    )) as FaucetTypes.MulticallReturnType<Callss>;
+    callss: Narrow<Callss>
+  ): Promise<FaucetTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends FaucetTypes.MultiCallParams | FaucetTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(Faucet, this, callss, getContractByCodeHash);
   }
 }

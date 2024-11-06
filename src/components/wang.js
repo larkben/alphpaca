@@ -3,9 +3,9 @@ import { Input } from "./ui/input"
 import { Button } from "./ui/button";
 import React, { useState, useEffect } from 'react'
 import { useWallet } from "@alephium/web3-react"
-import { ServiceMintWrappedAlf, ServiceMintOgAlf } from "../services/token.services"
+import { ServiceMintWrappedAlf, ServiceMintOgAlf, ServiceMintWrappedWang, ServiceMintWang } from "../services/token.services"
 
-export const Wrapped = ({ config }) => {
+export const WrappedWang = ({ config }) => {
   const { signer, account } = useWallet()
   const addressGroup = config.groupIndex
   const [ongoingTxId, setOngoingTxId] = useState()
@@ -18,7 +18,7 @@ export const Wrapped = ({ config }) => {
 
   useEffect(() => {
     if (amountOgAlf) {
-      setPredictedWrappedAmount(Number(amountOgAlf) * 1000000000000000000);
+      setPredictedWrappedAmount(Number(amountOgAlf) * 100000);
     } else {
       setPredictedWrappedAmount(0);
     }
@@ -26,7 +26,7 @@ export const Wrapped = ({ config }) => {
 
   useEffect(() => {
     if (amountWrappedAlf) {
-      setPredictedOgAlfAmount(Number(amountWrappedAlf) / 1000000000000000000);
+      setPredictedOgAlfAmount(Number(amountWrappedAlf) / 10000);
     } else {
       setPredictedOgAlfAmount(0);
     }
@@ -36,7 +36,7 @@ export const Wrapped = ({ config }) => {
   const handleMintWrappedOgAlf = async (e) => {
     e.preventDefault()
     if (signer) {
-      const result = await ServiceMintWrappedAlf(signer, amountOgAlf)
+      const result = await ServiceMintWrappedWang(signer, amountOgAlf)
     }
   }
 
@@ -44,7 +44,7 @@ export const Wrapped = ({ config }) => {
   const handleMintOgAlf = async (e) => {
     e.preventDefault()
     if (signer) {
-      const result = await ServiceMintOgAlf(signer, amountWrappedAlf)
+      const result = await ServiceMintWang(signer, amountWrappedAlf)
     }
   }
 

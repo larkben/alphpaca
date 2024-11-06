@@ -31,9 +31,10 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as RecoilMoveContractJson } from "../gamefi/moves/RecoilMove.ral.json";
-import { getContractByCodeHash } from "./contracts";
+import { getContractByCodeHash, registerContract } from "./contracts";
 import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
@@ -198,6 +199,7 @@ export const RecoilMove = new Factory(
     AllStructs
   )
 );
+registerContract(RecoilMove);
 
 // Use this class to interact with the blockchain
 export class RecoilMoveInstance extends ContractInstance {
@@ -297,14 +299,22 @@ export class RecoilMoveInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends RecoilMoveTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<RecoilMoveTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends RecoilMoveTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<RecoilMoveTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
+    callss: Narrow<Callss>
+  ): Promise<RecoilMoveTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends
+      | RecoilMoveTypes.MultiCallParams
+      | RecoilMoveTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(
       RecoilMove,
       this,
       callss,
       getContractByCodeHash
-    )) as RecoilMoveTypes.MulticallReturnType<Callss>;
+    );
   }
 }

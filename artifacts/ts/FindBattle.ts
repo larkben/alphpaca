@@ -31,9 +31,10 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as FindBattleContractJson } from "../gamefi/battle/FindBattle.ral.json";
-import { getContractByCodeHash } from "./contracts";
+import { getContractByCodeHash, registerContract } from "./contracts";
 import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
@@ -254,6 +255,7 @@ export const FindBattle = new Factory(
     AllStructs
   )
 );
+registerContract(FindBattle);
 
 // Use this class to interact with the blockchain
 export class FindBattleInstance extends ContractInstance {

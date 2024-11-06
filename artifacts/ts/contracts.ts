@@ -3,48 +3,18 @@
 /* eslint-disable */
 
 import { Contract, ContractFactory } from "@alephium/web3";
-import {
-  ALPHpacaBattles,
-  AllMoves,
-  BasicMove,
-  Battle,
-  CreateToken,
-  Faucet,
-  FeeCollection,
-  FindBattle,
-  HeldItems,
-  Item,
-  Player,
-  PlayerBase,
-  PowerMove,
-  RecoilMove,
-  Token,
-  WrappedOgAlfProtocol,
-} from ".";
 
 let contracts: ContractFactory<any>[] | undefined = undefined;
-export function getContractByCodeHash(codeHash: string): Contract {
+
+export function registerContract(factory: ContractFactory<any>) {
   if (contracts === undefined) {
-    contracts = [
-      ALPHpacaBattles,
-      AllMoves,
-      BasicMove,
-      Battle,
-      CreateToken,
-      Faucet,
-      FeeCollection,
-      FindBattle,
-      HeldItems,
-      Item,
-      Player,
-      PlayerBase,
-      PowerMove,
-      RecoilMove,
-      Token,
-      WrappedOgAlfProtocol,
-    ];
+    contracts = [factory];
+  } else {
+    contracts.push(factory);
   }
-  const c = contracts.find((c) => c.contract.hasCodeHash(codeHash));
+}
+export function getContractByCodeHash(codeHash: string): Contract {
+  const c = contracts?.find((c) => c.contract.hasCodeHash(codeHash));
   if (c === undefined) {
     throw new Error("Unknown code with code hash: " + codeHash);
   }

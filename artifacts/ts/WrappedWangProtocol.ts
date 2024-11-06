@@ -33,39 +33,39 @@ import {
   encodeContractFields,
   Narrow,
 } from "@alephium/web3";
-import { default as WrappedOgAlfProtocolContractJson } from "../walf/WrappedOgAlfProtocol.ral.json";
+import { default as WrappedWangProtocolContractJson } from "../wang/WrappedWangProtocol.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
 import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
-export namespace WrappedOgAlfProtocolTypes {
+export namespace WrappedWangProtocolTypes {
   export type Fields = {
-    walf: HexString;
-    walfamount: bigint;
+    wwang: HexString;
+    wwangamount: bigint;
     owner: Address;
-    ogalf: HexString;
-    ogalfamount: bigint;
+    wang: HexString;
+    wangamount: bigint;
     fee: bigint;
     feescollected: bigint;
   };
 
   export type State = ContractState<Fields>;
 
-  export type WrappedAlfMintedEvent = ContractEvent<{
+  export type WrappedWangMintedEvent = ContractEvent<{
     who: Address;
     amount: bigint;
   }>;
-  export type OgAlfRedeemedEvent = ContractEvent<{
+  export type OgWangRedeemedEvent = ContractEvent<{
     who: Address;
     amount: bigint;
   }>;
 
   export interface CallMethodTable {
-    getWalfToken: {
+    getWWangToken: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<HexString>;
     };
-    getWalfAmount: {
+    getWWangAmount: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
@@ -73,7 +73,7 @@ export namespace WrappedOgAlfProtocolTypes {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<Address>;
     };
-    getOgAlf: {
+    getWang: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<HexString>;
     };
@@ -81,11 +81,11 @@ export namespace WrappedOgAlfProtocolTypes {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
-    mintalf: {
+    mintwrapped: {
       params: CallContractParams<{ amount: bigint }>;
       result: CallContractResult<null>;
     };
-    mintogalf: {
+    mintog: {
       params: CallContractParams<{ amount: bigint }>;
       result: CallContractResult<null>;
     };
@@ -97,8 +97,8 @@ export namespace WrappedOgAlfProtocolTypes {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<null>;
     };
-    topupwalf: {
-      params: Omit<CallContractParams<{}>, "args">;
+    topupwwang: {
+      params: CallContractParams<{ amount: bigint }>;
       result: CallContractResult<null>;
     };
     editfee: {
@@ -123,11 +123,11 @@ export namespace WrappedOgAlfProtocolTypes {
   };
 
   export interface SignExecuteMethodTable {
-    getWalfToken: {
+    getWWangToken: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
-    getWalfAmount: {
+    getWWangAmount: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
@@ -135,7 +135,7 @@ export namespace WrappedOgAlfProtocolTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
-    getOgAlf: {
+    getWang: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
@@ -143,11 +143,11 @@ export namespace WrappedOgAlfProtocolTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
-    mintalf: {
+    mintwrapped: {
       params: SignExecuteContractMethodParams<{ amount: bigint }>;
       result: SignExecuteScriptTxResult;
     };
-    mintogalf: {
+    mintog: {
       params: SignExecuteContractMethodParams<{ amount: bigint }>;
       result: SignExecuteScriptTxResult;
     };
@@ -159,8 +159,8 @@ export namespace WrappedOgAlfProtocolTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
-    topupwalf: {
-      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+    topupwwang: {
+      params: SignExecuteContractMethodParams<{ amount: bigint }>;
       result: SignExecuteScriptTxResult;
     };
     editfee: {
@@ -175,10 +175,10 @@ export namespace WrappedOgAlfProtocolTypes {
 }
 
 class Factory extends ContractFactory<
-  WrappedOgAlfProtocolInstance,
-  WrappedOgAlfProtocolTypes.Fields
+  WrappedWangProtocolInstance,
+  WrappedWangProtocolTypes.Fields
 > {
-  encodeFields(fields: WrappedOgAlfProtocolTypes.Fields) {
+  encodeFields(fields: WrappedWangProtocolTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -186,80 +186,79 @@ class Factory extends ContractFactory<
     );
   }
 
-  eventIndex = { WrappedAlfMinted: 0, OgAlfRedeemed: 1 };
+  eventIndex = { WrappedWangMinted: 0, OgWangRedeemed: 1 };
   consts = {
     ErrorCodes: {
-      InvalidOgAlf: BigInt("0"),
-      InvalidWrappedAlf: BigInt("1"),
-      OgAlfInContract: BigInt("2"),
+      InvalidAmount: BigInt("1"),
+      WangInContract: BigInt("2"),
       InvalidCaller: BigInt("3"),
     },
   };
 
-  at(address: string): WrappedOgAlfProtocolInstance {
-    return new WrappedOgAlfProtocolInstance(address);
+  at(address: string): WrappedWangProtocolInstance {
+    return new WrappedWangProtocolInstance(address);
   }
 
   tests = {
-    getWalfToken: async (
+    getWWangToken: async (
       params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
+        TestContractParamsWithoutMaps<WrappedWangProtocolTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
-      return testMethod(this, "getWalfToken", params, getContractByCodeHash);
+      return testMethod(this, "getWWangToken", params, getContractByCodeHash);
     },
-    getWalfAmount: async (
+    getWWangAmount: async (
       params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
+        TestContractParamsWithoutMaps<WrappedWangProtocolTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
-      return testMethod(this, "getWalfAmount", params, getContractByCodeHash);
+      return testMethod(this, "getWWangAmount", params, getContractByCodeHash);
     },
     getOwner: async (
       params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
+        TestContractParamsWithoutMaps<WrappedWangProtocolTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<Address>> => {
       return testMethod(this, "getOwner", params, getContractByCodeHash);
     },
-    getOgAlf: async (
+    getWang: async (
       params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
+        TestContractParamsWithoutMaps<WrappedWangProtocolTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<HexString>> => {
-      return testMethod(this, "getOgAlf", params, getContractByCodeHash);
+      return testMethod(this, "getWang", params, getContractByCodeHash);
     },
     getFee: async (
       params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
+        TestContractParamsWithoutMaps<WrappedWangProtocolTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getFee", params, getContractByCodeHash);
     },
-    mintalf: async (
+    mintwrapped: async (
       params: TestContractParamsWithoutMaps<
-        WrappedOgAlfProtocolTypes.Fields,
+        WrappedWangProtocolTypes.Fields,
         { amount: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "mintalf", params, getContractByCodeHash);
+      return testMethod(this, "mintwrapped", params, getContractByCodeHash);
     },
-    mintogalf: async (
+    mintog: async (
       params: TestContractParamsWithoutMaps<
-        WrappedOgAlfProtocolTypes.Fields,
+        WrappedWangProtocolTypes.Fields,
         { amount: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "mintogalf", params, getContractByCodeHash);
+      return testMethod(this, "mintog", params, getContractByCodeHash);
     },
     destroyprotocol: async (
       params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
+        TestContractParamsWithoutMaps<WrappedWangProtocolTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -267,23 +266,23 @@ class Factory extends ContractFactory<
     },
     collectfees: async (
       params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
+        TestContractParamsWithoutMaps<WrappedWangProtocolTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "collectfees", params, getContractByCodeHash);
     },
-    topupwalf: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<WrappedOgAlfProtocolTypes.Fields, never>,
-        "testArgs"
+    topupwwang: async (
+      params: TestContractParamsWithoutMaps<
+        WrappedWangProtocolTypes.Fields,
+        { amount: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "topupwalf", params, getContractByCodeHash);
+      return testMethod(this, "topupwwang", params, getContractByCodeHash);
     },
     editfee: async (
       params: TestContractParamsWithoutMaps<
-        WrappedOgAlfProtocolTypes.Fields,
+        WrappedWangProtocolTypes.Fields,
         { newfee: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -292,7 +291,7 @@ class Factory extends ContractFactory<
   };
 
   stateForTest(
-    initFields: WrappedOgAlfProtocolTypes.Fields,
+    initFields: WrappedWangProtocolTypes.Fields,
     asset?: Asset,
     address?: string
   ) {
@@ -301,65 +300,65 @@ class Factory extends ContractFactory<
 }
 
 // Use this object to test and deploy the contract
-export const WrappedOgAlfProtocol = new Factory(
+export const WrappedWangProtocol = new Factory(
   Contract.fromJson(
-    WrappedOgAlfProtocolContractJson,
+    WrappedWangProtocolContractJson,
     "",
-    "b01b6b7db2945f4a58decc02a85c64337321f852569e692aa793274740f2f626",
+    "69c054e7f2cd8f098e238b8374b493150389ed67f617f6e1baaa6c4c6b329e08",
     AllStructs
   )
 );
-registerContract(WrappedOgAlfProtocol);
+registerContract(WrappedWangProtocol);
 
 // Use this class to interact with the blockchain
-export class WrappedOgAlfProtocolInstance extends ContractInstance {
+export class WrappedWangProtocolInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<WrappedOgAlfProtocolTypes.State> {
-    return fetchContractState(WrappedOgAlfProtocol, this);
+  async fetchState(): Promise<WrappedWangProtocolTypes.State> {
+    return fetchContractState(WrappedWangProtocol, this);
   }
 
   async getContractEventsCurrentCount(): Promise<number> {
     return getContractEventsCurrentCount(this.address);
   }
 
-  subscribeWrappedAlfMintedEvent(
-    options: EventSubscribeOptions<WrappedOgAlfProtocolTypes.WrappedAlfMintedEvent>,
+  subscribeWrappedWangMintedEvent(
+    options: EventSubscribeOptions<WrappedWangProtocolTypes.WrappedWangMintedEvent>,
     fromCount?: number
   ): EventSubscription {
     return subscribeContractEvent(
-      WrappedOgAlfProtocol.contract,
+      WrappedWangProtocol.contract,
       this,
       options,
-      "WrappedAlfMinted",
+      "WrappedWangMinted",
       fromCount
     );
   }
 
-  subscribeOgAlfRedeemedEvent(
-    options: EventSubscribeOptions<WrappedOgAlfProtocolTypes.OgAlfRedeemedEvent>,
+  subscribeOgWangRedeemedEvent(
+    options: EventSubscribeOptions<WrappedWangProtocolTypes.OgWangRedeemedEvent>,
     fromCount?: number
   ): EventSubscription {
     return subscribeContractEvent(
-      WrappedOgAlfProtocol.contract,
+      WrappedWangProtocol.contract,
       this,
       options,
-      "OgAlfRedeemed",
+      "OgWangRedeemed",
       fromCount
     );
   }
 
   subscribeAllEvents(
     options: EventSubscribeOptions<
-      | WrappedOgAlfProtocolTypes.WrappedAlfMintedEvent
-      | WrappedOgAlfProtocolTypes.OgAlfRedeemedEvent
+      | WrappedWangProtocolTypes.WrappedWangMintedEvent
+      | WrappedWangProtocolTypes.OgWangRedeemedEvent
     >,
     fromCount?: number
   ): EventSubscription {
     return subscribeContractEvents(
-      WrappedOgAlfProtocol.contract,
+      WrappedWangProtocol.contract,
       this,
       options,
       fromCount
@@ -367,90 +366,90 @@ export class WrappedOgAlfProtocolInstance extends ContractInstance {
   }
 
   view = {
-    getWalfToken: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getWalfToken">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getWalfToken">> => {
+    getWWangToken: async (
+      params?: WrappedWangProtocolTypes.CallMethodParams<"getWWangToken">
+    ): Promise<WrappedWangProtocolTypes.CallMethodResult<"getWWangToken">> => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
-        "getWalfToken",
+        "getWWangToken",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    getWalfAmount: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getWalfAmount">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getWalfAmount">> => {
+    getWWangAmount: async (
+      params?: WrappedWangProtocolTypes.CallMethodParams<"getWWangAmount">
+    ): Promise<WrappedWangProtocolTypes.CallMethodResult<"getWWangAmount">> => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
-        "getWalfAmount",
+        "getWWangAmount",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
     getOwner: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getOwner">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getOwner">> => {
+      params?: WrappedWangProtocolTypes.CallMethodParams<"getOwner">
+    ): Promise<WrappedWangProtocolTypes.CallMethodResult<"getOwner">> => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
         "getOwner",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    getOgAlf: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getOgAlf">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getOgAlf">> => {
+    getWang: async (
+      params?: WrappedWangProtocolTypes.CallMethodParams<"getWang">
+    ): Promise<WrappedWangProtocolTypes.CallMethodResult<"getWang">> => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
-        "getOgAlf",
+        "getWang",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
     getFee: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"getFee">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"getFee">> => {
+      params?: WrappedWangProtocolTypes.CallMethodParams<"getFee">
+    ): Promise<WrappedWangProtocolTypes.CallMethodResult<"getFee">> => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
         "getFee",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    mintalf: async (
-      params: WrappedOgAlfProtocolTypes.CallMethodParams<"mintalf">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"mintalf">> => {
+    mintwrapped: async (
+      params: WrappedWangProtocolTypes.CallMethodParams<"mintwrapped">
+    ): Promise<WrappedWangProtocolTypes.CallMethodResult<"mintwrapped">> => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
-        "mintalf",
+        "mintwrapped",
         params,
         getContractByCodeHash
       );
     },
-    mintogalf: async (
-      params: WrappedOgAlfProtocolTypes.CallMethodParams<"mintogalf">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"mintogalf">> => {
+    mintog: async (
+      params: WrappedWangProtocolTypes.CallMethodParams<"mintog">
+    ): Promise<WrappedWangProtocolTypes.CallMethodResult<"mintog">> => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
-        "mintogalf",
+        "mintog",
         params,
         getContractByCodeHash
       );
     },
     destroyprotocol: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"destroyprotocol">
+      params?: WrappedWangProtocolTypes.CallMethodParams<"destroyprotocol">
     ): Promise<
-      WrappedOgAlfProtocolTypes.CallMethodResult<"destroyprotocol">
+      WrappedWangProtocolTypes.CallMethodResult<"destroyprotocol">
     > => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
         "destroyprotocol",
         params === undefined ? {} : params,
@@ -458,32 +457,32 @@ export class WrappedOgAlfProtocolInstance extends ContractInstance {
       );
     },
     collectfees: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"collectfees">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"collectfees">> => {
+      params?: WrappedWangProtocolTypes.CallMethodParams<"collectfees">
+    ): Promise<WrappedWangProtocolTypes.CallMethodResult<"collectfees">> => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
         "collectfees",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    topupwalf: async (
-      params?: WrappedOgAlfProtocolTypes.CallMethodParams<"topupwalf">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"topupwalf">> => {
+    topupwwang: async (
+      params: WrappedWangProtocolTypes.CallMethodParams<"topupwwang">
+    ): Promise<WrappedWangProtocolTypes.CallMethodResult<"topupwwang">> => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
-        "topupwalf",
-        params === undefined ? {} : params,
+        "topupwwang",
+        params,
         getContractByCodeHash
       );
     },
     editfee: async (
-      params: WrappedOgAlfProtocolTypes.CallMethodParams<"editfee">
-    ): Promise<WrappedOgAlfProtocolTypes.CallMethodResult<"editfee">> => {
+      params: WrappedWangProtocolTypes.CallMethodParams<"editfee">
+    ): Promise<WrappedWangProtocolTypes.CallMethodResult<"editfee">> => {
       return callMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
         "editfee",
         params,
@@ -493,116 +492,115 @@ export class WrappedOgAlfProtocolInstance extends ContractInstance {
   };
 
   transact = {
-    getWalfToken: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"getWalfToken">
+    getWWangToken: async (
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"getWWangToken">
     ): Promise<
-      WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"getWalfToken">
+      WrappedWangProtocolTypes.SignExecuteMethodResult<"getWWangToken">
     > => {
       return signExecuteMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
-        "getWalfToken",
+        "getWWangToken",
         params
       );
     },
-    getWalfAmount: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"getWalfAmount">
+    getWWangAmount: async (
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"getWWangAmount">
     ): Promise<
-      WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"getWalfAmount">
+      WrappedWangProtocolTypes.SignExecuteMethodResult<"getWWangAmount">
     > => {
       return signExecuteMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
-        "getWalfAmount",
+        "getWWangAmount",
         params
       );
     },
     getOwner: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"getOwner">
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"getOwner">
     ): Promise<
-      WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"getOwner">
+      WrappedWangProtocolTypes.SignExecuteMethodResult<"getOwner">
     > => {
-      return signExecuteMethod(WrappedOgAlfProtocol, this, "getOwner", params);
+      return signExecuteMethod(WrappedWangProtocol, this, "getOwner", params);
     },
-    getOgAlf: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"getOgAlf">
-    ): Promise<
-      WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"getOgAlf">
-    > => {
-      return signExecuteMethod(WrappedOgAlfProtocol, this, "getOgAlf", params);
+    getWang: async (
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"getWang">
+    ): Promise<WrappedWangProtocolTypes.SignExecuteMethodResult<"getWang">> => {
+      return signExecuteMethod(WrappedWangProtocol, this, "getWang", params);
     },
     getFee: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"getFee">
-    ): Promise<WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"getFee">> => {
-      return signExecuteMethod(WrappedOgAlfProtocol, this, "getFee", params);
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"getFee">
+    ): Promise<WrappedWangProtocolTypes.SignExecuteMethodResult<"getFee">> => {
+      return signExecuteMethod(WrappedWangProtocol, this, "getFee", params);
     },
-    mintalf: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"mintalf">
+    mintwrapped: async (
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"mintwrapped">
     ): Promise<
-      WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"mintalf">
-    > => {
-      return signExecuteMethod(WrappedOgAlfProtocol, this, "mintalf", params);
-    },
-    mintogalf: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"mintogalf">
-    ): Promise<
-      WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"mintogalf">
-    > => {
-      return signExecuteMethod(WrappedOgAlfProtocol, this, "mintogalf", params);
-    },
-    destroyprotocol: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"destroyprotocol">
-    ): Promise<
-      WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"destroyprotocol">
+      WrappedWangProtocolTypes.SignExecuteMethodResult<"mintwrapped">
     > => {
       return signExecuteMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
+        this,
+        "mintwrapped",
+        params
+      );
+    },
+    mintog: async (
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"mintog">
+    ): Promise<WrappedWangProtocolTypes.SignExecuteMethodResult<"mintog">> => {
+      return signExecuteMethod(WrappedWangProtocol, this, "mintog", params);
+    },
+    destroyprotocol: async (
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"destroyprotocol">
+    ): Promise<
+      WrappedWangProtocolTypes.SignExecuteMethodResult<"destroyprotocol">
+    > => {
+      return signExecuteMethod(
+        WrappedWangProtocol,
         this,
         "destroyprotocol",
         params
       );
     },
     collectfees: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"collectfees">
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"collectfees">
     ): Promise<
-      WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"collectfees">
+      WrappedWangProtocolTypes.SignExecuteMethodResult<"collectfees">
     > => {
       return signExecuteMethod(
-        WrappedOgAlfProtocol,
+        WrappedWangProtocol,
         this,
         "collectfees",
         params
       );
     },
-    topupwalf: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"topupwalf">
+    topupwwang: async (
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"topupwwang">
     ): Promise<
-      WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"topupwalf">
+      WrappedWangProtocolTypes.SignExecuteMethodResult<"topupwwang">
     > => {
-      return signExecuteMethod(WrappedOgAlfProtocol, this, "topupwalf", params);
+      return signExecuteMethod(WrappedWangProtocol, this, "topupwwang", params);
     },
     editfee: async (
-      params: WrappedOgAlfProtocolTypes.SignExecuteMethodParams<"editfee">
-    ): Promise<
-      WrappedOgAlfProtocolTypes.SignExecuteMethodResult<"editfee">
-    > => {
-      return signExecuteMethod(WrappedOgAlfProtocol, this, "editfee", params);
+      params: WrappedWangProtocolTypes.SignExecuteMethodParams<"editfee">
+    ): Promise<WrappedWangProtocolTypes.SignExecuteMethodResult<"editfee">> => {
+      return signExecuteMethod(WrappedWangProtocol, this, "editfee", params);
     },
   };
 
-  async multicall<Calls extends WrappedOgAlfProtocolTypes.MultiCallParams>(
+  async multicall<Calls extends WrappedWangProtocolTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<WrappedOgAlfProtocolTypes.MultiCallResults<Calls>>;
-  async multicall<Callss extends WrappedOgAlfProtocolTypes.MultiCallParams[]>(
+  ): Promise<WrappedWangProtocolTypes.MultiCallResults<Calls>>;
+  async multicall<Callss extends WrappedWangProtocolTypes.MultiCallParams[]>(
     callss: Narrow<Callss>
-  ): Promise<WrappedOgAlfProtocolTypes.MulticallReturnType<Callss>>;
+  ): Promise<WrappedWangProtocolTypes.MulticallReturnType<Callss>>;
   async multicall<
     Callss extends
-      | WrappedOgAlfProtocolTypes.MultiCallParams
-      | WrappedOgAlfProtocolTypes.MultiCallParams[]
+      | WrappedWangProtocolTypes.MultiCallParams
+      | WrappedWangProtocolTypes.MultiCallParams[]
   >(callss: Callss): Promise<unknown> {
     return await multicallMethods(
-      WrappedOgAlfProtocol,
+      WrappedWangProtocol,
       this,
       callss,
       getContractByCodeHash

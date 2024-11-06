@@ -31,9 +31,10 @@ import {
   signExecuteMethod,
   addStdIdToFields,
   encodeContractFields,
+  Narrow,
 } from "@alephium/web3";
 import { default as BattleContractJson } from "../gamefi/battle/Battle.ral.json";
-import { getContractByCodeHash } from "./contracts";
+import { getContractByCodeHash, registerContract } from "./contracts";
 import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
 
 // Custom types for the contract
@@ -272,6 +273,7 @@ export const Battle = new Factory(
     AllStructs
   )
 );
+registerContract(Battle);
 
 // Use this class to interact with the blockchain
 export class BattleInstance extends ContractInstance {
@@ -433,14 +435,15 @@ export class BattleInstance extends ContractInstance {
     },
   };
 
+  async multicall<Calls extends BattleTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<BattleTypes.MultiCallResults<Calls>>;
   async multicall<Callss extends BattleTypes.MultiCallParams[]>(
-    ...callss: Callss
-  ): Promise<BattleTypes.MulticallReturnType<Callss>> {
-    return (await multicallMethods(
-      Battle,
-      this,
-      callss,
-      getContractByCodeHash
-    )) as BattleTypes.MulticallReturnType<Callss>;
+    callss: Narrow<Callss>
+  ): Promise<BattleTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends BattleTypes.MultiCallParams | BattleTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(Battle, this, callss, getContractByCodeHash);
   }
 }
