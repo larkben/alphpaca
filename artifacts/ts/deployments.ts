@@ -19,6 +19,8 @@ import {
   FindBattleInstance,
   Battle,
   BattleInstance,
+  WrappedWangProtocol,
+  WrappedWangProtocolInstance,
 } from ".";
 import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
@@ -33,6 +35,7 @@ export type Deployments = {
     PlayerBase?: DeployContractExecutionResult<PlayerBaseInstance>;
     FindBattle?: DeployContractExecutionResult<FindBattleInstance>;
     Battle?: DeployContractExecutionResult<BattleInstance>;
+    WrappedWangProtocol?: DeployContractExecutionResult<WrappedWangProtocolInstance>;
   };
 };
 
@@ -93,6 +96,15 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["Battle"],
             contractInstance: Battle.at(
               json.contracts["Battle"].contractInstance.address
+            ),
+          },
+    WrappedWangProtocol:
+      json.contracts["WrappedWangProtocol"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["WrappedWangProtocol"],
+            contractInstance: WrappedWangProtocol.at(
+              json.contracts["WrappedWangProtocol"].contractInstance.address
             ),
           },
   };
