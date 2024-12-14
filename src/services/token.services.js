@@ -169,13 +169,14 @@ export const ServiceMintWrappedWang = async (
   signerProvider,
   amount
 ) => {
+  const adjustedAmount = BigInt(amount + '00000')
   return await MintWWang.execute(signerProvider, {
     initialFields: {
       contract: wrapper,
-      amount: BigInt(amount)
+      amount: adjustedAmount
     },
     attoAlphAmount: DUST_AMOUNT,
-    tokens: [{id: "c1aeea313e36454f35beaf40130c9219faa40ba645aff93e16429146039f8202", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 100000000000000000n }]
+    tokens: [{id: "c1aeea313e36454f35beaf40130c9219faa40ba645aff93e16429146039f8202", amount: adjustedAmount}, {id: web3.ALPH_TOKEN_ID, amount: 100000000000000000n }]
   })
 }
 
@@ -184,13 +185,14 @@ export const ServiceMintWang = async (
   signerProvider,
   amount
 ) => {
+  const adjustedAmount = BigInt(amount + '00000')
   return await MintWang.execute(signerProvider, {
     initialFields: {
       contract: wrapper,
-      amount: BigInt(amount)
+      amount: adjustedAmount
     },
     attoAlphAmount: DUST_AMOUNT,
-    tokens: [{id: "05fceaf3d6f0e5e3ebce239f6c5503d42f9595ee4dcb1c8f21965f089e4b9600", amount: BigInt(amount)}, {id: web3.ALPH_TOKEN_ID, amount: 1000000000000000000n}]
+    tokens: [{id: "05fceaf3d6f0e5e3ebce239f6c5503d42f9595ee4dcb1c8f21965f089e4b9600", amount: adjustedAmount}, {id: web3.ALPH_TOKEN_ID, amount: 1000000000000000000n}]
   })
 }
 
