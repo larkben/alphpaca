@@ -10,11 +10,12 @@ Interface IDIAOracle {
 Contract Battle (
     playerOne: Address,
     pacaOne: ByteVec,
-    mut pacaOneHealth: U256,
-    mut playerTwo: Address,
+    mut oneHealth: U256,
+    mut twoHealth: Address,
     mut pacaTwo: ByteVec,
     mut pacaTwoHealth: U256,
     mut turn: Bool,
+    multiplier: U256,
     oracle: IDIAOracle
 ) {
     enum ErrorCodes {
@@ -24,11 +25,18 @@ Contract Battle (
         BattleIsDone = 4
     }
 
+    // random
     fn random() -> (U256) {
-        let seed = u256From32Byte!(blake2b!(toByteVec!(blockTarget!()) ++ toByteVec!(blockTimeStamp!()) ++ toByteVec!(oracle.getValue(b`BTC/USD`).value))) // oracle here
+        let seed = u256From32Byte!(
+            blake2b!(toByteVec!(blockTarget!()) ++ 
+            toByteVec!(blockTimeStamp!()) ++
+            toByteVec!(multiplier) ++ 
+            toByteVec!(oracle.getValue(b`BTC/USD`).value))
+        )
         return addModN!(0, seed, 5)
     }
 
+    // swap turns (False = P1, True = P2)
     fn whoTurn() -> Address {
         if (turn == false) {
             return playerOne
@@ -36,8 +44,9 @@ Contract Battle (
         return playerTwo
     }
 
+    // which NFT is taking damage
     @using(updateFields = true)
-    fn whichPaca(player: Address, damage: U256) -> (ByteVec) {
+    fn whichNFT(player: Address, damage: U256) -> (ByteVec) {
         if (player == playerOne) {
             pacaTwoHealth = pacaTwoHealth - damage
             return pacaTwo
@@ -48,7 +57,8 @@ Contract Battle (
         }
     }
 
-    fn checkIfPacaFainted() -> Address {
+    // check if NFT fainted
+    fn checkIfNFTFainted() -> Address {
         if (pacaOneHealth == 0) {
             return playerTwo
         }
@@ -60,6 +70,7 @@ Contract Battle (
         }
     }
 
+    // accept the battle
     @using(updateFields = true, checkExternalCaller = false)
     pub fn acceptBattle(paca: ByteVec) -> () {
         assert!(playerTwo == playerOne, ErrorCodes.BattleIsDone) 
@@ -68,6 +79,8 @@ Contract Battle (
         pacaTwo = paca
     }
 
+    // attack
+    // TODO: implement auto battle end if the other player knocks the other out
     @using(checkExternalCaller = true, updateFields = true)
     pub fn attack() -> () {
         assert!(playerTwo == nullContractAddress!(), ErrorCodes.NotYourTurn) 
@@ -85,6 +98,7 @@ Contract Battle (
         turn = !turn // switch turn
     }
 
+    // end battle
     @using(checkExternalCaller = false, updateFields = false, assetsInContract = true)
     pub fn endbattle() -> () {
         let winner = checkIfPacaFainted()
@@ -94,6 +108,8 @@ Contract Battle (
         }
     }
 
+    // leave the battle
+    // TODO: the player with the lowest HP is the loser
     @using(checkExternalCaller = true, updateFields = false, assetsInContract = true)
     pub fn leave() -> () {
         checkCaller!(callerAddress!() == whoTurn(), ErrorCodes.InvalidCaller)
@@ -106,6 +122,7 @@ Contract Battle (
         }
     }
 
+    // force cancel / cancel battle
     @using(checkExternalCaller = true, assetsInContract = true)
     pub fn cancel() -> () {
         checkCaller!(playerTwo == playerOne, ErrorCodes.BattleNotDone)
