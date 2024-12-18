@@ -1,17 +1,18 @@
+"use client";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import React, { useState, useEffect } from 'react';
 import { useWallet } from "@alephium/web3-react";
-import { BuildToken, CollectCreatorFees, DestroyTokenCreator, EditCreatorFees, ServiceCollectOgAlfFees, ServiceDestroyWrappedAlfProtocol, ServiceTopupWalf } from "../services/token.services";
+import { BuildToken, CollectCreatorFees, DestroyTokenCreator, EditCreatorFees, ServiceCollectOgAlfFees, ServiceCollectWangFees, ServiceDestroyWrappedAlfProtocol, ServiceTopupWalf } from "../services/token.services";
 const { NodeProvider } = require("@alephium/web3");
 
 const Node = "https://wallet-v20.mainnet.alephium.org";
 
 const nodeProvider = new NodeProvider("https://wallet-v20.mainnet.alephium.org");
 
-export const DevDashboard = ({ config }) => {
+export const Dev = ({ config }) => {
   const { signer, account } = useWallet();
-  const addressGroup = config.groupIndex;
+  const addressGroup = 0
   const [ongoingTxId, setOngoingTxId] = useState();
 
   const [amount, setAmount] = useState("");
@@ -44,7 +45,7 @@ export const DevDashboard = ({ config }) => {
   const handleCollectWrapperFees = async (e) => {
     e.preventDefault();
     if (signer) {
-      const result = await ServiceCollectOgAlfFees(signer);
+      const result = await ServiceCollectWangFees(signer);
     }
   };
 
