@@ -1,4 +1,4 @@
-Contract FindBattle(
+Contract BattleFactory(
     admin: Address,
     pvp: ByteVec,
     oracle: IDIAOracle
@@ -10,6 +10,7 @@ Contract FindBattle(
         NotAdmin = 0
     }
 
+    // begin the search for a battle
     @using(preapprovedAssets = true, checkExternalCaller = false)
     pub fn createBattle(nft: ByteVec) -> () {
 

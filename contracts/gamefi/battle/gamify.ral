@@ -10,34 +10,115 @@ struct PlayerData {
     // stats special
     mut spatk: U256,
     mut spdef: U256,
-    mut speed: U256
-    // move set
-
+    mut speed: U256,
+    // levels
+    mut hplv: U256,
+    mut atklv: U256,
+    mut deflv: U256,
+    mut spatklv: U256,
+    mut spdeflv: U256,
+    mut speedlv: U256
 }
-
-// type set
-// (normal, fire, fighting, water, flying, grass, poison, electric, 
-// ground, psychic, rock, ice, bug, dragon, ghost, dark, steel, fairy)
 
 Contract GamifyProtocol (
     admin: Address,
-    supercharged: U256
+    supercharged: U256,
+    // contracts with approval for update
+    approvedContracts: [ByteVec; 10]
 ) {
     // mapping
     mapping [ByteVec, PlayerData] supernfts
 
     // events
-    event // .. document as needed
+    event Supercharge(who: Address, nft: ByteVec, time: U256)
+    event Update(who: Address, nft: ByteVec, data: PlayerData)
+
+    enum GamifyCodes {
+        AlreadySupercharged = 0
+        NotAdmin = 1
+        NotSupercharged = 2
+        NotApprovedContract = 3
+    }
+
+    // public functions to get values and return
+    // ....
 
     // supercharge the nfts; create mapping
-    pub fn supercharge() -> () {
+    @using(checkExternalCaller = false, preapprovedAssets = true)
+    pub fn supercharge(nft: ByteVec) -> () {
+        // verify mapping does not exist
+        assert!(supernfts.contains!(nft) == false, GamifyCodes.AlreadySupercharged)
 
+        let caller = callerAddress!()
+        let time = blockTimeStamp!()
+
+        // player data
+        let s = PlayerData { 
+            nft: nft,
+            xp: 0,
+            // stats
+            hp: 5,
+            atk: 5,
+            def: 5,
+            // stats special
+            spatk: 0,
+            spdef: 0,
+            speed: 1,
+            // levels
+            hplv: 1,
+            atklv: 1,
+            deflv: 1,
+            spatklv: 0,
+            spdeflv: 0,
+            speedlv: 1
+        }
+
+        // insert mapping
+        supernfts.insert!(caller, nft, s)
+
+        // update the count
+        supercharged = supercharged + 1
+
+        // log event
+        emit Supercharge(caller, nft, time)
     }
 
     // update mapping data
-    pub fn metadata() -> () {
+    @using(checkExternalCaller = true)
+    pub fn metadata(nft: ByteVec, newData: PlayerData, whichParent: U256, caller: Address) -> () {
+        // update the mapping data and confirm caller address
+        assert!(supernfts.contains!(nft) == true, GamifyCodes.NotSupercharged)
+        checkCaller!(callerAddress!() == contractIdToAddress!(approvedContracts[whichParent]), GamifyCodes.NotApprovedContract)
 
+        // update
+        supernfts[nft].hp = newData.hp
+        supernfts[nft].atk = newData.atk
+        supernfts[nft].def = newData.def
+        supernfts[nft].spatk = newData.spatk
+        supernfts[nft].spdef = newData.spdef
+        supernfts[nft].speed = newData.speed
+        supernfts[nft].xp = newData.xp
+        supernfts[nft].hplv = newData.hplv
+        supernfts[nft].atklv = newData.atklv
+        supernfts[nft].deflv = newData.deflv
+        supernfts[nft].spatklv = newData.spatklv
+        supernfts[nft].spdeflv = newData.spdeflv
+        supernfts[nft].speedlv = newData.speedlv
+
+        // emit
+        emit Update(caller, nft, newData)
     }
 
-    // 
+    // update contract scripts (code and fields)
+    pub fn updateGamifyCode(newCode: ByteVec) -> () {
+        checkCaller!(callerAddress!() == admin, GamifyCodes.NotAdmin)
+
+        migrate!(newCode)
+    }
+
+    pub fn updateGamifyFields(newCode: ByteVec, immFields: ByteVec, mutFields: ByteVec) -> () {
+        checkCaller!(callerAddress!() == admin, GamifyCodes.NotAdmin)
+
+        migrateWithFields!(newCode, immFields, mutFields)
+    }
 }
