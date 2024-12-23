@@ -22,16 +22,16 @@ struct PlayerData {
 
 Contract GamifyProtocol (
     admin: Address,
-    supercharged: U256,
+    mut supercharged: U256,
     // contracts with approval for update
-    approvedContracts: [ByteVec; 10]
+    mut approvedContracts: [ByteVec; 10]
 ) {
     // mapping
     mapping [ByteVec, PlayerData] supernfts
 
     // events
     event Supercharge(who: Address, nft: ByteVec, time: U256)
-    event Update(who: Address, nft: ByteVec, data: PlayerData)
+    event Update(who: Address, nft: ByteVec)
 
     enum GamifyCodes {
         AlreadySupercharged = 0
@@ -42,6 +42,17 @@ Contract GamifyProtocol (
 
     // public functions to get values and return
     // ....
+    pub fn getNFTstats(nft: ByteVec) -> PlayerData {
+        assert!(supernfts.contains!(nft) == true, GamifyCodes.NotSupercharged)
+
+        let data = supernfts[nft]
+
+        return data
+    }
+    
+    pub fn isSupercharged(nft: ByteVec) -> Bool {
+        return supernfts.contains!(nft)
+    }
 
     // supercharge the nfts; create mapping
     @using(checkExternalCaller = false, preapprovedAssets = true)
@@ -90,7 +101,7 @@ Contract GamifyProtocol (
         assert!(supernfts.contains!(nft) == true, GamifyCodes.NotSupercharged)
         checkCaller!(callerAddress!() == contractIdToAddress!(approvedContracts[whichParent]), GamifyCodes.NotApprovedContract)
 
-        // update
+        // update ~ there might be a better and or more secure way to do this
         supernfts[nft].hp = newData.hp
         supernfts[nft].atk = newData.atk
         supernfts[nft].def = newData.def

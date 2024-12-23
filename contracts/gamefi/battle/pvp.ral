@@ -8,70 +8,51 @@ Interface IDIAOracle {
     pub fn getValue(key: ByteVec) -> DIAOracleValue
 }
 
+// implement the supercharged nfts with this
+
 Contract Battle (
     playerOne: Address,
-    alphling: ByteVec,
+    nftOne: ByteVec,
     playerTwo: Address,
-    alphling: ByteVec,
-    turn: Address,          // -> set the current address that should be playing
-    oracle: IDIAOracle
+    nftTwo: ByteVec,
+    turn: U256,                 // 1 (one) , 2 (two) ~ binary
+    oracle: IDIAOracle,
+    timeSinceLastTurn: U256
 ) {
-    enum ErrorCodes {
-        // ... rewrite these as needed
+    enum BattleCodes {
+        InvalidPlayer = 0
+        BattleIsActive = 1
     }
 
     // random -> will need a non oracle compatible contract for proper unit testing
     fn random() -> (U256) {
+        // add btc and alph; random if or else statement for further random certainity
         let seed = u256From32Byte!(
             blake2b!(toByteVec!(blockTarget!()) ++ 
             toByteVec!(blockTimeStamp!()) ++
-            toByteVec!(multiplier) ++ 
             toByteVec!(oracle.getValue(b`BTC/USD`).value))
         )
         return addModN!(0, seed, 5)
     }
 
     // swap turns (False = P1, True = P2)
-    fn whoTurn() -> Address {
-        if (turn == false) {
-            return playerOne
+    fn whoTurn() -> (Address, ByteVec) {
+        if (turn == 1) {
+            return playerOne, nftOne
         }
-        return playerTwo
+        return playerTwo, nftTwo
     }
 
-    // which NFT is taking damage
-    @using(updateFields = true)
-    fn whichNFT(player: Address, damage: U256) -> (ByteVec) {
-        if (player == playerOne) {
-            pacaTwoHealth = pacaTwoHealth - damage
-            return pacaTwo
-        }
-        else {
-            pacaOneHealth = pacaOneHealth - damage
-            return pacaOne
-        }
-    }
-
-    // check if NFT fainted
-    fn checkIfNFTFainted() -> Address {
-        if (pacaOneHealth == 0) {
-            return playerTwo
-        }
-        else if (pacaTwoHealth == 0) {
-            return playerOne
-        }
-        else {
-            return nullContractAddress!()
-        }
-    }
-
-    // accept the battle
+    // accept the battle when seen from the search
     @using(updateFields = true, checkExternalCaller = false)
-    pub fn acceptBattle(paca: ByteVec) -> () {
-        assert!(playerTwo == playerOne, ErrorCodes.BattleIsDone) 
+    pub fn acceptBattle(nft: ByteVec) -> () {
+        // assert that battle is not attempted to be joined after started
+        assert!(playerTwo == playerOne, ErrorCodes.BattleIsActive) 
+
+        // assert that the nft is valid
 
         playerTwo = callerAddress!()
-        pacaTwo = paca
+        nftTwo = paca
     }
 
     // attack
