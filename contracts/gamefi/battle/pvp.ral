@@ -1,3 +1,4 @@
+// the DIA oracle here is hard to test in unit testing cases and thus we will need to make an alternate contract to test this
 struct DIAOracleValue {
     mut value: U256,
     mut timestamp: U256
@@ -9,23 +10,17 @@ Interface IDIAOracle {
 
 Contract Battle (
     playerOne: Address,
-    pacaOne: ByteVec,
-    mut oneHealth: U256,
-    mut twoHealth: Address,
-    mut pacaTwo: ByteVec,
-    mut pacaTwoHealth: U256,
-    mut turn: Bool,
-    multiplier: U256,
+    alphling: ByteVec,
+    playerTwo: Address,
+    alphling: ByteVec,
+    turn: Address,          // -> set the current address that should be playing
     oracle: IDIAOracle
 ) {
     enum ErrorCodes {
-        NotYourTurn = 1
-        BattleNotDone = 2
-        InvalidCaller = 3
-        BattleIsDone = 4
+        // ... rewrite these as needed
     }
 
-    // random
+    // random -> will need a non oracle compatible contract for proper unit testing
     fn random() -> (U256) {
         let seed = u256From32Byte!(
             blake2b!(toByteVec!(blockTarget!()) ++ 

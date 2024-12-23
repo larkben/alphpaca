@@ -15,7 +15,7 @@ Contract FindBattle(
 
         let path = nft
 
-        let (encodeImmutableFields, encodeMutableFields) = Battle.encodeFields!(callerAddress!(), nft, 15, callerAddress!(), zeros!(1), 15, true, oracle)
+        let (encodeImmutableFields, encodeMutableFields) = Battle.encodeFields!()
 
         let battleId = createSubContract!{callerAddress!() -> ALPH: minimalContractDeposit!()}
         (

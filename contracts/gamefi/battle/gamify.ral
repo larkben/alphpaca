@@ -1,11 +1,43 @@
-Contract GamifyNFT (
-    admin: Address
+// need to determine what fields we want
+struct PlayerData {
+    // nft
+    nft: ByteVec,
+    mut xp: U256,
+    // stats
+    mut hp: U256,
+    mut atk: U256,
+    mut def: U256,
+    // stats special
+    mut spatk: U256,
+    mut spdef: U256,
+    mut speed: U256
+    // move set
+
+}
+
+// type set
+// (normal, fire, fighting, water, flying, grass, poison, electric, 
+// ground, psychic, rock, ice, bug, dragon, ghost, dark, steel, fairy)
+
+Contract GamifyProtocol (
+    admin: Address,
+    supercharged: U256
 ) {
     // mapping
+    mapping [ByteVec, PlayerData] supernfts
 
     // events
+    event // .. document as needed
 
-    // functions; like a dictionary for asset lookup
+    // supercharge the nfts; create mapping
+    pub fn supercharge() -> () {
 
-    // upgrade
+    }
+
+    // update mapping data
+    pub fn metadata() -> () {
+
+    }
+
+    // 
 }
