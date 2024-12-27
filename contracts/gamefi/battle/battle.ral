@@ -47,7 +47,7 @@ Contract Battle (
     @using(updateFields = true, checkExternalCaller = false)
     pub fn acceptBattle(nft: ByteVec) -> () {
         // assert that battle is not attempted to be joined after started
-        assert!(playerTwo == playerOne, ErrorCodes.BattleIsActive) 
+        assert!(playerTwo == playerOne, BattleCodes.BattleIsActive) 
 
         // assert that the nft is valid
 

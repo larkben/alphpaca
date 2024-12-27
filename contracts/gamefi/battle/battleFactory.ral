@@ -1,26 +1,37 @@
 Contract BattleFactory(
     admin: Address,
     pvp: ByteVec,
-    oracle: IDIAOracle
+    oracle: IDIAOracle,
+    gameFi: ByteVec
 ) {
     event Battle(who: Address, id: ByteVec)
     event BattleStart(id: ByteVec)
 
-    enum Error {
+    enum BattleFactoryErrorCodes {
         NotAdmin = 0
+        NotSupercharged = 1
     }
 
-    // begin the search for a battle
+    fn isSupercharged(nft: ByteVec) -> Bool {
+        // returns a boolean
+        return GamifyProtocol(gameFi).isSupercharged(nft)
+    }
+
+    // create the subContract for a search for a battle
     @using(preapprovedAssets = true, checkExternalCaller = false)
     pub fn createBattle(nft: ByteVec) -> () {
+        // assert the nft has been through gameFi
+        assert!(isSupercharged(nft) == true, BattleFactoryErrorCodes.NotSupercharged)
 
+        // value declaration
         let path = nft
+        let nullToken = b``
 
-        let (encodeImmutableFields, encodeMutableFields) = Battle.encodeFields!()
+        let (encodeImmutableFields, encodeMutableFields) = Battle.encodeFields!(callerAddress!(), nft, callerAddress!(), nullToken, 1, oracle, 0)
 
-        let battleId = createSubContract!{callerAddress!() -> ALPH: minimalContractDeposit!()}
+        let battleId = createSubContract!{callerAddress!() -> ALPH: minimalContractDeposit!(), nft: 1}  // transfer the minimal contract deposit and the owners nft
         (
-            path,
+            path,   // use the owners nft as the path to the subContract
             pvp,
             encodeImmutableFields,
             encodeMutableFields
@@ -29,15 +40,23 @@ Contract BattleFactory(
         emit Battle(callerAddress!(), battleId)
     }
 
+    // start a battle that was in the search status
     @using(checkExternalCaller = false)
-    pub fn start(contractId: ByteVec, paca: ByteVec) -> () {
+    pub fn start(contractId: ByteVec, nft: ByteVec) -> () {
+        // assert the nft has been through gameFi
+        assert!(isSupercharged(nft) == true, BattleFactoryErrorCodes.NotSupercharged)
+
+        // declare the subContract
         let battle = Battle(contractId)
 
-        battle.acceptBattle(paca)
+        // make call to the subContract
+        battle.acceptBattle{callerAddress!() -> nft: 1}(nft)
 
+        // emit the event
         emit BattleStart(contractId)
     }
 
+    // need to work on these functions
     @using(checkExternalCaller = false)
     pub fn attack(contractId: ByteVec) -> () {
         let battle = Battle(contractId)
