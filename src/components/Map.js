@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 
 export function Map() {
   const [scale, setScale] = useState(3)
-  const [position, setPosition] = useState({ x: window.innerWidth/4, y: window.innerHeight/8 })
+  const [position, setPosition] = useState({ x: 350, y: 80 })
   const [isDragging, setIsDragging] = useState(false)
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 })
   const [selectedNft, setSelectedNft] = useState(null)
@@ -73,7 +73,7 @@ export function Map() {
   return (
     <div className="w-full bg-gray-800">
       <h2 className="text-4xl font-bold text-center text-white mb-8 pt-16">
-        Explore ALPHpaca's NFTs
+        Explore ALPHpaca&apos;s NFTs
       </h2>
       
       <div 
@@ -100,7 +100,7 @@ export function Map() {
               <div key={index} className="relative w-16 h-16">
                 <img
                   src={src}
-                  alt={`ALPHpaca's #${index + 1}`}
+                  alt={`ALPHpaca&apos;s #${index + 1}`}
                   className={`w-16 h-16 select-none cursor-pointer transition-all duration-300 absolute ${
                     selectedNft === index ? 'transform scale-150 z-50 shadow-lg' : ''
                   }`}
@@ -116,7 +116,7 @@ export function Map() {
                   <div 
                     className="absolute left-20 top-1/2 -translate-y-1/2 bg-black text-white px-2 py-1 rounded whitespace-nowrap z-50"
                   >
-                    ALPHpaca's #{index + 1}
+                    ALPHpaca&apos;s #{index + 1}
                   </div>
                 )}
               </div>
