@@ -2,6 +2,7 @@ import Link from "next/link"
 import { AlephiumConnectButton, AlephiumWalletProvider } from '@alephium/web3-react'
 import { Terminal } from "./terminal"
 import React from "react"
+import { Map } from "./Map"
 
 export function Hero() {
   return (
@@ -12,55 +13,62 @@ export function Hero() {
       </main>
       <h1 className="text-4xl font-bold text-center mb-8 text-white"> Explore Decentralized Applications / Tools </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-20 py-20">
-        <div className="rounded-lg overflow-hidden shadow-lg bg-orange-500 z-50">
-          <div className="p-6">
-            <div className="flex justify-center">
-              <CoinsIcon className="h-12 w-12 text-white" />
+        <div className="rounded-lg overflow-hidden shadow-lg bg-orange-500 z-50 p-4">
+          <div className="flex justify-center items-center h-full">
+            <div className="text-center">
+              <div className="flex justify-center mb-4">
+                <CoinsIcon className="h-8 w-8 text-white" />
+              </div>
+              <h2 className="text-lg font-semibold text-white"> Token Creation </h2>
+              <p className="text-white-400"> Create a token on the Alephium Blockchain. </p>
+              <Link
+                className="mt-2 inline-flex items-center justify-center px-3 py-1 border border-gray-200 border-transparent text-sm font-medium rounded-md text-black bg-orange-300 hover:bg-orange-400 dark:border-gray-800"
+                href="/tokencreate"
+              >
+                Create Now
+              </Link>
             </div>
-            <h2 className="mt-4 text-xl font-semibold text-white"> Token Creation </h2>
-            <p className="mt-2 text-white-400"> Create a token on the Alephium Blockchain. </p>
-            <Link
-              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-orange-300 hover:bg-orange-400 dark:border-gray-800"
-              href="/tokencreate"
-            >
-              Create Now
-            </Link>
           </div>
         </div>
-        <div className="rounded-lg overflow-hidden shadow-lg bg-pink-500 z-50">
-          <div className="p-6">
-            <div className="flex justify-center">
-              <ClockIcon className="h-12 w-12 text-white" />
+        <div className="rounded-lg overflow-hidden shadow-lg bg-pink-500 z-50 p-4">
+          <div className="flex justify-center items-center h-full">
+            <div className="text-center">
+              <div className="flex justify-center mb-4">
+                <ClockIcon className="h-8 w-8 text-white" />
+              </div>
+              <h2 className="text-lg font-semibold text-white"> On-Chain Gaming </h2>
+              <p className="text-white-400"> Coming Soon! </p>
+              <Link
+                className="mt-2 inline-flex items-center justify-center px-3 py-1 border border-gray-200 border-transparent text-sm font-medium rounded-md text-black bg-pink-300 hover:bg-pink-400 dark:border-gray-800"
+                href="#"
+              >
+                Soon!
+              </Link>
             </div>
-            <h2 className="mt-4 text-xl font-semibold text-white"> On-Chain Gaming </h2>
-            <p className="mt-2 text-white-400"> Coming Soon! </p>
-            <Link
-              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-pink-300 hover:bg-pink-400 dark:border-gray-800"
-              href="#"
-            >
-              Soon!
-            </Link>
           </div>
         </div>
-        <div className="rounded-lg overflow-hidden shadow-lg bg-blue-800 z-50">
-          <div className="p-6">
-            <div className="flex justify-center">
-              <Users2Icon className="h-12 w-12 text-white" />
+        <div className="rounded-lg overflow-hidden shadow-lg bg-blue-800 z-50 p-4">
+          <div className="flex justify-center items-center h-full">
+            <div className="text-center">
+              <div className="flex justify-center mb-4">
+                <Users2Icon className="h-8 w-8 text-white" />
+              </div>
+              <h2 className="text-lg font-semibold text-white"> Blockchain Eagle </h2>
+              <p className="text-white-400"> An alpacas worst nightmare come to life. Coming Soon! </p>
+              <Link
+                className="mt-2 inline-flex items-center justify-center px-3 py-1 border border-gray-200 border-transparent text-sm font-medium rounded-md text-black bg-blue-300 hover:bg-blue-400 dark:border-gray-800"
+                href="#"
+              >
+                Soon!
+              </Link>
             </div>
-            <h2 className="mt-4 text-xl font-semibold text-white"> Blockchain Eagle </h2>
-            <p className="mt-2 text-white-400"> An alpacas worst nightmare come to life. Coming Soon! </p>
-            <Link
-              className="mt-4 inline-flex items-center justify-center px-4 py-2 border border-gray-200 border-transparent text-base font-medium rounded-md text-black bg-blue-300 hover:bg-blue-400 dark:border-gray-800"
-              href="#"
-            >
-              Soon!
-            </Link>
           </div>
         </div>
       </div>
+      <Map/>
       <section className="flex flex-col items-center justify-center py-20 bg-gray-700 text-white">
       <h1 className="text-4xl font-bold text-center mb-8 text-white"> A little about ALPHpaca ... </h1>
-        <div className="w-3/4 md:w-1/2 lg:w-1/3 p-6 bg-gray-800 rounded-lg shadow-lg mb-6">
+        <div className="w-1/2 md:w-1/3 lg:w-1/4 p-6 bg-gray-800 rounded-lg shadow-lg mb-6">
           <Terminal/>
         </div>
         <div className="w-3/4 md:w-1/2 lg:w-1/3 p-6 bg-gray-800 rounded-lg shadow-lg mb-6">
@@ -76,9 +84,6 @@ export function Hero() {
           </p>
         </div>
       </section>
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-y-0 right-0 flex items-center" />
-      </div>
     </div>
   )
 }
