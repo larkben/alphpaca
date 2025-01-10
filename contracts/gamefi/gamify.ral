@@ -18,6 +18,7 @@ Contract GamifyProtocol (
     admin: Address,
     mut supercharged: U256,
     pacaToken: ByteVec,
+    mut pacaAmount: U256,
     xpRate: U256             // 1 for 10 (1 $PACA = 10 XP)
 ) {
     // mapping
@@ -109,6 +110,7 @@ Contract GamifyProtocol (
         if (quickRest) {
             // request payment for XP
             transferToken!(callerAddress!(), selfAddress!(), pacaToken, 20) // 20 paca fee
+            pacaAmount = pacaAmount + 20
 
             // each xp or 1 xp = 10 xp after ratio adjustment -> apply xp
             supernfts[nft].hp = supernfts[nft].levels[0] * 25
@@ -154,6 +156,7 @@ Contract GamifyProtocol (
 
             // each xp or 1 xp = 10 xp after ratio adjustment -> apply xp
             supernfts[nft].xp = supernfts[nft].xp + (xp * 10)
+            pacaAmount = pacaAmount + (xp * xpRate)
         }
 
         else {
@@ -183,6 +186,14 @@ Contract GamifyProtocol (
     }
 
     // reward PACA function
+    @using(checkExternalCaller = true, updateFields = true, assetsInContract = true)
+    pub fn rewardPaca(reward: U256, reciever: Address) -> () {
+        checkCaller!(approved.contains!(callerAddress!()) == true, GamifyCodes.NotApprovedContract)
+
+        assert!(approved[callerAddress!()] == true, GamifyCodes.NotApprovedContract)
+
+        transferToken!(selfAddress!(), reciever, pacaToken, reward)
+    }
 
     // update contract scripts (code and fields)
     pub fn updateGamifyCode(newCode: ByteVec) -> () {
