@@ -1,4 +1,4 @@
-// need to determine what fields we want
+// possibly add inventory
 struct PlayerData {
     // nft
     nft: ByteVec,
@@ -8,26 +8,22 @@ struct PlayerData {
     mut atk: U256,
     mut def: U256,
     // stats special
-    mut spatk: U256,
-    mut spdef: U256,
     mut speed: U256,
-    // levels
-    mut hplv: U256,
-    mut atklv: U256,
-    mut deflv: U256,
-    mut spatklv: U256,
-    mut spdeflv: U256,
-    mut speedlv: U256
+    // hp / atk / def / spd
+    mut levels: [U256; 4],
+    mut cooldown: U256
 }
 
 Contract GamifyProtocol (
     admin: Address,
     mut supercharged: U256,
-    // contracts with approval for update
-    mut approvedContracts: [ByteVec; 10]
+    pacaToken: ByteVec,
+    xpRate: U256             // 1 for 10 (1 $PACA = 10 XP)
 ) {
     // mapping
     mapping [ByteVec, PlayerData] supernfts
+    mapping [ByteVec, Bool] collections
+    mapping [Address, Bool] approved
 
     // events
     event Supercharge(who: Address, nft: ByteVec, time: U256)
@@ -38,10 +34,10 @@ Contract GamifyProtocol (
         NotAdmin = 1
         NotSupercharged = 2
         NotApprovedContract = 3
+        NotEnoughXp = 4
     }
 
     // public functions to get values and return
-    // ....
     pub fn getNFTstats(nft: ByteVec) -> PlayerData {
         assert!(supernfts.contains!(nft) == true, GamifyCodes.NotSupercharged)
 
@@ -63,25 +59,21 @@ Contract GamifyProtocol (
         let caller = callerAddress!()
         let time = blockTimeStamp!()
 
+        let t = [1,1,1,1]
+
         // player data
         let s = PlayerData { 
             nft: nft,
             xp: 0,
             // stats
-            hp: 5,
-            atk: 5,
+            hp: 20,
+            atk: 10,
             def: 5,
             // stats special
-            spatk: 0,
-            spdef: 0,
             speed: 1,
             // levels
-            hplv: 1,
-            atklv: 1,
-            deflv: 1,
-            spatklv: 0,
-            spdeflv: 0,
-            speedlv: 1
+            levels: t,
+            cooldown: 0
         }
 
         // insert mapping
@@ -94,31 +86,103 @@ Contract GamifyProtocol (
         emit Supercharge(caller, nft, time)
     }
 
-    // update mapping data
-    @using(checkExternalCaller = true)
-    pub fn metadata(nft: ByteVec, newData: PlayerData, whichParent: U256, caller: Address) -> () {
-        // update the mapping data and confirm caller address
-        assert!(supernfts.contains!(nft) == true, GamifyCodes.NotSupercharged)
-        checkCaller!(callerAddress!() == contractIdToAddress!(approvedContracts[whichParent]), GamifyCodes.NotApprovedContract)
+    // these need to be built out
+    @using(checkExternalCaller = false, updateFields = true)
+    pub fn updateLevel(nft: ByteVec, index: U256) -> () {
+        assert!(isSupercharged(nft) == true, GamifyCodes.NotSupercharged)
 
-        // update ~ there might be a better and or more secure way to do this
-        supernfts[nft].hp = newData.hp
-        supernfts[nft].atk = newData.atk
-        supernfts[nft].def = newData.def
-        supernfts[nft].spatk = newData.spatk
-        supernfts[nft].spdef = newData.spdef
-        supernfts[nft].speed = newData.speed
-        supernfts[nft].xp = newData.xp
-        supernfts[nft].hplv = newData.hplv
-        supernfts[nft].atklv = newData.atklv
-        supernfts[nft].deflv = newData.deflv
-        supernfts[nft].spatklv = newData.spatklv
-        supernfts[nft].spdeflv = newData.spdeflv
-        supernfts[nft].speedlv = newData.speedlv
+        let currentLevel = supernfts[nft].levels[index]
+        let currentXp = supernfts[nft].xp
 
-        // emit
-        emit Update(caller, nft, newData)
+        // required xp has been obtained
+        assert!(currentXp > (currentLevel * 100), GamifyCodes.NotEnoughXp)
+
+        // upgrade it
+        supernfts[nft].levels[index] = supernfts[nft].levels[index] + 1
+        supernfts[nft].xp = supernfts[nft].xp - (currentLevel * 100)
     }
+
+    @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true)
+    pub fn rest(nft: ByteVec, quickRest: Bool) -> () {
+        assert!(isSupercharged(nft) == true, GamifyCodes.NotSupercharged)
+
+        if (quickRest) {
+            // request payment for XP
+            transferToken!(callerAddress!(), selfAddress!(), pacaToken, 20) // 20 paca fee
+
+            // each xp or 1 xp = 10 xp after ratio adjustment -> apply xp
+            supernfts[nft].hp = supernfts[nft].levels[0] * 25
+        }
+
+        else {
+            checkCaller!(approved.contains!(callerAddress!()) == true, GamifyCodes.NotApprovedContract)
+
+            assert!(approved[callerAddress!()] == true, GamifyCodes.NotApprovedContract)
+
+            supernfts[nft].hp = supernfts[nft].levels[0] * 25
+            
+            supernfts[nft].cooldown = blockTimeStamp!() + 3600000 // 1 hour cooldown on health
+        }
+
+        // emit the event
+    }
+
+    @using(checkExternalCaller = false, updateFields = true)
+    pub fn removeHealth(nft: ByteVec, damage: U256) -> (U256) {   // returns that the player had enough health to remove / health remaining
+        assert!(isSupercharged(nft) == true, GamifyCodes.NotSupercharged)
+
+        if ((damage - supernfts[nft].def) > supernfts[nft].hp) {
+            supernfts[nft].hp = 0
+
+            return 0
+        }
+
+        supernfts[nft].hp = supernfts[nft].hp - (damage - supernfts[nft].def)
+
+        let remaining = supernfts[nft].hp
+
+        return remaining
+    }
+
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn addXp(nft: ByteVec, xp: U256, paidXp: Bool) -> () {
+        assert!(isSupercharged(nft) == true, GamifyCodes.NotSupercharged)
+
+        if (paidXp) {
+            // request payment for XP
+            transferToken!(callerAddress!(), selfAddress!(), pacaToken, xp * xpRate)
+
+            // each xp or 1 xp = 10 xp after ratio adjustment -> apply xp
+            supernfts[nft].xp = supernfts[nft].xp + (xp * 10)
+        }
+
+        else {
+            checkCaller!(approved.contains!(callerAddress!()) == true, GamifyCodes.NotApprovedContract)
+
+            assert!(approved[callerAddress!()] == true, GamifyCodes.NotApprovedContract)
+
+            supernfts[nft].xp = supernfts[nft].xp + (xp * 10)
+        }
+
+        // emit the event
+    }
+
+    @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true)
+    pub fn editValidContract(contract: Address, remove: Bool) -> (Bool) {   // returns whether contract was removed or added
+        checkCaller!(admin == callerAddress!(), GamifyCodes.NotAdmin)
+
+        if (!remove) {
+            approved.insert!(callerAddress!(), contract, true)
+
+            return false
+        }
+
+        approved.remove!(callerAddress!(), contract)
+
+        return true
+    }
+
+    // reward PACA function
 
     // update contract scripts (code and fields)
     pub fn updateGamifyCode(newCode: ByteVec) -> () {
