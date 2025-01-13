@@ -36,6 +36,7 @@ Contract GamifyProtocol (
         NotSupercharged = 2
         NotApprovedContract = 3
         NotEnoughXp = 4
+        NotApprovedNFT = 5
     }
 
     // public functions to get values and return
@@ -56,6 +57,12 @@ Contract GamifyProtocol (
     pub fn supercharge(nft: ByteVec) -> () {
         // verify mapping does not exist
         assert!(supernfts.contains!(nft) == false, GamifyCodes.AlreadySupercharged)
+
+        // collection validation
+        // get the data associated with the NFT
+        let (id, tempIndex) = INFT(nft).getCollectionIndex()
+
+        assert!(collections.contains!(id) == true, GamifyCodes.NotApprovedNFT)
 
         let caller = callerAddress!()
         let time = blockTimeStamp!()
