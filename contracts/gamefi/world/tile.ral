@@ -1,0 +1,5 @@
+Contract Tile() {
+    pub fn returnBen() -> (ByteVec) {
+        return b`Ben`
+    }
+}

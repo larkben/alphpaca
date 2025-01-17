@@ -2,24 +2,43 @@ Contract BattleFactory(
     admin: Address,
     pvp: ByteVec,
     oracle: IDIAOracle,
-    gameFi: ByteVec
+    gameFi: ByteVec,
+    // reward flow
+    token: ByteVec,
+    mut tokenAmount: U256
 ) {
-    event Battle(who: Address, id: ByteVec)
-    event BattleStart(id: ByteVec)
+    event BattleCreate(nftOne: ByteVec, creator: Address, wagerToken: ByteVec, wager: U256)
+    event BattleStart(nftOne: ByteVec, nftTwo: ByteVec, reward: U256, hpOne: U256, hpTwo: U256)
+    event BattleEnd(nftOne: ByteVec, nftTwo: ByteVec, winner: ByteVec)
 
     enum BattleFactoryErrorCodes {
         NotAdmin = 0
         NotSupercharged = 1
     }
 
+    // helper functions
+    // --------------------------------------------------------------------------------------------
     fn isSupercharged(nft: ByteVec) -> Bool {
         // returns a boolean
         return GamifyProtocol(gameFi).isSupercharged(nft)
     }
 
-    // create the subContract for a search for a battle
+    // variable amount of PACA
+    fn assignReward() -> U256 {
+        let seed = u256From32Byte!(
+            blake2b!(toByteVec!(blockTarget!()) ++ 
+            toByteVec!(blockTimeStamp!()) ++
+            toByteVec!(oracle.getValue(b`BTC/USD`).value))
+        )
+        return addModN!(50, seed, 150)
+    }
+
+    // contract functions
+    // --------------------------------------------------------------------------------------------
+    // notes:
+    // battle take place on land plots? ~ could be sorta cool I think
     @using(preapprovedAssets = true, checkExternalCaller = false)
-    pub fn createBattle(nft: ByteVec) -> () {
+    pub fn createBattle(nft: ByteVec, wagerToken: ByteVec, amount: U256) -> () {
         // assert the nft has been through gameFi
         assert!(isSupercharged(nft) == true, BattleFactoryErrorCodes.NotSupercharged)
 
@@ -27,9 +46,10 @@ Contract BattleFactory(
         let path = nft
         let nullToken = b``
 
-        let (encodeImmutableFields, encodeMutableFields) = Battle.encodeFields!(callerAddress!(), nft, callerAddress!(), nullToken, 1, oracle, 0)
+        let (encodeImmutableFields, encodeMutableFields) = Battle.encodeFields!(callerAddress!(), nft, wagerToken, amount, callerAddress!(), nullToken, 1, oracle, gameFi, 0)
 
-        let battleId = createSubContract!{callerAddress!() -> ALPH: minimalContractDeposit!(), nft: 1}  // transfer the minimal contract deposit and the owners nft
+        // APS!
+        let battleId = createSubContract!{callerAddress!() -> ALPH: minimalContractDeposit!(), nft: 1, wagerToken: amount} 
         (
             path,   // use the owners nft as the path to the subContract
             pvp,
@@ -37,26 +57,35 @@ Contract BattleFactory(
             encodeMutableFields
         )
 
-        emit Battle(callerAddress!(), battleId)
+        // emit the event
+        emit BattleCreate(nft, callerAddress!(), wagerToken, amount)
     }
 
-    // start a battle that was in the search status
-    @using(checkExternalCaller = false)
-    pub fn start(contractId: ByteVec, nft: ByteVec) -> () {
+    @using(checkExternalCaller = false, preapprovedAssets = true)
+    pub fn start(nft: ByteVec, opponent: ByteVec) -> () {
         // assert the nft has been through gameFi
         assert!(isSupercharged(nft) == true, BattleFactoryErrorCodes.NotSupercharged)
 
         // declare the subContract
-        let battle = Battle(contractId)
+        let battle = Battle(subContractId!(opponent))
+
+        // get reward
+        let wagerToken = battle.getWagerToken() 
+        let amount = battle.getWagerAmount()
+
+        let reward = assignReward()
+
+        // get stats
+        let nftOne = GamifyProtocol(gameFi).getNFTstats(nft)
+        let nftTwo = GamifyProtocol(gameFi).getNFTstats(opponent)
 
         // make call to the subContract
-        battle.acceptBattle{callerAddress!() -> nft: 1}(nft)
+        battle.acceptBattle{callerAddress!() -> nft: 1, wagerToken: amount}(nft, callerAddress!())
 
-        // emit the event
-        emit BattleStart(contractId)
+        // emit the event ~ reward is assigned at runtime (oracle)
+        emit BattleStart(nft, opponent, reward, nftOne.hp, nftTwo.hp)
     }
 
-    // need to work on these functions
     @using(checkExternalCaller = false)
     pub fn attack(contractId: ByteVec) -> () {
         let battle = Battle(contractId)
@@ -87,16 +116,31 @@ Contract BattleFactory(
         // emit the event
     }
 
+    @using(checkExternalCaller = false, assetsInContract = true, preapprovedAssets = true)
+    pub fn fund(who: Address, token: ByteVec, amount: U256, topup: Bool) -> () {
+        checkCaller!(callerAddress!() == admin, BattleFactoryErrorCodes.NotAdmin)
+
+        if (topup) {
+            transferToken!(callerAddress!(), selfAddress!(), token, tokenAmount)
+
+            tokenAmount = tokenAmount + amount
+        }
+
+        else {
+            transferToken!(selfAddress!(), callerAddress!(), token, tokenAmount)
+        }
+    }
+
     @using(checkExternalCaller = true)
     pub fn upgrade(newCode: ByteVec) -> () {
-        checkCaller!(callerAddress!() == admin, Error.NotAdmin)
+        checkCaller!(callerAddress!() == admin, BattleFactoryErrorCodes.NotAdmin)
 
         migrate!(newCode)
     }
 
     @using(checkExternalCaller = true, updateFields = true)
     pub fn upgradeFields(newCode: ByteVec, immutable: ByteVec, mutable: ByteVec) -> () {
-        checkCaller!(callerAddress!() == admin, Error.NotAdmin)
+        checkCaller!(callerAddress!() == admin, BattleFactoryErrorCodes.NotAdmin)
 
         migrateWithFields!(newCode, immutable, mutable)
     }

@@ -1,4 +1,3 @@
-// the DIA oracle here is hard to test in unit testing cases and thus we will need to make an alternate contract to test this
 struct DIAOracleValue {
     mut value: U256,
     mut timestamp: U256
@@ -13,15 +12,32 @@ Interface IDIAOracle {
 Contract Battle (
     playerOne: Address,
     nftOne: ByteVec,
-    playerTwo: Address,
-    nftTwo: ByteVec,
-    turn: U256,                 // 1 (one) , 2 (two) ~ binary
-    oracle: IDIAOracle,
+    // wager
+    wagerToken: ByteVec,
+    amount: U256,
+    // opponent
+    mut playerTwo: Address,
+    mut nftTwo: ByteVec,
+    // battle logic
+    mut turn: U256,                 // 1 (one) , 2 (two) ~ binary
+    oracle: IDIAOracle,             // random
+    gamefi: ByteVec,
     timeSinceLastTurn: U256
 ) {
     enum BattleCodes {
         InvalidPlayer = 0
         BattleIsActive = 1
+        NotYourTurn = 2
+        NFTFainted = 3
+    }
+
+    // get functions
+    pub fn getWagerToken() -> (ByteVec) {
+        return wagerToken
+    }
+
+    pub fn getWagerAmount() -> (U256) {
+        return amount
     }
 
     // random -> will need a non oracle compatible contract for proper unit testing
@@ -45,14 +61,22 @@ Contract Battle (
 
     // accept the battle when seen from the search
     @using(updateFields = true, checkExternalCaller = false)
-    pub fn acceptBattle(nft: ByteVec) -> () {
+    pub fn acceptBattle(nft: ByteVec, caller: Address) -> () {
         // assert that battle is not attempted to be joined after started
         assert!(playerTwo == playerOne, BattleCodes.BattleIsActive) 
 
-        // assert that the nft is valid
+        // assert that the nft is valid (valid health)
+        let stats = GamifyProtocol(gamefi).getNFTstats(nft)
+
+        assert!(stats.hp > 0, BattleCodes.NFTFainted)
+
+        // fetch wager (if present)
+        if (amount > 0) {
+            transferToken!(caller, selfAddress!(), wagerToken, amount)
+        }
 
         playerTwo = callerAddress!()
-        nftTwo = paca
+        nftTwo = nft
     }
 
     // attack
