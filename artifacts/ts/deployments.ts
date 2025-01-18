@@ -18,8 +18,6 @@ import {
   PlayerInstance,
   PlayerBase,
   PlayerBaseInstance,
-  FindBattle,
-  FindBattleInstance,
   Battle,
   BattleInstance,
   WrappedWangProtocol,
@@ -36,7 +34,6 @@ export type Deployments = {
     WrappedOgAlfProtocol?: DeployContractExecutionResult<WrappedOgAlfProtocolInstance>;
     Player?: DeployContractExecutionResult<PlayerInstance>;
     PlayerBase?: DeployContractExecutionResult<PlayerBaseInstance>;
-    FindBattle?: DeployContractExecutionResult<FindBattleInstance>;
     Battle?: DeployContractExecutionResult<BattleInstance>;
     WrappedWangProtocol?: DeployContractExecutionResult<WrappedWangProtocolInstance>;
   };
@@ -81,15 +78,6 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["PlayerBase"],
             contractInstance: PlayerBase.at(
               json.contracts["PlayerBase"].contractInstance.address
-            ),
-          },
-    FindBattle:
-      json.contracts["FindBattle"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["FindBattle"],
-            contractInstance: FindBattle.at(
-              json.contracts["FindBattle"].contractInstance.address
             ),
           },
     Battle:
