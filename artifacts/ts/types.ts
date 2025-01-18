@@ -9,8 +9,13 @@ export interface DIAOracleValue extends Record<string, Val> {
   value: bigint;
   timestamp: bigint;
 }
-export interface MoveReturn extends Record<string, Val> {
-  p: bigint;
-  a: bigint;
-  r: bigint;
+export interface PlayerData extends Record<string, Val> {
+  nft: HexString;
+  xp: bigint;
+  hp: bigint;
+  atk: bigint;
+  def: bigint;
+  speed: bigint;
+  levels: [bigint, bigint, bigint, bigint];
+  cooldown: bigint;
 }

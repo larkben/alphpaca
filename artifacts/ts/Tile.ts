@@ -33,22 +33,18 @@ import {
   encodeContractFields,
   Narrow,
 } from "@alephium/web3";
-import { default as ALPHpacaBattlesContractJson } from "../gamefi/ALPHpacaBattles.ral.json";
+import { default as TileContractJson } from "../gamefi/world/Tile.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, PlayerData, AllStructs } from "./types";
 
 // Custom types for the contract
-export namespace ALPHpacaBattlesTypes {
-  export type Fields = {
-    owner: Address;
-  };
-
-  export type State = ContractState<Fields>;
+export namespace TileTypes {
+  export type State = Omit<ContractState<any>, "fields">;
 
   export interface CallMethodTable {
-    editAdmin: {
-      params: CallContractParams<{ newAdmin: Address }>;
-      result: CallContractResult<null>;
+    returnBen: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
     };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
@@ -68,8 +64,8 @@ export namespace ALPHpacaBattlesTypes {
   };
 
   export interface SignExecuteMethodTable {
-    editAdmin: {
-      params: SignExecuteContractMethodParams<{ newAdmin: Address }>;
+    returnBen: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
   }
@@ -79,84 +75,88 @@ export namespace ALPHpacaBattlesTypes {
     SignExecuteMethodTable[T]["result"];
 }
 
-class Factory extends ContractFactory<
-  ALPHpacaBattlesInstance,
-  ALPHpacaBattlesTypes.Fields
-> {
-  encodeFields(fields: ALPHpacaBattlesTypes.Fields) {
-    return encodeContractFields(
-      addStdIdToFields(this.contract, fields),
-      this.contract.fieldsSig,
-      AllStructs
-    );
+class Factory extends ContractFactory<TileInstance, {}> {
+  encodeFields() {
+    return encodeContractFields({}, this.contract.fieldsSig, AllStructs);
   }
 
-  consts = { ToolErrors: { InvalidCaller: BigInt("0") } };
-
-  at(address: string): ALPHpacaBattlesInstance {
-    return new ALPHpacaBattlesInstance(address);
+  at(address: string): TileInstance {
+    return new TileInstance(address);
   }
 
   tests = {
-    editAdmin: async (
-      params: TestContractParamsWithoutMaps<
-        ALPHpacaBattlesTypes.Fields,
-        { newAdmin: Address }
+    returnBen: async (
+      params?: Omit<
+        TestContractParamsWithoutMaps<never, never>,
+        "testArgs" | "initialFields"
       >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "editAdmin", params, getContractByCodeHash);
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(
+        this,
+        "returnBen",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
     },
   };
 
-  stateForTest(
-    initFields: ALPHpacaBattlesTypes.Fields,
-    asset?: Asset,
-    address?: string
-  ) {
+  stateForTest(initFields: {}, asset?: Asset, address?: string) {
     return this.stateForTest_(initFields, asset, address, undefined);
   }
 }
 
 // Use this object to test and deploy the contract
-export const ALPHpacaBattles = new Factory(
+export const Tile = new Factory(
   Contract.fromJson(
-    ALPHpacaBattlesContractJson,
+    TileContractJson,
     "",
-    "c334278365b7b79574fb13664b9f64430a53833357e6e2d2eb423df1980f4a7d",
+    "7c0146d8168124ebf084e8a9b826c9861de3f529abb1fbe5df462c6ad774b617",
     AllStructs
   )
 );
-registerContract(ALPHpacaBattles);
+registerContract(Tile);
 
 // Use this class to interact with the blockchain
-export class ALPHpacaBattlesInstance extends ContractInstance {
+export class TileInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<ALPHpacaBattlesTypes.State> {
-    return fetchContractState(ALPHpacaBattles, this);
+  async fetchState(): Promise<TileTypes.State> {
+    return fetchContractState(Tile, this);
   }
 
   view = {
-    editAdmin: async (
-      params: ALPHpacaBattlesTypes.CallMethodParams<"editAdmin">
-    ): Promise<ALPHpacaBattlesTypes.CallMethodResult<"editAdmin">> => {
+    returnBen: async (
+      params?: TileTypes.CallMethodParams<"returnBen">
+    ): Promise<TileTypes.CallMethodResult<"returnBen">> => {
       return callMethod(
-        ALPHpacaBattles,
+        Tile,
         this,
-        "editAdmin",
-        params,
+        "returnBen",
+        params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
   };
 
   transact = {
-    editAdmin: async (
-      params: ALPHpacaBattlesTypes.SignExecuteMethodParams<"editAdmin">
-    ): Promise<ALPHpacaBattlesTypes.SignExecuteMethodResult<"editAdmin">> => {
-      return signExecuteMethod(ALPHpacaBattles, this, "editAdmin", params);
+    returnBen: async (
+      params: TileTypes.SignExecuteMethodParams<"returnBen">
+    ): Promise<TileTypes.SignExecuteMethodResult<"returnBen">> => {
+      return signExecuteMethod(Tile, this, "returnBen", params);
     },
   };
+
+  async multicall<Calls extends TileTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<TileTypes.MultiCallResults<Calls>>;
+  async multicall<Callss extends TileTypes.MultiCallParams[]>(
+    callss: Narrow<Callss>
+  ): Promise<TileTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends TileTypes.MultiCallParams | TileTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(Tile, this, callss, getContractByCodeHash);
+  }
 }

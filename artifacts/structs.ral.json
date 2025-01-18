@@ -15,21 +15,36 @@
     ]
   },
   {
-    "name": "MoveReturn",
+    "name": "PlayerData",
     "fieldNames": [
-      "p",
-      "a",
-      "r"
+      "nft",
+      "xp",
+      "hp",
+      "atk",
+      "def",
+      "speed",
+      "levels",
+      "cooldown"
     ],
     "fieldTypes": [
+      "ByteVec",
       "U256",
       "U256",
+      "U256",
+      "U256",
+      "U256",
+      "[U256;4]",
       "U256"
     ],
     "isMutable": [
       false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ]
   }
 ]

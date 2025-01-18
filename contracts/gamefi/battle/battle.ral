@@ -21,14 +21,15 @@ Contract Battle (
     // battle logic
     mut turn: U256,                 // 1 (one) , 2 (two) ~ binary
     oracle: IDIAOracle,             // random
-    gamefi: ByteVec,
-    timeSinceLastTurn: U256
+    gamefi: ByteVec
+    //timeSinceLastTurn: U256
 ) {
     enum BattleCodes {
         InvalidPlayer = 0
         BattleIsActive = 1
         NotYourTurn = 2
         NFTFainted = 3
+        BattleNotDone = 4
     }
 
     // get functions
@@ -48,19 +49,28 @@ Contract Battle (
             toByteVec!(blockTimeStamp!()) ++
             toByteVec!(oracle.getValue(b`BTC/USD`).value))
         )
-        return addModN!(0, seed, 5)
+        return addModN!(5, seed, 10)
+    }
+
+    // end battle
+    @using(updateFields = false, assetsInContract = true)
+    fn endbattle(winner: Address) -> () {
+        destroySelf!(winner)
     }
 
     // swap turns (False = P1, True = P2)
-    fn whoTurn() -> (Address, ByteVec) {
+    @using(updateFields = true)
+    fn whoTurn() -> (Address, ByteVec, ByteVec) {
         if (turn == 1) {
-            return playerOne, nftOne
+            turn = 2
+            return playerOne, nftOne, nftTwo
         }
-        return playerTwo, nftTwo
+        turn = 1
+        return playerTwo, nftTwo, nftOne
     }
 
     // accept the battle when seen from the search
-    @using(updateFields = true, checkExternalCaller = false)
+    @using(updateFields = true, checkExternalCaller = false, preapprovedAssets = true)
     pub fn acceptBattle(nft: ByteVec, caller: Address) -> () {
         // assert that battle is not attempted to be joined after started
         assert!(playerTwo == playerOne, BattleCodes.BattleIsActive) 
@@ -80,57 +90,72 @@ Contract Battle (
     }
 
     // attack
-    // TODO: implement auto battle end if the other player knocks the other out
-    @using(checkExternalCaller = true, updateFields = true)
-    pub fn attack() -> () {
-        assert!(playerTwo == nullContractAddress!(), ErrorCodes.NotYourTurn) 
+    @using(checkExternalCaller = true, updateFields = false)
+    pub fn attack() -> (Address, ByteVec, U256) {
+        assert!(playerTwo == playerOne, BattleCodes.InvalidPlayer) 
 
-        let condition = checkIfPacaFainted()
+        // checks player
+        let (player, nft, opponent) = whoTurn()
+        checkCaller!(callerAddress!() == player, BattleCodes.NotYourTurn)
 
-        assert!(condition == nullContractAddress!(), ErrorCodes.BattleIsDone)
+        let stats = GamifyProtocol(gamefi).getNFTstats(nft)
+        let damage = stats.atk + random()
 
-        let allowed = whoTurn()
+        // call the remove health (attack)
+        let _ = GamifyProtocol(gamefi).removeHealth(opponent, damage)
 
-        checkCaller!(callerAddress!() == allowed, ErrorCodes.NotYourTurn)
+        let opStats = GamifyProtocol(gamefi).getNFTstats(opponent)
 
-        let _ = whichPaca(allowed, random())
+        // is the nft alive
+        if (opStats.hp == 0) {
+            endbattle(player)
 
-        turn = !turn // switch turn
-    }
-
-    // end battle
-    @using(checkExternalCaller = false, updateFields = false, assetsInContract = true)
-    pub fn endbattle() -> () {
-        let winner = checkIfPacaFainted()
-
-        if (winner != nullContractAddress!()) {
-            destroySelf!(winner) // gets the contract deposit
+            return player, nft, 0
         }
+
+        return nullContractAddress!(), opponent, opStats.hp
     }
 
     // leave the battle
-    // TODO: the player with the lowest HP is the loser
-    @using(checkExternalCaller = true, updateFields = false, assetsInContract = true)
+    @using(checkExternalCaller = false, updateFields = false, assetsInContract = true)
     pub fn leave() -> () {
-        checkCaller!(callerAddress!() == whoTurn(), ErrorCodes.InvalidCaller)
+        let caller = callerAddress!()
 
-        if (whoTurn() == playerOne) {
-            destroySelf!(playerTwo)
-        }
-        else {
-            destroySelf!(playerOne)
+        if (caller == playerOne || caller == playerTwo) {
+            // compare stats
+            let oneStats = GamifyProtocol(gamefi).getNFTstats(nftOne)
+            let twoStats = GamifyProtocol(gamefi).getNFTstats(nftTwo)
+
+            // what if health is equal -> the player who leaves will lose
+            if (oneStats.hp > twoStats.hp) {
+                destroySelf!(playerOne)
+            }
+
+            else if (oneStats.hp == twoStats.hp) {
+                if (caller == playerOne) {
+                    destroySelf!(playerTwo)
+                }
+                else {
+                    destroySelf!(playerOne)
+                }
+            }
+
+            else {
+                destroySelf!(playerTwo)
+            }
         }
     }
 
     // force cancel / cancel battle
     @using(checkExternalCaller = true, assetsInContract = true)
     pub fn cancel() -> () {
-        checkCaller!(playerTwo == playerOne, ErrorCodes.BattleNotDone)
+        checkCaller!(playerTwo == playerOne, BattleCodes.BattleNotDone)
 
         destroySelf!(playerOne)
     }
 }
 
+// debugging
 TxScript ForceContractCancel (
     pvp: Battle
 ) {

@@ -2,21 +2,17 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export * from "./ALPHpacaBattles";
-export * from "./AllMoves";
-export * from "./BasicMove";
 export * from "./Battle";
+export * from "./BattleFactory";
 export * from "./CreateToken";
 export * from "./Faucet";
 export * from "./FeeCollection";
-export * from "./FindBattle";
-export * from "./HeldItems";
-export * from "./Item";
+export * from "./GamifyProtocol";
 export * from "./Player";
 export * from "./PlayerBase";
-export * from "./PowerMove";
-export * from "./RecoilMove";
+export * from "./Tile";
 export * from "./Token";
+export * from "./World";
 export * from "./WrappedOgAlfProtocol";
 export * from "./WrappedWangProtocol";
 export * from "./scripts";

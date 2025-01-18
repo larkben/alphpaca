@@ -1,17 +1,23 @@
 {
-  "version": "v3.6.3",
-  "name": "End",
-  "bytecodeTemplate": "01010300000005{1}0d0c{0}0103",
+  "version": "v3.11.1",
+  "name": "UpgradeBattleFactoryFields",
+  "bytecodeTemplate": "01010300000007{1}{2}{3}0f0c{0}010a",
   "fieldsSig": {
     "names": [
       "market",
-      "contractId"
+      "newCode",
+      "immutable",
+      "mutable"
     ],
     "types": [
-      "FindBattle",
+      "BattleFactory",
+      "ByteVec",
+      "ByteVec",
       "ByteVec"
     ],
     "isMutable": [
+      false,
+      false,
       false,
       false
     ]

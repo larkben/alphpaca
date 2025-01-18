@@ -35,51 +35,52 @@ import {
 } from "@alephium/web3";
 import { default as BattleContractJson } from "../gamefi/battle/Battle.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, PlayerData, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace BattleTypes {
   export type Fields = {
     playerOne: Address;
-    pacaOne: HexString;
-    pacaOneHealth: bigint;
+    nftOne: HexString;
+    wagerToken: HexString;
+    amount: bigint;
     playerTwo: Address;
-    pacaTwo: HexString;
-    pacaTwoHealth: bigint;
-    turn: boolean;
+    nftTwo: HexString;
+    turn: bigint;
     oracle: HexString;
+    gamefi: HexString;
   };
 
   export type State = ContractState<Fields>;
 
   export interface CallMethodTable {
+    getWagerToken: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getWagerAmount: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
     random: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
+    endbattle: {
+      params: CallContractParams<{ winner: Address }>;
+      result: CallContractResult<null>;
+    };
     whoTurn: {
       params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<Address>;
-    };
-    whichPaca: {
-      params: CallContractParams<{ player: Address; damage: bigint }>;
-      result: CallContractResult<HexString>;
-    };
-    checkIfPacaFainted: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<Address>;
+      result: CallContractResult<[Address, HexString, HexString]>;
     };
     acceptBattle: {
-      params: CallContractParams<{ paca: HexString }>;
+      params: CallContractParams<{ nft: HexString; caller: Address }>;
       result: CallContractResult<null>;
     };
     attack: {
       params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<null>;
-    };
-    endbattle: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<null>;
+      result: CallContractResult<[Address, HexString, bigint]>;
     };
     leave: {
       params: Omit<CallContractParams<{}>, "args">;
@@ -107,34 +108,34 @@ export namespace BattleTypes {
   };
 
   export interface SignExecuteMethodTable {
+    getWagerToken: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    getWagerAmount: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
     random: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
+    endbattle: {
+      params: SignExecuteContractMethodParams<{ winner: Address }>;
       result: SignExecuteScriptTxResult;
     };
     whoTurn: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
-    whichPaca: {
+    acceptBattle: {
       params: SignExecuteContractMethodParams<{
-        player: Address;
-        damage: bigint;
+        nft: HexString;
+        caller: Address;
       }>;
       result: SignExecuteScriptTxResult;
     };
-    checkIfPacaFainted: {
-      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
-      result: SignExecuteScriptTxResult;
-    };
-    acceptBattle: {
-      params: SignExecuteContractMethodParams<{ paca: HexString }>;
-      result: SignExecuteScriptTxResult;
-    };
     attack: {
-      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
-      result: SignExecuteScriptTxResult;
-    };
-    endbattle: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
@@ -163,11 +164,12 @@ class Factory extends ContractFactory<BattleInstance, BattleTypes.Fields> {
   }
 
   consts = {
-    ErrorCodes: {
-      NotYourTurn: BigInt("1"),
-      BattleNotDone: BigInt("2"),
-      InvalidCaller: BigInt("3"),
-      BattleIsDone: BigInt("4"),
+    BattleCodes: {
+      InvalidPlayer: BigInt("0"),
+      BattleIsActive: BigInt("1"),
+      NotYourTurn: BigInt("2"),
+      NFTFainted: BigInt("3"),
+      BattleNotDone: BigInt("4"),
     },
   };
 
@@ -176,6 +178,22 @@ class Factory extends ContractFactory<BattleInstance, BattleTypes.Fields> {
   }
 
   tests = {
+    getWagerToken: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<BattleTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<HexString>> => {
+      return testMethod(this, "getWagerToken", params, getContractByCodeHash);
+    },
+    getWagerAmount: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<BattleTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<bigint>> => {
+      return testMethod(this, "getWagerAmount", params, getContractByCodeHash);
+    },
     random: async (
       params: Omit<
         TestContractParamsWithoutMaps<BattleTypes.Fields, never>,
@@ -184,39 +202,28 @@ class Factory extends ContractFactory<BattleInstance, BattleTypes.Fields> {
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "random", params, getContractByCodeHash);
     },
+    endbattle: async (
+      params: TestContractParamsWithoutMaps<
+        BattleTypes.Fields,
+        { winner: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "endbattle", params, getContractByCodeHash);
+    },
     whoTurn: async (
       params: Omit<
         TestContractParamsWithoutMaps<BattleTypes.Fields, never>,
         "testArgs"
       >
-    ): Promise<TestContractResultWithoutMaps<Address>> => {
+    ): Promise<
+      TestContractResultWithoutMaps<[Address, HexString, HexString]>
+    > => {
       return testMethod(this, "whoTurn", params, getContractByCodeHash);
-    },
-    whichPaca: async (
-      params: TestContractParamsWithoutMaps<
-        BattleTypes.Fields,
-        { player: Address; damage: bigint }
-      >
-    ): Promise<TestContractResultWithoutMaps<HexString>> => {
-      return testMethod(this, "whichPaca", params, getContractByCodeHash);
-    },
-    checkIfPacaFainted: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<BattleTypes.Fields, never>,
-        "testArgs"
-      >
-    ): Promise<TestContractResultWithoutMaps<Address>> => {
-      return testMethod(
-        this,
-        "checkIfPacaFainted",
-        params,
-        getContractByCodeHash
-      );
     },
     acceptBattle: async (
       params: TestContractParamsWithoutMaps<
         BattleTypes.Fields,
-        { paca: HexString }
+        { nft: HexString; caller: Address }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "acceptBattle", params, getContractByCodeHash);
@@ -226,16 +233,8 @@ class Factory extends ContractFactory<BattleInstance, BattleTypes.Fields> {
         TestContractParamsWithoutMaps<BattleTypes.Fields, never>,
         "testArgs"
       >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
+    ): Promise<TestContractResultWithoutMaps<[Address, HexString, bigint]>> => {
       return testMethod(this, "attack", params, getContractByCodeHash);
-    },
-    endbattle: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<BattleTypes.Fields, never>,
-        "testArgs"
-      >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "endbattle", params, getContractByCodeHash);
     },
     leave: async (
       params: Omit<
@@ -269,7 +268,7 @@ export const Battle = new Factory(
   Contract.fromJson(
     BattleContractJson,
     "",
-    "273f3007ca75e6ee2708dd1ac2991dbe2b2f72359a0d7e7894ea1ffe868c1933",
+    "85f3b48fa7fe3cbc7e156135f0d03beb8630b3202806cb69b4b3247a4d4a0133",
     AllStructs
   )
 );
@@ -286,6 +285,28 @@ export class BattleInstance extends ContractInstance {
   }
 
   view = {
+    getWagerToken: async (
+      params?: BattleTypes.CallMethodParams<"getWagerToken">
+    ): Promise<BattleTypes.CallMethodResult<"getWagerToken">> => {
+      return callMethod(
+        Battle,
+        this,
+        "getWagerToken",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getWagerAmount: async (
+      params?: BattleTypes.CallMethodParams<"getWagerAmount">
+    ): Promise<BattleTypes.CallMethodResult<"getWagerAmount">> => {
+      return callMethod(
+        Battle,
+        this,
+        "getWagerAmount",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
     random: async (
       params?: BattleTypes.CallMethodParams<"random">
     ): Promise<BattleTypes.CallMethodResult<"random">> => {
@@ -297,6 +318,17 @@ export class BattleInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    endbattle: async (
+      params: BattleTypes.CallMethodParams<"endbattle">
+    ): Promise<BattleTypes.CallMethodResult<"endbattle">> => {
+      return callMethod(
+        Battle,
+        this,
+        "endbattle",
+        params,
+        getContractByCodeHash
+      );
+    },
     whoTurn: async (
       params?: BattleTypes.CallMethodParams<"whoTurn">
     ): Promise<BattleTypes.CallMethodResult<"whoTurn">> => {
@@ -304,28 +336,6 @@ export class BattleInstance extends ContractInstance {
         Battle,
         this,
         "whoTurn",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
-    },
-    whichPaca: async (
-      params: BattleTypes.CallMethodParams<"whichPaca">
-    ): Promise<BattleTypes.CallMethodResult<"whichPaca">> => {
-      return callMethod(
-        Battle,
-        this,
-        "whichPaca",
-        params,
-        getContractByCodeHash
-      );
-    },
-    checkIfPacaFainted: async (
-      params?: BattleTypes.CallMethodParams<"checkIfPacaFainted">
-    ): Promise<BattleTypes.CallMethodResult<"checkIfPacaFainted">> => {
-      return callMethod(
-        Battle,
-        this,
-        "checkIfPacaFainted",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
@@ -348,17 +358,6 @@ export class BattleInstance extends ContractInstance {
         Battle,
         this,
         "attack",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
-    },
-    endbattle: async (
-      params?: BattleTypes.CallMethodParams<"endbattle">
-    ): Promise<BattleTypes.CallMethodResult<"endbattle">> => {
-      return callMethod(
-        Battle,
-        this,
-        "endbattle",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
@@ -388,25 +387,30 @@ export class BattleInstance extends ContractInstance {
   };
 
   transact = {
+    getWagerToken: async (
+      params: BattleTypes.SignExecuteMethodParams<"getWagerToken">
+    ): Promise<BattleTypes.SignExecuteMethodResult<"getWagerToken">> => {
+      return signExecuteMethod(Battle, this, "getWagerToken", params);
+    },
+    getWagerAmount: async (
+      params: BattleTypes.SignExecuteMethodParams<"getWagerAmount">
+    ): Promise<BattleTypes.SignExecuteMethodResult<"getWagerAmount">> => {
+      return signExecuteMethod(Battle, this, "getWagerAmount", params);
+    },
     random: async (
       params: BattleTypes.SignExecuteMethodParams<"random">
     ): Promise<BattleTypes.SignExecuteMethodResult<"random">> => {
       return signExecuteMethod(Battle, this, "random", params);
     },
+    endbattle: async (
+      params: BattleTypes.SignExecuteMethodParams<"endbattle">
+    ): Promise<BattleTypes.SignExecuteMethodResult<"endbattle">> => {
+      return signExecuteMethod(Battle, this, "endbattle", params);
+    },
     whoTurn: async (
       params: BattleTypes.SignExecuteMethodParams<"whoTurn">
     ): Promise<BattleTypes.SignExecuteMethodResult<"whoTurn">> => {
       return signExecuteMethod(Battle, this, "whoTurn", params);
-    },
-    whichPaca: async (
-      params: BattleTypes.SignExecuteMethodParams<"whichPaca">
-    ): Promise<BattleTypes.SignExecuteMethodResult<"whichPaca">> => {
-      return signExecuteMethod(Battle, this, "whichPaca", params);
-    },
-    checkIfPacaFainted: async (
-      params: BattleTypes.SignExecuteMethodParams<"checkIfPacaFainted">
-    ): Promise<BattleTypes.SignExecuteMethodResult<"checkIfPacaFainted">> => {
-      return signExecuteMethod(Battle, this, "checkIfPacaFainted", params);
     },
     acceptBattle: async (
       params: BattleTypes.SignExecuteMethodParams<"acceptBattle">
@@ -417,11 +421,6 @@ export class BattleInstance extends ContractInstance {
       params: BattleTypes.SignExecuteMethodParams<"attack">
     ): Promise<BattleTypes.SignExecuteMethodResult<"attack">> => {
       return signExecuteMethod(Battle, this, "attack", params);
-    },
-    endbattle: async (
-      params: BattleTypes.SignExecuteMethodParams<"endbattle">
-    ): Promise<BattleTypes.SignExecuteMethodResult<"endbattle">> => {
-      return signExecuteMethod(Battle, this, "endbattle", params);
     },
     leave: async (
       params: BattleTypes.SignExecuteMethodParams<"leave">

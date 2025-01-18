@@ -1,42 +1,63 @@
 {
-  "version": "v3.6.3",
+  "version": "v3.11.1",
   "name": "Battle",
-  "bytecode": "0809402f404140644082409b40cc40e441044119000000030117574056404414074254432f5553440d0ece02d4a0e6c23117021701160140444e7117000c1600118802000000000108a004041c4c02ce0002a001020000020201111600ce00454c07a00316012ba103a002024a06a00016012ba100ce0102000000000110a0000c2f4c03a001024a09a0030c2f4c03ce00024a02ca0201000101000ad3430f6730a001ce0045107bb4a1011600a10201000002001bd3352693aaa001ca450d7b000317001600ca45107b00011701b41601450d7b16010000000218a00419a104010200010009d3c8512445000317001600ca464c021600b001020000000fd38f386a7fb40001450f7b0001ce00454c03a001b04a02ce00b0010200000008d3a7633c58a001ce00450e7bce00b0",
-  "codeHash": "273f3007ca75e6ee2708dd1ac2991dbe2b2f72359a0d7e7894ea1ffe868c1933",
+  "bytecode": "09090e1c404c4055407540c2414941cb41e0010000000103d35a1414bbce0202010000000103d3d647972ece0302000000030117574056404414074254432f5553440d0ece04d4a0e6c23117021701160140444e711700111600130a88020002010100021600b0000000000310a0020d2f4c060ea102ce00ce01a001020da102a000a001ce01020103020d004028d35b585282a000ce00450d7b16000d130bce050100170c170b170a1709170817071706170517041703170216040c330f7bce030c334c051601b2ce02ce03aab4a1001600a1010100001a034048d3bb466beca000ce00450c7b0004170217011700b41600450e7b16010d130bce050100170d170c170b170a1709170817071706170517041703160600022a170e1602160e0e0dce0501051816020d130bce0501001719171817171716171517141713171217111710170f16110c2f4c0616000003160016010c02ca160216110201020017004042d38f386a7fb417001600ce00451600a000451b4c4037ce010d130bce050100170b170a170917081707170617051704170317021701a0010d130bce0501001716171517141713171217111710170f170e170d170c1603160e334c03ce00b04a101603160e2f4c0a1600ce00454c03a000b04a02ce00b04a02a000b0010200000008d3a7633c58a000ce0045107bce00b0",
+  "codeHash": "85f3b48fa7fe3cbc7e156135f0d03beb8630b3202806cb69b4b3247a4d4a0133",
   "fieldsSig": {
     "names": [
       "playerOne",
-      "pacaOne",
-      "pacaOneHealth",
+      "nftOne",
+      "wagerToken",
+      "amount",
       "playerTwo",
-      "pacaTwo",
-      "pacaTwoHealth",
+      "nftTwo",
       "turn",
-      "oracle"
+      "oracle",
+      "gamefi"
     ],
     "types": [
       "Address",
       "ByteVec",
+      "ByteVec",
       "U256",
       "Address",
       "ByteVec",
       "U256",
-      "Bool",
-      "IDIAOracle"
+      "IDIAOracle",
+      "ByteVec"
     ],
     "isMutable": [
       false,
       false,
+      false,
+      false,
       true,
       true,
       true,
-      true,
-      true,
+      false,
       false
     ]
   },
   "eventsSig": [],
   "functions": [
+    {
+      "name": "getWagerToken",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getWagerAmount",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
     {
       "name": "random",
       "paramNames": [],
@@ -47,50 +68,41 @@
       ]
     },
     {
+      "name": "endbattle",
+      "paramNames": [
+        "winner"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
       "name": "whoTurn",
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
       "returnTypes": [
-        "Address"
-      ]
-    },
-    {
-      "name": "whichPaca",
-      "paramNames": [
-        "player",
-        "damage"
-      ],
-      "paramTypes": [
         "Address",
-        "U256"
-      ],
-      "paramIsMutable": [
-        false,
-        false
-      ],
-      "returnTypes": [
+        "ByteVec",
         "ByteVec"
-      ]
-    },
-    {
-      "name": "checkIfPacaFainted",
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "Address"
       ]
     },
     {
       "name": "acceptBattle",
       "paramNames": [
-        "paca"
+        "nft",
+        "caller"
       ],
       "paramTypes": [
-        "ByteVec"
+        "ByteVec",
+        "Address"
       ],
       "paramIsMutable": [
+        false,
         false
       ],
       "returnTypes": []
@@ -100,14 +112,11 @@
       "paramNames": [],
       "paramTypes": [],
       "paramIsMutable": [],
-      "returnTypes": []
-    },
-    {
-      "name": "endbattle",
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": []
+      "returnTypes": [
+        "Address",
+        "ByteVec",
+        "U256"
+      ]
     },
     {
       "name": "leave",
@@ -127,31 +136,38 @@
   "constants": [],
   "enums": [
     {
-      "name": "ErrorCodes",
+      "name": "BattleCodes",
       "fields": [
         {
-          "name": "NotYourTurn",
+          "name": "InvalidPlayer",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "BattleIsActive",
           "value": {
             "type": "U256",
             "value": "1"
           }
         },
         {
-          "name": "BattleNotDone",
+          "name": "NotYourTurn",
           "value": {
             "type": "U256",
             "value": "2"
           }
         },
         {
-          "name": "InvalidCaller",
+          "name": "NFTFainted",
           "value": {
             "type": "U256",
             "value": "3"
           }
         },
         {
-          "name": "BattleIsDone",
+          "name": "BattleNotDone",
           "value": {
             "type": "U256",
             "value": "4"

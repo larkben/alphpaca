@@ -35,7 +35,7 @@ import {
 } from "@alephium/web3";
 import { default as CreateTokenContractJson } from "../createtoken/CreateToken.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, PlayerData, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace CreateTokenTypes {

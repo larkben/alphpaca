@@ -1,17 +1,23 @@
 {
-  "version": "v3.6.3",
+  "version": "v3.11.1",
   "name": "CreatePvp",
-  "bytecodeTemplate": "01010300000008b4d1a2{1}0d0c{0}0100",
+  "bytecodeTemplate": "0101030000000ab4d1a2{1}{2}{3}0f0c{0}0103",
   "fieldsSig": {
     "names": [
       "market",
-      "paca"
+      "paca",
+      "wagerToken",
+      "wager"
     ],
     "types": [
-      "FindBattle",
-      "ByteVec"
+      "BattleFactory",
+      "ByteVec",
+      "ByteVec",
+      "U256"
     ],
     "isMutable": [
+      false,
+      false,
       false,
       false
     ]

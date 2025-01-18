@@ -23,7 +23,7 @@ Contract GamifyProtocol (
 ) {
     // mapping
     mapping [ByteVec, PlayerData] supernfts
-    mapping [ByteVec, Bool] collections
+    mapping [ByteVec, Bool] collections         // key (collectionId, true/false)
     mapping [Address, Bool] approved
 
     // events
@@ -53,14 +53,14 @@ Contract GamifyProtocol (
     }
 
     // supercharge the nfts; create mapping
-    @using(checkExternalCaller = false, preapprovedAssets = true)
+    @using(checkExternalCaller = false, preapprovedAssets = true, updateFields = true)
     pub fn supercharge(nft: ByteVec) -> () {
         // verify mapping does not exist
         assert!(supernfts.contains!(nft) == false, GamifyCodes.AlreadySupercharged)
 
         // collection validation
         // get the data associated with the NFT
-        let (id, tempIndex) = INFT(nft).getCollectionIndex()
+        let (id, _) = INFT(nft).getCollectionIndex()
 
         assert!(collections.contains!(id) == true, GamifyCodes.NotApprovedNFT)
 
@@ -75,7 +75,7 @@ Contract GamifyProtocol (
             xp: 0,
             // stats
             hp: 20,
-            atk: 10,
+            atk: 7,
             def: 5,
             // stats special
             speed: 1,
@@ -95,7 +95,7 @@ Contract GamifyProtocol (
     }
 
     // these need to be built out
-    @using(checkExternalCaller = false, updateFields = true)
+    @using(checkExternalCaller = false, updateFields = false)
     pub fn updateLevel(nft: ByteVec, index: U256) -> () {
         assert!(isSupercharged(nft) == true, GamifyCodes.NotSupercharged)
 
@@ -110,7 +110,7 @@ Contract GamifyProtocol (
         supernfts[nft].xp = supernfts[nft].xp - (currentLevel * 100)
     }
 
-    @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true)
+    @using(checkExternalCaller = false, updateFields = true, preapprovedAssets = true)
     pub fn rest(nft: ByteVec, quickRest: Bool) -> () {
         assert!(isSupercharged(nft) == true, GamifyCodes.NotSupercharged)
 
@@ -136,7 +136,7 @@ Contract GamifyProtocol (
         // emit the event
     }
 
-    @using(checkExternalCaller = false, updateFields = true)
+    @using(checkExternalCaller = false, updateFields = false)
     pub fn removeHealth(nft: ByteVec, damage: U256) -> (U256) {   // returns that the player had enough health to remove / health remaining
         assert!(isSupercharged(nft) == true, GamifyCodes.NotSupercharged)
 
@@ -153,7 +153,7 @@ Contract GamifyProtocol (
         return remaining
     }
 
-    @using(checkExternalCaller = true, updateFields = true)
+    @using(checkExternalCaller = false, updateFields = true, preapprovedAssets = true)
     pub fn addXp(nft: ByteVec, xp: U256, paidXp: Bool) -> () {
         assert!(isSupercharged(nft) == true, GamifyCodes.NotSupercharged)
 
@@ -177,7 +177,7 @@ Contract GamifyProtocol (
         // emit the event
     }
 
-    @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true)
+    @using(checkExternalCaller = true, updateFields = false, preapprovedAssets = true)
     pub fn editValidContract(contract: Address, remove: Bool) -> (Bool) {   // returns whether contract was removed or added
         checkCaller!(admin == callerAddress!(), GamifyCodes.NotAdmin)
 
@@ -193,7 +193,7 @@ Contract GamifyProtocol (
     }
 
     // reward PACA function
-    @using(checkExternalCaller = true, updateFields = true, assetsInContract = true)
+    @using(checkExternalCaller = true, updateFields = false, assetsInContract = true)
     pub fn rewardPaca(reward: U256, reciever: Address) -> () {
         checkCaller!(approved.contains!(callerAddress!()) == true, GamifyCodes.NotApprovedContract)
 
@@ -203,12 +203,14 @@ Contract GamifyProtocol (
     }
 
     // update contract scripts (code and fields)
+    @using(updateFields = false, checkExternalCaller = true)
     pub fn updateGamifyCode(newCode: ByteVec) -> () {
         checkCaller!(callerAddress!() == admin, GamifyCodes.NotAdmin)
 
         migrate!(newCode)
     }
 
+    @using(updateFields = true, checkExternalCaller = true)
     pub fn updateGamifyFields(newCode: ByteVec, immFields: ByteVec, mutFields: ByteVec) -> () {
         checkCaller!(callerAddress!() == admin, GamifyCodes.NotAdmin)
 

@@ -28,7 +28,6 @@ import { default as EditCollectionUriScriptJson } from "../gamefi/EditCollection
 import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.json";
 import { default as EditWangFeesScriptJson } from "../wang/EditWangFees.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
-import { default as EndScriptJson } from "../gamefi/battle/End.ral.json";
 import { default as ForceContractCancelScriptJson } from "../gamefi/battle/ForceContractCancel.ral.json";
 import { default as GettokenScriptJson } from "../scripts/Gettoken.ral.json";
 import { default as LeaveBattleScriptJson } from "../gamefi/battle/LeaveBattle.ral.json";
@@ -44,12 +43,12 @@ import { default as TopupWangProtocolScriptJson } from "../wang/TopupWangProtoco
 import { default as UpdateCreationFeeScriptJson } from "../createtoken/UpdateCreationFee.ral.json";
 import { default as UpdateNFTScriptJson } from "../gamefi/UpdateNFT.ral.json";
 import { default as UpdateNFTFieldsScriptJson } from "../gamefi/UpdateNFTFields.ral.json";
+import { default as UpgradeBattleFactoryScriptJson } from "../gamefi/battle/UpgradeBattleFactory.ral.json";
+import { default as UpgradeBattleFactoryFieldsScriptJson } from "../gamefi/battle/UpgradeBattleFactoryFields.ral.json";
 import { default as UpgradeCollectionCodeScriptJson } from "../gamefi/UpgradeCollectionCode.ral.json";
 import { default as UpgradeCollectionFieldsScriptJson } from "../gamefi/UpgradeCollectionFields.ral.json";
-import { default as UpgradeFindBattleScriptJson } from "../gamefi/battle/UpgradeFindBattle.ral.json";
-import { default as UpgradeFindBattleWithFieldsScriptJson } from "../gamefi/battle/UpgradeFindBattleWithFields.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
-import { DIAOracleValue, MoveReturn, AllStructs } from "./types";
+import { DIAOracleValue, PlayerData, AllStructs } from "./types";
 
 export const ActivateWalfProtocol = new ExecutableScript<{
   contract: HexString;
@@ -97,6 +96,8 @@ export const CollectWangFees = new ExecutableScript<{ contract: HexString }>(
 export const CreatePvp = new ExecutableScript<{
   market: HexString;
   paca: HexString;
+  wagerToken: HexString;
+  wager: bigint;
 }>(Script.fromJson(CreatePvpScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const Destroy = new ExecutableScript<{ contract: HexString }>(
@@ -152,11 +153,6 @@ export const Editfee = new ExecutableScript<{
   edit: bigint;
 }>(Script.fromJson(EditfeeScriptJson, "", AllStructs), getContractByCodeHash);
 
-export const End = new ExecutableScript<{
-  market: HexString;
-  contractId: HexString;
-}>(Script.fromJson(EndScriptJson, "", AllStructs), getContractByCodeHash);
-
 export const ForceContractCancel = new ExecutableScript<{ pvp: HexString }>(
   Script.fromJson(ForceContractCancelScriptJson, "", AllStructs),
   getContractByCodeHash
@@ -210,8 +206,8 @@ export const Sendout = new ExecutableScript<{
 
 export const Start = new ExecutableScript<{
   market: HexString;
-  contractId: HexString;
-  paca: HexString;
+  nft: HexString;
+  opponent: HexString;
 }>(Script.fromJson(StartScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const Topup = new ExecutableScript<{
@@ -248,6 +244,24 @@ export const UpdateNFTFields = new ExecutableScript<{
   getContractByCodeHash
 );
 
+export const UpgradeBattleFactory = new ExecutableScript<{
+  market: HexString;
+  newCode: HexString;
+}>(
+  Script.fromJson(UpgradeBattleFactoryScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const UpgradeBattleFactoryFields = new ExecutableScript<{
+  market: HexString;
+  newCode: HexString;
+  immutable: HexString;
+  mutable: HexString;
+}>(
+  Script.fromJson(UpgradeBattleFactoryFieldsScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const UpgradeCollectionCode = new ExecutableScript<{
   collection: HexString;
   newCode: HexString;
@@ -263,24 +277,6 @@ export const UpgradeCollectionFields = new ExecutableScript<{
   newMutFieldsEncoded: HexString;
 }>(
   Script.fromJson(UpgradeCollectionFieldsScriptJson, "", AllStructs),
-  getContractByCodeHash
-);
-
-export const UpgradeFindBattle = new ExecutableScript<{
-  market: HexString;
-  newCode: HexString;
-}>(
-  Script.fromJson(UpgradeFindBattleScriptJson, "", AllStructs),
-  getContractByCodeHash
-);
-
-export const UpgradeFindBattleWithFields = new ExecutableScript<{
-  market: HexString;
-  newCode: HexString;
-  immutable: HexString;
-  mutable: HexString;
-}>(
-  Script.fromJson(UpgradeFindBattleWithFieldsScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
