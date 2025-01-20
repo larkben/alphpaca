@@ -95,15 +95,15 @@ export namespace BattleFactoryTypes {
       result: CallContractResult<null>;
     };
     attack: {
-      params: CallContractParams<{ contractId: HexString }>;
+      params: CallContractParams<{ nft: HexString }>;
       result: CallContractResult<null>;
     };
     leavebattle: {
-      params: CallContractParams<{ contractId: HexString }>;
+      params: CallContractParams<{ nft: HexString }>;
       result: CallContractResult<null>;
     };
     cancel: {
-      params: CallContractParams<{ contractId: HexString }>;
+      params: CallContractParams<{ nft: HexString }>;
       result: CallContractResult<null>;
     };
     fund: {
@@ -173,15 +173,15 @@ export namespace BattleFactoryTypes {
       result: SignExecuteScriptTxResult;
     };
     attack: {
-      params: SignExecuteContractMethodParams<{ contractId: HexString }>;
+      params: SignExecuteContractMethodParams<{ nft: HexString }>;
       result: SignExecuteScriptTxResult;
     };
     leavebattle: {
-      params: SignExecuteContractMethodParams<{ contractId: HexString }>;
+      params: SignExecuteContractMethodParams<{ nft: HexString }>;
       result: SignExecuteScriptTxResult;
     };
     cancel: {
-      params: SignExecuteContractMethodParams<{ contractId: HexString }>;
+      params: SignExecuteContractMethodParams<{ nft: HexString }>;
       result: SignExecuteScriptTxResult;
     };
     fund: {
@@ -280,7 +280,7 @@ class Factory extends ContractFactory<
     attack: async (
       params: TestContractParamsWithoutMaps<
         BattleFactoryTypes.Fields,
-        { contractId: HexString }
+        { nft: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "attack", params, getContractByCodeHash);
@@ -288,7 +288,7 @@ class Factory extends ContractFactory<
     leavebattle: async (
       params: TestContractParamsWithoutMaps<
         BattleFactoryTypes.Fields,
-        { contractId: HexString }
+        { nft: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "leavebattle", params, getContractByCodeHash);
@@ -296,7 +296,7 @@ class Factory extends ContractFactory<
     cancel: async (
       params: TestContractParamsWithoutMaps<
         BattleFactoryTypes.Fields,
-        { contractId: HexString }
+        { nft: HexString }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "cancel", params, getContractByCodeHash);
@@ -341,7 +341,7 @@ export const BattleFactory = new Factory(
   Contract.fromJson(
     BattleFactoryContractJson,
     "",
-    "de6479222e96207f3a1205692cce11554461d8c85db55cbd32b92c1a5dcd8614",
+    "769ce2a8b48469d081496b0c453df46e7e040b2751454542e9858adf1b1f6a60",
     AllStructs
   )
 );

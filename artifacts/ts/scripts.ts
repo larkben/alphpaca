@@ -59,7 +59,7 @@ export const ActivateWalfProtocol = new ExecutableScript<{
 
 export const Attack = new ExecutableScript<{
   market: HexString;
-  contractId: HexString;
+  nft: HexString;
 }>(Script.fromJson(AttackScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const Buildtoken = new ExecutableScript<{
@@ -75,7 +75,7 @@ export const Buildtoken = new ExecutableScript<{
 
 export const Cancel = new ExecutableScript<{
   market: HexString;
-  contractId: HexString;
+  nft: HexString;
 }>(Script.fromJson(CancelScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const CollectFees = new ExecutableScript<{ contract: HexString }>(
@@ -165,7 +165,7 @@ export const Gettoken = new ExecutableScript<{
 
 export const LeaveBattle = new ExecutableScript<{
   market: HexString;
-  contractId: HexString;
+  nft: HexString;
 }>(
   Script.fromJson(LeaveBattleScriptJson, "", AllStructs),
   getContractByCodeHash

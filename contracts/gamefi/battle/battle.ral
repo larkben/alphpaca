@@ -41,6 +41,10 @@ Contract Battle (
         return amount
     }
 
+    pub fn getBattleDetails() -> (Address, ByteVec, Address, ByteVec) {
+        return playerOne, nftOne, playerTwo, nftTwo
+    }
+
     // random -> will need a non oracle compatible contract for proper unit testing
     fn random() -> (U256) {
         // add btc and alph; random if or else statement for further random certainity
@@ -102,46 +106,32 @@ Contract Battle (
         let damage = stats.atk + random()
 
         // call the remove health (attack)
-        let _ = GamifyProtocol(gamefi).removeHealth(opponent, damage)
-
-        let opStats = GamifyProtocol(gamefi).getNFTstats(opponent)
+        let remainingHealth = GamifyProtocol(gamefi).removeHealth(opponent, damage)
 
         // is the nft alive
-        if (opStats.hp == 0) {
+        if (remainingHealth == 0) {
             endbattle(player)
 
             return player, nft, 0
         }
 
-        return nullContractAddress!(), opponent, opStats.hp
+        return nullContractAddress!(), opponent, remainingHealth
     }
 
     // leave the battle
     @using(checkExternalCaller = false, updateFields = false, assetsInContract = true)
-    pub fn leave() -> () {
-        let caller = callerAddress!()
+    pub fn leave(caller: Address) -> () {
 
         if (caller == playerOne || caller == playerTwo) {
             // compare stats
-            let oneStats = GamifyProtocol(gamefi).getNFTstats(nftOne)
-            let twoStats = GamifyProtocol(gamefi).getNFTstats(nftTwo)
+            //let oneStats = GamifyProtocol(gamefi).getNFTstats(nftOne)
+            //let twoStats = GamifyProtocol(gamefi).getNFTstats(nftTwo)
 
-            // what if health is equal -> the player who leaves will lose
-            if (oneStats.hp > twoStats.hp) {
-                destroySelf!(playerOne)
+            if (caller == playerOne) {
+                destroySelf!(playerTwo) 
             }
-
-            else if (oneStats.hp == twoStats.hp) {
-                if (caller == playerOne) {
-                    destroySelf!(playerTwo)
-                }
-                else {
-                    destroySelf!(playerOne)
-                }
-            }
-
             else {
-                destroySelf!(playerTwo)
+                destroySelf!(playerOne)
             }
         }
     }

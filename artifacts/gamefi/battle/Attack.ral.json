@@ -5,7 +5,7 @@
   "fieldsSig": {
     "names": [
       "market",
-      "contractId"
+      "nft"
     ],
     "types": [
       "BattleFactory",

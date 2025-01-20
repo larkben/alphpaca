@@ -10,6 +10,9 @@ Contract BattleFactory(
     event BattleCreate(nftOne: ByteVec, creator: Address, wagerToken: ByteVec, wager: U256)
     event BattleStart(nftOne: ByteVec, nftTwo: ByteVec, reward: U256, hpOne: U256, hpTwo: U256)
     event BattleEnd(nftOne: ByteVec, nftTwo: ByteVec, winner: ByteVec)
+    event BattleLeave(nftOne: ByteVec, nftLeft: ByteVec, who: Address, nftWon: ByteVec, winner: Address)
+    event BattleAttack()
+    event BattleCancel()
 
     enum BattleFactoryErrorCodes {
         NotAdmin = 0
@@ -31,7 +34,7 @@ Contract BattleFactory(
             toByteVec!(oracle.getValue(b`BTC/USD`).value))
         )
         return addModN!(50, seed, 150)
-    }
+    } 
 
     pub fn getWagerDetails(nft: ByteVec) -> (ByteVec, U256) {
         let details = Battle(subContractId!(nft))
@@ -76,7 +79,7 @@ Contract BattleFactory(
         assert!(isSupercharged(nft) == true, BattleFactoryErrorCodes.NotSupercharged)
 
         // declare the subContract
-        let battle = Battle(subContractId!(nft))
+        let battle = Battle(subContractId!(opponent))
 
         // get reward
         let wagerToken = battle.getWagerToken() 
@@ -96,27 +99,41 @@ Contract BattleFactory(
     }
 
     @using(checkExternalCaller = false)
-    pub fn attack(contractId: ByteVec) -> () {
-        let battle = Battle(contractId)
+    pub fn attack(nft: ByteVec) -> () {
+        let battle = Battle(subContractId!(nft))
 
         // consider using these in event logging
         let (_,_,_) = battle.attack()
+
+        // emit
+        emit BattleAttack()
     }
 
     @using(checkExternalCaller = false)
-    pub fn leavebattle(contractId: ByteVec) -> () {
-        let battle = Battle(contractId)
+    pub fn leavebattle(nft: ByteVec) -> () {
+        let battle = Battle(subContractId!(nft))
 
-        battle.leave()
+        let (playerOne, nftOne, playerTwo, nftTwo) = battle.getBattleDetails()
+        let caller = callerAddress!()
+
+        battle.leave(caller)
+
+        if (caller == playerOne) {
+            emit BattleLeave(nft, nftOne, playerOne, nftTwo, playerTwo)
+        }
+        else {
+            emit BattleLeave(nft, nftTwo, playerTwo, nftOne, playerOne)
+        }
     }
 
     @using(checkExternalCaller = false)
-    pub fn cancel(contractId: ByteVec) -> () {
-        let battle = Battle(contractId)
+    pub fn cancel(nft: ByteVec) -> () {
+        let battle = Battle(subContractId!(nft))
 
         battle.cancel()
 
-        // emit the event
+        // emit
+        // ...
     }
 
     @using(checkExternalCaller = false, assetsInContract = true, preapprovedAssets = true, updateFields = true)
@@ -170,23 +187,24 @@ TxScript Start (
 
 TxScript Attack (
     market: BattleFactory,
-    contractId: ByteVec
+    nft: ByteVec
+
 ) {
-    market.attack(contractId)
+    market.attack(nft)
 }
 
 TxScript LeaveBattle (
     market: BattleFactory,
-    contractId: ByteVec
+    nft: ByteVec
 ) {
-    market.leavebattle(contractId)
+    market.leavebattle(nft)
 }
 
 TxScript Cancel (
     market: BattleFactory,
-    contractId: ByteVec
+    nft: ByteVec
 ) {
-    market.cancel(contractId)
+    market.cancel(nft)
 }
 
 // upgrades
