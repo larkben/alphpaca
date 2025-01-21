@@ -11,8 +11,8 @@ Contract BattleFactory(
     event BattleStart(nftOne: ByteVec, nftTwo: ByteVec, reward: U256, hpOne: U256, hpTwo: U256)
     event BattleEnd(nftOne: ByteVec, nftTwo: ByteVec, winner: ByteVec)
     event BattleLeave(nftOne: ByteVec, nftLeft: ByteVec, who: Address, nftWon: ByteVec, winner: Address)
-    event BattleAttack()
-    event BattleCancel()
+    event BattleAttack(winner: Address, nft: ByteVec, remainingHealth: U256)
+    event BattleCancel(nftOne: ByteVec, who: Address)
 
     enum BattleFactoryErrorCodes {
         NotAdmin = 0
@@ -103,10 +103,10 @@ Contract BattleFactory(
         let battle = Battle(subContractId!(nft))
 
         // consider using these in event logging
-        let (_,_,_) = battle.attack()
+        let (winner, selectNFT, remainingHealth) = battle.attack()
 
         // emit
-        emit BattleAttack()
+        emit BattleAttack(winner, selectNFT, remainingHealth)
     }
 
     @using(checkExternalCaller = false)
@@ -133,7 +133,7 @@ Contract BattleFactory(
         battle.cancel()
 
         // emit
-        // ...
+        emit BattleCancel(nft, callerAddress!())
     }
 
     @using(checkExternalCaller = false, assetsInContract = true, preapprovedAssets = true, updateFields = true)

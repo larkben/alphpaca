@@ -68,6 +68,22 @@ export namespace BattleFactoryTypes {
     nftTwo: HexString;
     winner: HexString;
   }>;
+  export type BattleLeaveEvent = ContractEvent<{
+    nftOne: HexString;
+    nftLeft: HexString;
+    who: Address;
+    nftWon: HexString;
+    winner: Address;
+  }>;
+  export type BattleAttackEvent = ContractEvent<{
+    winner: Address;
+    nft: HexString;
+    remainingHealth: bigint;
+  }>;
+  export type BattleCancelEvent = ContractEvent<{
+    nftOne: HexString;
+    who: Address;
+  }>;
 
   export interface CallMethodTable {
     isSupercharged: {
@@ -224,7 +240,14 @@ class Factory extends ContractFactory<
     );
   }
 
-  eventIndex = { BattleCreate: 0, BattleStart: 1, BattleEnd: 2 };
+  eventIndex = {
+    BattleCreate: 0,
+    BattleStart: 1,
+    BattleEnd: 2,
+    BattleLeave: 3,
+    BattleAttack: 4,
+    BattleCancel: 5,
+  };
   consts = {
     BattleFactoryErrorCodes: {
       NotAdmin: BigInt("0"),
@@ -341,7 +364,7 @@ export const BattleFactory = new Factory(
   Contract.fromJson(
     BattleFactoryContractJson,
     "",
-    "769ce2a8b48469d081496b0c453df46e7e040b2751454542e9858adf1b1f6a60",
+    "aa16f114c184851beb77111230f1d7924dc4a9f847372166539df2443c59d014",
     AllStructs
   )
 );
@@ -400,11 +423,53 @@ export class BattleFactoryInstance extends ContractInstance {
     );
   }
 
+  subscribeBattleLeaveEvent(
+    options: EventSubscribeOptions<BattleFactoryTypes.BattleLeaveEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      BattleFactory.contract,
+      this,
+      options,
+      "BattleLeave",
+      fromCount
+    );
+  }
+
+  subscribeBattleAttackEvent(
+    options: EventSubscribeOptions<BattleFactoryTypes.BattleAttackEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      BattleFactory.contract,
+      this,
+      options,
+      "BattleAttack",
+      fromCount
+    );
+  }
+
+  subscribeBattleCancelEvent(
+    options: EventSubscribeOptions<BattleFactoryTypes.BattleCancelEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      BattleFactory.contract,
+      this,
+      options,
+      "BattleCancel",
+      fromCount
+    );
+  }
+
   subscribeAllEvents(
     options: EventSubscribeOptions<
       | BattleFactoryTypes.BattleCreateEvent
       | BattleFactoryTypes.BattleStartEvent
       | BattleFactoryTypes.BattleEndEvent
+      | BattleFactoryTypes.BattleLeaveEvent
+      | BattleFactoryTypes.BattleAttackEvent
+      | BattleFactoryTypes.BattleCancelEvent
     >,
     fromCount?: number
   ): EventSubscription {

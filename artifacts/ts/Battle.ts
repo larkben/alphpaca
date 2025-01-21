@@ -62,6 +62,10 @@ export namespace BattleTypes {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
+    getBattleDetails: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<[Address, HexString, Address, HexString]>;
+    };
     random: {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
@@ -83,7 +87,7 @@ export namespace BattleTypes {
       result: CallContractResult<[Address, HexString, bigint]>;
     };
     leave: {
-      params: Omit<CallContractParams<{}>, "args">;
+      params: CallContractParams<{ caller: Address }>;
       result: CallContractResult<null>;
     };
     cancel: {
@@ -116,6 +120,10 @@ export namespace BattleTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
+    getBattleDetails: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
     random: {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
@@ -140,7 +148,7 @@ export namespace BattleTypes {
       result: SignExecuteScriptTxResult;
     };
     leave: {
-      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      params: SignExecuteContractMethodParams<{ caller: Address }>;
       result: SignExecuteScriptTxResult;
     };
     cancel: {
@@ -194,6 +202,21 @@ class Factory extends ContractFactory<BattleInstance, BattleTypes.Fields> {
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getWagerAmount", params, getContractByCodeHash);
     },
+    getBattleDetails: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<BattleTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<
+      TestContractResultWithoutMaps<[Address, HexString, Address, HexString]>
+    > => {
+      return testMethod(
+        this,
+        "getBattleDetails",
+        params,
+        getContractByCodeHash
+      );
+    },
     random: async (
       params: Omit<
         TestContractParamsWithoutMaps<BattleTypes.Fields, never>,
@@ -237,9 +260,9 @@ class Factory extends ContractFactory<BattleInstance, BattleTypes.Fields> {
       return testMethod(this, "attack", params, getContractByCodeHash);
     },
     leave: async (
-      params: Omit<
-        TestContractParamsWithoutMaps<BattleTypes.Fields, never>,
-        "testArgs"
+      params: TestContractParamsWithoutMaps<
+        BattleTypes.Fields,
+        { caller: Address }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "leave", params, getContractByCodeHash);
@@ -268,7 +291,7 @@ export const Battle = new Factory(
   Contract.fromJson(
     BattleContractJson,
     "",
-    "7972bb8451e0f633a37b5cdddeaa20011fd1ad016f1a1c4cc7f8112bd4db147d",
+    "10f37961c3315b33831970f85c7261a8daa72b7cfb1e0e4df2d6e934f8d617b0",
     AllStructs
   )
 );
@@ -303,6 +326,17 @@ export class BattleInstance extends ContractInstance {
         Battle,
         this,
         "getWagerAmount",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getBattleDetails: async (
+      params?: BattleTypes.CallMethodParams<"getBattleDetails">
+    ): Promise<BattleTypes.CallMethodResult<"getBattleDetails">> => {
+      return callMethod(
+        Battle,
+        this,
+        "getBattleDetails",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
@@ -363,15 +397,9 @@ export class BattleInstance extends ContractInstance {
       );
     },
     leave: async (
-      params?: BattleTypes.CallMethodParams<"leave">
+      params: BattleTypes.CallMethodParams<"leave">
     ): Promise<BattleTypes.CallMethodResult<"leave">> => {
-      return callMethod(
-        Battle,
-        this,
-        "leave",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
+      return callMethod(Battle, this, "leave", params, getContractByCodeHash);
     },
     cancel: async (
       params?: BattleTypes.CallMethodParams<"cancel">
@@ -396,6 +424,11 @@ export class BattleInstance extends ContractInstance {
       params: BattleTypes.SignExecuteMethodParams<"getWagerAmount">
     ): Promise<BattleTypes.SignExecuteMethodResult<"getWagerAmount">> => {
       return signExecuteMethod(Battle, this, "getWagerAmount", params);
+    },
+    getBattleDetails: async (
+      params: BattleTypes.SignExecuteMethodParams<"getBattleDetails">
+    ): Promise<BattleTypes.SignExecuteMethodResult<"getBattleDetails">> => {
+      return signExecuteMethod(Battle, this, "getBattleDetails", params);
     },
     random: async (
       params: BattleTypes.SignExecuteMethodParams<"random">

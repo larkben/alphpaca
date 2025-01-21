@@ -59,6 +59,8 @@ Contract Battle (
     // end battle
     @using(updateFields = false, assetsInContract = true)
     fn endbattle(winner: Address) -> () {
+        // return the opposite players assets!!!!
+        
         destroySelf!(winner)
     }
 
@@ -128,9 +130,11 @@ Contract Battle (
             //let twoStats = GamifyProtocol(gamefi).getNFTstats(nftTwo)
 
             if (caller == playerOne) {
+                // return the opposite players assets!!!!
                 destroySelf!(playerTwo) 
             }
             else {
+                // return the opposite players assets!!!!
                 destroySelf!(playerOne)
             }
         }
@@ -140,6 +144,8 @@ Contract Battle (
     @using(checkExternalCaller = true, assetsInContract = true)
     pub fn cancel() -> () {
         checkCaller!(playerTwo == playerOne, BattleCodes.BattleNotDone)
+
+        // return the opposite players assets!!!!
 
         destroySelf!(playerOne)
     }
