@@ -217,3 +217,48 @@ Contract GamifyProtocol (
         migrateWithFields!(newCode, immFields, mutFields)
     }
 }
+
+// supercharge functions
+TxScript Supercharge (
+    contract: GamifyProtocol,
+    nft: ByteVec
+) {
+    contract.supercharge{callerAddress!() -> ALPH: mapEntryDeposit!()}(nft)
+}
+
+TxScript UpdateLevel (
+    contract: GamifyProtocol,
+) {
+
+}
+
+TxScript Rest (
+    contract: GamifyProtocol,
+) {
+
+}
+
+TxScript AddXp (
+    contract: GamifyProtocol,
+) {
+    
+}
+
+TxScript EditValidContract (
+    contract: GamifyProtocol,
+) {
+
+}
+
+// upgrade code
+TxScript UpdateGamifyCode (
+    contract: GamifyProtocol,
+) {
+
+}
+
+TxScript UpdateGamifyFields (
+    contract: GamifyProtocol,
+) {
+    
+}
