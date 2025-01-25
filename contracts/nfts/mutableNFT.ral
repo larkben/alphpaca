@@ -1,0 +1,31 @@
+import "std/nft_interface"
+
+Contract MutableNFT(
+  mut tokenUri: ByteVec,    // allows the tokenUri to be edited
+  collectionId: ByteVec,
+  nftIndex: U256
+) implements INFT {
+  enum ErrorCodes {
+    NotCalledFromCollection = 0
+  }
+
+  pub fn getTokenUri() -> ByteVec {
+    return tokenUri
+  }
+
+  pub fn getNFTIndex() -> U256 {
+    return nftIndex
+  }
+
+  pub fn getCollectionIndex() -> (ByteVec, U256) {
+    return collectionId, nftIndex
+  }
+
+  @using(checkExternalCaller = true, updateFields = true)
+  pub fn editUri(newUri: ByteVec) -> () {
+    let addressCalled = contractIdToAddress!(collectionId)
+
+    checkCaller!(callerAddress!() == addressCalled, ErrorCodes.NotCalledFromCollection)
+    tokenUri = newUri
+  }
+}

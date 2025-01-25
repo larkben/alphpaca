@@ -1,0 +1,19 @@
+// This is for the scenario where an artist or AI creates a set of arts
+// in advance and sell to the public for minting, users can mint the arts
+// in the collection sequentially by paying the mint price.
+Contract NFTPublicSaleCollectionSequential(
+    nftMutableTemplateId: ByteVec,
+    mut collectionUri: ByteVec,
+    nftBaseUri: ByteVec,
+    mut collectionOwner: Address,
+    maxSupply: U256,
+    mut mintPrice: U256,
+    mut mintToken: ByteVec,
+    mut maxBatchMintSize: U256,
+    mut totalSupply: U256,
+    mut ownerOnly: Bool
+) extends NFTPublicSaleCollectionSequentialBase(nftMutableTemplateId, collectionUri, nftBaseUri, collectionOwner, maxSupply, mintPrice, mintToken, maxBatchMintSize, totalSupply, ownerOnly) {
+    pub fn getMintToken() -> ByteVec {
+        return mintToken
+    }
+}

@@ -1,0 +1,406 @@
+{
+  "version": "v3.11.1",
+  "name": "NFTPublicSaleCollectionSequential",
+  "bytecode": "0b13091240264039404e40634078408d40a240b740f3413941aa41c241d841f0420942174225010000000102a00002010000000102a0050201000102010a160040cb17011601c50c7b16010201000203000816010002170216001602410e7b010001010008d3024d01c6b4a001450d7b1600a100010001010008d39b8168f5b4a001450d7b1600a102010001010008d396418a83b4a001450d7b1600a103010001010008d3baca6e87b4a001450d7b1600a104010001010008d3cf0fa615b4a001450d7b1600a101010001010008d3dc0f33e0b4a001450d7b1600a10600030204011ea0064c051600a001450d7bb116011406414c5048000313036416010010130164170317021600d1a2160140ce00160216030d1600c90201010104014026d3b8b591eea005ce02310e7b1600a0034113067bb41701a00517021601d1a216011602000a17031601b21600a002aaa0050d2aa10505160116020d6016030201010206014040d3a98507ae1600a004320f7b1600ce02a0052b32107b1601a0034113067bb41702a0051703140017040c170516051600314c1016041602d1a21602160316052a000a44170416050d2a17054a2c1602b21601a00216002caaa00516002aa105051602160316006016040201000303000ad37c37db9cb4a00145117b160016011602bb010202020009d3f1ab4760b4a001450d7b16001601a801020303000ad303550fffb4a001450d7b160016011602ab01000101010bd3d118d32e1600ce02310c7bce011600894402010000000103d3c483090fa00202010000000103d3f986a6dda00302",
+  "codeHash": "c5288d7605774302682b2c390f27e9e888d124909225b02632de0c20d281c286",
+  "fieldsSig": {
+    "names": [
+      "nftMutableTemplateId",
+      "collectionUri",
+      "nftBaseUri",
+      "collectionOwner",
+      "maxSupply",
+      "mintPrice",
+      "mintToken",
+      "maxBatchMintSize",
+      "totalSupply",
+      "ownerOnly",
+      "__stdInterfaceId"
+    ],
+    "types": [
+      "ByteVec",
+      "ByteVec",
+      "ByteVec",
+      "Address",
+      "U256",
+      "U256",
+      "ByteVec",
+      "U256",
+      "U256",
+      "Bool",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "eventsSig": [
+    {
+      "name": "Mint",
+      "fieldNames": [
+        "minter",
+        "fromIndex",
+        "mintSize"
+      ],
+      "fieldTypes": [
+        "Address",
+        "U256",
+        "U256"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "getCollectionUri",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "totalSupply",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "nftByIndex",
+      "paramNames": [
+        "index"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "INFT"
+      ]
+    },
+    {
+      "name": "validateNFT",
+      "paramNames": [
+        "nftId",
+        "nftIndex"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editCollectionUri",
+      "paramNames": [
+        "newUri"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editMintPrice",
+      "paramNames": [
+        "newPrice"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editMintToken",
+      "paramNames": [
+        "newToken"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editBatchSize",
+      "paramNames": [
+        "newSize"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editCollectionOwner",
+      "paramNames": [
+        "newOwner"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editMintStatus",
+      "paramNames": [
+        "newStatus"
+      ],
+      "paramTypes": [
+        "Bool"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "mint_",
+      "paramNames": [
+        "minter",
+        "index"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "mint",
+      "paramNames": [
+        "token"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "mintBatch",
+      "paramNames": [
+        "size",
+        "token"
+      ],
+      "paramTypes": [
+        "U256",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "upgradeNFTCollection",
+      "paramNames": [
+        "newCode",
+        "newImmFieldsEncoded",
+        "newMutFieldsEncoded"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdraw",
+      "paramNames": [
+        "to",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdrawToken",
+      "paramNames": [
+        "to",
+        "token",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "getNFTUri",
+      "paramNames": [
+        "index"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getMintPrice",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getMintToken",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "PublicSaleErrorCodes",
+      "fields": [
+        {
+          "name": "IncorrectTokenIndex",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "IncorrectTokenIndex",
+          "value": {
+            "type": "U256",
+            "value": "2"
+          }
+        },
+        {
+          "name": "InvalidMintBatchSize",
+          "value": {
+            "type": "U256",
+            "value": "3"
+          }
+        },
+        {
+          "name": "InsufficientNumOfUnminted",
+          "value": {
+            "type": "U256",
+            "value": "4"
+          }
+        },
+        {
+          "name": "IncorrectToken",
+          "value": {
+            "type": "U256",
+            "value": "6"
+          }
+        },
+        {
+          "name": "AdminOnly",
+          "value": {
+            "type": "U256",
+            "value": "5"
+          }
+        },
+        {
+          "name": "NFTNotFound",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "CollectionOwnerAllowedOnly",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        },
+        {
+          "name": "NFTNotPartOfCollection",
+          "value": {
+            "type": "U256",
+            "value": "2"
+          }
+        }
+      ]
+    }
+  ],
+  "stdInterfaceId": "0002"
+}

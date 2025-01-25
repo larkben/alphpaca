@@ -1,0 +1,59 @@
+import "std/nft_collection_with_royalty_interface"
+
+Contract NFTPublicSaleCollectionRandomWithRoyalty(
+    nftTemplateId: ByteVec,
+    nftMutableTemplateId: ByteVec,
+    mut collectionUri: ByteVec,
+    nftBaseUri: ByteVec,
+    mut collectionOwner: Address,
+    maxSupply: U256,
+    mut mintPrice: U256,
+    mut mintToken: ByteVec,
+    mut maxBatchMintSize: U256,
+    mut royaltyRate: U256, // basis point. e.g. 2.5% == 250 basis point
+    mut totalSupply: U256,
+    mut ownerOnly: Bool
+) extends NFTPublicSaleCollectionRandomBase(nftTemplateId, nftMutableTemplateId, collectionUri, nftBaseUri, collectionOwner, maxSupply, mintPrice, mintToken, maxBatchMintSize, totalSupply, ownerOnly)
+    implements INFTCollectionWithRoyalty {
+
+    enum ErrorCodes {
+        RoyaltyRateTooHigh = 0
+    }
+    
+    @using(updateFields = true, checkExternalCaller = true)
+    pub fn editRoyaltyRate(newRate: U256) -> () {
+        assert!(newRate <= 5000, ErrorCodes.RoyaltyRateTooHigh)
+        checkCaller!(collectionOwner == callerAddress!(), ErrorCodes.CollectionOwnerAllowedOnly)
+        royaltyRate = newRate
+    }
+
+    pub fn royaltyAmount(@unused tokenId: ByteVec, salePrice: U256) -> (U256) {
+        return salePrice * royaltyRate / 10000
+    }
+
+    @using(assetsInContract = true, preapprovedAssets = true, checkExternalCaller = false)
+    pub fn payRoyalty(payer: Address, amount: U256) -> () {
+        transferTokenToSelf!(payer, ALPH, amount)
+    }
+
+    @using(assetsInContract = true, preapprovedAssets = true, checkExternalCaller = false)
+    pub fn payRoyaltyNonNative(payer: Address, token: ByteVec, amount: U256) -> () {
+        transferTokenToSelf!(payer, token, amount)
+    }
+
+    @using(checkExternalCaller = true)
+    pub fn withdrawRoyalty(to: Address, amount: U256) -> () {
+
+        checkCaller!(collectionOwner == callerAddress!(), ErrorCodes.AdminOnly)
+
+        withdraw(to, amount)
+    }
+
+    @using(checkExternalCaller = true, assetsInContract = true)
+    pub fn withdrawNonNativeRoyalty(to: Address, token: ByteVec, amount: U256) -> () {
+
+        checkCaller!(collectionOwner == callerAddress!(), ErrorCodes.AdminOnly)
+
+        transferTokenFromSelf!(to, token, amount)
+    }
+}

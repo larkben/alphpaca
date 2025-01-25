@@ -1,0 +1,23 @@
+TxScript WithdrawFromPublicSaleCollectionSequential(
+    to: Address,
+    token: ByteVec,
+    amount: U256,
+    nftCollectionId: ByteVec,
+    royalty: Bool,
+    nonNative: Bool
+) {
+    if (nonNative) {
+        if (royalty) {
+            NFTPublicSaleCollectionSequentialWithRoyalty(nftCollectionId).withdrawNonNativeRoyalty(to, token, amount)
+        } else {
+            NFTPublicSaleCollectionSequential(nftCollectionId).withdrawToken(to, token, amount)
+        }
+    }
+    else {
+        if (royalty) {
+            NFTPublicSaleCollectionSequentialWithRoyalty(nftCollectionId).withdraw(to, amount)
+        } else {
+            NFTPublicSaleCollectionSequential(nftCollectionId).withdraw(to, amount)
+        }
+    }
+}

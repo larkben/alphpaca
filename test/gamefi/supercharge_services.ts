@@ -3,6 +3,8 @@ import {
     Address,
     DUST_AMOUNT,
     HexString,
+    MAP_ENTRY_DEPOSIT,
+    MINIMAL_CONTRACT_DEPOSIT,
     NodeProvider,
     ONE_ALPH,
     SignerProvider,
@@ -25,7 +27,7 @@ import {
   import { off } from 'process'
   import { ValByteVec } from '@alephium/web3/dist/src/api/api-alephium'
   import { MinimalContractDeposit, token } from '@alephium/web3/dist/src/codec'
-import { Buildtoken, CollectFees, CreateToken, CreateTokenInstance, GamifyProtocol, Token, TokenInstance, UpdateCreationFee } from '../../artifacts/ts'
+import { Buildtoken, CollectFees, CreateToken, CreateTokenInstance, EditValidContract, GamifyProtocol, GamifyProtocolInstance, Supercharge, Token, TokenInstance, UpdateCreationFee } from '../../artifacts/ts'
   
   web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
   export const ZERO_ADDRESS = 'tgx7VNFoP9DJiFMFgXXtafQZkUvyEdDHT9ryamHJYrjq'
@@ -47,67 +49,35 @@ import { Buildtoken, CollectFees, CreateToken, CreateTokenInstance, GamifyProtoc
     });
   }
 
-  export async function UpdateCreatorFees(
+  export async function SuperchargeNFT(
     signer: SignerProvider,
-    tokenCreator: CreateTokenInstance,
-    amount: number
+    gamefi: GamifyProtocolInstance,
+    nft: string
+
   ) {
-    return await UpdateCreationFee.execute(signer, {
+    return await Supercharge.execute(signer, {
       initialFields: {
-          contract: tokenCreator.contractId,
-          amount: BigInt(amount)
+        contract: gamefi.contractId,
+        nft: nft
       },
-      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
-    });
-  }
-  
-  /*
-  // ipfs functions - needs alphaga token and alph token
-  export async function CreateCoin(
-    signer: SignerProvider,
-    tokenCreator: CreateTokenInstance,
-    symbol: string,
-    name: string,
-    decimals: number,
-    tokenTotal: number
-  ) {
-    return await Buildtoken.execute(signer, {
-      initialFields: {
-          contract: tokenCreator.contractId,
-          symbol: stringToHex(symbol),
-          name: stringToHex(name),
-          decimals: BigInt(decimals),
-          tokenTotal: BigInt(tokenTotal)
-      },
-      attoAlphAmount: DUST_AMOUNT + ONE_ALPH, // 0.1 alph
-      tokens: [{ id: ALPH_TOKEN_ID, amount: ONE_ALPH * 10n }],
-    });
-  }
-  
-  export async function CollectCreatorFees(
-    signer: SignerProvider,
-    tokenCreator: CreateTokenInstance
-  ) {
-    return await CollectFees.execute(signer, {
-      initialFields: {
-          contract: tokenCreator.contractId
-      },
-      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+      attoAlphAmount: DUST_AMOUNT + MINIMAL_CONTRACT_DEPOSIT, // 0.1 alph
+      tokens: [{id: nft, amount: 1n}]
     });
   }
 
-  export async function UpdateCreatorFees(
+  export async function AddApprovedNFTCollection (
     signer: SignerProvider,
-    tokenCreator: CreateTokenInstance,
-    amount: number
+    gamefi: GamifyProtocolInstance,
+    contract: string
   ) {
-    return await UpdateCreationFee.execute(signer, {
+    return await EditValidContract.execute(signer, {
       initialFields: {
-          contract: tokenCreator.contractId,
-          amount: BigInt(amount)
+        gamefi: gamefi.contractId,
+        contract: contract,
+        remove: false
       },
       attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+      tokens: [{id: ALPH_TOKEN_ID, amount: ONE_ALPH}]
     });
   }
-*/
   

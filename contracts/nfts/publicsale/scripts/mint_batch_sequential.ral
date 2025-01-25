@@ -1,0 +1,28 @@
+TxScript MintBatchSequential(
+    nftCollectionId: ByteVec,
+    batchSize: U256,
+    mintPrice: U256,
+    royalty: Bool,
+    token: ByteVec
+) {
+    // gets the total minimalContractDeposit required for the batchMint
+    let alphAmount = batchSize * minimalContractDeposit!()
+
+    if (royalty) {
+        // fetch the current mintToken of the collection
+        let mintTokenRoyalty = NFTPublicSaleCollectionSequentialWithRoyalty(nftCollectionId).getMintToken()
+
+        let totalPriceRoyalty = batchSize * mintPrice
+
+        // approves contractDeposit and totalPrice
+        NFTPublicSaleCollectionSequentialWithRoyalty(nftCollectionId).mintBatch{callerAddress!() -> ALPH: alphAmount, mintTokenRoyalty: totalPriceRoyalty}(batchSize, token)
+    } else {
+        // fetch the current mintToken of the collection
+        let mintTokenSequential = NFTPublicSaleCollectionSequential(nftCollectionId).getMintToken()
+
+        let totalPriceSequential = batchSize * mintPrice
+        
+        // approves contractDeposit and totalPrice
+        NFTPublicSaleCollectionSequential(nftCollectionId).mintBatch{callerAddress!() -> ALPH: alphAmount, mintTokenSequential: totalPriceSequential}(batchSize, token)
+    }
+}

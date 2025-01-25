@@ -1,0 +1,58 @@
+{
+  "version": "v3.11.1",
+  "name": "CreatePublicSaleCollectionSequentialWithRoyalty",
+  "bytecodeTemplate": "0101030002001f{8}130f320c7b{1}{3}{5}1407414c5048000201130464{2}{4}{6}{7}{8}{9}{10}{11}13086417011700b4d1a2{0}16001601af18",
+  "fieldsSig": {
+    "names": [
+      "publicSaleCollectionTemplateId",
+      "nftMutableTemplateId",
+      "collectionUri",
+      "nftBaseUri",
+      "collectionOwner",
+      "maxSupply",
+      "mintPrice",
+      "mintToken",
+      "maxBatchMintSize",
+      "royaltyRate",
+      "totalSupply",
+      "ownerOnly"
+    ],
+    "types": [
+      "ByteVec",
+      "ByteVec",
+      "ByteVec",
+      "ByteVec",
+      "Address",
+      "U256",
+      "U256",
+      "ByteVec",
+      "U256",
+      "U256",
+      "U256",
+      "Bool"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

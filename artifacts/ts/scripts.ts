@@ -13,12 +13,15 @@ import {
 } from "@alephium/web3";
 import { getContractByCodeHash } from "./contracts";
 import { default as ActivateWalfProtocolScriptJson } from "../walf/ActivateWalfProtocol.ral.json";
+import { default as AddXpScriptJson } from "../gamefi/AddXp.ral.json";
 import { default as AttackScriptJson } from "../gamefi/battle/Attack.ral.json";
 import { default as BuildtokenScriptJson } from "../createtoken/Buildtoken.ral.json";
 import { default as CancelScriptJson } from "../gamefi/battle/Cancel.ral.json";
 import { default as CollectFeesScriptJson } from "../createtoken/CollectFees.ral.json";
 import { default as CollectOgAlfFeesScriptJson } from "../walf/CollectOgAlfFees.ral.json";
 import { default as CollectWangFeesScriptJson } from "../wang/CollectWangFees.ral.json";
+import { default as CreatePublicSaleCollectionSequentialScriptJson } from "../nfts/publicsale/scripts/CreatePublicSaleCollectionSequential.ral.json";
+import { default as CreatePublicSaleCollectionSequentialWithRoyaltyScriptJson } from "../nfts/publicsale/scripts/CreatePublicSaleCollectionSequentialWithRoyalty.ral.json";
 import { default as CreatePvpScriptJson } from "../gamefi/battle/CreatePvp.ral.json";
 import { default as DestroyScriptJson } from "../scripts/Destroy.ral.json";
 import { default as DestroyOgAlfProtocolScriptJson } from "../walf/DestroyOgAlfProtocol.ral.json";
@@ -26,27 +29,36 @@ import { default as DestroyWangProtocolScriptJson } from "../wang/DestroyWangPro
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
 import { default as EditCollectionUriScriptJson } from "../gamefi/EditCollectionUri.ral.json";
 import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.json";
+import { default as EditValidContractScriptJson } from "../gamefi/EditValidContract.ral.json";
 import { default as EditWangFeesScriptJson } from "../wang/EditWangFees.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
 import { default as ForceContractCancelScriptJson } from "../gamefi/battle/ForceContractCancel.ral.json";
 import { default as GettokenScriptJson } from "../scripts/Gettoken.ral.json";
 import { default as LeaveBattleScriptJson } from "../gamefi/battle/LeaveBattle.ral.json";
 import { default as MintAlfScriptJson } from "../walf/MintAlf.ral.json";
+import { default as MintBatchSequentialScriptJson } from "../nfts/publicsale/scripts/MintBatchSequential.ral.json";
+import { default as MintNextSequentialScriptJson } from "../nfts/publicsale/scripts/MintNextSequential.ral.json";
 import { default as MintOgAlfScriptJson } from "../walf/MintOgAlf.ral.json";
 import { default as MintPlayerScriptJson } from "../gamefi/MintPlayer.ral.json";
 import { default as MintWWangScriptJson } from "../wang/MintWWang.ral.json";
 import { default as MintWangScriptJson } from "../wang/MintWang.ral.json";
+import { default as RestScriptJson } from "../gamefi/Rest.ral.json";
 import { default as SendoutScriptJson } from "../scripts/Sendout.ral.json";
 import { default as StartScriptJson } from "../gamefi/battle/Start.ral.json";
+import { default as SuperchargeScriptJson } from "../gamefi/Supercharge.ral.json";
 import { default as TopupScriptJson } from "../scripts/Topup.ral.json";
 import { default as TopupWangProtocolScriptJson } from "../wang/TopupWangProtocol.ral.json";
 import { default as UpdateCreationFeeScriptJson } from "../createtoken/UpdateCreationFee.ral.json";
+import { default as UpdateGamifyCodeScriptJson } from "../gamefi/UpdateGamifyCode.ral.json";
+import { default as UpdateGamifyFieldsScriptJson } from "../gamefi/UpdateGamifyFields.ral.json";
+import { default as UpdateLevelScriptJson } from "../gamefi/UpdateLevel.ral.json";
 import { default as UpdateNFTScriptJson } from "../gamefi/UpdateNFT.ral.json";
 import { default as UpdateNFTFieldsScriptJson } from "../gamefi/UpdateNFTFields.ral.json";
 import { default as UpgradeBattleFactoryScriptJson } from "../gamefi/battle/UpgradeBattleFactory.ral.json";
 import { default as UpgradeBattleFactoryFieldsScriptJson } from "../gamefi/battle/UpgradeBattleFactoryFields.ral.json";
 import { default as UpgradeCollectionCodeScriptJson } from "../gamefi/UpgradeCollectionCode.ral.json";
 import { default as UpgradeCollectionFieldsScriptJson } from "../gamefi/UpgradeCollectionFields.ral.json";
+import { default as WithdrawFromPublicSaleCollectionSequentialScriptJson } from "../nfts/publicsale/scripts/WithdrawFromPublicSaleCollectionSequential.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
 import { DIAOracleValue, PlayerData, AllStructs } from "./types";
 
@@ -56,6 +68,13 @@ export const ActivateWalfProtocol = new ExecutableScript<{
   Script.fromJson(ActivateWalfProtocolScriptJson, "", AllStructs),
   getContractByCodeHash
 );
+
+export const AddXp = new ExecutableScript<{
+  contract: HexString;
+  nft: HexString;
+  xp: bigint;
+  paidXp: boolean;
+}>(Script.fromJson(AddXpScriptJson, "", AllStructs), getContractByCodeHash);
 
 export const Attack = new ExecutableScript<{
   market: HexString;
@@ -92,6 +111,50 @@ export const CollectWangFees = new ExecutableScript<{ contract: HexString }>(
   Script.fromJson(CollectWangFeesScriptJson, "", AllStructs),
   getContractByCodeHash
 );
+
+export const CreatePublicSaleCollectionSequential = new ExecutableScript<{
+  publicSaleCollectionTemplateId: HexString;
+  nftMutableTemplateId: HexString;
+  collectionUri: HexString;
+  nftBaseUri: HexString;
+  collectionOwner: Address;
+  maxSupply: bigint;
+  mintPrice: bigint;
+  mintToken: HexString;
+  maxBatchMintSize: bigint;
+  totalSupply: bigint;
+  ownerOnly: boolean;
+}>(
+  Script.fromJson(
+    CreatePublicSaleCollectionSequentialScriptJson,
+    "",
+    AllStructs
+  ),
+  getContractByCodeHash
+);
+
+export const CreatePublicSaleCollectionSequentialWithRoyalty =
+  new ExecutableScript<{
+    publicSaleCollectionTemplateId: HexString;
+    nftMutableTemplateId: HexString;
+    collectionUri: HexString;
+    nftBaseUri: HexString;
+    collectionOwner: Address;
+    maxSupply: bigint;
+    mintPrice: bigint;
+    mintToken: HexString;
+    maxBatchMintSize: bigint;
+    royaltyRate: bigint;
+    totalSupply: bigint;
+    ownerOnly: boolean;
+  }>(
+    Script.fromJson(
+      CreatePublicSaleCollectionSequentialWithRoyaltyScriptJson,
+      "",
+      AllStructs
+    ),
+    getContractByCodeHash
+  );
 
 export const CreatePvp = new ExecutableScript<{
   market: HexString;
@@ -140,6 +203,15 @@ export const EditOgAlfFees = new ExecutableScript<{
   getContractByCodeHash
 );
 
+export const EditValidContract = new ExecutableScript<{
+  gamefi: HexString;
+  contract: HexString;
+  remove: boolean;
+}>(
+  Script.fromJson(EditValidContractScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const EditWangFees = new ExecutableScript<{
   contract: HexString;
   newfee: bigint;
@@ -176,6 +248,27 @@ export const MintAlf = new ExecutableScript<{
   amount: bigint;
 }>(Script.fromJson(MintAlfScriptJson, "", AllStructs), getContractByCodeHash);
 
+export const MintBatchSequential = new ExecutableScript<{
+  nftCollectionId: HexString;
+  batchSize: bigint;
+  mintPrice: bigint;
+  royalty: boolean;
+  token: HexString;
+}>(
+  Script.fromJson(MintBatchSequentialScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const MintNextSequential = new ExecutableScript<{
+  nftCollectionId: HexString;
+  mintPrice: bigint;
+  royalty: boolean;
+  token: HexString;
+}>(
+  Script.fromJson(MintNextSequentialScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const MintOgAlf = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
@@ -199,6 +292,12 @@ export const MintWang = new ExecutableScript<{
   amount: bigint;
 }>(Script.fromJson(MintWangScriptJson, "", AllStructs), getContractByCodeHash);
 
+export const Rest = new ExecutableScript<{
+  contract: HexString;
+  nft: HexString;
+  quickRest: boolean;
+}>(Script.fromJson(RestScriptJson, "", AllStructs), getContractByCodeHash);
+
 export const Sendout = new ExecutableScript<{
   contract: HexString;
   amount: bigint;
@@ -209,6 +308,14 @@ export const Start = new ExecutableScript<{
   nft: HexString;
   opponent: HexString;
 }>(Script.fromJson(StartScriptJson, "", AllStructs), getContractByCodeHash);
+
+export const Supercharge = new ExecutableScript<{
+  contract: HexString;
+  nft: HexString;
+}>(
+  Script.fromJson(SuperchargeScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const Topup = new ExecutableScript<{
   contract: HexString;
@@ -228,6 +335,33 @@ export const UpdateCreationFee = new ExecutableScript<{
   amount: bigint;
 }>(
   Script.fromJson(UpdateCreationFeeScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const UpdateGamifyCode = new ExecutableScript<{
+  contract: HexString;
+  newCode: HexString;
+}>(
+  Script.fromJson(UpdateGamifyCodeScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const UpdateGamifyFields = new ExecutableScript<{
+  contract: HexString;
+  newCode: HexString;
+  immFields: HexString;
+  mutFields: HexString;
+}>(
+  Script.fromJson(UpdateGamifyFieldsScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const UpdateLevel = new ExecutableScript<{
+  contract: HexString;
+  nft: HexString;
+  index: bigint;
+}>(
+  Script.fromJson(UpdateLevelScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
@@ -277,6 +411,22 @@ export const UpgradeCollectionFields = new ExecutableScript<{
   newMutFieldsEncoded: HexString;
 }>(
   Script.fromJson(UpgradeCollectionFieldsScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const WithdrawFromPublicSaleCollectionSequential = new ExecutableScript<{
+  to: Address;
+  token: HexString;
+  amount: bigint;
+  nftCollectionId: HexString;
+  royalty: boolean;
+  nonNative: boolean;
+}>(
+  Script.fromJson(
+    WithdrawFromPublicSaleCollectionSequentialScriptJson,
+    "",
+    AllStructs
+  ),
   getContractByCodeHash
 );
 

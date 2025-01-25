@@ -1,0 +1,86 @@
+{
+  "version": "v3.11.1",
+  "name": "MutableNFT",
+  "bytecode": "040409144022403c010000000102a00002010000000203ce00ce0102010000000103d310a20164ce010201000102000bd3083ea1dace00771701b41601450c7b1600a100",
+  "codeHash": "bdf74ffc0e1d91ab9c46d186069639b46d23ed7dc2bf5616e9fced218e52da97",
+  "fieldsSig": {
+    "names": [
+      "tokenUri",
+      "collectionId",
+      "nftIndex",
+      "__stdInterfaceId"
+    ],
+    "types": [
+      "ByteVec",
+      "ByteVec",
+      "U256",
+      "ByteVec"
+    ],
+    "isMutable": [
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "getTokenUri",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getCollectionIndex",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec",
+        "U256"
+      ]
+    },
+    {
+      "name": "getNFTIndex",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "editUri",
+      "paramNames": [
+        "newUri"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "NotCalledFromCollection",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  ],
+  "stdInterfaceId": "0003"
+}

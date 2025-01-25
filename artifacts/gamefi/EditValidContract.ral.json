@@ -1,0 +1,31 @@
+{
+  "version": "v3.11.1",
+  "name": "EditValidContract",
+  "bytecodeTemplate": "01010300000009b4d1a2{1}{2}0e0c{0}0107",
+  "fieldsSig": {
+    "names": [
+      "gamefi",
+      "contract",
+      "remove"
+    ],
+    "types": [
+      "GamifyProtocol",
+      "ByteVec",
+      "Bool"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

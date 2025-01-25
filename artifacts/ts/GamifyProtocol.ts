@@ -91,8 +91,8 @@ export namespace GamifyProtocolTypes {
       result: CallContractResult<null>;
     };
     editValidContract: {
-      params: CallContractParams<{ contract: Address; remove: boolean }>;
-      result: CallContractResult<boolean>;
+      params: CallContractParams<{ contract: HexString; remove: boolean }>;
+      result: CallContractResult<null>;
     };
     rewardPaca: {
       params: CallContractParams<{ reward: bigint; reciever: Address }>;
@@ -171,7 +171,7 @@ export namespace GamifyProtocolTypes {
     };
     editValidContract: {
       params: SignExecuteContractMethodParams<{
-        contract: Address;
+        contract: HexString;
         remove: boolean;
       }>;
       result: SignExecuteScriptTxResult;
@@ -303,10 +303,10 @@ class Factory extends ContractFactory<
     editValidContract: async (
       params: TestContractParams<
         GamifyProtocolTypes.Fields,
-        { contract: Address; remove: boolean },
+        { contract: HexString; remove: boolean },
         GamifyProtocolTypes.Maps
       >
-    ): Promise<TestContractResult<boolean, GamifyProtocolTypes.Maps>> => {
+    ): Promise<TestContractResult<null, GamifyProtocolTypes.Maps>> => {
       return testMethod(
         this,
         "editValidContract",
@@ -367,8 +367,8 @@ class Factory extends ContractFactory<
 export const GamifyProtocol = new Factory(
   Contract.fromJson(
     GamifyProtocolContractJson,
-    "=14-2+9b=2-2+60=2-2+2e=2-1=1-4+7=2-2+a5=3+f=1+560=2-2+7=1-1=1-1+58c=425-1+9=266+7a7e0214696e73657274206174206d617020706174683a2000=1646-2+4023=29-1+e=38+7a7e0214696e73657274206174206d617020706174683a2000=52+7a7e021472656d6f7665206174206d617020706174683a2000=228",
-    "dc9d9f2610662af2f8dc3157ba5a923f2e4cef282cae0c983026325e97d1fc17",
+    "=14-2+9b=2-2+60=2-2+2e=2-1=1-4+7=2-2+a5=3-1+a=2-1+5b=1+56f=2-2+87=425-1+9=266+7a7e0214696e73657274206174206d617020706174683a2000=1647-1+e=29-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=13-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=224",
+    "069c4f18450971a6aa7e08b08ca1fff9ba632ffdc2c19fbb96fdbe6d43e5e357",
     AllStructs
   )
 );

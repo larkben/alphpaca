@@ -1,0 +1,98 @@
+// This is for the scenario where an artist or AI creates a set of arts
+// in advance and sell to the public for minting, users can mint any of
+// the arts in the collection by paying the mint price.
+Abstract Contract NFTPublicSaleCollectionRandomBase(
+    nftTemplateId: ByteVec,
+    nftMutableTemplateId: ByteVec,
+    mut collectionUri: ByteVec,
+    nftBaseUri: ByteVec,
+    mut collectionOwner: Address,
+    maxSupply: U256,
+    mut mintPrice: U256,
+    mut mintToken: ByteVec,
+    mut maxBatchMintSize: U256,
+    mut totalSupply: U256,
+    mut ownerOnly: Bool
+) extends MutableNFTCollectionBase(collectionUri, totalSupply, collectionOwner), NFTPublicSaleCollectionBase(nftBaseUri, maxSupply, mintPrice) {
+    event Mint(minter: Address, index: U256)
+
+    enum ErrorCodes {
+        IncorrectTokenIndex = 2
+        AdminOnly = 3
+    }
+
+    @using(updateFields = true, checkExternalCaller = true)
+    pub fn editCollectionUri(newUri: ByteVec) -> () {
+        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
+        collectionUri = newUri
+    }
+
+    @using(updateFields = true, checkExternalCaller = true)
+    pub fn editMintPrice(newPrice: U256) -> () {
+        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
+        mintPrice = newPrice
+    }
+
+    @using(updateFields = true, checkExternalCaller = true)
+    pub fn editMintToken(newToken: ByteVec) -> () {
+        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
+        mintToken = newToken
+    }
+
+    @using(updateFields = true, checkExternalCaller = true)
+    pub fn editBatchSize(newSize: U256) -> () {
+        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
+        maxBatchMintSize = newSize
+    }
+
+    @using(updateFields = true, checkExternalCaller = true)
+    pub fn editCollectionOwner(newOwner: Address) -> () {
+        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
+        collectionOwner = newOwner
+    }
+
+    @using(updateFields = true, checkExternalCaller = true)
+    pub fn editMintStatus(newStatus: Bool) -> () {
+        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.CollectionOwnerAllowedOnly)
+        ownerOnly = false
+    }
+
+    @using(preapprovedAssets = true, updateFields = true, assetsInContract = true, checkExternalCaller = false)
+    pub fn mint(index: U256) -> (ByteVec) {
+        assert!(index < maxSupply, ErrorCodes.IncorrectTokenIndex)
+
+        let minter = callerAddress!()
+        let (encodeImmutableFields, encodeMutableFields) = NFT.encodeFields!(getNFTUri(index), selfContractId!(), index)
+
+        let contractId = copyCreateSubContractWithToken!{minter -> ALPH: 100000000000000000}(
+            toByteVec!(index),
+            nftTemplateId,
+            encodeImmutableFields,
+            encodeMutableFields,
+            1,
+            minter
+        )
+
+        transferTokenToSelf!(minter, ALPH, mintPrice)
+
+        totalSupply = totalSupply + 1
+
+        emit Mint(minter, index)
+        return contractId
+    }
+
+    pub fn getCollectionOwner() -> Address {
+        return collectionOwner
+    }
+
+    pub fn getMaxSupply() -> U256 {
+        return maxSupply
+    }
+
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn upgradeNFTCollection(newCode: ByteVec, newImmFieldsEncoded: ByteVec, newMutFieldsEncoded: ByteVec) -> () {
+        checkCaller!(callerAddress!() == collectionOwner, ErrorCodes.AdminOnly)
+
+        migrateWithFields!(newCode, newImmFieldsEncoded, newMutFieldsEncoded)       
+    }
+}

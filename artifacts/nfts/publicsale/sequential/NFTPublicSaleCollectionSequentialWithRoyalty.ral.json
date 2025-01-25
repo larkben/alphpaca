@@ -1,0 +1,533 @@
+{
+  "version": "v3.11.1",
+  "name": "NFTPublicSaleCollectionSequentialWithRoyalty",
+  "bytecode": "0c1a091240264039404940544066407b409040a540ba40cf40e44120416641d741ef4205421d4236424442524260427d429442b4010000000102a00002010000000102a0060201000102010a160040cb17011601c50c7b16010201000203000816010002170216001602410e7b0100020201061601a0052c1367102d0201010202000316001601a9010002020008a001b445117b160016010011010001010008d3024d01c6b4a001450d7b1600a100010001010008d39b8168f5b4a001450d7b1600a102010001010008d396418a83b4a001450d7b1600a103010001010008d3baca6e87b4a001450d7b1600a104010001010008d3cf0fa615b4a001450d7b1600a101010001010008d3dc0f33e0b4a001450d7b1600a10700030204011ea0074c051600a001450d7bb116011406414c5048000313036416010013130164170317021600d1a2160140ce00160216030d1600c90201010104014026d3b8b591eea006ce02310e7b1600a0034113067bb41701a00617021601d1a216011602000d17031601b21600a002aaa0060d2aa10605160116020d6016030201010206014040d3a98507ae1600a004320f7b1600ce02a0062b32107b1601a0034113067bb41702a0061703140017040c170516051600314c1016041602d1a21602160316052a000d44170416050d2a17054a2c1602b21601a00216002caaa00616002aa106051602160316006016040201000303000ad37c37db9cb4a00145117b160016011602bb010202020009d3f1ab4760b4a001450d7b16001601a801020303000ad303550fffb4a001450d7b160016011602ab01000101010bd3d118d32e1600ce02310c7bce011600894402010000000103d3c483090fa00202010000000103d34bc213efa00102010000000103d3f986a6dda0030201000101000dd340c7c66a1600135388320c7ba001b4450d7b1600a105010103040008d30b9e0a9eb217031600160316011602aa010203030010d3ebb4d2c4a001b445117b1601a003410d7bb21600a0031602aa",
+  "codeHash": "5d7b7dc6de587bf449b1bba4563bb7115da24f804922f6c2e638882d77e114d0",
+  "fieldsSig": {
+    "names": [
+      "nftMutableTemplateId",
+      "collectionUri",
+      "nftBaseUri",
+      "collectionOwner",
+      "maxSupply",
+      "mintPrice",
+      "mintToken",
+      "maxBatchMintSize",
+      "royaltyRate",
+      "totalSupply",
+      "ownerOnly",
+      "__stdInterfaceId"
+    ],
+    "types": [
+      "ByteVec",
+      "ByteVec",
+      "ByteVec",
+      "Address",
+      "U256",
+      "U256",
+      "ByteVec",
+      "U256",
+      "U256",
+      "U256",
+      "Bool",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "eventsSig": [
+    {
+      "name": "Mint",
+      "fieldNames": [
+        "minter",
+        "fromIndex",
+        "mintSize"
+      ],
+      "fieldTypes": [
+        "Address",
+        "U256",
+        "U256"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "getCollectionUri",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "totalSupply",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "nftByIndex",
+      "paramNames": [
+        "index"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "INFT"
+      ]
+    },
+    {
+      "name": "validateNFT",
+      "paramNames": [
+        "nftId",
+        "nftIndex"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "royaltyAmount",
+      "paramNames": [
+        "tokenId",
+        "salePrice"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "payRoyalty",
+      "paramNames": [
+        "payer",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdrawRoyalty",
+      "paramNames": [
+        "to",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editCollectionUri",
+      "paramNames": [
+        "newUri"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editMintPrice",
+      "paramNames": [
+        "newPrice"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editMintToken",
+      "paramNames": [
+        "newToken"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editBatchSize",
+      "paramNames": [
+        "newSize"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editCollectionOwner",
+      "paramNames": [
+        "newOwner"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editMintStatus",
+      "paramNames": [
+        "newStatus"
+      ],
+      "paramTypes": [
+        "Bool"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "mint_",
+      "paramNames": [
+        "minter",
+        "index"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "mint",
+      "paramNames": [
+        "token"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "mintBatch",
+      "paramNames": [
+        "size",
+        "token"
+      ],
+      "paramTypes": [
+        "U256",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "upgradeNFTCollection",
+      "paramNames": [
+        "newCode",
+        "newImmFieldsEncoded",
+        "newMutFieldsEncoded"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdraw",
+      "paramNames": [
+        "to",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdrawToken",
+      "paramNames": [
+        "to",
+        "token",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "getNFTUri",
+      "paramNames": [
+        "index"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getMintPrice",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getCollectionOwner",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "Address"
+      ]
+    },
+    {
+      "name": "getMintToken",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "editRoyaltyRate",
+      "paramNames": [
+        "newRate"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "payRoyaltyMultiToken",
+      "paramNames": [
+        "payer",
+        "token",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdrawNonNativeRoyalty",
+      "paramNames": [
+        "to",
+        "token",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "PublicSaleErrorCodes",
+      "fields": [
+        {
+          "name": "IncorrectTokenIndex",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ErrorCodes",
+      "fields": [
+        {
+          "name": "IncorrectTokenIndex",
+          "value": {
+            "type": "U256",
+            "value": "2"
+          }
+        },
+        {
+          "name": "InvalidMintBatchSize",
+          "value": {
+            "type": "U256",
+            "value": "3"
+          }
+        },
+        {
+          "name": "InsufficientNumOfUnminted",
+          "value": {
+            "type": "U256",
+            "value": "4"
+          }
+        },
+        {
+          "name": "IncorrectToken",
+          "value": {
+            "type": "U256",
+            "value": "6"
+          }
+        },
+        {
+          "name": "AdminOnly",
+          "value": {
+            "type": "U256",
+            "value": "5"
+          }
+        },
+        {
+          "name": "NFTNotFound",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "CollectionOwnerAllowedOnly",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        },
+        {
+          "name": "NFTNotPartOfCollection",
+          "value": {
+            "type": "U256",
+            "value": "2"
+          }
+        },
+        {
+          "name": "RoyaltyRateTooHigh",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "TokenMustMatchMintToken",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  ],
+  "stdInterfaceId": "000201"
+}

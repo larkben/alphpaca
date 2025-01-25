@@ -95,7 +95,7 @@ Contract GamifyProtocol (
     }
 
     // these need to be built out
-    @using(checkExternalCaller = false, updateFields = false)
+    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = true)
     pub fn updateLevel(nft: ByteVec, index: U256) -> () {
         assert!(isSupercharged(nft) == true, GamifyCodes.NotSupercharged)
 
@@ -178,18 +178,20 @@ Contract GamifyProtocol (
     }
 
     @using(checkExternalCaller = true, updateFields = false, preapprovedAssets = true)
-    pub fn editValidContract(contract: Address, remove: Bool) -> (Bool) {   // returns whether contract was removed or added
+    pub fn editValidContract(contract: ByteVec, remove: Bool) -> () {   // returns whether contract was removed or added
         checkCaller!(admin == callerAddress!(), GamifyCodes.NotAdmin)
 
         if (!remove) {
-            approved.insert!(callerAddress!(), contract, true)
+            collections.insert!(callerAddress!(), contract, true)
 
-            return false
+            //return false
         }
 
-        approved.remove!(callerAddress!(), contract)
+        else {
+            collections.remove!(callerAddress!(), contract)
+        }
 
-        return true
+        //return true
     }
 
     // reward PACA function
@@ -228,37 +230,50 @@ TxScript Supercharge (
 
 TxScript UpdateLevel (
     contract: GamifyProtocol,
+    nft: ByteVec,
+    index: U256
 ) {
-
+    contract.updateLevel{callerAddress!() -> nft: 1}(nft, index)
 }
 
 TxScript Rest (
     contract: GamifyProtocol,
+    nft: ByteVec,
+    quickRest: Bool
 ) {
-
+    contract.rest{callerAddress!() -> nft: 1}(nft, quickRest)
 }
 
 TxScript AddXp (
     contract: GamifyProtocol,
+    nft: ByteVec,
+    xp: U256,
+    paidXp: Bool
 ) {
-    
+    contract.addXp{callerAddress!() -> nft: 1}(nft, xp, paidXp)
 }
 
 TxScript EditValidContract (
-    contract: GamifyProtocol,
+    gamefi: GamifyProtocol,
+    contract: ByteVec,
+    remove: Bool
 ) {
-
+    gamefi.editValidContract{callerAddress!() -> ALPH: mapEntryDeposit!()}(contract, remove)
 }
 
 // upgrade code
 TxScript UpdateGamifyCode (
     contract: GamifyProtocol,
+    newCode: ByteVec
 ) {
-
+    contract.updateGamifyCode(newCode)
 }
 
 TxScript UpdateGamifyFields (
     contract: GamifyProtocol,
+    newCode: ByteVec, 
+    immFields: ByteVec, 
+    mutFields: ByteVec
 ) {
-    
+    contract.updateGamifyFields(newCode, immFields, mutFields)
 }
