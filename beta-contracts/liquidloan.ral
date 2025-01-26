@@ -1,0 +1,52 @@
+// this loan will use the price oracle to determine if the loan can be liquidated 
+// if the collateral falls under 150% of loan value
+
+Contract LiquidLoan (
+    admin: Address,
+    mut loanee: Address,
+    tokenRequested: ByteVec,
+    tokenAmount: ByteVec,
+    // collateral
+    collateralToken: ByteVec,
+    collateralAmount: U256,
+    interest: U256,
+    rate: U256,
+    duration: U256,
+    mut startTime: U256,
+    // active
+    mut active: Bool
+) {
+    // error codes
+
+    pub fn getTokenRequested() -> (ByteVec, U256) {
+        return tokenRequested, tokenAmount
+    }
+
+    pub fn isLoanComplete() -> (Bool) {
+        assert!(active == true, 1)
+
+        // confirm the loan has completed it's time
+        assert!(blockTimeStamp!() > startTime + duration, 0)
+
+        return true
+    }
+
+    // contract functions
+
+    pub fn acceptLoan() -> () {
+
+    }
+
+    pub fn cancelLoan() -> () {
+
+    }
+
+    pub fn payLoan() -> () {
+
+    }
+
+    pub fn acceptForfeit() -> () {
+
+    }
+}
+

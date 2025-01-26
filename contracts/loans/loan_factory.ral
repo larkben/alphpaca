@@ -1,0 +1,117 @@
+Contract LoanFactory (
+    admin: Address,
+    loanTemplate: ByteVec,
+    mut activeLoans: U256,
+    mut rate: U256
+) {
+    // events
+    event NewLoan(contract: ByteVec, tokenRequested: ByteVec, tokenAmount: U256, collateralToken: ByteVec, collateralAmount: U256, interest: U256, duration: U256, who: Address)
+    event AcceptedLoan(contract: ByteVec, who: Address)
+    event LoanRemoved(contract: ByteVec, who: Address)
+    event LoanWithdraw(contract: ByteVec, forfeit: Bool, who: Address)
+
+    enum LoanCodes {
+        NotAdmin = 0
+    }
+
+    // contract functions
+    @using(checkExternalCaller = false, preapprovedAssets = true, updateFields = true)
+    pub fn createLoan(tokenRequested: ByteVec, tokenAmount: U256, collateralToken: ByteVec, collateralAmount: U256, interest: U256, duration: U256) -> () {
+        let caller = callerAddress!()
+
+        let (encodeImmutableFields, encodeMutableFields) = Loan.encodeFields!(
+            caller,
+            nullContractAddress!(),
+            tokenRequested,
+            tokenAmount,
+            // collateral
+            collateralToken,
+            collateralAmount,
+            interest,
+            rate,
+            duration,
+            0,
+            false,
+            selfAddress!()
+        )
+
+        let contractID = copyCreateContract!{caller -> ALPH: minimalContractDeposit!() + dustAmount!(), collateralToken: collateralAmount}(
+            loanTemplate,                                                                                  
+            encodeImmutableFields,
+            encodeMutableFields
+        )
+
+        activeLoans = activeLoans + 1
+
+        // emit event
+        emit NewLoan(contractID, tokenRequested, tokenAmount, collateralToken, collateralAmount, interest, duration, caller)
+    }
+
+    @using(checkExternalCaller = false, preapprovedAssets = true)
+    pub fn accept(contractId: ByteVec) -> () {
+        let loan = Loan(contractId)
+
+        let caller = callerAddress!()
+
+        let (token, amount) = loan.getTokenRequested()
+
+        loan.acceptLoan{caller -> token: amount}(caller)
+
+        // emit event
+        emit AcceptedLoan(contractId, caller)
+    }
+
+    @using(checkExternalCaller = false, preapprovedAssets = false)
+    pub fn cancel(contractId: ByteVec) -> () {
+        let loan = Loan(contractId)
+
+        let caller = callerAddress!()
+
+        loan.cancelLoan(caller)
+
+        // emit event
+        emit LoanRemoved(contractId, caller)
+    }
+
+    @using(checkExternalCaller = false, preapprovedAssets = true)
+    pub fn pay(contractId: ByteVec) -> () {
+        let loan = Loan(contractId)
+
+        let caller = callerAddress!()
+
+        let (token, amount) = loan.getTokenRequested()
+        let totalAmount = loan.getInterest(amount)
+
+        loan.payLoan{caller -> token: totalAmount}(caller)
+
+        // emit event
+        emit LoanWithdraw(contractId, false, caller)
+    }
+    
+    @using(checkExternalCaller = false, preapprovedAssets = false)
+    pub fn forfeit(contractId: ByteVec) -> () {
+        let loan = Loan(contractId)
+
+        let caller = callerAddress!()
+
+        //let (token, amount) = loan.getTokenCollateral()
+
+        loan.acceptForfeit()
+
+        // emit event
+        emit LoanWithdraw(contractId, true, caller)
+    }
+
+    // edit rate
+    @using(checkExternalCaller = true, preapprovedAssets = false, updateFields = true)
+    pub fn editRate(newRate: U256) -> () {
+        checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
+
+        rate = newRate
+
+        // emit event
+    }
+
+    // liquidate? ~ function
+    
+}

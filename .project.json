@@ -227,6 +227,18 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "Loan": {
+      "sourceFile": "loans/loan.ral",
+      "sourceCodeHash": "cfee2e2eb6710e0b3e6eb40e8c3e5c024dacfb9fbe68969a3a9897e3619b21f0",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "c4cc12da74cec146d91a70ac0bfbe7edf2e27b1874f3c8a5b65d322bef948c12"
+    },
+    "LoanFactory": {
+      "sourceFile": "loans/loan_factory.ral",
+      "sourceCodeHash": "d6f4de538ae6fa7e0737dd170371123d7397b1085b46f0b44e79a0590a4e43b6",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "597ea7c98450f2917081b379bf7dd02acde37553f51e66e845a0cab64c22ec0a"
+    },
     "MintAlf": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",

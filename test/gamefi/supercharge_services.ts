@@ -35,7 +35,7 @@ import { Buildtoken, CollectFees, CreateToken, CreateTokenInstance, EditValidCon
   
   const nodeProvider = new NodeProvider('http://127.0.0.1:22973') 
 
-  // token contract
+  // gamefi template
 
   export async function GamifyProtocoldeploy() {
     return await GamifyProtocol.deploy(defaultSigner, {

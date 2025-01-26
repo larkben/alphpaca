@@ -8,6 +8,8 @@ export * from "./CreateToken";
 export * from "./Faucet";
 export * from "./FeeCollection";
 export * from "./GamifyProtocol";
+export * from "./Loan";
+export * from "./LoanFactory";
 export * from "./MutableNFT";
 export * from "./NFT";
 export * from "./NFTPublicSaleCollectionRandom";

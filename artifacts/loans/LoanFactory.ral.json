@@ -1,0 +1,196 @@
+{
+  "version": "v3.11.1",
+  "name": "LoanFactory",
+  "bytecode": "04064062409340b340ef410e41230103060a004031d3f1f57cf8b41706160616001601160216031604a0011605b2130964ca0c041303641708170716067ad113c3038d7ea4c680002aa216021603a3ce0116071608af1709a0000d2aa100051609160016011602160316041605160676010301050018d3ab87b3d416001701b417020c0e1601010017041703160216031604a316020d0c1601010506160016025f01000103000ed389ef220a16001701b4170216020d0c1601010607160016025f01030106001fd3738950ae16001701b417020c0e160101001704170316040d0d160101031705160216031605a316020d0c160101070816000416026001000103000ed35637085316001701b417020c0c1601010808160003160260010001010008d366b0cd96b4ce00450c7b1600a101",
+  "codeHash": "597ea7c98450f2917081b379bf7dd02acde37553f51e66e845a0cab64c22ec0a",
+  "fieldsSig": {
+    "names": [
+      "admin",
+      "loanTemplate",
+      "activeLoans",
+      "rate"
+    ],
+    "types": [
+      "Address",
+      "ByteVec",
+      "U256",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  "eventsSig": [
+    {
+      "name": "NewLoan",
+      "fieldNames": [
+        "contract",
+        "tokenRequested",
+        "tokenAmount",
+        "collateralToken",
+        "collateralAmount",
+        "interest",
+        "duration",
+        "who"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "ByteVec",
+        "U256",
+        "ByteVec",
+        "U256",
+        "U256",
+        "U256",
+        "Address"
+      ]
+    },
+    {
+      "name": "AcceptedLoan",
+      "fieldNames": [
+        "contract",
+        "who"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "Address"
+      ]
+    },
+    {
+      "name": "LoanRemoved",
+      "fieldNames": [
+        "contract",
+        "who"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "Address"
+      ]
+    },
+    {
+      "name": "LoanWithdraw",
+      "fieldNames": [
+        "contract",
+        "forfeit",
+        "who"
+      ],
+      "fieldTypes": [
+        "ByteVec",
+        "Bool",
+        "Address"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "createLoan",
+      "paramNames": [
+        "tokenRequested",
+        "tokenAmount",
+        "collateralToken",
+        "collateralAmount",
+        "interest",
+        "duration"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256",
+        "ByteVec",
+        "U256",
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "accept",
+      "paramNames": [
+        "contractId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "cancel",
+      "paramNames": [
+        "contractId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "pay",
+      "paramNames": [
+        "contractId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "forfeit",
+      "paramNames": [
+        "contractId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editRate",
+      "paramNames": [
+        "newRate"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [
+    {
+      "name": "LoanCodes",
+      "fields": [
+        {
+          "name": "NotAdmin",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        }
+      ]
+    }
+  ]
+}
