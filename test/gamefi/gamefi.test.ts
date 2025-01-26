@@ -4,10 +4,10 @@ import {
     NodeProvider,
     contractIdFromAddress,
     groupOfAddress,
-  } from "@alephium/web3";
-  import { PrivateKeyWallet } from "@alephium/web3-wallet";
-  import { getSigners, testAddress } from "@alephium/web3-test";
-  import { alph, randomP2PKHAddress } from "../create-token/utils";
+} from "@alephium/web3";
+import { PrivateKeyWallet } from "@alephium/web3-wallet";
+import { getSigners, testAddress } from "@alephium/web3-test";
+import { alph, randomP2PKHAddress } from "../create-token/utils";
 import { GamifyProtocolInstance, MutableNFTInstance, NFTPublicSaleCollectionSequentialWithRoyaltyInstance, TokenInstance } from "../../artifacts/ts";
 import { createCustomCollection, createNFT, defaultSigner, deployCollection, deployNFT } from "./nft-helper";
 import { AddApprovedNFTCollection, GamifyProtocoldeploy, SuperchargeNFT } from "./supercharge_services";
