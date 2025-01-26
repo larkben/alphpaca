@@ -14,6 +14,21 @@ Contract LoanFactory (
         NotAdmin = 0
     }
 
+    pub fn getRequiredTokens(contractId: ByteVec, withInterest: Bool) -> (ByteVec, U256) {
+        let loan = Loan(contractId)
+
+        let (token, amount) = loan.getTokenRequested()
+
+        if (withInterest) {
+            let interestTotal = loan.getInterest(amount)
+
+            return token, interestTotal
+        }
+        else {
+            return token, amount
+        }
+    }
+
     // contract functions
     @using(checkExternalCaller = false, preapprovedAssets = true, updateFields = true)
     pub fn createLoan(tokenRequested: ByteVec, tokenAmount: U256, collateralToken: ByteVec, collateralAmount: U256, interest: U256, duration: U256) -> () {
@@ -112,6 +127,118 @@ Contract LoanFactory (
         // emit event
     }
 
+    // withdraw fees
+    @using(checkExternalCaller = true, preapprovedAssets = false, updateFields = false, assetsInContract = true)
+    pub fn withdrawLoanFactoryFees(who: Address, token: ByteVec, amount: U256) -> () {
+        checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
+
+        transferToken!(selfAddress!(), who, token, amount)
+
+        // emit event
+    }
+
+    // upgrade
+    @using(updateFields = false, checkExternalCaller = true)
+    pub fn updateLoanFactoryCode(newCode: ByteVec) -> () {
+        checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
+
+        migrate!(newCode)
+    }
+
+    @using(updateFields = true, checkExternalCaller = true)
+    pub fn updateLoanFactoryFields(newCode: ByteVec, immFields: ByteVec, mutFields: ByteVec) -> () {
+        checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
+
+        migrateWithFields!(newCode, immFields, mutFields)
+    }
+
     // liquidate? ~ function
     
+}
+
+TxScript CreateLoan (
+    loanFactory: LoanFactory,
+    tokenRequested: ByteVec,
+    tokenAmount: U256,
+    collateralToken: ByteVec,
+    collateralAmount: U256,
+    interest: U256,
+    duration: U256
+) {
+    loanFactory.createLoan{callerAddress!() -> ALPH: minimalContractDeposit!() + dustAmount!(), collateralToken: collateralAmount}(
+        tokenRequested,
+        tokenAmount,
+        collateralToken,
+        collateralAmount,
+        interest,
+        duration
+    )
+}
+
+TxScript AcceptLoan (
+    loanFactory: LoanFactory,
+    contract: ByteVec
+) {
+    let (token, amount) = loanFactory.getRequiredTokens(contract, false)
+
+    loanFactory.accept{callerAddress!() -> token: amount}(contract)
+}
+
+TxScript CancelLoan (
+    loanFactory: LoanFactory,
+    contract: ByteVec
+) {
+    loanFactory.cancel(contract)
+}
+
+TxScript PayLoan (
+    loanFactory: LoanFactory,
+    contract: ByteVec
+) {
+    let (token, amount) = loanFactory.getRequiredTokens(contract, true)
+
+    loanFactory.pay{callerAddress!() -> token: amount}(contract)
+}
+
+TxScript ForfeitLoan (
+    loanFactory: LoanFactory,
+    contract: ByteVec
+) {
+    loanFactory.forfeit(contract)
+}
+
+// admin
+
+TxScript EditLoanRate (
+    loanFactory: LoanFactory,
+    newRate: U256
+) {
+    loanFactory.editRate(newRate)
+}
+
+TxScript WithdrawLoanFactoryFees (
+    loanFactory: LoanFactory,
+    who: Address,
+    token: ByteVec,
+    amount: U256
+) {
+    loanFactory.withdrawLoanFactoryFees(who, token, amount)
+}
+
+// upgrade
+
+TxScript UpdateLoanFactoryCode (
+    loanFactory: LoanFactory,
+    newCode: ByteVec
+) {
+    loanFactory.updateLoanFactoryCode(newCode)
+}
+
+TxScript UpdateLoanFactoryFields (
+    loanFactory: LoanFactory,
+    newCode: ByteVec, 
+    immFields: ByteVec, 
+    mutFields: ByteVec
+) {
+    loanFactory.updateLoanFactoryFields(newCode, immFields, mutFields)
 }

@@ -73,6 +73,13 @@ export namespace LoanFactoryTypes {
   }>;
 
   export interface CallMethodTable {
+    getRequiredTokens: {
+      params: CallContractParams<{
+        contractId: HexString;
+        withInterest: boolean;
+      }>;
+      result: CallContractResult<[HexString, bigint]>;
+    };
     createLoan: {
       params: CallContractParams<{
         tokenRequested: HexString;
@@ -104,6 +111,26 @@ export namespace LoanFactoryTypes {
       params: CallContractParams<{ newRate: bigint }>;
       result: CallContractResult<null>;
     };
+    withdrawLoanFactoryFees: {
+      params: CallContractParams<{
+        who: Address;
+        token: HexString;
+        amount: bigint;
+      }>;
+      result: CallContractResult<null>;
+    };
+    updateLoanFactoryCode: {
+      params: CallContractParams<{ newCode: HexString }>;
+      result: CallContractResult<null>;
+    };
+    updateLoanFactoryFields: {
+      params: CallContractParams<{
+        newCode: HexString;
+        immFields: HexString;
+        mutFields: HexString;
+      }>;
+      result: CallContractResult<null>;
+    };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
     CallMethodTable[T]["params"];
@@ -122,6 +149,13 @@ export namespace LoanFactoryTypes {
   };
 
   export interface SignExecuteMethodTable {
+    getRequiredTokens: {
+      params: SignExecuteContractMethodParams<{
+        contractId: HexString;
+        withInterest: boolean;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
     createLoan: {
       params: SignExecuteContractMethodParams<{
         tokenRequested: HexString;
@@ -153,6 +187,26 @@ export namespace LoanFactoryTypes {
       params: SignExecuteContractMethodParams<{ newRate: bigint }>;
       result: SignExecuteScriptTxResult;
     };
+    withdrawLoanFactoryFees: {
+      params: SignExecuteContractMethodParams<{
+        who: Address;
+        token: HexString;
+        amount: bigint;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    updateLoanFactoryCode: {
+      params: SignExecuteContractMethodParams<{ newCode: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    updateLoanFactoryFields: {
+      params: SignExecuteContractMethodParams<{
+        newCode: HexString;
+        immFields: HexString;
+        mutFields: HexString;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
   }
   export type SignExecuteMethodParams<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["params"];
@@ -180,6 +234,19 @@ class Factory extends ContractFactory<
   }
 
   tests = {
+    getRequiredTokens: async (
+      params: TestContractParamsWithoutMaps<
+        LoanFactoryTypes.Fields,
+        { contractId: HexString; withInterest: boolean }
+      >
+    ): Promise<TestContractResultWithoutMaps<[HexString, bigint]>> => {
+      return testMethod(
+        this,
+        "getRequiredTokens",
+        params,
+        getContractByCodeHash
+      );
+    },
     createLoan: async (
       params: TestContractParamsWithoutMaps<
         LoanFactoryTypes.Fields,
@@ -235,6 +302,45 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "editRate", params, getContractByCodeHash);
     },
+    withdrawLoanFactoryFees: async (
+      params: TestContractParamsWithoutMaps<
+        LoanFactoryTypes.Fields,
+        { who: Address; token: HexString; amount: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "withdrawLoanFactoryFees",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updateLoanFactoryCode: async (
+      params: TestContractParamsWithoutMaps<
+        LoanFactoryTypes.Fields,
+        { newCode: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "updateLoanFactoryCode",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updateLoanFactoryFields: async (
+      params: TestContractParamsWithoutMaps<
+        LoanFactoryTypes.Fields,
+        { newCode: HexString; immFields: HexString; mutFields: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "updateLoanFactoryFields",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   stateForTest(
@@ -251,7 +357,7 @@ export const LoanFactory = new Factory(
   Contract.fromJson(
     LoanFactoryContractJson,
     "",
-    "597ea7c98450f2917081b379bf7dd02acde37553f51e66e845a0cab64c22ec0a",
+    "64067a353c56ec160269faca72815e575c538e9a46410935b0f24a8b2cfb2048",
     AllStructs
   )
 );
@@ -341,6 +447,17 @@ export class LoanFactoryInstance extends ContractInstance {
   }
 
   view = {
+    getRequiredTokens: async (
+      params: LoanFactoryTypes.CallMethodParams<"getRequiredTokens">
+    ): Promise<LoanFactoryTypes.CallMethodResult<"getRequiredTokens">> => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "getRequiredTokens",
+        params,
+        getContractByCodeHash
+      );
+    },
     createLoan: async (
       params: LoanFactoryTypes.CallMethodParams<"createLoan">
     ): Promise<LoanFactoryTypes.CallMethodResult<"createLoan">> => {
@@ -407,9 +524,53 @@ export class LoanFactoryInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    withdrawLoanFactoryFees: async (
+      params: LoanFactoryTypes.CallMethodParams<"withdrawLoanFactoryFees">
+    ): Promise<
+      LoanFactoryTypes.CallMethodResult<"withdrawLoanFactoryFees">
+    > => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "withdrawLoanFactoryFees",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updateLoanFactoryCode: async (
+      params: LoanFactoryTypes.CallMethodParams<"updateLoanFactoryCode">
+    ): Promise<LoanFactoryTypes.CallMethodResult<"updateLoanFactoryCode">> => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "updateLoanFactoryCode",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updateLoanFactoryFields: async (
+      params: LoanFactoryTypes.CallMethodParams<"updateLoanFactoryFields">
+    ): Promise<
+      LoanFactoryTypes.CallMethodResult<"updateLoanFactoryFields">
+    > => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "updateLoanFactoryFields",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
+    getRequiredTokens: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"getRequiredTokens">
+    ): Promise<
+      LoanFactoryTypes.SignExecuteMethodResult<"getRequiredTokens">
+    > => {
+      return signExecuteMethod(LoanFactory, this, "getRequiredTokens", params);
+    },
     createLoan: async (
       params: LoanFactoryTypes.SignExecuteMethodParams<"createLoan">
     ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"createLoan">> => {
@@ -440,5 +601,60 @@ export class LoanFactoryInstance extends ContractInstance {
     ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"editRate">> => {
       return signExecuteMethod(LoanFactory, this, "editRate", params);
     },
+    withdrawLoanFactoryFees: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"withdrawLoanFactoryFees">
+    ): Promise<
+      LoanFactoryTypes.SignExecuteMethodResult<"withdrawLoanFactoryFees">
+    > => {
+      return signExecuteMethod(
+        LoanFactory,
+        this,
+        "withdrawLoanFactoryFees",
+        params
+      );
+    },
+    updateLoanFactoryCode: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"updateLoanFactoryCode">
+    ): Promise<
+      LoanFactoryTypes.SignExecuteMethodResult<"updateLoanFactoryCode">
+    > => {
+      return signExecuteMethod(
+        LoanFactory,
+        this,
+        "updateLoanFactoryCode",
+        params
+      );
+    },
+    updateLoanFactoryFields: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"updateLoanFactoryFields">
+    ): Promise<
+      LoanFactoryTypes.SignExecuteMethodResult<"updateLoanFactoryFields">
+    > => {
+      return signExecuteMethod(
+        LoanFactory,
+        this,
+        "updateLoanFactoryFields",
+        params
+      );
+    },
   };
+
+  async multicall<Calls extends LoanFactoryTypes.MultiCallParams>(
+    calls: Calls
+  ): Promise<LoanFactoryTypes.MultiCallResults<Calls>>;
+  async multicall<Callss extends LoanFactoryTypes.MultiCallParams[]>(
+    callss: Narrow<Callss>
+  ): Promise<LoanFactoryTypes.MulticallReturnType<Callss>>;
+  async multicall<
+    Callss extends
+      | LoanFactoryTypes.MultiCallParams
+      | LoanFactoryTypes.MultiCallParams[]
+  >(callss: Callss): Promise<unknown> {
+    return await multicallMethods(
+      LoanFactory,
+      this,
+      callss,
+      getContractByCodeHash
+    );
+  }
 }
