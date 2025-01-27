@@ -18,41 +18,51 @@ import {
   PlayerInstance,
   PlayerBase,
   PlayerBaseInstance,
-  Battle,
-  BattleInstance,
   WrappedWangProtocol,
   WrappedWangProtocolInstance,
+  Loan,
+  LoanInstance,
+  LoanFactory,
+  LoanFactoryInstance,
 } from ".";
 import { default as mainnetDeployments } from "../.deployments.mainnet.json";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
+import { default as devnetDeployments } from "../../deployments/.deployments.devnet.json";
 
 export type Deployments = {
   deployerAddress: string;
   contracts: {
-    Token: DeployContractExecutionResult<TokenInstance>;
-    CreateToken: DeployContractExecutionResult<CreateTokenInstance>;
+    Token?: DeployContractExecutionResult<TokenInstance>;
+    CreateToken?: DeployContractExecutionResult<CreateTokenInstance>;
     WrappedOgAlfProtocol?: DeployContractExecutionResult<WrappedOgAlfProtocolInstance>;
     Player?: DeployContractExecutionResult<PlayerInstance>;
     PlayerBase?: DeployContractExecutionResult<PlayerBaseInstance>;
-    Battle?: DeployContractExecutionResult<BattleInstance>;
     WrappedWangProtocol?: DeployContractExecutionResult<WrappedWangProtocolInstance>;
+    Loan?: DeployContractExecutionResult<LoanInstance>;
+    LoanFactory?: DeployContractExecutionResult<LoanFactoryInstance>;
   };
 };
 
 function toDeployments(json: any): Deployments {
   const contracts = {
-    Token: {
-      ...json.contracts["Token"],
-      contractInstance: Token.at(
-        json.contracts["Token"].contractInstance.address
-      ),
-    },
-    CreateToken: {
-      ...json.contracts["CreateToken"],
-      contractInstance: CreateToken.at(
-        json.contracts["CreateToken"].contractInstance.address
-      ),
-    },
+    Token:
+      json.contracts["Token"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["Token"],
+            contractInstance: Token.at(
+              json.contracts["Token"].contractInstance.address
+            ),
+          },
+    CreateToken:
+      json.contracts["CreateToken"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["CreateToken"],
+            contractInstance: CreateToken.at(
+              json.contracts["CreateToken"].contractInstance.address
+            ),
+          },
     WrappedOgAlfProtocol:
       json.contracts["WrappedOgAlfProtocol"] === undefined
         ? undefined
@@ -80,15 +90,6 @@ function toDeployments(json: any): Deployments {
               json.contracts["PlayerBase"].contractInstance.address
             ),
           },
-    Battle:
-      json.contracts["Battle"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["Battle"],
-            contractInstance: Battle.at(
-              json.contracts["Battle"].contractInstance.address
-            ),
-          },
     WrappedWangProtocol:
       json.contracts["WrappedWangProtocol"] === undefined
         ? undefined
@@ -96,6 +97,24 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["WrappedWangProtocol"],
             contractInstance: WrappedWangProtocol.at(
               json.contracts["WrappedWangProtocol"].contractInstance.address
+            ),
+          },
+    Loan:
+      json.contracts["Loan"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["Loan"],
+            contractInstance: Loan.at(
+              json.contracts["Loan"].contractInstance.address
+            ),
+          },
+    LoanFactory:
+      json.contracts["LoanFactory"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["LoanFactory"],
+            contractInstance: LoanFactory.at(
+              json.contracts["LoanFactory"].contractInstance.address
             ),
           },
   };
@@ -114,6 +133,8 @@ export function loadDeployments(
       ? mainnetDeployments
       : networkId === "testnet"
       ? testnetDeployments
+      : networkId === "devnet"
+      ? devnetDeployments
       : undefined;
   if (deployments === undefined) {
     throw Error("The contract has not been deployed to the " + networkId);

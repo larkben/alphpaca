@@ -81,6 +81,14 @@ Contract Loan (
         destroySelf!(caller)
     }
 
+    @using(checkExternalCaller = true, assetsInContract = true)
+    pub fn forceCancel(caller: Address) -> () {
+        // confirm loan is not running
+        assert!(active == false, 1)
+
+        destroySelf!(caller)
+    }
+
     @using(checkExternalCaller = true, preapprovedAssets = true, assetsInContract = true)
     pub fn payLoan(caller: Address) -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
@@ -115,4 +123,10 @@ Contract Loan (
         // claim collateral
         destroySelf!(loanee)
     }
+}
+
+TxScript ForceCancel (
+    loan: Loan
+) {
+    loan.forceCancel(callerAddress!())
 }

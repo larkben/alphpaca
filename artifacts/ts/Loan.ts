@@ -85,6 +85,10 @@ export namespace LoanTypes {
       params: CallContractParams<{ caller: Address }>;
       result: CallContractResult<null>;
     };
+    forceCancel: {
+      params: CallContractParams<{ caller: Address }>;
+      result: CallContractResult<null>;
+    };
     payLoan: {
       params: CallContractParams<{ caller: Address }>;
       result: CallContractResult<null>;
@@ -136,6 +140,10 @@ export namespace LoanTypes {
       result: SignExecuteScriptTxResult;
     };
     cancelLoan: {
+      params: SignExecuteContractMethodParams<{ caller: Address }>;
+      result: SignExecuteScriptTxResult;
+    };
+    forceCancel: {
       params: SignExecuteContractMethodParams<{ caller: Address }>;
       result: SignExecuteScriptTxResult;
     };
@@ -231,6 +239,14 @@ class Factory extends ContractFactory<LoanInstance, LoanTypes.Fields> {
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "cancelLoan", params, getContractByCodeHash);
     },
+    forceCancel: async (
+      params: TestContractParamsWithoutMaps<
+        LoanTypes.Fields,
+        { caller: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "forceCancel", params, getContractByCodeHash);
+    },
     payLoan: async (
       params: TestContractParamsWithoutMaps<
         LoanTypes.Fields,
@@ -259,7 +275,7 @@ export const Loan = new Factory(
   Contract.fromJson(
     LoanContractJson,
     "",
-    "c4cc12da74cec146d91a70ac0bfbe7edf2e27b1874f3c8a5b65d322bef948c12",
+    "4b4c7368da849f6c5ecf589aaf2aacf252346c37d5de50d153975fb1c87c89d7",
     AllStructs
   )
 );
@@ -353,6 +369,17 @@ export class LoanInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    forceCancel: async (
+      params: LoanTypes.CallMethodParams<"forceCancel">
+    ): Promise<LoanTypes.CallMethodResult<"forceCancel">> => {
+      return callMethod(
+        Loan,
+        this,
+        "forceCancel",
+        params,
+        getContractByCodeHash
+      );
+    },
     payLoan: async (
       params: LoanTypes.CallMethodParams<"payLoan">
     ): Promise<LoanTypes.CallMethodResult<"payLoan">> => {
@@ -406,6 +433,11 @@ export class LoanInstance extends ContractInstance {
       params: LoanTypes.SignExecuteMethodParams<"cancelLoan">
     ): Promise<LoanTypes.SignExecuteMethodResult<"cancelLoan">> => {
       return signExecuteMethod(Loan, this, "cancelLoan", params);
+    },
+    forceCancel: async (
+      params: LoanTypes.SignExecuteMethodParams<"forceCancel">
+    ): Promise<LoanTypes.SignExecuteMethodResult<"forceCancel">> => {
+      return signExecuteMethod(Loan, this, "forceCancel", params);
     },
     payLoan: async (
       params: LoanTypes.SignExecuteMethodParams<"payLoan">

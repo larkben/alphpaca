@@ -127,6 +127,15 @@ Contract LoanFactory (
         // emit event
     }
 
+    @using(checkExternalCaller = true, preapprovedAssets = false, updateFields = false, assetsInContract = true)
+    pub fn destroyLoanFactory() -> () {
+        checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
+
+        destroySelf!(admin)
+
+        // emit event
+    }
+
     // withdraw fees
     @using(checkExternalCaller = true, preapprovedAssets = false, updateFields = false, assetsInContract = true)
     pub fn withdrawLoanFactoryFees(who: Address, token: ByteVec, amount: U256) -> () {
@@ -241,4 +250,10 @@ TxScript UpdateLoanFactoryFields (
     mutFields: ByteVec
 ) {
     loanFactory.updateLoanFactoryFields(newCode, immFields, mutFields)
+}
+
+TxScript DestroyLoanFactory (
+    loanFactory: LoanFactory
+) {
+    loanFactory.destroyLoanFactory()
 }

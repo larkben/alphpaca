@@ -27,6 +27,7 @@ import { default as CreatePublicSaleCollectionSequentialScriptJson } from "../nf
 import { default as CreatePublicSaleCollectionSequentialWithRoyaltyScriptJson } from "../nfts/publicsale/scripts/CreatePublicSaleCollectionSequentialWithRoyalty.ral.json";
 import { default as CreatePvpScriptJson } from "../gamefi/battle/CreatePvp.ral.json";
 import { default as DestroyScriptJson } from "../scripts/Destroy.ral.json";
+import { default as DestroyLoanFactoryScriptJson } from "../loans/DestroyLoanFactory.ral.json";
 import { default as DestroyOgAlfProtocolScriptJson } from "../walf/DestroyOgAlfProtocol.ral.json";
 import { default as DestroyWangProtocolScriptJson } from "../wang/DestroyWangProtocol.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
@@ -36,6 +37,7 @@ import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.js
 import { default as EditValidContractScriptJson } from "../gamefi/EditValidContract.ral.json";
 import { default as EditWangFeesScriptJson } from "../wang/EditWangFees.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
+import { default as ForceCancelScriptJson } from "../loans/ForceCancel.ral.json";
 import { default as ForceContractCancelScriptJson } from "../gamefi/battle/ForceContractCancel.ral.json";
 import { default as ForfeitLoanScriptJson } from "../loans/ForfeitLoan.ral.json";
 import { default as GettokenScriptJson } from "../scripts/Gettoken.ral.json";
@@ -206,6 +208,13 @@ export const Destroy = new ExecutableScript<{ contract: HexString }>(
   getContractByCodeHash
 );
 
+export const DestroyLoanFactory = new ExecutableScript<{
+  loanFactory: HexString;
+}>(
+  Script.fromJson(DestroyLoanFactoryScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const DestroyOgAlfProtocol = new ExecutableScript<{
   contract: HexString;
 }>(
@@ -270,6 +279,11 @@ export const Editfee = new ExecutableScript<{
   contract: HexString;
   edit: bigint;
 }>(Script.fromJson(EditfeeScriptJson, "", AllStructs), getContractByCodeHash);
+
+export const ForceCancel = new ExecutableScript<{ loan: HexString }>(
+  Script.fromJson(ForceCancelScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
 
 export const ForceContractCancel = new ExecutableScript<{ pvp: HexString }>(
   Script.fromJson(ForceContractCancelScriptJson, "", AllStructs),

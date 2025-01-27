@@ -111,6 +111,10 @@ export namespace LoanFactoryTypes {
       params: CallContractParams<{ newRate: bigint }>;
       result: CallContractResult<null>;
     };
+    destroyLoanFactory: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<null>;
+    };
     withdrawLoanFactoryFees: {
       params: CallContractParams<{
         who: Address;
@@ -185,6 +189,10 @@ export namespace LoanFactoryTypes {
     };
     editRate: {
       params: SignExecuteContractMethodParams<{ newRate: bigint }>;
+      result: SignExecuteScriptTxResult;
+    };
+    destroyLoanFactory: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
     withdrawLoanFactoryFees: {
@@ -302,6 +310,19 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "editRate", params, getContractByCodeHash);
     },
+    destroyLoanFactory: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<LoanFactoryTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "destroyLoanFactory",
+        params,
+        getContractByCodeHash
+      );
+    },
     withdrawLoanFactoryFees: async (
       params: TestContractParamsWithoutMaps<
         LoanFactoryTypes.Fields,
@@ -357,7 +378,7 @@ export const LoanFactory = new Factory(
   Contract.fromJson(
     LoanFactoryContractJson,
     "",
-    "64067a353c56ec160269faca72815e575c538e9a46410935b0f24a8b2cfb2048",
+    "22f41a9bba354c106a52b6855e3e6cd7bed79138d1aeb7164d06a34d394e0d27",
     AllStructs
   )
 );
@@ -524,6 +545,17 @@ export class LoanFactoryInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    destroyLoanFactory: async (
+      params?: LoanFactoryTypes.CallMethodParams<"destroyLoanFactory">
+    ): Promise<LoanFactoryTypes.CallMethodResult<"destroyLoanFactory">> => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "destroyLoanFactory",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
     withdrawLoanFactoryFees: async (
       params: LoanFactoryTypes.CallMethodParams<"withdrawLoanFactoryFees">
     ): Promise<
@@ -600,6 +632,13 @@ export class LoanFactoryInstance extends ContractInstance {
       params: LoanFactoryTypes.SignExecuteMethodParams<"editRate">
     ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"editRate">> => {
       return signExecuteMethod(LoanFactory, this, "editRate", params);
+    },
+    destroyLoanFactory: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"destroyLoanFactory">
+    ): Promise<
+      LoanFactoryTypes.SignExecuteMethodResult<"destroyLoanFactory">
+    > => {
+      return signExecuteMethod(LoanFactory, this, "destroyLoanFactory", params);
     },
     withdrawLoanFactoryFees: async (
       params: LoanFactoryTypes.SignExecuteMethodParams<"withdrawLoanFactoryFees">
