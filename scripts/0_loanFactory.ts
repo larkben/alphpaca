@@ -11,7 +11,7 @@ const deployLoanFactory: DeployFunction<Settings> = async (
   const result = await deployer.deployContract(LoanFactory, {
     initialFields: {
       admin: deployer.account.address,
-      loanTemplate: '97e338e67de6bb1243ade1809ef2cf38f8869b5b3e9be29e942f9af914bf1800',
+      loanTemplate: '78f54e186e2a8d5eeb9a4c941860a390d4c6f33eaf18c60b1722b953dc6ef800',
       activeLoans: 0n,
       rate: 200n        // 2%
     }

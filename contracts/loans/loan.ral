@@ -35,12 +35,17 @@ Contract Loan (
 
     pub fn getInterest(principal: U256) -> (U256) {
         if (interest > 0) {
-            let gain = (principal * interest) / 10000
-            // return the original amount plus interest
-            return principal + gain 
+            // Calculate the proportional interest based on elapsed time
+            let timeFactor = (blockTimeStamp!() - startTime) / 31556926000
+    
+            // Calculate the gain for the elapsed time
+            let gain = (principal * interest * timeFactor) / 10000
+    
+            // Return the original amount plus interest
+            return principal + gain
         }
         else {
-            return 0
+            return principal
         }
     }
 

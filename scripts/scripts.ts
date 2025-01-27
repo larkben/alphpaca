@@ -1,5 +1,5 @@
 import { getSigner } from "@alephium/web3-test"
-import { DestroyWangProtocol, ForceContractCancel, PlayerBase, TopupWangProtocol, UpgradeCollectionCode } from "../artifacts/ts"
+import { DestroyLoanFactory, DestroyWangProtocol, ForceCancel, ForceContractCancel, PlayerBase, TopupWangProtocol, UpgradeCollectionCode } from "../artifacts/ts"
 import { DUST_AMOUNT, NodeProvider, SignerProvider, addressVal, binToHex, byteVecVal, encodePrimitiveValues, stringToHex, u256Val } from "@alephium/web3";
 import { PrivateKeyWallet } from "@alephium/web3-wallet";
 import { DeployFunction, Deployer, Network } from "@alephium/cli";
@@ -19,13 +19,18 @@ const topupWang: DeployFunction<Settings> = async (
   ): Promise<void> => {
     const upgradeNetwork = getNetwork()
     
-    await TopupWangProtocol.execute(signer, {
+    await DestroyLoanFactory.execute(signer, {
       initialFields: {
-        contract: "4264d30873a297c93fbc0a2b0286f8df7a16991c2618f42c34e5fc075f252300",
-        amount: 100000000n
+        loanFactory: "344c0c7e58563daa96c0fa2a69a41d7d3a2ca3b7df06dfc97c417e4631556b00"
       },
-      tokens: [{id: "05fceaf3d6f0e5e3ebce239f6c5503d42f9595ee4dcb1c8f21965f089e4b9600", amount: 100000000n }]
     })
+
+    await ForceCancel.execute(signer, {
+      initialFields: {
+        loan: "97e338e67de6bb1243ade1809ef2cf38f8869b5b3e9be29e942f9af914bf1800"
+      },
+    })
+    
    /*
     await DestroyWangProtocol.execute(signer, {
       initialFields: {

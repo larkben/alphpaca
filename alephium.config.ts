@@ -19,6 +19,15 @@ export function loadSettings(network: 'devnet' | 'testnet' | 'mainnet'): { commi
 const configuration: typeof config = {
   deploymentScriptDir: 'scripts',
   skipRecompile: true,
+  compilerOptions: {
+    ignoreUnusedConstantsWarnings: true,
+    ignoreUnusedVariablesWarnings: true,
+    ignoreUnusedFieldsWarnings: false,
+    ignoreUnusedPrivateFunctionsWarnings: false,
+    ignoreUpdateFieldsCheckWarnings: false,
+    ignoreCheckExternalCallerWarnings: false,
+    errorOnWarnings: false,
+  },
 
   networks: {
     devnet: {
