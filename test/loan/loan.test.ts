@@ -9,8 +9,8 @@ import {
 } from "@alephium/web3";
 import { PrivateKeyWallet } from "@alephium/web3-wallet";
 import { getSigners, testAddress } from "@alephium/web3-test";
-import { alph, randomP2PKHAddress } from "../create-token/utils";
-import { AcceptLoan, GamifyProtocolInstance, LoanFactoryInstance, LoanFactoryTestInstance, LoanInstance, LoanTestInstance, MutableNFTInstance, NFTPublicSaleCollectionSequentialWithRoyaltyInstance, TokenInstance } from "../../artifacts/ts";
+import { alph, CreateCoin, deployCreateToken, deployToken, randomP2PKHAddress } from "../create-token/utils";
+import { AcceptLoan, CreateTokenInstance, GamifyProtocolInstance, LoanFactoryInstance, LoanFactoryTestInstance, LoanInstance, LoanTestInstance, MutableNFTInstance, NFTPublicSaleCollectionSequentialWithRoyaltyInstance, TokenInstance } from "../../artifacts/ts";
 import { AcceptLoanService, CalculateLoanAssets, CancelLoanService, CreateLoanService, DeployLoan, DeployLoanFactory, PayLoanService } from "./loan_services";
 import { debug } from "console";
   
@@ -21,6 +21,9 @@ import { debug } from "console";
 
     let loanFactoryTemplate: LoanFactoryTestInstance
     let loanTemplate: LoanTestInstance
+
+    let tokenTemplate: TokenInstance;
+    let creatorTemplate: CreateTokenInstance;
   
     let lister: Address;
     let buyer: PrivateKeyWallet[];
@@ -31,6 +34,9 @@ import { debug } from "console";
 
       loanTemplate = (await DeployLoan()).contractInstance
       loanFactoryTemplate = (await DeployLoanFactory(loanTemplate)).contractInstance
+
+      tokenTemplate = (await deployToken()).contractInstance;
+      creatorTemplate = (await deployCreateToken(tokenTemplate)).contractInstance;
     });
   
     test('loan (loanfi)', async () => {
@@ -53,13 +59,27 @@ import { debug } from "console";
         loanId = contractIdFromAddress(details.generatedOutputs[0].address)
         hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
 
-        await AcceptLoanService(spender, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 10000000000000000000)
+        await AcceptLoanService(spender, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 10000000000000000000, 1738084367000)
 
         // calculate the amount
-        let calculatedAmount = await CalculateLoanAssets(nodeProvider, contractAddress, 1751130767000)
+        let calculatedAmount = await CalculateLoanAssets(nodeProvider, contractAddress, 2951130767000)
 
-        await PayLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, calculatedAmount)
+        await PayLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, calculatedAmount, 2951130767000)
 
         // next test with various tokens (decimals, etc)
+        let tokenDetails = await CreateCoin(creator, creatorTemplate, "test", "prototype", 18, 1000); // 18 decimals
+
+        let createdToken = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
+
+        /* 
+        //loanOne = await CreateLoanService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 10000000000000000000, , 20000000000000000000, 1000, 3000)
+
+        details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
+        contractAddress = details.generatedOutputs[0].address
+
+        loanId = contractIdFromAddress(details.generatedOutputs[0].address)
+        hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
+        */
+
       })
   });

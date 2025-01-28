@@ -99,13 +99,14 @@ import { start } from 'repl'
     contract: string,
     token: string,
     amount: number,
+    startTime: number
   ) {
     return await AcceptLoanTest.execute(signer, {
       initialFields: {
         loanFactory: loanFactory.contractId,
         contract: contract,
         interestTime: 0n,              // should always be zero in this case
-        startTime: 1738084367000n      // 0 for startTime
+        startTime: BigInt(startTime)
       },
       attoAlphAmount: DUST_AMOUNT, // 0.1 alph
       tokens: [{id: token, amount: BigInt(amount) }]
@@ -131,13 +132,14 @@ import { start } from 'repl'
     loanFactory: LoanFactoryTestInstance,
     contract: string,
     token: string,
-    amount: number
+    amount: number,
+    interestTime: number
   ) {
     return await PayLoanTest.execute(signer, {
       initialFields: {
         loanFactory: loanFactory.contractId,
         contract: contract,
-        interestTime: 1751130767000n  // 600,000 seconds
+        interestTime: BigInt(interestTime)
       },
       attoAlphAmount: DUST_AMOUNT, // 0.1 alph
       tokens: [{id: token, amount: BigInt(amount) }]

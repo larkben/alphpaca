@@ -5,10 +5,14 @@
 
 ALPHpacas is a token with roughly ~11 million circulating with no inital ICO (all airdropped or giveaways); our main attractions are:
 
-`Token Creator` - create a token on Alephium (depreciating) <br/>
+`Token Creator` - create a token on Alephium <br/>
+`Gamify Protocol` - taking regular nfts and giving them gamefi elements for the masses (in development) <br/>
+`Alpaca Loans` - create hi-risk (~high apy) loans or liquid loans (lower risk) to create a strategic financial position and or create a leveraged position <br/>
+
+### Side Utils
+
 `Walf Protocol` - convert 1 OG ALF into its wrapped variant <br/>
 `Wang Wrapper` - convert group 2 wang over into group 0 <br/>
-`Paca Punch 🥊` - a Pvp game built entirely on the Alephium blockchain using smart contracts (developing)
 
 ### What can I do with them?
 
@@ -16,9 +20,15 @@ Besides being cute, cuddly and collectible ALPHpacas represent being an early me
 
 ### Who is the team?
 
-Current Team as Stands:
-
 larkben - smart contract developer and average web developer (cofounder of ALPHaga NFT Marketplace) <br/>
 overgames - talented backend and frontend web developer (cofounder of ALPHaga NFT Marketplace)
+
+### Notes:
+
+(running bytecode raw) https://docs.alephium.org/sdk/transaction/#execute-script-transaction ? <br/>
+testing (token decimals, fees accural)  <br/>
+documentation  <br/>
+liquidation control bot  <br/>
+beta on mainnet  <br/>
 
 
