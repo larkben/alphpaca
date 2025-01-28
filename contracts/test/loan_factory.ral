@@ -20,7 +20,7 @@ Contract LoanFactoryTest (
         let (token, amount) = loan.getTokenRequested()
 
         if (withInterest) {
-            let interestTotal = loan.getInterest(amount, interestTime)
+            let interestTotal = loan.getInterest(interestTime)
 
             return token, interestTotal
         }
@@ -88,14 +88,14 @@ Contract LoanFactoryTest (
         emit LoanRemoved(contractId, caller)
     }
 
-    @using(checkExternalCaller = false, preapprovedAssets = true)
+    @using(checkExternalCaller = false, preapprovedAssets = true, assetsInContract = enforced)
     pub fn pay(contractId: ByteVec, interestTime: U256) -> () {
         let loan = LoanTest(contractId)
 
         let caller = callerAddress!()
 
         let (token, amount) = loan.getTokenRequested()
-        let totalAmount = loan.getInterest(amount, interestTime)
+        let totalAmount = loan.getInterest(interestTime)
 
         loan.payLoan{caller -> token: totalAmount}(caller, interestTime)
 

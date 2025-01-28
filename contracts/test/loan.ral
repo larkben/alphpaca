@@ -33,19 +33,18 @@ Contract LoanTest (
         return true
     }
 
-    pub fn getInterest(principal: U256, time: U256) -> (U256) {
+    pub fn getInterest(time: U256) -> (U256) {
         if (interest > 0) {
-            // Calculate the proportional interest based on elapsed time
-            let timeFactor = (time - startTime) / 31556926000
+            // Calculate elapsed time
+            let elapsedTime = time - startTime
     
-            // Calculate the gain for the elapsed time
-            let gain = (principal * interest * timeFactor) / 10000
+            // Avoid integer truncation: multiply first, then divide
+            let gain = (tokenAmount * interest * elapsedTime) / (31556926000 * 10000)
     
             // Return the original amount plus interest
-            return principal + gain
-        }
-        else {
-            return principal
+            return tokenAmount + gain
+        } else {
+            return tokenAmount
         }
     }
 
@@ -86,7 +85,7 @@ Contract LoanTest (
         destroySelf!(caller)
     }
 
-    @using(checkExternalCaller = false, assetsInContract = true)
+    @using(checkExternalCaller = true, assetsInContract = true)
     pub fn forceCancel() -> () {
         checkCaller!(callerAddress!() == creator, 5)
 
@@ -103,7 +102,7 @@ Contract LoanTest (
         assert!(active == true, 2)
 
         // transfer back assets plus the interest
-        let totalPayment = getInterest(tokenAmount, interestTime)
+        let totalPayment = getInterest(interestTime)
 
         let totalCommission = getCommission(totalPayment)
 
@@ -131,11 +130,43 @@ Contract LoanTest (
     }
 
     // debug functions
+    // - edit active status
+    // - edit startTime
+
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn editActiveStatus(newStatus: Bool) -> () {
+        checkCaller!(callerAddress!() == creator, 5)
+
+        active = newStatus
+    }
+
+    @using(checkExternalCaller = true, updateFields = true)
+    pub fn editStartTime(newTime: U256) -> () {
+        checkCaller!(callerAddress!() == creator, 5)
+
+        startTime = newTime
+    }
 
 }
 
 TxScript ForceCancelTest (
-    loan: Loan
+    loan: LoanTest
 ) {
     loan.forceCancel()
+}
+
+// debug functions
+
+TxScript EditActiveStatus (
+    loan: LoanTest,
+    newStatus: Bool
+) {
+    loan.editActiveStatus(newStatus)
+}
+
+TxScript EditStartTime (
+    loan: LoanTest,
+    newTime: U256
+) {
+    loan.editStartTime(newTime)
 }

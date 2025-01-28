@@ -35,10 +35,12 @@ import { default as DestroyLoanFactoryTestScriptJson } from "../test/DestroyLoan
 import { default as DestroyOgAlfProtocolScriptJson } from "../walf/DestroyOgAlfProtocol.ral.json";
 import { default as DestroyWangProtocolScriptJson } from "../wang/DestroyWangProtocol.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
+import { default as EditActiveStatusScriptJson } from "../test/EditActiveStatus.ral.json";
 import { default as EditCollectionUriScriptJson } from "../gamefi/EditCollectionUri.ral.json";
 import { default as EditLoanRateScriptJson } from "../loans/EditLoanRate.ral.json";
 import { default as EditLoanRateTestScriptJson } from "../test/EditLoanRateTest.ral.json";
 import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.json";
+import { default as EditStartTimeScriptJson } from "../test/EditStartTime.ral.json";
 import { default as EditValidContractScriptJson } from "../gamefi/EditValidContract.ral.json";
 import { default as EditWangFeesScriptJson } from "../wang/EditWangFees.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
@@ -283,6 +285,14 @@ export const Destroycreator = new ExecutableScript<{ contract: HexString }>(
   getContractByCodeHash
 );
 
+export const EditActiveStatus = new ExecutableScript<{
+  loan: HexString;
+  newStatus: boolean;
+}>(
+  Script.fromJson(EditActiveStatusScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const EditCollectionUri = new ExecutableScript<{
   collection: HexString;
   newCollectionUri: HexString;
@@ -312,6 +322,14 @@ export const EditOgAlfFees = new ExecutableScript<{
   newfee: bigint;
 }>(
   Script.fromJson(EditOgAlfFeesScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const EditStartTime = new ExecutableScript<{
+  loan: HexString;
+  newTime: bigint;
+}>(
+  Script.fromJson(EditStartTimeScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 

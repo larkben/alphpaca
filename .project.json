@@ -19,7 +19,7 @@
     },
     "AcceptLoanTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -73,7 +73,7 @@
     },
     "CancelLoanTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -103,7 +103,7 @@
     },
     "CreateLoanTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -151,7 +151,7 @@
     },
     "DestroyLoanFactoryTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -173,6 +173,12 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
+    "EditActiveStatus": {
+      "sourceFile": "test/loan.ral",
+      "sourceCodeHash": "e93678d73e57853ec01e044b65b62e9dab19195293bb18136f9b5af329838d84",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
     "EditCollectionUri": {
       "sourceFile": "gamefi/playerbase.ral",
       "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
@@ -187,13 +193,19 @@
     },
     "EditLoanRateTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "EditOgAlfFees": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "EditStartTime": {
+      "sourceFile": "test/loan.ral",
+      "sourceCodeHash": "e93678d73e57853ec01e044b65b62e9dab19195293bb18136f9b5af329838d84",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -235,7 +247,7 @@
     },
     "ForceCancelTest": {
       "sourceFile": "test/loan.ral",
-      "sourceCodeHash": "7c0e1daaa96162d05886ce77b81c555d8351216a2438006f00f3b817328d997b",
+      "sourceCodeHash": "e93678d73e57853ec01e044b65b62e9dab19195293bb18136f9b5af329838d84",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -253,7 +265,7 @@
     },
     "ForfeitLoanTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -325,15 +337,15 @@
     },
     "LoanFactoryTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "31109ab3f2f8b6bac54386a2b2f1ea98f19cd0f734ac05d58e640997d6608bc9"
+      "codeHashDebug": "de46b32a2d174a4df7aa60251611a3e94aa243a29f323fdf80359a24deae2ba5"
     },
     "LoanTest": {
       "sourceFile": "test/loan.ral",
-      "sourceCodeHash": "7c0e1daaa96162d05886ce77b81c555d8351216a2438006f00f3b817328d997b",
+      "sourceCodeHash": "e93678d73e57853ec01e044b65b62e9dab19195293bb18136f9b5af329838d84",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": "7e09bc82f7e1a11eac635bb20ac99428c9f18524d0adfeeb18e118bf72c2a88d"
+      "codeHashDebug": "8de955b4a7279fb6c7caeb9339ff0f83c543485f69e31ca791756e33de13f9b9"
     },
     "MintAlf": {
       "sourceFile": "walf/walf.ral",
@@ -481,7 +493,7 @@
     },
     "PayLoanTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -577,7 +589,7 @@
     },
     "UpdateLoanFactoryCodeTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -589,7 +601,7 @@
     },
     "UpdateLoanFactoryFieldsTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -643,7 +655,7 @@
     },
     "WithdrawLoanFactoryFeesTest": {
       "sourceFile": "test/loan_factory.ral",
-      "sourceCodeHash": "d291522e624fa2cae3e6a1784481067f972e6ae73f1a9ac4e90d423e2005af82",
+      "sourceCodeHash": "2b91e0a59dd596b0461b97566649acdd0b39507159c82dbc370d2bbfa3f4b725",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },

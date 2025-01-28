@@ -1,15 +1,18 @@
 {
   "version": "v3.11.1",
-  "name": "ForceCancelTest",
-  "bytecodeTemplate": "010103000000040c0c{0}0107",
+  "name": "EditStartTime",
+  "bytecodeTemplate": "01010300000005{1}0d0c{0}010b",
   "fieldsSig": {
     "names": [
-      "loan"
+      "loan",
+      "newTime"
     ],
     "types": [
-      "LoanTest"
+      "LoanTest",
+      "U256"
     ],
     "isMutable": [
+      false,
       false
     ]
   },

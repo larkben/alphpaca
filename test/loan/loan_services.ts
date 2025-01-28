@@ -27,7 +27,8 @@ import {
   import { off } from 'process'
   import { ValByteVec } from '@alephium/web3/dist/src/api/api-alephium'
   import { MinimalContractDeposit, NullContractAddress, token } from '@alephium/web3/dist/src/codec'
-import { AcceptLoan, Buildtoken, CancelLoan, CollectFees, CreateLoan, CreateToken, CreateTokenInstance, EditValidContract, GamifyProtocol, GamifyProtocolInstance, Loan, LoanFactory, LoanFactoryInstance, LoanInstance, PayLoan, Supercharge, Token, TokenInstance, UpdateCreationFee } from '../../artifacts/ts'
+import { AcceptLoan, AcceptLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoanTest, CreateToken, CreateTokenInstance, EditValidContract, GamifyProtocol, GamifyProtocolInstance, Loan, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, Supercharge, Token, TokenInstance, UpdateCreationFee } from '../../artifacts/ts'
+import { start } from 'repl'
   
   web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
   export const ZERO_ADDRESS = 'tgx7VNFoP9DJiFMFgXXtafQZkUvyEdDHT9ryamHJYrjq'
@@ -38,7 +39,7 @@ import { AcceptLoan, Buildtoken, CancelLoan, CollectFees, CreateLoan, CreateToke
   // loan templates
 
   export async function DeployLoan() {
-    return await Loan.deploy(defaultSigner, {
+    return await LoanTest.deploy(defaultSigner, {
       initialFields: {
           creator: defaultSigner.account.address,
           loanee: ZERO_ADDRESS,
@@ -56,8 +57,8 @@ import { AcceptLoan, Buildtoken, CancelLoan, CollectFees, CreateLoan, CreateToke
     });
   }
 
-  export async function DeployLoanFactory(loan: LoanInstance) {
-    return await LoanFactory.deploy(defaultSigner, {
+  export async function DeployLoanFactory(loan: LoanTestInstance) {
+    return await LoanFactoryTest.deploy(defaultSigner, {
       initialFields: {
           admin: defaultSigner.account.address,
           loanTemplate: loan.contractId,
@@ -69,7 +70,7 @@ import { AcceptLoan, Buildtoken, CancelLoan, CollectFees, CreateLoan, CreateToke
 
   export async function CreateLoanService(
     signer: SignerProvider,
-    loanFactory: LoanFactoryInstance,
+    loanFactory: LoanFactoryTestInstance,
     tokenRequested: string,
     tokenAmount: number,
     collateralToken: string,
@@ -77,7 +78,7 @@ import { AcceptLoan, Buildtoken, CancelLoan, CollectFees, CreateLoan, CreateToke
     interest: number,
     duration: number
   ) {
-    return await CreateLoan.execute(signer, {
+    return await CreateLoanTest.execute(signer, {
       initialFields: {
           loanFactory: loanFactory.contractId,
           tokenRequested: tokenRequested,
@@ -94,15 +95,17 @@ import { AcceptLoan, Buildtoken, CancelLoan, CollectFees, CreateLoan, CreateToke
 
   export async function AcceptLoanService (
     signer: SignerProvider,
-    loanFactory: LoanFactoryInstance,
+    loanFactory: LoanFactoryTestInstance,
     contract: string,
     token: string,
-    amount: number
+    amount: number,
   ) {
-    return await AcceptLoan.execute(signer, {
+    return await AcceptLoanTest.execute(signer, {
       initialFields: {
         loanFactory: loanFactory.contractId,
-        contract: contract
+        contract: contract,
+        interestTime: 0n,              // should always be zero in this case
+        startTime: 1738084367000n      // 0 for startTime
       },
       attoAlphAmount: DUST_AMOUNT, // 0.1 alph
       tokens: [{id: token, amount: BigInt(amount) }]
@@ -111,10 +114,10 @@ import { AcceptLoan, Buildtoken, CancelLoan, CollectFees, CreateLoan, CreateToke
 
   export async function CancelLoanService (
     signer: SignerProvider,
-    loanFactory: LoanFactoryInstance,
+    loanFactory: LoanFactoryTestInstance,
     contract: string
   ) {
-    return await CancelLoan.execute(signer, {
+    return await CancelLoanTest.execute(signer, {
       initialFields: {
         loanFactory: loanFactory.contractId,
         contract: contract
@@ -125,17 +128,46 @@ import { AcceptLoan, Buildtoken, CancelLoan, CollectFees, CreateLoan, CreateToke
 
   export async function PayLoanService (
     signer: SignerProvider,
-    loanFactory: LoanFactoryInstance,
+    loanFactory: LoanFactoryTestInstance,
     contract: string,
     token: string,
     amount: number
   ) {
-    return await PayLoan.execute(signer, {
+    return await PayLoanTest.execute(signer, {
       initialFields: {
         loanFactory: loanFactory.contractId,
-        contract: contract
+        contract: contract,
+        interestTime: 1751130767000n  // 600,000 seconds
       },
       attoAlphAmount: DUST_AMOUNT, // 0.1 alph
       tokens: [{id: token, amount: BigInt(amount) }]
     });
   }
+
+// helper function
+
+export async function CalculateLoanAssets (
+  node: NodeProvider,
+  contractAddress: string,
+  time: number
+) {
+  let details = await node.contracts.getContractsAddressState(contractAddress)
+  //console.log(details.mutFields[1].value)
+
+  let startTime = Number(details.mutFields[1].value);
+  let interestRate = Number(details.immFields[5].value); // Assuming interest is at index 2
+  let principal = Number(details.immFields[2].value); // Assuming principal is at index 0
+
+  console.log("start time is " + startTime + " interest rate: " + interestRate + " principal: " + principal)
+
+  // Calculate the proportional interest based on elapsed time
+  let elapsedTime = time - startTime; // Time difference in milliseconds
+  let timeFactor = elapsedTime / 31556926000; // Convert to years (approx.)
+
+  // Calculate the gain for the elapsed time
+  let gain = (principal * interestRate * timeFactor) / 10000;
+
+  // Return the original amount plus interest
+  console.log(principal + gain)
+  return principal + gain + 100000000000000000 // .1 overhead
+}
