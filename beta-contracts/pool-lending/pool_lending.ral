@@ -1,0 +1,114 @@
+struct Borrower {
+    mut collateral: U256,
+    mut borrowedAmount: U256
+}
+
+// convert to factory to create various pools
+Contract Pool (
+    lendingToken: ByteVec,          // The token being lent (e.g., USDC)
+    collateralToken: ByteVec,       // The token used as collateral (e.g., ETH as WETH)
+    interestRate: U256,             // Annual interest rate (5%)
+    collateralFactor: U256,         // 150% collateral requirement
+    liquidationThreshold: U256,     // 120% collateral value
+    mut totalDeposits: U256,
+    mut totalBorrowed: U256 
+)
+    mapping [Address, Borrower] borrowers
+
+    // Deposit funds into the lending pool -> how do we keep track of lenders here?
+    @using(preapprovedAssets = true, checkExternalCaller = false)
+    pub fn deposit(amount: U256) -> () {
+        assert!(amount > 0, 1)
+
+        totalDeposits += amount
+
+        // Transfer tokens from lender to this contract
+        transferToken!(callerAddress!(), selfAddress!(), lendingToken, amount)
+    }
+
+    // Borrow from the pool by providing collateral
+    @using(preapprovedAssets = true, checkExternalCaller = false, assetsInContract = true)
+    pub fn borrow(borrowAmount: U256) -> () {
+        assert!(borrowAmount > 0, 2)
+        let requiredCollateral = (borrowAmount * COLLATERAL_FACTOR) / 100
+
+        let caller = callerAddress!()
+
+        // map entry deposits and checks
+        
+        // Update pool and borrower data -> verify this
+        totalBorrowed += borrowAmount
+        borrowers[caller].collateral += requiredCollateral
+        borrowers[caller].borrowedAmount += borrowAmount
+
+        // Transfer collateral and lending tokens
+        transferToken!(caller, selfAddress!(), collateralToken, requiredCollateral)
+        transferToken!(selfAddress!(), caller, lendingToken, borrowAmount)
+    }
+
+    // Repay borrowed amount
+    pub fn repay(repayAmount: U256) -> () {
+        let caller = callerAddress!()
+
+        let borrowInstance = borrowers[caller]
+
+        assert!(borrowInstance.borrowedAmount > 0, 3)
+        assert!(repayAmount > 0, 4)
+
+        remainingDebt = borrowInstance.borrowedAmount
+
+        if (repayAmount >= remainingDebt) {
+            repayAmount = remainingDebt // Limit repayment to the total debt
+        }
+
+        // Update borrower and pool state
+        borrowInstance.borrowedAmount -= repayAmount
+        totalBorrowed -= repayAmount
+
+        // Transfer repayment tokens
+        transferToken!(caller, selfAddress!(), lendingToken, repayAmount)
+    }
+
+    // Withdraw collateral after full repayment
+    pub fn withdrawCollateral() -> () {
+        let caller = callerAddress!()
+
+        let borrowInstance = borrowers[caller]
+
+        assert!(borrowInstance.borrowedAmount == 0, 5)
+        assert!(borrowInstance.collateral > 0, 6)
+
+        let collateralToWithdraw = borrower.collateral
+        borrowInstance.collateral = 0
+
+        transferToken!(caller, selfAddress!(), collateralToken, collateralToWithdraw);
+    }
+
+    // Liquidate undercollateralized positions
+    pub fn liquidate(borrowerAddress: Address) -> () {
+        let borrowInstance = borrowers[caller]
+
+        assert!(borrowInstance.borrowedAmount > 0, 7)
+
+        // oracle integration (HERE)
+
+        //collateralValue = borrower.collateral; // Assume 1:1 value for simplicity
+        requiredCollateral = (borrowInstance.borrowedAmount * LIQUIDATION_THRESHOLD) / 100
+
+        assert!(
+            collateralValue < requiredCollateral,
+            8
+        )
+
+        debtToRepay = borrowInstance.borrowedAmount
+        collateralToSeize = borrowInstance.collateral
+
+        // Update pool and borrower state
+        totalBorrowed -= debtToRepay
+        borrowInstance.borrowedAmount = 0
+        borrowInstance.collateral = 0
+
+        // Transfer collateral to liquidator
+        // how to liquidate???
+    }
+}

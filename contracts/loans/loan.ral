@@ -33,19 +33,18 @@ Contract Loan (
         return true
     }
 
-    pub fn getInterest(principal: U256) -> (U256) {
+    pub fn getInterest() -> (U256) {
         if (interest > 0) {
-            // Calculate the proportional interest based on elapsed time
-            let timeFactor = (blockTimeStamp!() - startTime) / 31556926000
+            // Calculate elapsed time
+            let elapsedTime = blockTimeStamp!() - startTime
     
-            // Calculate the gain for the elapsed time
-            let gain = (principal * interest * timeFactor) / 10000
+            // Avoid integer truncation: multiply first, then divide
+            let gain = (tokenAmount * interest * elapsedTime) / (31556926000 * 10000)
     
             // Return the original amount plus interest
-            return principal + gain
-        }
-        else {
-            return principal
+            return tokenAmount + gain
+        } else {
+            return tokenAmount
         }
     }
 
@@ -103,7 +102,7 @@ Contract Loan (
         assert!(active == true, 2)
 
         // transfer back assets plus the interest
-        let totalPayment = getInterest(tokenAmount)
+        let totalPayment = getInterest()
 
         let totalCommission = getCommission(totalPayment)
 

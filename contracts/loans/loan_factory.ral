@@ -20,7 +20,7 @@ Contract LoanFactory (
         let (token, amount) = loan.getTokenRequested()
 
         if (withInterest) {
-            let interestTotal = loan.getInterest(amount)
+            let interestTotal = loan.getInterest()
 
             return token, interestTotal
         }
@@ -95,7 +95,7 @@ Contract LoanFactory (
         let caller = callerAddress!()
 
         let (token, amount) = loan.getTokenRequested()
-        let totalAmount = loan.getInterest(amount)
+        let totalAmount = loan.getInterest()
 
         loan.payLoan{caller -> token: totalAmount}(caller)
 

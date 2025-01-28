@@ -59,5 +59,7 @@ import { debug } from "console";
         let calculatedAmount = await CalculateLoanAssets(nodeProvider, contractAddress, 1751130767000)
 
         await PayLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, calculatedAmount)
+
+        // next test with various tokens (decimals, etc)
       })
   });

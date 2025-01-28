@@ -70,7 +70,7 @@ export namespace LoanTypes {
       result: CallContractResult<boolean>;
     };
     getInterest: {
-      params: CallContractParams<{ principal: bigint }>;
+      params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
     getCommission: {
@@ -128,7 +128,7 @@ export namespace LoanTypes {
       result: SignExecuteScriptTxResult;
     };
     getInterest: {
-      params: SignExecuteContractMethodParams<{ principal: bigint }>;
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
     getCommission: {
@@ -211,9 +211,9 @@ class Factory extends ContractFactory<LoanInstance, LoanTypes.Fields> {
       return testMethod(this, "isLoanComplete", params, getContractByCodeHash);
     },
     getInterest: async (
-      params: TestContractParamsWithoutMaps<
-        LoanTypes.Fields,
-        { principal: bigint }
+      params: Omit<
+        TestContractParamsWithoutMaps<LoanTypes.Fields, never>,
+        "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<bigint>> => {
       return testMethod(this, "getInterest", params, getContractByCodeHash);
@@ -275,7 +275,7 @@ export const Loan = new Factory(
   Contract.fromJson(
     LoanContractJson,
     "",
-    "21eec2e2ca72fca84590e500c789ccbc1250949441dee3aeeadf8a705e40b6d3",
+    "687923567da4068285205d0659d47fc0157fbb51b576ac787c008818d08a24de",
     AllStructs
   )
 );
@@ -326,13 +326,13 @@ export class LoanInstance extends ContractInstance {
       );
     },
     getInterest: async (
-      params: LoanTypes.CallMethodParams<"getInterest">
+      params?: LoanTypes.CallMethodParams<"getInterest">
     ): Promise<LoanTypes.CallMethodResult<"getInterest">> => {
       return callMethod(
         Loan,
         this,
         "getInterest",
-        params,
+        params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
