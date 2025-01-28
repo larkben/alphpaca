@@ -1,0 +1,34 @@
+{
+  "version": "v3.11.1",
+  "name": "UpdateLoanFactoryFieldsTest",
+  "bytecodeTemplate": "01010300000007{1}{2}{3}0f0c{0}010a",
+  "fieldsSig": {
+    "names": [
+      "loanFactory",
+      "newCode",
+      "immFields",
+      "mutFields"
+    ],
+    "types": [
+      "LoanFactoryTest",
+      "ByteVec",
+      "ByteVec",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

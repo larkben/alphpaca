@@ -1,0 +1,34 @@
+{
+  "version": "v3.11.1",
+  "name": "AcceptLoanTest",
+  "bytecodeTemplate": "01010300020013{1}04{2}0f0e{0}010017011700b416001601a3{1}{3}0e0c{0}0102",
+  "fieldsSig": {
+    "names": [
+      "loanFactory",
+      "contract",
+      "interestTime",
+      "startTime"
+    ],
+    "types": [
+      "LoanFactoryTest",
+      "ByteVec",
+      "U256",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

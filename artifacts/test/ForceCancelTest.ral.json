@@ -1,6 +1,6 @@
 {
   "version": "v3.11.1",
-  "name": "ForceCancel",
+  "name": "ForceCancelTest",
   "bytecodeTemplate": "010103000000040c0c{0}0107",
   "fieldsSig": {
     "names": [

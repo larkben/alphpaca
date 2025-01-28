@@ -1,0 +1,43 @@
+{
+  "version": "v3.11.1",
+  "name": "CreateLoanTest",
+  "bytecodeTemplate": "01010300000013b47ad113c3038d7ea4c680002aa2{3}{4}a3{1}{2}{3}{4}{5}{6}13060c{0}0101",
+  "fieldsSig": {
+    "names": [
+      "loanFactory",
+      "tokenRequested",
+      "tokenAmount",
+      "collateralToken",
+      "collateralAmount",
+      "interest",
+      "duration"
+    ],
+    "types": [
+      "LoanFactoryTest",
+      "ByteVec",
+      "U256",
+      "ByteVec",
+      "U256",
+      "U256",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

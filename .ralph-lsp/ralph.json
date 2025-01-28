@@ -1,6 +1,11 @@
 {
   "contractPath": "contracts",
   "compilerOptions": {
-    "ignoreUnusedConstantsWarnings": false
+    "ignoreUnusedConstantsWarnings": true,
+    "ignoreUnusedVariablesWarnings": true,
+    "ignoreUnusedFieldsWarnings": false,
+    "ignoreUnusedPrivateFunctionsWarnings": false,
+    "ignoreUpdateFieldsCheckWarnings": false,
+    "ignoreCheckExternalCallerWarnings": false
   }
 }

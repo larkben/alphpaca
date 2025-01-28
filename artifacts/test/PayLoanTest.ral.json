@@ -1,15 +1,21 @@
 {
   "version": "v3.11.1",
-  "name": "ForceCancel",
-  "bytecodeTemplate": "010103000000040c0c{0}0107",
+  "name": "PayLoanTest",
+  "bytecodeTemplate": "01010300020013{1}03{2}0f0e{0}010017011700b416001601a3{1}{2}0e0c{0}0104",
   "fieldsSig": {
     "names": [
-      "loan"
+      "loanFactory",
+      "contract",
+      "interestTime"
     ],
     "types": [
-      "Loan"
+      "LoanFactoryTest",
+      "ByteVec",
+      "U256"
     ],
     "isMutable": [
+      false,
+      false,
       false
     ]
   },

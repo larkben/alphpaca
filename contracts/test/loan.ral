@@ -1,0 +1,141 @@
+Contract LoanTest (
+    creator: Address,
+    mut loanee: Address,
+    tokenRequested: ByteVec,
+    tokenAmount: U256,
+    // collateral
+    collateralToken: ByteVec,
+    collateralAmount: U256,
+    interest: U256,
+    rate: U256,                 // 200 would be 2%
+    duration: U256,
+    mut startTime: U256,
+    // active
+    mut active: Bool,
+    parentContract: Address
+) {
+
+    // helper functions
+    pub fn getTokenRequested() -> (ByteVec, U256) {
+        return tokenRequested, tokenAmount
+    }
+
+    pub fn getTokenCollateral() -> (ByteVec, U256) {
+        return collateralToken, collateralAmount
+    }
+
+    pub fn isLoanComplete(time: U256) -> (Bool) {
+        assert!(active == true, 1)
+
+        // confirm the loan has completed it's time
+        assert!(time > startTime + duration, 0)
+
+        return true
+    }
+
+    pub fn getInterest(principal: U256, time: U256) -> (U256) {
+        if (interest > 0) {
+            // Calculate the proportional interest based on elapsed time
+            let timeFactor = (time - startTime) / 31556926000
+    
+            // Calculate the gain for the elapsed time
+            let gain = (principal * interest * timeFactor) / 10000
+    
+            // Return the original amount plus interest
+            return principal + gain
+        }
+        else {
+            return principal
+        }
+    }
+
+    fn getCommission(total: U256) -> (U256) {
+        if (rate > 0) {
+            let comission = (total * rate) / 10000
+            // return the original amount plus interest
+            return comission 
+        }
+        else {
+            return 0
+        }
+    }       
+
+    // contract functions
+    @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true)
+    pub fn acceptLoan(acceptor: Address, time: U256) -> () {
+        checkCaller!(callerAddress!() == parentContract, 0)
+
+        assert!(active == false, 4)
+
+        // transfer tokens to person requesting them
+        transferToken!(acceptor, creator, tokenRequested, tokenAmount)
+
+        // assignment
+        active = true
+        startTime = time
+        loanee = acceptor
+    }
+
+    @using(checkExternalCaller = true, assetsInContract = true)
+    pub fn cancelLoan(caller: Address) -> () {
+        checkCaller!(callerAddress!() == parentContract, 0)
+
+        // confirm loan is not running
+        assert!(active == false, 1)
+
+        destroySelf!(caller)
+    }
+
+    @using(checkExternalCaller = false, assetsInContract = true)
+    pub fn forceCancel() -> () {
+        checkCaller!(callerAddress!() == creator, 5)
+
+        assert!(active == false, 1)
+
+        destroySelf!(creator)
+    }
+
+    @using(checkExternalCaller = true, preapprovedAssets = true, assetsInContract = true)
+    pub fn payLoan(caller: Address, interestTime: U256) -> () {
+        checkCaller!(callerAddress!() == parentContract, 0)
+
+        // payback the loan
+        assert!(active == true, 2)
+
+        // transfer back assets plus the interest
+        let totalPayment = getInterest(tokenAmount, interestTime)
+
+        let totalCommission = getCommission(totalPayment)
+
+        // user pays back two seperate accounts (marketplace fees, and the person who loaned them the assets)
+        transferToken!(caller, loanee, tokenRequested, totalPayment - totalCommission)
+
+        transferToken!(caller, parentContract, tokenRequested, totalCommission)
+
+        // destroy the contract
+        destroySelf!(creator)
+    }
+
+    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
+    pub fn acceptForfeit(time: U256) -> () {
+        checkCaller!(callerAddress!() == parentContract, 0)
+
+        assert!(active == true, 3)
+        assert!(startTime + duration < time, 4)
+
+        let totalCommission = getCommission(collateralAmount)
+        transferToken!(selfAddress!(), parentContract, collateralToken, totalCommission)
+
+        // claim collateral
+        destroySelf!(loanee)
+    }
+
+    // debug functions
+
+}
+
+TxScript ForceCancelTest (
+    loan: Loan
+) {
+    loan.forceCancel()
+}
