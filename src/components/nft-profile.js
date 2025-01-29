@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from 'react';
 import { useWallet } from '@alephium/web3-react';
-import Link from "next/link";
 import { Cog  } from 'lucide-react';
 import { fetchNFTsByAddress } from '../lib/nfts';
 import { web3, NodeProvider, ExplorerProvider } from "@alephium/web3";
@@ -17,7 +16,6 @@ const NFTGallery = () => {
   const [page, setPage] = useState(0);
   const [isNFTsLoading, setIsNFTsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [error, setError] = useState(null);
   const [mintingResults, setMintingResults] = useState(new Map());
   const [selectedNFT, setSelectedNFT] = useState(null);
 
@@ -52,12 +50,10 @@ const NFTGallery = () => {
         setHasMore(filteredNFTs.length > pageSize);
       } else {
         console.error('Unexpected response from fetchNFTsByAddress:', fetchedNFTs);
-        setError('Failed to load NFTs. Please try again.');
         setHasMore(false);
       }
     } catch (error) {
       console.error('Error loading NFTs:', error);
-      setError('Failed to load NFTs. Please try again.');
       setHasMore(false);
     } finally {
       setIsNFTsLoading(false);
@@ -112,68 +108,75 @@ const NFTGallery = () => {
   return (
     <div className="container">
       {isNFTsLoading && displayedNFTs.length === 0 ? (
-        <div className="flex items-center justify-center mt-6">Loading NFTs...</div>
+        <div className="flex items-center justify-center mt-6">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-400"></div>
+        </div>
       ) : displayedNFTs.length > 0 ? (
         <InfiniteScroll onNextPage={loadMoreNFTs} hasMore={hasMore} isLoading={isLoadingMore}>
           {({ bottomSentinelRef }) => (
             <>
-              <div className="flex items-center justify-center mt-3">
-                <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[30px]">
-                  {displayedNFTs.map((nft, index) => (
-                    <div 
-                      key={`${nft.tokenId}-${index}`} 
-                      className="group relative p-4 rounded-2xl bg-slate-700 border border-gray-800 shadow-lg cursor-pointer hover:shadow-gray-700 transition-all duration-500 h-fit"
-                      onClick={() => handleNFTClick(nft)}
-                    >
-                      <div className="relative overflow-hidden rounded-t-lg">
+              <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+                {displayedNFTs.map((nft, index) => (
+                  <div 
+                    key={`${nft.tokenId}-${index}`} 
+                    onClick={() => handleNFTClick(nft)}
+                    className="group relative bg-gradient-to-b from-gray-800/90 to-gray-900/90 rounded-2xl border border-gray-700/50 backdrop-blur-sm overflow-hidden hover:border-green-400/50 transition-all duration-300 cursor-pointer"
+                  >
+                    <div className="relative p-3">
+                      <div className="relative group-hover:transform group-hover:scale-105 transition-all duration-500">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
                         <img
                           src={nft.image}
-                          alt={nft.name || 'NFT image'}
-                          className="rounded-xl group-hover:scale-110 transition-all duration-500"
+                          alt={nft.name || 'NFT'}
+                          className="relative rounded-2xl w-full aspect-square object-cover"
                         />
                       </div>
+                      
                       {nft.isOld && (
-                          <div 
-                            className="flex items-center mt-1 ml-1 absolute top-0 left-0 bg-green-400/80 text-white px-2 py-1 text-xl font-bold rounded-xl cursor-pointer"
-                            onClick={() => handleMintForId(nft.tokenId)}
-                          >
-                            <Cog className="animate-spin mr-2" style={{ animationDuration: '3s' }} size={24} />
-                            Upgrade Available
-                          </div>
-                        )}
-                        {mintingResults.get(nft.tokenId) && (
-                          <div className="mt-2 text-sm text-center">
-                            {mintingResults.get(nft.tokenId)}
-                          </div>
-                        )}
-                        <div className="p-4">
-                        <Link href={`#`} className="text-lg font-semibold hover:text-cyan-300">
+                        <div 
+                          className="absolute top-5 left-5 flex items-center bg-green-400/90 text-white px-3 py-1.5 rounded-full text-sm font-medium backdrop-blur-sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMintForId(nft.tokenId);
+                          }}
+                        >
+                          <Cog className="animate-spin mr-2" style={{ animationDuration: '3s' }} size={16} />
+                          Upgrade Available
+                        </div>
+                      )}
+                      
+                      {mintingResults.get(nft.tokenId) && (
+                        <div className="absolute top-5 right-5 bg-gray-900/90 text-green-400 px-3 py-1.5 rounded-full text-sm backdrop-blur-sm">
+                          {mintingResults.get(nft.tokenId)}
+                        </div>
+                      )}
+
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold text-white group-hover:text-green-400 transition-colors">
                           {nft.name || 'Unnamed NFT'}
-                        </Link>
+                        </h3>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
-              <div ref={bottomSentinelRef}></div>
+
+              <div ref={bottomSentinelRef} />
+              
               {isLoadingMore && (
                 <div className="mt-6 text-center">
-                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                       role="status">
-                    <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                      Loading...
-                    </span>
-                  </div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-400 inline-block"></div>
                 </div>
               )}
             </>
           )}
         </InfiniteScroll>
       ) : (
-        <div className="mt-6">
-          <h5 className="text-xl font-semibold">No NFTs owned</h5>
+        <div className="mt-6 text-center">
+          <h5 className="text-xl font-semibold text-gray-400">No NFTs owned</h5>
         </div>
       )}
+
       {selectedNFT && (
         <NFTPopup nft={selectedNFT} onClose={closePopup} />
       )}

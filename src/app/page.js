@@ -1,18 +1,15 @@
-import Image from "next/image";
+"use client"
+
 import { Hero } from "../components";
 import { Navbar } from "../components/navbar";
-import {
-  AlephiumConnectButton,
-  AlephiumWalletProvider,
-} from "@alephium/web3-react";
+import { Footer } from "../components/footer";
 
 export default function Home() {
   return (
     <div>
-      <AlephiumWalletProvider network={"mainnet"}>
-        <Navbar/>
-        <Hero/>
-      </AlephiumWalletProvider>
+      <Navbar/>
+      <Hero/>
+      <Footer/>
     </div>
   );
 }

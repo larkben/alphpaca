@@ -1,6 +1,6 @@
 import React from "react";
 
-export function Terminal() {
+const Terminal = () => {
   return (
     <aside className="bg-black text-white p-6 rounded-lg w-full max-w-lg font-mono">
       <div className="flex justify-between items-center">
@@ -22,3 +22,5 @@ export function Terminal() {
     </aside>
   )
 }
+
+export default Terminal;

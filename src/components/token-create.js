@@ -1,30 +1,22 @@
 "use client";
 import { Input } from "./ui/input"
 import { Button } from "./ui/button";
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useWallet } from "@alephium/web3-react"
 import { BuildToken } from "../services/token.services"
-import { AlephiumConnectButton } from '@alephium/web3-react'
-import { contractIdFromAddress } from "@alephium/web3";
 import TokenList from "./createdtokens"
+import { motion } from "framer-motion";
 
 export const TokenCreateAutomation = ({ config }) => {
-  const { signer, account } = useWallet()
-  const addressGroup = config.groupIndex
-  const [ongoingTxId, setOngoingTxId] = useState()
+  const { signer } = useWallet()
 
   const [symbol, setSymbol] = useState("")
   const [name, setName] = useState("")
   const [decimals, setDecimals] = useState('')
   const [supply, setSupply] = useState('')
 
-  const [contract, setContract] = useState("")
-
-  const [id, setId] = useState("")
-
   const supplyWithDecimals = Number(`${supply}e-${decimals}`);
 
-  // Handle of Token Create
   const handleTokenCreate = async (e) => {
     e.preventDefault()
     if (signer) {
@@ -32,103 +24,134 @@ export const TokenCreateAutomation = ({ config }) => {
     }
   }
 
-  const getTokenId = async (e) => {
-    e.preventDefault();
-    const result = await contractIdFromAddress(id.toString());
-    setId(result.toString()); // Update state with the retrieved token ID
-  };  
-
-  // Token Id
-  const tokenId = getTokenId
-
-  useEffect(() => {
-    // Your client-side code here
-
-    // Cleanup function if needed
-    return () => {
-      // Cleanup logic
-    };
-  }, []);
-
-  // Form submit to insert values and receive input
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen py-20 bg-gray-900 sm:px-6 lg:px-8">
-      <div className="min-w-30 space-y-8 bg-gray-800 p-6 rounded-lg shadow-md z-50">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-500">Create Your Token</h2>
-          <p className="mt-2 text-center text-sm text-gray-400">Please fill in the details of your token. All tokens are final and immutable. 10 ALPH will be taken as deposit. <br/> 9 ALPH for service and 1 ALPH for blockchain storage requirements. </p>
-          <h3 className="text-1xl text-white text-center py-5"> Token Preview: </h3> 
-          <p className="text-1xl text-white text-center"> Token: {name} : ({symbol}) </p>
-          <p className="text-1xl text-white text-center"> Total Supply with Decimals: {supplyWithDecimals} </p>
-          <p className="text-1xl text-white text-center"> Total Supply without Decimals: {supply} </p>
-        </div>
-        <form onSubmit={handleTokenCreate} className="mt-8 space-y-6">
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label className="text-white" htmlFor="symbol">Symbol</label>
-              <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border  border-gray-700 placeholder-gray-500 text-blue-500 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
-                id="symbol"
-                name="symbol"
-                value={symbol}
-                onChange={(e) => setSymbol(e.target.value)}
-                required
-                type="text"
-              />
-            </div>
-            <div>
-              <label className="text-white" htmlFor="name">Name</label>
-              <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border  border-gray-700 placeholder-gray-500 text-blue-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
-                id="name"
-                name="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                type="text"
-              />
-            </div>
-            <div>
-              <label className="text-white" htmlFor="decimals">Decimals</label>
-              <Input
-                className="text-blue-500 appearance-none rounded relative block w-full px-3 py-2 border  border-gray-700 placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
-                id="decimals"
-                max="18"
-                min="0"
-                name="decimals"
-                value={decimals}
-                onChange={(e) => setDecimals(e.target.value)}
-                required
-                type="number"
-              />
-            </div>
-            <div>
-              <label className="text-white" htmlFor="supply">Supply</label>
-              <Input
-                className="appearance-none rounded relative block w-full px-3 py-2 border  border-gray-700 placeholder-gray-500 text-blue-500 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm dark:border-gray-800"
-                id="supply"
-                min="0"
-                name="supply"
-                value={supply}
-                onChange={(e) => setSupply(e.target.value)}
-                required
-                type="number"
-              />
+    <main className="flex flex-col items-center justify-center min-h-screen py-20 bg-gradient-to-b from-gray-900 to-black">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-2xl mx-auto px-4"
+      >
+        <div className="space-y-8 bg-gradient-to-b from-gray-800/90 to-gray-900/90 p-8 rounded-xl border border-gray-700/50 backdrop-blur-sm shadow-xl">
+          <div>
+            <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+              Create Your Token
+            </h2>
+            <p className="mt-4 text-center text-gray-400 text-sm">
+              Please fill in the details of your token. All tokens are final and immutable.
+              <br/>
+              <span className="text-green-400 font-medium">10 ALPH</span> will be taken as deposit:
+              <br/>
+              9 ALPH for service and 1 ALPH for blockchain storage requirements.
+            </p>
+
+            <div className="mt-8 p-4 bg-gray-800/50 rounded-xl border border-gray-700/30">
+              <h3 className="text-lg font-medium text-white text-center mb-4">Token Preview</h3>
+              <div className="space-y-2">
+                <p className="text-gray-300 text-center">
+                  Token: <span className="text-green-400 font-medium">{name || "---"}</span>
+                  {symbol && <span className="text-gray-400 ml-2">({symbol})</span>}
+                </p>
+                <p className="text-gray-300 text-center">
+                  Supply with Decimals: <span className="text-green-400 font-medium">{supplyWithDecimals || "0"}</span>
+                </p>
+                <p className="text-gray-300 text-center">
+                  Supply without Decimals: <span className="text-green-400 font-medium">{supply || "0"}</span>
+                </p>
+              </div>
             </div>
           </div>
-          <div>
+
+          <form onSubmit={handleTokenCreate} className="space-y-6">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor="symbol">
+                  Symbol
+                </label>
+                <Input
+                  className="w-full px-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-xl text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-transparent transition-all"
+                  id="symbol"
+                  name="symbol"
+                  value={symbol}
+                  onChange={(e) => setSymbol(e.target.value)}
+                  required
+                  type="text"
+                  placeholder="e.g. BTC"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor="name">
+                  Name
+                </label>
+                <Input
+                  className="w-full px-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-xl text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-transparent transition-all"
+                  id="name"
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  type="text"
+                  placeholder="e.g. Bitcoin"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor="decimals">
+                  Decimals
+                </label>
+                <Input
+                  className="w-full px-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-xl text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-transparent transition-all"
+                  id="decimals"
+                  max="18"
+                  min="0"
+                  name="decimals"
+                  value={decimals}
+                  onChange={(e) => setDecimals(e.target.value)}
+                  required
+                  type="number"
+                  placeholder="e.g. 18"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2" htmlFor="supply">
+                  Supply
+                </label>
+                <Input
+                  className="w-full px-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-xl text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-transparent transition-all"
+                  id="supply"
+                  min="0"
+                  name="supply"
+                  value={supply}
+                  onChange={(e) => setSupply(e.target.value)}
+                  required
+                  type="number"
+                  placeholder="e.g. 21000000"
+                />
+              </div>
+            </div>
+
             <Button
-              className="group relative w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-800"
+              className="w-full px-4 py-3 bg-gradient-to-r from-green-500/10 via-green-500/20 to-green-400/10 
+                hover:from-green-500/20 hover:via-green-500/30 hover:to-green-400/20 
+                border border-green-500/20 hover:border-green-500/30 
+                transition-all duration-300 ease-out
+                text-green-400 hover:text-green-300 rounded-xl font-medium"
               type="submit"
             >
               Create Token
             </Button>
+          </form>
+
+          <div className="pt-8 border-t border-gray-700/50">
+            <h2 className="text-2xl font-bold text-center bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent mb-6">
+              Created Tokens
+            </h2>
+            <TokenList/>
           </div>
-        </form>
-        <br/>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-500">Created Tokens:</h2>
-        <TokenList/>
         </div>
+      </motion.div>
     </main>
   )
 }

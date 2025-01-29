@@ -20,7 +20,6 @@ import {
     web3
   } from '@alephium/web3'
   import { randomBytes } from 'crypto'
-  import * as base58 from 'bs58'
   import * as blake from 'blakejs'
   import { PrivateKeyWallet } from '@alephium/web3-wallet'
   import { testPrivateKey } from '@alephium/web3-test'

@@ -1,14 +1,15 @@
-import { AlephiumConnectButton, AlephiumWalletProvider } from '@alephium/web3-react'
+"use client"
+
 import { Navbar } from "../../components/navbar";
 import Dashboard from "../../components/profile";
+import { Footer } from "../../components/footer";
 
 export default function TokenCPage() {
   return (
     <main>
-      <AlephiumWalletProvider network={"mainnet"}>
-        <Navbar/>
-        <Dashboard/>
-      </AlephiumWalletProvider>
+      <Navbar/>
+      <Dashboard/>
+      <Footer/>
     </main>
   );
 }

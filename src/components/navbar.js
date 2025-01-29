@@ -7,6 +7,7 @@ import { PiWalletBold } from "react-icons/pi";
 import { LiaSignOutAltSolid } from 'react-icons/lia';
 import { ANS } from '@alph-name-service/ans-sdk';
 import { balanceOf } from "../lib/utils";
+import { FaCoins } from "react-icons/fa";
 
 export function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -51,88 +52,180 @@ export function Navbar() {
     navigator.clipboard.writeText(text);
   };
 
+  const menuItems = [
+    { label: 'Home', href: '/' },
+    { label: 'Token Creation', href: '/tokencreate' },
+    { label: 'Wrapped Tokens', href: '/warpper' },
+    { 
+      label: 'ALPHpaca',
+      submenu: [
+        { label: 'Migrate ALPHpaca', href: '/migrate' },
+        { label: 'Profile', href: '/profile' },
+        { label: 'Coming Soon!', href: '/battle' },
+      ]
+    }
+  ];
+
   return (
-    <div className="bg-gray-800">
-      <header className="flex items-center justify-between bg-gray-800 px-6 py-4 text-white">
-        <Link className="z-50 flex items-center space-x-2" href="/">
-          <span className="text-lg font-semibold text-white">ALPHpaca</span>
-        </Link>
-        <nav className="z-50 hidden space-x-4 md:flex">
-          <Link className="text-white hover:text-green-500" href="/">Home</Link>
-          <Link className="text-white hover:text-green-500" href="/tokencreate">Token Creation</Link>
-          <div className="relative">
-            <button
-              className="text-white hover:text-green-500 focus:outline-none"
-              onClick={toggleDropdown}
-            >
-              ALPHpaca
-            </button>
-            {isDropdownOpen && (
-              <div className="absolute top-full left-0 mt-1 w-48 bg-gray-800 rounded-lg shadow-lg z-50">
-                <Link className="block px-4 py-2 text-white hover:text-green-500" href="/migrate">Migrate ALPHpaca</Link>
-                <Link className="block px-4 py-2 text-white hover:text-green-500" href="/profile">Profile</Link>
-                <Link className="block px-4 py-2 text-white hover:text-green-500" href="/battle">Coming Soon!</Link>
-              </div>
-            )}
-          </div>
-          <Link className="text-white hover:text-green-500" href="/warpper">Wrapped Tokens Protocol</Link>
-        </nav>
+    <div className="bg-gradient-to-b from-gray-900 to-gray-800/95 backdrop-blur-sm border-b border-gray-700/50">
+      <header className="container mx-auto flex items-center justify-between px-6 py-4 text-white">
         <div className="z-50 flex items-center space-x-2">
-          <Link className="text-white hover:text-green-500" href="https://twitter.com/alphpacas">
-            <TwitterIcon className="h-6 w-6" />
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-xl font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity">
+              ALPHpaca
+            </span>
           </Link>
-          <Link className="text-white hover:text-green-500" href="https://github.com/larkben/nonchalant">
-            &lt;/&gt;
-          </Link>
+        </div>
+
+        <nav className="z-50 hidden space-x-6 md:flex">
+          {menuItems.map((item, index) => (
+            item.submenu ? (
+              <div key={index} className="relative group">
+                <button
+                  className="text-gray-300 hover:text-green-400 transition-colors duration-200"
+                  onClick={toggleDropdown}
+                >
+                  {item.label}
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-gray-800/95 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden shadow-xl">
+                    {item.submenu.map((subItem, subIndex) => (
+                      <Link
+                        key={subIndex}
+                        href={subItem.href}
+                        className="block px-4 py-3 text-gray-300 hover:text-green-400 hover:bg-gray-700/50 transition-all duration-200"
+                      >
+                        {subItem.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div key={index}>
+                <Link
+                  href={item.href}
+                  className="text-gray-300 hover:text-green-400 transition-colors duration-200"
+                >
+                  {item.label}
+                </Link>
+              </div>
+            )
+          ))}
+        </nav>
+
+        <div className="z-50 flex items-center space-x-4">
           <AlephiumConnectButton.Custom>
             {({ isConnected, disconnect, show, account }) => {
               const bal = balance?.balance ?? "0";
               return isConnected ? (
                 <div className="relative">
-                  <button onClick={toggleWalletDropdown} className="text-white hover:text-green-500 focus:outline-none p-2">
-                  {ansUri ? (
-                    <img src={ansUri}  width={38} height={38} className="rounded-full w-10 h-w-10 shadow dark:shadow-gray-700" alt=""  />
-                  ) : (
-                    <AiOutlineUser className="w-8 h-8" />
-                  )}
+                  <button 
+                    onClick={toggleWalletDropdown} 
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 p-2"
+                  >
+                    {ansUri ? (
+                      <img src={ansUri} width={38} height={38} className="rounded-full shadow-lg shadow-green-900/20" alt="" />
+                    ) : (
+                      <AiOutlineUser className="w-8 h-8" />
+                    )}
                   </button>
                   {isWalletDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 rounded overflow-hidden bg-slate-800/80 shadow shadow-gray-600">
+                    <div className="absolute right-0 mt-2 w-72 rounded-2xl overflow-hidden bg-gray-800/95 backdrop-blur-sm border border-gray-700/50 shadow-xl z-[100]">
                       <div className="relative">
-                      <div className="py-8 bg-gradient-to-tr from-green-300 to-cyan-400"></div>
-                        <div className="absolute px-4 -bottom-3 start-0">
-                          <div className="flex items-end">
+                        <div className="h-24 bg-gradient-to-tr from-green-400/20 via-emerald-500/20 to-cyan-500/20"></div>
+                        <div className="absolute -bottom-4 start-4">
+                          <div className="flex items-center gap-3">
                             {ansUri ? (
-                              <img src={ansUri}  width={38} height={38} className="rounded-full w-10 h-w-10 shadow dark:shadow-gray-700" alt=""  />
+                              <img src={ansUri} className="rounded-xl w-12 h-12 border-2 border-gray-700/50 shadow-lg" alt="" />
                             ) : (
-                              <AiOutlineUser className="w-8 h-8" />
+                              <div className="rounded-xl w-12 h-12 border-2 border-gray-700/50 bg-gray-800 flex items-center justify-center">
+                                <AiOutlineUser className="w-6 h-6 text-gray-400" />
+                              </div>
                             )}
-
-                            <span className="font-semibold text-[15px] ms-1">{ansName || "No Name"}</span>
+                            <div>
+                              <h4 className="font-medium text-[15px] text-white">
+                                {ansName || "Unnamed"}
+                              </h4>
+                              <p className="text-xs text-gray-400">Connected with Alephium</p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div className="p-4">
-                        <h5 className="font-semibold text-[15px]">Wallet:</h5>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[13px] text-slate-400">{shortenHash(wallet?.account?.address)}</span>
-                          <button onClick={() => copyToClipboard(walletAddress)} className="text-green-500"><AiOutlineCopy/></button>
+
+                      <div className="px-4 py-3 mt-4">
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center justify-between p-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 rounded-lg bg-green-400/10">
+                                <PiWalletBold className="w-4 h-4 text-green-400" />
+                              </div>
+                              <div>
+                                <p className="text-xs text-gray-400">Wallet</p>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm text-white">{shortenHash(wallet?.account?.address)}</span>
+                                  <button 
+                                    onClick={() => copyToClipboard(wallet?.account?.address)} 
+                                    className="text-gray-400 hover:text-green-400 transition-colors"
+                                  >
+                                    <AiOutlineCopy className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center justify-between p-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50">
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 rounded-lg bg-emerald-400/10">
+                                  <FaCoins className="w-4 h-4 text-emerald-400" />
+                                </div>
+                                <div>
+                                  <p className="text-xs text-gray-400">ALPH Balance</p>
+                                  <p className="text-sm text-white">{(parseFloat(bal) / 1e18).toFixed(2)} $ALPH</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between p-2.5 rounded-xl bg-gray-900/50 border border-gray-700/50">
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 rounded-lg bg-cyan-400/10">
+                                  <FaCoins className="w-4 h-4 text-cyan-400" />
+                                </div>
+                                <div>
+                                  <p className="text-xs text-gray-400">PACA Balance</p>
+                                  <p className="text-sm text-white">{(parseFloat(pacaBalance) / 1e18).toFixed(2)} $PACA</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="p-4">
-                        <h5 className="text-[15px]">Balance: <span className="text-green-500 font-semibold">{(parseFloat(bal) / 1e18).toFixed(2)} $ALPH</span></h5>
-                        <h5 className="text-[15px]">PACA: <span className="text-green-500 font-semibold">{(parseFloat(pacaBalance) / 1e18).toFixed(2)} $PACA</span></h5>
+
+                      <div className="border-t border-gray-700/50 mt-2">
+                        <button 
+                          onClick={disconnect} 
+                          className="flex items-center gap-2 w-full px-4 py-3 text-[14px] text-gray-400 hover:text-red-400 hover:bg-gray-700/50 transition-all"
+                        >
+                          <LiaSignOutAltSolid className="w-4 h-4" />
+                          Disconnect Wallet
+                        </button>
                       </div>
-                      <div className="border-t border-gray-100 dark:border-gray-800"></div>
-                      <button onClick={disconnect} className="w-full text-left px-4 py-2 text-[14px] font-semibold hover:text-green-500">
-                        <LiaSignOutAltSolid className="inline mr-1"/> Logout
-                      </button>
                     </div>
                   )}
                 </div>
               ) : (
-                <button onClick={show} id="connectWallet" className="text-white hover:text-green-500 focus:outline-none p-2">
-                  <PiWalletBold className="w-8 h-8" />
+                <button
+                  onClick={show}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-green-500/10 via-green-500/20 to-green-400/10 
+                    hover:from-green-500/20 hover:via-green-500/30 hover:to-green-400/20 
+                    border border-green-500/20 hover:border-green-500/30 
+                    transition-all duration-300 ease-out
+                    text-green-400 hover:text-green-300"
+                >
+                  <PiWalletBold className="w-5 h-5" />
+                  <span>Connect</span>
                 </button>
               )
             }}
@@ -140,24 +233,5 @@ export function Navbar() {
         </div>
       </header>
     </div>
-  );
-}
-
-function TwitterIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-    </svg>
   );
 }
