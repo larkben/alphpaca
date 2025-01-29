@@ -14,7 +14,7 @@ ALPHpacas is a token with roughly ~11 million circulating with no inital ICO (al
 `Walf Protocol` - convert 1 OG ALF into its wrapped variant <br/>
 `Wang Wrapper` - convert group 2 wang over into group 0 <br/>
 
-### What can I do with them?
+### NFTS?
 
 Besides being cute, cuddly and collectible ALPHpacas represent being an early member of the Alephium community and will always be the first priority with any of the games we make.
 
