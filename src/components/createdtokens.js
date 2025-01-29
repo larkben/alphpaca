@@ -112,7 +112,7 @@ const TokenComponent = () => {
                   {token.name} ({token.symbol})
                 </h3>
                 <a 
-                  href={`https://explorer.alephium.org/tokens/${token.id}`}
+                  href={`https://explorer.alephium.org/addresses/${token.address}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-green-400 transition-colors"
