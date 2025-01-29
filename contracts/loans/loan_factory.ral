@@ -2,8 +2,14 @@ Contract LoanFactory (
     admin: Address,
     loanTemplate: ByteVec,
     mut activeLoans: U256,
-    mut rate: U256
+    mut rate: U256,
+    mut liquidationBot: Address,
+    oracle: IDIAOracle
 ) {
+    // price mappings
+    mapping [ByteVec, U256] tokenPrices
+    mapping [ByteVec, ByteVec] tokenPairs
+
     // events
     event NewLoan(contract: ByteVec, tokenRequested: ByteVec, tokenAmount: U256, collateralToken: ByteVec, collateralAmount: U256, interest: U256, duration: U256, who: Address)
     event AcceptedLoan(contract: ByteVec, who: Address)
@@ -13,6 +19,33 @@ Contract LoanFactory (
     enum LoanCodes {
         NotAdmin = 0
         TokenSizeTooSmall = 1
+    }
+
+    // oracle price updater
+    fn updateTokenPrice(token: ByteVec) -> () {
+        // maybe assert that the token is in the mapping
+
+        tokenPrices[token] = oracle.getValue(tokenPairs[token]).value
+    }
+
+    // health / collateral value calculation
+    fn determineCollateralRatio(
+        tokenRequested: ByteVec, 
+        tokenPair: ByteVec, 
+        collateralToken: ByteVec, 
+        collateralPair: ByteVec, 
+        threshhold: U256
+    ) -> (U256) {
+        let loan_value = oracle.getValue(tokenPair).value
+
+        let collateral_value = oracle.getValue(collateralPair).value
+
+        if (loan_value == 0) {
+            return 0
+        }
+        
+        let collateral_ratio = (collateral_value * 100) / loan_value
+        return collateral_ratio
     }
 
     pub fn getRequiredTokens(contractId: ByteVec, withInterest: Bool) -> (ByteVec, U256) {
@@ -43,7 +76,7 @@ Contract LoanFactory (
 
     // contract functions
     @using(checkExternalCaller = false, preapprovedAssets = true, updateFields = true)
-    pub fn createLoan(tokenRequested: ByteVec, tokenAmount: U256, collateralToken: ByteVec, collateralAmount: U256, interest: U256, duration: U256) -> () {
+    pub fn createLoan(tokenRequested: ByteVec, tokenAmount: U256, collateralToken: ByteVec, collateralAmount: U256, interest: U256, duration: U256, canLiquidate: Bool) -> () {
         let caller = callerAddress!()
 
         checkTokenAmount(tokenAmount, rate)
@@ -61,7 +94,13 @@ Contract LoanFactory (
             duration,
             0,
             false,
-            selfAddress!()
+            selfAddress!(),
+            liquidationBot,
+            canLiquidate,
+            false,
+            nullContractAddress!(),
+            tokenAmount,
+            0
         )
 
         let contractID = copyCreateContract!{caller -> ALPH: minimalContractDeposit!() + dustAmount!(), collateralToken: collateralAmount}(
@@ -117,6 +156,7 @@ Contract LoanFactory (
         emit LoanWithdraw(contractId, false, caller)
     }
     
+    // liquidation
     @using(checkExternalCaller = false, preapprovedAssets = false)
     pub fn forfeit(contractId: ByteVec) -> () {
         let loan = Loan(contractId)
@@ -131,14 +171,41 @@ Contract LoanFactory (
         emit LoanWithdraw(contractId, true, caller)
     }
 
+    // check liquidation
+    pub fn liquidation(contractId: ByteVec, tokenPair: ByteVec, collateralPair: ByteVec) -> () {
+
+    }
+
+    // auction functions
+    // ....
+
     // edit rate
     @using(checkExternalCaller = true, preapprovedAssets = false, updateFields = true)
     pub fn editRate(newRate: U256) -> () {
         checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
 
         rate = newRate
+    }
 
-        // emit event
+    @using(checkExternalCaller = true, preapprovedAssets = false, updateFields = true)
+    pub fn editLiquidationBot(newBot: Address) -> () {
+        checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
+
+        liquidationBot = newBot
+    }
+
+    // ... complete this
+    @using(checkExternalCaller = true, preapprovedAssets = true, updateFields = false)
+    pub fn tokenMapping(token: ByteVec, add: Bool, pair: Bool) -> () {
+        checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
+
+        // create mapping
+        if (add) {
+            tokenPrices.insert!(callerAddress!(), token, 0) // token starts at zero
+        }
+        else {
+            tokenPrices.remove!(callerAddress!(), token)
+        }
     }
 
     @using(checkExternalCaller = true, preapprovedAssets = false, updateFields = false, assetsInContract = true)
@@ -186,7 +253,8 @@ TxScript CreateLoan (
     collateralToken: ByteVec,
     collateralAmount: U256,
     interest: U256,
-    duration: U256
+    duration: U256,
+    canLiquidate: Bool
 ) {
     loanFactory.createLoan{callerAddress!() -> ALPH: minimalContractDeposit!() + dustAmount!(), collateralToken: collateralAmount}(
         tokenRequested,
@@ -194,7 +262,8 @@ TxScript CreateLoan (
         collateralToken,
         collateralAmount,
         interest,
-        duration
+        duration,
+        canLiquidate
     )
 }
 
@@ -248,7 +317,7 @@ TxScript WithdrawLoanFactoryFees (
     loanFactory.withdrawLoanFactoryFees(who, token, amount)
 }
 
-// upgrade
+// upgrade / destroy
 
 TxScript UpdateLoanFactoryCode (
     loanFactory: LoanFactory,

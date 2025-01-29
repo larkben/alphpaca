@@ -5,15 +5,28 @@ Contract Loan (
     tokenAmount: U256,
     // collateral
     collateralToken: ByteVec,
-    collateralAmount: U256,
+    mut collateralAmount: U256,
     interest: U256,
     rate: U256,                 // 200 would be 2%
     duration: U256,
     mut startTime: U256,
     // active
     mut active: Bool,
-    parentContract: Address
+    parentContract: Address,
+    // liquidation
+    liquidationBot: Address,
+    canLiquidate: Bool,
+    mut liquidation: Bool,
+    // auction
+    mut highestBidder: Address,
+    mut highestBid: U256,
+    mut timeToEnd: U256
 ) {
+    enum Loan {
+        AuctionEnded = 0
+        InvalidCaller = 1
+        AuctionActive = 2
+    }
 
     // helper functions
     pub fn getTokenRequested() -> (ByteVec, U256) {
@@ -132,27 +145,33 @@ Contract Loan (
         destroySelf!(loanee)
     }
 
-    // activate the liquidation process ~ under 150% collateral
+    // liquidation functions
     // ---------------------------------------------------------
 
-    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
-    pub fn addCollateral(collateralAmount: U256) -> () {
+    // returns the amount of collateral after added
+    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true, updateFields = true)
+    pub fn addCollateral(caller: Address, collateralAdded: U256) -> (U256) {
         checkCaller!(callerAddress!() == parentContract, 0)
 
         // confirm the contract is a liquid contracts
-        assert!(canLiquidate = true, 6)
+        assert!(canLiquidate == true, 6)
 
         // confirm it's active
         assert!(active == true, 3)
 
+        // transfer additional collateral to offset liquidation
+        transferToken!(caller, selfAddress!(), collateralToken, collateralAdded)
+        collateralAmount = collateralAmount + collateralAdded
+
+        return collateralAmount
     }
 
-    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
-    pub fn activateLiquidation(collateralLevel: U256, startingBid: U256) -> () {
+    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = false, updateFields = true)
+    pub fn activateLiquidation(collateralLevel: U256) -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
 
         // confirm the contract is a liquid contracts
-        assert!(canLiquidate = true, 6)
+        assert!(canLiquidate == true, 6)
 
         // confirm it's active
         assert!(active == true, 3)
@@ -162,15 +181,17 @@ Contract Loan (
         timeToEnd = blockTimeStamp!() + 3600000  // 1 hour to liquidate -> assets are just sent to loanee
 
         // set the highest bid
-        highestBid = startingBid
+        highestBid = tokenAmount
     }
 
-    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
-    pub fn bid(caller: Address, bidAmount: U256) -> () {
+    // should return timeEnd + token + newHighestBid + newHighestBidder
+    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true, updateFields = true)
+    pub fn bid(caller: Address, bidAmount: U256) -> (U256, ByteVec, U256, Address) {    
+        // confirm this loan is called from the factory
         checkCaller!(callerAddress!() == parentContract, 0)
 
         // confirm the contract is a liquid contracts
-        assert!(canLiquidate = true, 6)
+        assert!(canLiquidate == true, 6)
 
         // confirm it's active
         assert!(active == true, 3)
@@ -182,33 +203,36 @@ Contract Loan (
         assert!(blockTimeStamp!() < timeToEnd, Loan.AuctionEnded)
 
         // assert topBidder cannot bid up
-        assert!(callerAddress!() != auctions[token].topBidder, AuctionCodes.InvalidCaller)
+        assert!(caller != highestBidder, Loan.InvalidCaller)
 
         // return previous top bid if not origin
         if (highestBidder != nullContractAddress!()) {
+            transferToken!(selfAddress!(), highestBidder, ALPH, dustAmount!())
             transferToken!(selfAddress!(), highestBidder, tokenRequested, highestBid)
         }
 
-        topBidder = callerAddress!()
+        highestBidder = caller
         highestBid = bidAmount
 
         // Then transfer tokens
-        transferToken!(callerAddress!(), selfAddress!(), tokenRequested, bidAmount)
+        transferToken!(caller, selfAddress!(), ALPH, dustAmount!())
+        transferToken!(caller, selfAddress!(), tokenRequested, bidAmount)
 
         // anti-sniping
         if ((timeToEnd - blockTimeStamp!()) < 150000) {
             timeToEnd = timeToEnd + 150000 // 5 minutes in milliseconds
         }
 
-        emit BidAuction(callerAddress!(), asset, totalBid, interval, timeToEnd)
+        return timeToEnd, tokenRequested, highestBid, highestBidder
     }
 
+    // redeem the auction
     @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
     pub fn redeem(caller: Address) -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
 
         // confirm the contract is a liquid contracts
-        assert!(canLiquidate = true, 6)
+        assert!(canLiquidate == true, 6)
 
         // confirm it's active
         assert!(active == true, 3)
@@ -216,7 +240,24 @@ Contract Loan (
         // Ensure the auction has ended
         assert!(blockTimeStamp!() > timeToEnd, Loan.AuctionActive)
 
-        // implement redemption mechanics
+        // send the highestBid - fee to loanee
+        let factoryFeeLoanee = getCommission(highestBid)
+        let factoryFeeBidder = getCommission(highestBid)
+
+        // transfer requested token back
+        transferToken!(selfAddress!(), loanee, ALPH, dustAmount!())
+        transferToken!(selfAddress!(), loanee, tokenRequested, highestBid - factoryFeeLoanee)
+
+        // transfer collateral to auction winner
+        transferToken!(selfAddress!(), highestBidder, ALPH, dustAmount!())
+        transferToken!(selfAddress!(), highestBidder, collateralToken, collateralAmount - factoryFeeBidder)
+
+        // factory fees
+        transferToken!(selfAddress!(), parentContract, ALPH, dustAmount!())
+        transferToken!(selfAddress!(), parentContract, tokenRequested, factoryFeeLoanee)
+        transferToken!(selfAddress!(), parentContract, collateralToken, factoryFeeBidder)
+
+        destroySelf!(creator)
     }
 }
 
