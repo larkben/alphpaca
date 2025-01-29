@@ -12,6 +12,7 @@ Contract LoanFactoryTest (
 
     enum LoanCodes {
         NotAdmin = 0
+        TokenSizeTooSmall = 1
     }
 
     pub fn getRequiredTokens(contractId: ByteVec, withInterest: Bool, interestTime: U256) -> (ByteVec, U256) {
@@ -29,10 +30,23 @@ Contract LoanFactoryTest (
         }
     }
 
+    fn checkTokenAmount(priceIn: U256, commissionRateIn: U256) -> () {
+        // Calculate the commission based on the rate
+        let commission = (priceIn * commissionRateIn) / 10000
+
+        // Ensure the token amount is sufficient
+        assert!(priceIn > commission, LoanCodes.TokenSizeTooSmall)
+
+        // Additional optional check for a minimum base token amount
+        assert!(priceIn >= 10000, LoanCodes.TokenSizeTooSmall)
+    }
+
     // contract functions
     @using(checkExternalCaller = false, preapprovedAssets = true, updateFields = true)
     pub fn createLoan(tokenRequested: ByteVec, tokenAmount: U256, collateralToken: ByteVec, collateralAmount: U256, interest: U256, duration: U256) -> () {
         let caller = callerAddress!()
+
+        checkTokenAmount(tokenAmount, rate)
 
         let (encodeImmutableFields, encodeMutableFields) = LoanTest.encodeFields!(
             caller,

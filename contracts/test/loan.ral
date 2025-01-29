@@ -5,15 +5,28 @@ Contract LoanTest (
     tokenAmount: U256,
     // collateral
     collateralToken: ByteVec,
-    collateralAmount: U256,
+    mut collateralAmount: U256,
     interest: U256,
     rate: U256,                 // 200 would be 2%
     duration: U256,
     mut startTime: U256,
     // active
     mut active: Bool,
-    parentContract: Address
+    parentContract: Address,
+    // liquidation
+    liquidationBot: Address,
+    canLiquidate: Bool,
+    liquidation: Bool
+    // auction
+    mut highestBidder: Address,
+    mut highestBid: U256,
+    mut timeToEnd: U256
 ) {
+
+    enum Loan {
+        AuctionEnded = 0
+        AuctionActive = 1
+    }
 
     // helper functions
     pub fn getTokenRequested() -> (ByteVec, U256) {
@@ -122,11 +135,88 @@ Contract LoanTest (
         assert!(active == true, 3)
         assert!(startTime + duration < time, 4)
 
+        assert!(canLiquidate == false, 6)
+
         let totalCommission = getCommission(collateralAmount)
         transferToken!(selfAddress!(), parentContract, collateralToken, totalCommission)
 
         // claim collateral
         destroySelf!(loanee)
+    }
+
+    // activate the liquidation process ~ under 150% collateral
+    // ---------------------------------------------------------
+
+    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
+    pub fn activateLiquidation(collateralLevel: U256, startingBid: U256) -> () {
+        checkCaller!(callerAddress!() == parentContract, 0)
+
+        // confirm the contract is a liquid contracts
+        assert!(canLiquidate = true, 6)
+
+        // confirm it's active
+        assert!(active == true, 3)
+
+        // liquidation to true
+        liquidation = true
+        timeToEnd = blockTimeStamp!() + 1800000  // 30 min to liquidate
+
+        // set the highest bid
+        highestBid = startingBid
+    }
+
+    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
+    pub fn bid(caller: Address, bidAmount: U256) -> () {
+        checkCaller!(callerAddress!() == parentContract, 0)
+
+        // confirm the contract is a liquid contracts
+        assert!(canLiquidate = true, 6)
+
+        // confirm it's active
+        assert!(active == true, 3)
+
+        // newBid must be greater than current bid
+        assert!(bidAmount > highestBid, 7)
+
+        // check time on auction
+        assert!(blockTimeStamp!() < timeToEnd, Loan.AuctionEnded)
+
+        // assert topBidder cannot bid up
+        assert!(callerAddress!() != auctions[token].topBidder, AuctionCodes.InvalidCaller)
+
+        // return previous top bid if not origin
+        if (highestBidder != nullContractAddress!()) {
+            transferToken!(selfAddress!(), highestBidder, tokenRequested, highestBid)
+        }
+
+        topBidder = callerAddress!()
+        highestBid = bidAmount
+
+        // Then transfer tokens
+        transferToken!(callerAddress!(), selfAddress!(), tokenRequested, bidAmount)
+
+        // anti-sniping
+        if ((timeToEnd - blockTimeStamp!()) < 150000) {
+            timeToEnd = timeToEnd + 150000 // 5 minutes in milliseconds
+        }
+
+        emit BidAuction(callerAddress!(), asset, totalBid, interval, timeToEnd)
+    }
+
+    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
+    pub fn redeem(caller: Address) -> () {
+        checkCaller!(callerAddress!() == parentContract, 0)
+
+        // confirm the contract is a liquid contracts
+        assert!(canLiquidate = true, 6)
+
+        // confirm it's active
+        assert!(active == true, 3)
+
+        // Ensure the auction has ended
+        assert!(blockTimeStamp!() > timeToEnd, Loan.AuctionActive)
+
+        // implement redemption mechanics
     }
 
     // debug functions

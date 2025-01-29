@@ -80,6 +80,10 @@ export namespace LoanFactoryTypes {
       }>;
       result: CallContractResult<[HexString, bigint]>;
     };
+    checkTokenAmount: {
+      params: CallContractParams<{ priceIn: bigint; commissionRateIn: bigint }>;
+      result: CallContractResult<null>;
+    };
     createLoan: {
       params: CallContractParams<{
         tokenRequested: HexString;
@@ -160,6 +164,13 @@ export namespace LoanFactoryTypes {
       }>;
       result: SignExecuteScriptTxResult;
     };
+    checkTokenAmount: {
+      params: SignExecuteContractMethodParams<{
+        priceIn: bigint;
+        commissionRateIn: bigint;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
     createLoan: {
       params: SignExecuteContractMethodParams<{
         tokenRequested: HexString;
@@ -235,7 +246,9 @@ class Factory extends ContractFactory<
   }
 
   eventIndex = { NewLoan: 0, AcceptedLoan: 1, LoanRemoved: 2, LoanWithdraw: 3 };
-  consts = { LoanCodes: { NotAdmin: BigInt("0") } };
+  consts = {
+    LoanCodes: { NotAdmin: BigInt("0"), TokenSizeTooSmall: BigInt("1") },
+  };
 
   at(address: string): LoanFactoryInstance {
     return new LoanFactoryInstance(address);
@@ -251,6 +264,19 @@ class Factory extends ContractFactory<
       return testMethod(
         this,
         "getRequiredTokens",
+        params,
+        getContractByCodeHash
+      );
+    },
+    checkTokenAmount: async (
+      params: TestContractParamsWithoutMaps<
+        LoanFactoryTypes.Fields,
+        { priceIn: bigint; commissionRateIn: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "checkTokenAmount",
         params,
         getContractByCodeHash
       );
@@ -378,7 +404,7 @@ export const LoanFactory = new Factory(
   Contract.fromJson(
     LoanFactoryContractJson,
     "",
-    "7f2bd609885a8ee3d57530636832664a6befa723a98ae4f00c76f0883758aa41",
+    "7a724457bcb95cd904120601a4f0d4d7d989700c6be966e5fe791fd2b8f362ad",
     AllStructs
   )
 );
@@ -475,6 +501,17 @@ export class LoanFactoryInstance extends ContractInstance {
         LoanFactory,
         this,
         "getRequiredTokens",
+        params,
+        getContractByCodeHash
+      );
+    },
+    checkTokenAmount: async (
+      params: LoanFactoryTypes.CallMethodParams<"checkTokenAmount">
+    ): Promise<LoanFactoryTypes.CallMethodResult<"checkTokenAmount">> => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "checkTokenAmount",
         params,
         getContractByCodeHash
       );
@@ -602,6 +639,13 @@ export class LoanFactoryInstance extends ContractInstance {
       LoanFactoryTypes.SignExecuteMethodResult<"getRequiredTokens">
     > => {
       return signExecuteMethod(LoanFactory, this, "getRequiredTokens", params);
+    },
+    checkTokenAmount: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"checkTokenAmount">
+    ): Promise<
+      LoanFactoryTypes.SignExecuteMethodResult<"checkTokenAmount">
+    > => {
+      return signExecuteMethod(LoanFactory, this, "checkTokenAmount", params);
     },
     createLoan: async (
       params: LoanFactoryTypes.SignExecuteMethodParams<"createLoan">
