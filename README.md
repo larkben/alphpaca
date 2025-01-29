@@ -23,6 +23,14 @@ Besides being cute, cuddly and collectible ALPHpacas represent being an early me
 larkben - smart contract developer and average web developer (cofounder of ALPHaga NFT Marketplace) <br/>
 overgames - talented backend and frontend web developer (cofounder of ALPHaga NFT Marketplace)
 
+## Security | Terms | Privacy
+
+`terms` - When forking this code, attempting to deploy it, or alter it. You are to become responsible for it and if it should not work properly. This could lead to losses in which you but not I would be responsible for. Furthermore by using our Dapp you confirm that you will comply with all rules in the area you live. We are not responsible for rules broken in the area you live. 
+
+`security` - When using our dapps be sure to only use the appropriate sites. In this case. `alphpacas.dev` and `alpacafi.app`. Any other URL should be considered a scam.
+
+`privacy` - We do not track IPs and or perform specific targeted data collection.
+
 ### Notes:
 
 (running bytecode raw) https://docs.alephium.org/sdk/transaction/#execute-script-transaction ? <br/>
