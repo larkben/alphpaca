@@ -1,14 +1,15 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-const { NodeProvider, hexToString, addressFromContractId } = require('@alephium/web3');
+import { NodeProvider, hexToString, addressFromContractId } from '@alephium/web3';
+import { Copy, ExternalLink } from 'lucide-react';
 
-const Node = "https://wallet-v20.mainnet.alephium.org";
-const nodeProvider = new NodeProvider("https://wallet-v20.mainnet.alephium.org");
+const nodeProvider = new NodeProvider("https://node.alphaga.app");
 
 const TokenComponent = () => {
   const [tokens, setTokens] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [copiedId, setCopiedId] = useState(null);
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -30,7 +31,7 @@ const TokenComponent = () => {
             const address = addressFromContractId(id);
   
             try {
-              const response = await fetch(`https://wallet-v20.mainnet.alephium.org/contracts/${address}/state`);
+              const response = await fetch(`https://node.alphaga.app/contracts/${address}/state`);
               if (!response.ok) {
                 throw new Error('Network response was not ok');
               }
@@ -67,40 +68,107 @@ const TokenComponent = () => {
     fetchTokens();
   }, []);
 
+  const copyToClipboard = (text, type) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(type);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const formatSupply = (supply, decimals) => {
+    const value = parseFloat(supply) / Math.pow(10, decimals);
+    return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  };
+
   if (isLoading) {
-    return <div>Loading tokens...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-400"></div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[400px] text-red-400">
+        <div className="text-center">
+          <div className="text-2xl mb-2">⚠️</div>
+          <div>Error: {error}</div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="p-4 text-amber-500">
-      <ul className="space-y-4">
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid md:grid-cols-2 gap-6">
         {tokens.map((token, index) => (
-          <li key={index} className="border border-gray-300 p-4 rounded-lg">
-            <div className="mb-2">
-              <strong className="font-bold">Token ID:</strong> {token.id}
+          <div 
+            key={index} 
+            className="bg-gradient-to-b from-gray-800/90 to-gray-900/90 rounded-2xl border border-gray-700/50 backdrop-blur-sm overflow-hidden hover:border-green-400/50 transition-all duration-300"
+          >
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                  {token.name} ({token.symbol})
+                </h3>
+                <a 
+                  href={`https://explorer.alephium.org/tokens/${token.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-green-400 transition-colors"
+                >
+                  <ExternalLink size={20} />
+                </a>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex flex-col gap-1">
+                  <div className="text-sm text-gray-400">Token ID</div>
+                  <div className="flex items-center gap-2 bg-gray-900/50 rounded-xl p-3 border border-gray-700/50">
+                    <div className="text-sm text-gray-300 font-mono truncate">
+                      {token.id}
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(token.id, `id-${index}`)}
+                      className="text-gray-400 hover:text-green-400 transition-colors ml-auto"
+                    >
+                      <Copy size={16} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <div className="text-sm text-gray-400">Contract Address</div>
+                  <div className="flex items-center gap-2 bg-gray-900/50 rounded-xl p-3 border border-gray-700/50">
+                    <div className="text-sm text-gray-300 font-mono truncate">
+                      {token.address}
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(token.address, `address-${index}`)}
+                      className="text-gray-400 hover:text-green-400 transition-colors ml-auto"
+                    >
+                      <Copy size={16} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-gray-900/50 rounded-xl p-3 border border-gray-700/50">
+                    <div className="text-sm text-gray-400 mb-1">Total Supply</div>
+                    <div className="text-green-400 font-semibold">
+                      {formatSupply(token.supply, token.decimals)}
+                    </div>
+                  </div>
+                  <div className="bg-gray-900/50 rounded-xl p-3 border border-gray-700/50">
+                    <div className="text-sm text-gray-400 mb-1">Decimals</div>
+                    <div className="text-green-400 font-semibold">{token.decimals}</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="mb-2">
-              <strong className="font-bold">Token Address:</strong> {token.address}
-            </div>
-            <div className="mb-2">
-              <strong className="font-bold">Name:</strong> {token.name}
-            </div>
-            <div className="mb-2">
-              <strong className="font-bold">Symbol:</strong> {token.symbol}
-            </div>
-            <div>
-              <strong className="font-bold">Decimals:</strong> {token.decimals}
-            </div>
-            <div>
-              <strong className="font-bold">Supply:</strong> {token.supply}
-            </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
