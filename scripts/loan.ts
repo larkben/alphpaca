@@ -1,6 +1,6 @@
 import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
-import { NULL_CONTRACT_ADDRESS, ZERO_ADDRESS } from '@alephium/web3'
+import { ZERO_ADDRESS } from '@alephium/web3'
 import { loadDeployments } from '../artifacts/ts/deployments'
 import { Loan } from '../artifacts/ts';
 
@@ -11,7 +11,7 @@ const deployLoan: DeployFunction<Settings> = async (
   const result = await deployer.deployContract(Loan, {
     initialFields: {
       creator: deployer.account.address,
-      loanee: NULL_CONTRACT_ADDRESS,
+      loanee: ZERO_ADDRESS,
       tokenRequested: '',
       tokenAmount: 0n,
       collateralToken: '',
@@ -21,7 +21,7 @@ const deployLoan: DeployFunction<Settings> = async (
       duration: 0n,
       startTime: 0n,
       active: false,
-      parentContract: NULL_CONTRACT_ADDRESS
+      parentContract: ZERO_ADDRESS
     }
   })
   const contractId = result.contractInstance.contractId

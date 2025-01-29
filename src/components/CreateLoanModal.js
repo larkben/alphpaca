@@ -62,6 +62,12 @@ const CustomTokenSelect = ({ value, onChange, options }) => {
 }
 
 const CreateLoanModal = ({ isOpen, onClose }) => {
+  const [loanToken, setLoanToken] = useState('USDT')
+  const [collateralToken, setCollateralToken] = useState('ALPH')
+  const [loanAmount, setLoanAmount] = useState('')
+  const [collateralAmount, setCollateralAmount] = useState('')
+  const [enableLiquidation, setEnableLiquidation] = useState(false)
+  
   if (!isOpen) return null
 
   const handleOverlayClick = (e) => {
@@ -69,12 +75,6 @@ const CreateLoanModal = ({ isOpen, onClose }) => {
       onClose()
     }
   }
-
-  const [loanToken, setLoanToken] = useState('USDT')
-  const [collateralToken, setCollateralToken] = useState('ALPH')
-  const [loanAmount, setLoanAmount] = useState('')
-  const [collateralAmount, setCollateralAmount] = useState('')
-  const [enableLiquidation, setEnableLiquidation] = useState(false)
   
   const tokens = ['USDT', 'ALPH', 'WBNB']
 

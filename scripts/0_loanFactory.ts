@@ -1,6 +1,5 @@
 import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
-import { NULL_CONTRACT_ADDRESS, ZERO_ADDRESS } from '@alephium/web3'
 import { loadDeployments } from '../artifacts/ts/deployments'
 import { Loan, LoanFactory } from '../artifacts/ts';
 
