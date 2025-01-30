@@ -221,7 +221,7 @@ Contract LoanFactoryTest (
         emit LoanRemoved(contractId, caller)
     }
 
-    @using(checkExternalCaller = false, preapprovedAssets = true)
+    @using(checkExternalCaller = false, preapprovedAssets = true, assetsInContract = enforced)
     pub fn pay(contractId: ByteVec) -> () {
         let loan = LoanTest(contractId)
 

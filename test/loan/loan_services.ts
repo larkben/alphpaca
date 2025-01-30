@@ -55,7 +55,7 @@ import { start } from 'repl'
         parentContract: ZERO_ADDRESS,
         canLiquidate: false,
         liquidation: false,
-        highestBidder: '',
+        highestBidder: ZERO_ADDRESS,
         highestBid: 0n,
         timeToEnd: 0n,
         oracle: ZERO_ADDRESS // maybe it has to be contract id
@@ -234,9 +234,9 @@ export async function CalculateLoanAssets (
   time: number
 ) {
   let details = await node.contracts.getContractsAddressState(contractAddress)
-  //console.log(details.mutFields[1].value)
+  //console.log(details)
 
-  let startTime = Number(details.mutFields[1].value);
+  let startTime = Number(details.mutFields[2].value);
   let interestRate = Number(details.immFields[5].value); // Assuming interest is at index 2
   let principal = Number(details.immFields[2].value); // Assuming principal is at index 0
 
