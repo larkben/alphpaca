@@ -1,19 +1,19 @@
 {
   "version": "v3.11.1",
-  "name": "UpdateLoanFactoryFieldsTest",
-  "bytecodeTemplate": "01010300000007{1}{2}{3}0f0c{0}0119",
+  "name": "WithdrawFundsTest",
+  "bytecodeTemplate": "01010300000007{1}{2}{3}0f0c{0}0112",
   "fieldsSig": {
     "names": [
       "loanFactory",
-      "newCode",
-      "immFields",
-      "mutFields"
+      "contractId",
+      "token",
+      "amount"
     ],
     "types": [
       "LoanFactoryTest",
       "ByteVec",
       "ByteVec",
-      "ByteVec"
+      "U256"
     ],
     "isMutable": [
       false,

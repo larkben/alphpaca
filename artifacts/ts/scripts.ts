@@ -14,7 +14,9 @@ import {
 import { getContractByCodeHash } from "./contracts";
 import { default as AcceptLoanScriptJson } from "../loans/AcceptLoan.ral.json";
 import { default as AcceptLoanTestScriptJson } from "../test/AcceptLoanTest.ral.json";
+import { default as AcceptMarketTestScriptJson } from "../test/AcceptMarketTest.ral.json";
 import { default as ActivateWalfProtocolScriptJson } from "../walf/ActivateWalfProtocol.ral.json";
+import { default as AddFundsTestScriptJson } from "../test/AddFundsTest.ral.json";
 import { default as AddXpScriptJson } from "../gamefi/AddXp.ral.json";
 import { default as AttackScriptJson } from "../gamefi/battle/Attack.ral.json";
 import { default as BuildtokenScriptJson } from "../createtoken/Buildtoken.ral.json";
@@ -26,19 +28,24 @@ import { default as CollectOgAlfFeesScriptJson } from "../walf/CollectOgAlfFees.
 import { default as CollectWangFeesScriptJson } from "../wang/CollectWangFees.ral.json";
 import { default as CreateLoanScriptJson } from "../loans/CreateLoan.ral.json";
 import { default as CreateLoanTestScriptJson } from "../test/CreateLoanTest.ral.json";
+import { default as CreateLoaneeMarketTestScriptJson } from "../test/CreateLoaneeMarketTest.ral.json";
 import { default as CreatePublicSaleCollectionSequentialScriptJson } from "../nfts/publicsale/scripts/CreatePublicSaleCollectionSequential.ral.json";
 import { default as CreatePublicSaleCollectionSequentialWithRoyaltyScriptJson } from "../nfts/publicsale/scripts/CreatePublicSaleCollectionSequentialWithRoyalty.ral.json";
 import { default as CreatePvpScriptJson } from "../gamefi/battle/CreatePvp.ral.json";
 import { default as DestroyScriptJson } from "../scripts/Destroy.ral.json";
 import { default as DestroyLoanFactoryScriptJson } from "../loans/DestroyLoanFactory.ral.json";
 import { default as DestroyLoanFactoryTestScriptJson } from "../test/DestroyLoanFactoryTest.ral.json";
+import { default as DestroyMarketTestScriptJson } from "../test/DestroyMarketTest.ral.json";
 import { default as DestroyOgAlfProtocolScriptJson } from "../walf/DestroyOgAlfProtocol.ral.json";
 import { default as DestroyWangProtocolScriptJson } from "../wang/DestroyWangProtocol.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
 import { default as EditCollectionUriScriptJson } from "../gamefi/EditCollectionUri.ral.json";
+import { default as EditInterestTestScriptJson } from "../test/EditInterestTest.ral.json";
+import { default as EditLiquidateTestScriptJson } from "../test/EditLiquidateTest.ral.json";
 import { default as EditLoanRateScriptJson } from "../loans/EditLoanRate.ral.json";
 import { default as EditLoanRateTestScriptJson } from "../test/EditLoanRateTest.ral.json";
 import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.json";
+import { default as EditTimeTestScriptJson } from "../test/EditTimeTest.ral.json";
 import { default as EditValidContractScriptJson } from "../gamefi/EditValidContract.ral.json";
 import { default as EditWangFeesScriptJson } from "../wang/EditWangFees.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
@@ -79,6 +86,7 @@ import { default as UpgradeBattleFactoryFieldsScriptJson } from "../gamefi/battl
 import { default as UpgradeCollectionCodeScriptJson } from "../gamefi/UpgradeCollectionCode.ral.json";
 import { default as UpgradeCollectionFieldsScriptJson } from "../gamefi/UpgradeCollectionFields.ral.json";
 import { default as WithdrawFromPublicSaleCollectionSequentialScriptJson } from "../nfts/publicsale/scripts/WithdrawFromPublicSaleCollectionSequential.ral.json";
+import { default as WithdrawFundsTestScriptJson } from "../test/WithdrawFundsTest.ral.json";
 import { default as WithdrawLoanFactoryFeesScriptJson } from "../loans/WithdrawLoanFactoryFees.ral.json";
 import { default as WithdrawLoanFactoryFeesTestScriptJson } from "../test/WithdrawLoanFactoryFeesTest.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
@@ -100,10 +108,35 @@ export const AcceptLoanTest = new ExecutableScript<{
   getContractByCodeHash
 );
 
+export const AcceptMarketTest = new ExecutableScript<{
+  loanFactory: HexString;
+  tokenRequested: HexString;
+  tokenAmount: bigint;
+  collateralToken: HexString;
+  collateralAmount: bigint;
+  interest: bigint;
+  duration: bigint;
+  loaneeMarket: HexString;
+}>(
+  Script.fromJson(AcceptMarketTestScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const ActivateWalfProtocol = new ExecutableScript<{
   contract: HexString;
 }>(
   Script.fromJson(ActivateWalfProtocolScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const AddFundsTest = new ExecutableScript<{
+  loanFactory: HexString;
+  contractId: HexString;
+  token: HexString;
+  amount: bigint;
+  gas: boolean;
+}>(
+  Script.fromJson(AddFundsTestScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
@@ -194,6 +227,18 @@ export const CreateLoanTest = new ExecutableScript<{
   getContractByCodeHash
 );
 
+export const CreateLoaneeMarketTest = new ExecutableScript<{
+  loanFactory: HexString;
+  token: HexString;
+  tokenAmount: bigint;
+  minInterest: bigint;
+  maxTime: bigint;
+  liquidation: boolean;
+}>(
+  Script.fromJson(CreateLoaneeMarketTestScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const CreatePublicSaleCollectionSequential = new ExecutableScript<{
   publicSaleCollectionTemplateId: HexString;
   nftMutableTemplateId: HexString;
@@ -264,6 +309,14 @@ export const DestroyLoanFactoryTest = new ExecutableScript<{
   getContractByCodeHash
 );
 
+export const DestroyMarketTest = new ExecutableScript<{
+  loanFactory: HexString;
+  contractId: HexString;
+}>(
+  Script.fromJson(DestroyMarketTestScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const DestroyOgAlfProtocol = new ExecutableScript<{
   contract: HexString;
 }>(
@@ -291,6 +344,24 @@ export const EditCollectionUri = new ExecutableScript<{
   getContractByCodeHash
 );
 
+export const EditInterestTest = new ExecutableScript<{
+  loanFactory: HexString;
+  contractId: HexString;
+  newInterest: bigint;
+}>(
+  Script.fromJson(EditInterestTestScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const EditLiquidateTest = new ExecutableScript<{
+  loanFactory: HexString;
+  contractId: HexString;
+  liquid: boolean;
+}>(
+  Script.fromJson(EditLiquidateTestScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const EditLoanRate = new ExecutableScript<{
   loanFactory: HexString;
   newRate: bigint;
@@ -312,6 +383,15 @@ export const EditOgAlfFees = new ExecutableScript<{
   newfee: bigint;
 }>(
   Script.fromJson(EditOgAlfFeesScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const EditTimeTest = new ExecutableScript<{
+  loanFactory: HexString;
+  contractId: HexString;
+  newTime: bigint;
+}>(
+  Script.fromJson(EditTimeTestScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
@@ -614,6 +694,16 @@ export const WithdrawFromPublicSaleCollectionSequential = new ExecutableScript<{
     "",
     AllStructs
   ),
+  getContractByCodeHash
+);
+
+export const WithdrawFundsTest = new ExecutableScript<{
+  loanFactory: HexString;
+  contractId: HexString;
+  token: HexString;
+  amount: bigint;
+}>(
+  Script.fromJson(WithdrawFundsTestScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 

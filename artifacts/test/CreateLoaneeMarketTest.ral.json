@@ -1,21 +1,27 @@
 {
   "version": "v3.11.1",
-  "name": "UpdateLoanFactoryFieldsTest",
-  "bytecodeTemplate": "01010300000007{1}{2}{3}0f0c{0}0119",
+  "name": "CreateLoaneeMarketTest",
+  "bytecodeTemplate": "01010300000012b47a{1}{2}a3d10f2ca2{1}{2}{3}{4}{5}110c{0}010d",
   "fieldsSig": {
     "names": [
       "loanFactory",
-      "newCode",
-      "immFields",
-      "mutFields"
+      "token",
+      "tokenAmount",
+      "minInterest",
+      "maxTime",
+      "liquidation"
     ],
     "types": [
       "LoanFactoryTest",
       "ByteVec",
-      "ByteVec",
-      "ByteVec"
+      "U256",
+      "U256",
+      "U256",
+      "Bool"
     ],
     "isMutable": [
+      false,
+      false,
       false,
       false,
       false,

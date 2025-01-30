@@ -84,6 +84,14 @@ export namespace LoaneeMarketTypes {
       }>;
       result: CallContractResult<null>;
     };
+    withdraw: {
+      params: CallContractParams<{ caller: Address; amount: bigint }>;
+      result: CallContractResult<null>;
+    };
+    destroy: {
+      params: CallContractParams<{ caller: Address }>;
+      result: CallContractResult<null>;
+    };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
     CallMethodTable[T]["params"];
@@ -144,6 +152,17 @@ export namespace LoaneeMarketTypes {
         amount: bigint;
         gas: boolean;
       }>;
+      result: SignExecuteScriptTxResult;
+    };
+    withdraw: {
+      params: SignExecuteContractMethodParams<{
+        caller: Address;
+        amount: bigint;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    destroy: {
+      params: SignExecuteContractMethodParams<{ caller: Address }>;
       result: SignExecuteScriptTxResult;
     };
   }
@@ -238,6 +257,22 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "add", params, getContractByCodeHash);
     },
+    withdraw: async (
+      params: TestContractParamsWithoutMaps<
+        LoaneeMarketTypes.Fields,
+        { caller: Address; amount: bigint }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "withdraw", params, getContractByCodeHash);
+    },
+    destroy: async (
+      params: TestContractParamsWithoutMaps<
+        LoaneeMarketTypes.Fields,
+        { caller: Address }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "destroy", params, getContractByCodeHash);
+    },
   };
 
   stateForTest(
@@ -254,7 +289,7 @@ export const LoaneeMarket = new Factory(
   Contract.fromJson(
     LoaneeMarketContractJson,
     "",
-    "aa57a3173e0257f184f33b4cb9907791121d145288c609eaf929ba1d65336b99",
+    "5a2abbbfb35b570a59770734429906c2701f5a954c610eee322c132c8181bc56",
     AllStructs
   )
 );
@@ -348,6 +383,28 @@ export class LoaneeMarketInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    withdraw: async (
+      params: LoaneeMarketTypes.CallMethodParams<"withdraw">
+    ): Promise<LoaneeMarketTypes.CallMethodResult<"withdraw">> => {
+      return callMethod(
+        LoaneeMarket,
+        this,
+        "withdraw",
+        params,
+        getContractByCodeHash
+      );
+    },
+    destroy: async (
+      params: LoaneeMarketTypes.CallMethodParams<"destroy">
+    ): Promise<LoaneeMarketTypes.CallMethodResult<"destroy">> => {
+      return callMethod(
+        LoaneeMarket,
+        this,
+        "destroy",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
@@ -398,6 +455,16 @@ export class LoaneeMarketInstance extends ContractInstance {
       params: LoaneeMarketTypes.SignExecuteMethodParams<"add">
     ): Promise<LoaneeMarketTypes.SignExecuteMethodResult<"add">> => {
       return signExecuteMethod(LoaneeMarket, this, "add", params);
+    },
+    withdraw: async (
+      params: LoaneeMarketTypes.SignExecuteMethodParams<"withdraw">
+    ): Promise<LoaneeMarketTypes.SignExecuteMethodResult<"withdraw">> => {
+      return signExecuteMethod(LoaneeMarket, this, "withdraw", params);
+    },
+    destroy: async (
+      params: LoaneeMarketTypes.SignExecuteMethodParams<"destroy">
+    ): Promise<LoaneeMarketTypes.SignExecuteMethodResult<"destroy">> => {
+      return signExecuteMethod(LoaneeMarket, this, "destroy", params);
     },
   };
 

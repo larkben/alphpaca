@@ -46,7 +46,7 @@ Contract LoaneeMarket (
     }
 
     // delegate
-    @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true)
+    @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = false, assetsInContract = true)
     pub fn delegate(caller: Address, amount: U256) -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
 
@@ -72,5 +72,26 @@ Contract LoaneeMarket (
         }
 
         tokenAmount = tokenAmount + amount
+    }
+
+    @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = false, assetsInContract = true)
+    pub fn withdraw(caller: Address, amount: U256) -> () {
+        checkCaller!(callerAddress!() == parentContract, 0)
+
+        assert!(caller == creator, 1)
+
+        transferToken!(selfAddress!(), caller, token, amount)
+        transferToken!(selfAddress!(), caller, ALPH, dustAmount!())
+
+        tokenAmount = tokenAmount - amount
+    }
+
+    @using(checkExternalCaller = true, updateFields = false, preapprovedAssets = false, assetsInContract = true)
+    pub fn destroy(caller: Address) -> () {
+        checkCaller!(callerAddress!() == parentContract, 0)
+
+        assert!(caller == creator, 1)
+
+        destroySelf!(creator)
     }
 }
