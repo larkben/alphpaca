@@ -793,7 +793,7 @@ export const LoanFactoryTest = new Factory(
   Contract.fromJson(
     LoanFactoryTestContractJson,
     "=86-2+8d=2-2+a1=2-2+ba=2-1=1+e=2-2+e6=2617-1+e=29-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=15-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
-    "daac04e1ed3e8296b1c350f4cbc8ff1deb9d77b2583dfb2c87891a88d8537651",
+    "f42b0c0686ede762c921c59e03d45ebc55396e6ee91f07830ac3b2c0bf3de809",
     AllStructs
   )
 );

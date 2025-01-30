@@ -40,7 +40,7 @@ export async function CreateLoaneeMarketService (
     signer: SignerProvider,
     loanFactory: LoanFactoryTestInstance,
     token: string,
-    tokenAmount: number,
+    tokenAmount: bigint,
     minInterest: number,
     maxTime: number,
     liquidation: boolean
@@ -49,13 +49,13 @@ export async function CreateLoaneeMarketService (
       initialFields: {
           loanFactory: loanFactory.contractId,
           token: token,
-          tokenAmount: BigInt(tokenAmount),
+          tokenAmount: tokenAmount,
           minInterest: BigInt(minInterest),
           maxTime: BigInt(maxTime),
           liquidation: liquidation
       },
       attoAlphAmount: DUST_AMOUNT * (MINIMAL_CONTRACT_DEPOSIT * 3n), // 0.1 alph
-      tokens: [{id: token, amount: BigInt(tokenAmount)}]
+      tokens: [{id: token, amount: BigInt(1)}]
     });
   }
 

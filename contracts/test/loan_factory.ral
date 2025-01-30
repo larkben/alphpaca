@@ -319,7 +319,7 @@ Contract LoanFactoryTest (
             selfAddress!()
         )
 
-        let contractID = copyCreateContract!{caller -> ALPH: (minimalContractDeposit!() * 3), token: tokenAmount}(
+        let contractID = copyCreateContract!{caller -> token: tokenAmount, ALPH: minimalContractDeposit!() * 3}(
             marketTemplate,                                                                                  
             encodeImmutableFields,
             encodeMutableFields
@@ -582,7 +582,7 @@ TxScript CreateLoaneeMarketTest (
     maxTime: U256,
     liquidation: Bool
 ) {
-    loanFactory.loaneeMarket{callerAddress!() -> token: tokenAmount, ALPH: (minimalContractDeposit!() * 3)}(
+    loanFactory.loaneeMarket{callerAddress!() -> token: tokenAmount, ALPH: minimalContractDeposit!() * 3}(
         token,
         tokenAmount,
         minInterest,

@@ -11,7 +11,7 @@ import { PrivateKeyWallet } from "@alephium/web3-wallet";
 import { getSigners, testAddress } from "@alephium/web3-test";
 import { alph, CreateCoin, deployCreateToken, deployToken, randomP2PKHAddress } from "../create-token/utils";
 import { AcceptLoan, CreateTokenInstance, ForfeitLoanTest, GamifyProtocolInstance, LoaneeMarketInstance, LoanFactoryInstance, LoanFactoryTestInstance, LoanInstance, LoanTestInstance, MutableNFTInstance, NFTPublicSaleCollectionSequentialWithRoyaltyInstance, TestOracleInstance, TokenInstance, UpdateTime } from "../../artifacts/ts";
-import { AcceptLoanService, AddTokenMapping, CalculateLoanAssets, CancelLoanService, CreateLoanService, defaultSigner, DeployLoan, DeployLoanFactory, DeployMarket, ForfeitLoanService, PayLoanService } from "./loan_services";
+import { AcceptLoanService, AddTokenMapping, CalculateLoanAssets, CancelLoanService, CreateLoanService, defaultSigner, DeployLoan, DeployLoanFactory, DeployMarket, ForfeitLoanService, LiquidationLoanService, PayLoanService } from "./loan_services";
 import { debug } from "console";
 import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } from "./time_services";
 import { CreateLoaneeMarketService } from "./market_services";
@@ -121,6 +121,10 @@ import { CreateLoaneeMarketService } from "./market_services";
 
         await PayLoanService(creator, loanFactoryTemplate, hexString, ids[0], calculatedAmount)
 
+        // assign token to mapping for oracle
+
+        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ids[0], true, "BTC/USD")
+
         // testing forfeit
 
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
@@ -140,11 +144,41 @@ import { CreateLoaneeMarketService } from "./market_services";
 
         await ForfeitLoanService(creator, loanFactoryTemplate, hexString)
 
-        // confirm forefit does not work on liquidation loan
-        // ...
+        // confirm forefit does not work on liquidation loan - good
+        /*
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
+
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ids[0], 40000, ALPH_TOKEN_ID, 10000000000000000000, 800, 20000000, true)
+
+        details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
+        contractAddress = details.generatedOutputs[0].address
+
+        loanId = contractIdFromAddress(details.generatedOutputs[0].address)
+        hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
+
+        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ids[0], 40000)
+
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 21000000)
+
+        await ForfeitLoanService(creator, loanFactoryTemplate, hexString)
+        */
 
         // test liquidation loans
-        // ...
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
+
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ids[0], 1000000, ALPH_TOKEN_ID, 10000000000000000000, 800, 20000000, true) // 1 bitcoin and 10 alph
+
+        details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
+        contractAddress = details.generatedOutputs[0].address
+
+        loanId = contractIdFromAddress(details.generatedOutputs[0].address)
+        hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
+
+        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ids[0], 1000000)
+
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 21000000)
+
+        await LiquidationLoanService(creator, loanFactoryTemplate, hexString)
 
         // bidding
         // ...
@@ -152,8 +186,8 @@ import { CreateLoaneeMarketService } from "./market_services";
         // redeem
         // ...
 
-        // loanee market creation
-        await CreateLoaneeMarketService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 1000000000000000000 * 100, 500, 2629743000, true)
+        // loanee market creation ~  Failed to request postContractsUnsignedTxExecuteScript, error: [API Error] - Not enough balance: got 988398622418706283369, expected 300000000000000005627500000000001 - Status code: 400
+        // await CreateLoaneeMarketService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, alph(10), 500, 2629743000, true)
 
         // loanee market destroy
         // ...
