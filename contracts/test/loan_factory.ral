@@ -687,6 +687,16 @@ TxScript WithdrawLoanFactoryFeesTest (
     loanFactory.withdrawLoanFactoryFees(who, token, amount)
 }
 
+TxScript TokenMapping (
+    loanFactory: LoanFactoryTest,
+    token: ByteVec, 
+    add: Bool, 
+    pair: Bool, 
+    pairtoken: ByteVec
+) {
+    loanFactory.tokenMapping{callerAddress!() -> ALPH: mapEntryDeposit!()}(token, add, pair, pairtoken)
+}
+
 // upgrade / destroy
 
 TxScript UpdateLoanFactoryCodeTest (

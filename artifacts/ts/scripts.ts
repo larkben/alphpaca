@@ -73,6 +73,7 @@ import { default as RestScriptJson } from "../gamefi/Rest.ral.json";
 import { default as SendoutScriptJson } from "../scripts/Sendout.ral.json";
 import { default as StartScriptJson } from "../gamefi/battle/Start.ral.json";
 import { default as SuperchargeScriptJson } from "../gamefi/Supercharge.ral.json";
+import { default as TokenMappingScriptJson } from "../test/TokenMapping.ral.json";
 import { default as TopupScriptJson } from "../scripts/Topup.ral.json";
 import { default as TopupWangProtocolScriptJson } from "../wang/TopupWangProtocol.ral.json";
 import { default as UpdateCreationFeeScriptJson } from "../createtoken/UpdateCreationFee.ral.json";
@@ -582,6 +583,17 @@ export const Supercharge = new ExecutableScript<{
   nft: HexString;
 }>(
   Script.fromJson(SuperchargeScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
+export const TokenMapping = new ExecutableScript<{
+  loanFactory: HexString;
+  token: HexString;
+  add: boolean;
+  pair: boolean;
+  pairtoken: HexString;
+}>(
+  Script.fromJson(TokenMappingScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 

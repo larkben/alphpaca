@@ -27,7 +27,7 @@ import {
   import { off } from 'process'
   import { ValByteVec } from '@alephium/web3/dist/src/api/api-alephium'
   import { MinimalContractDeposit, NullContractAddress, token } from '@alephium/web3/dist/src/codec'
-import { AcceptLoan, AcceptLoanTest, BidLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoanTest, CreateToken, CreateTokenInstance, EditValidContract, ForfeitLoanTest, GamifyProtocol, GamifyProtocolInstance, Loan, LoaneeMarket, LoaneeMarketInstance, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, RedeemLoanTest, Supercharge, TestOracleInstance, Token, TokenInstance, UpdateCreationFee } from '../../artifacts/ts'
+import { AcceptLoan, AcceptLoanTest, BidLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoanTest, CreateToken, CreateTokenInstance, EditValidContract, ForfeitLoanTest, GamifyProtocol, GamifyProtocolInstance, Loan, LoaneeMarket, LoaneeMarketInstance, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, RedeemLoanTest, Supercharge, TestOracleInstance, Token, TokenInstance, TokenMapping, UpdateCreationFee } from '../../artifacts/ts'
 import { start } from 'repl'
   
   web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
@@ -160,7 +160,7 @@ import { start } from 'repl'
         loanFactory: loanFactory.contractId,
         contract: contract
       },
-      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+      attoAlphAmount: (DUST_AMOUNT * 2n), // 0.1 alph
       tokens: [{id: token, amount: BigInt(amount) }]
     });
   }
@@ -226,6 +226,28 @@ import { start } from 'repl'
     });
   }
 
+// admin functions
+
+export async function AddTokenMapping (
+  signer: SignerProvider,
+  loanFactory: LoanFactoryTestInstance,
+  token: string,
+  add: boolean,
+  pair: boolean,
+  pairToken: string
+) {
+  return await TokenMapping.execute(signer, {
+    initialFields: {
+      loanFactory: loanFactory.contractId,
+      token: '',
+      add: false,
+      pair: false,
+      pairtoken: ''
+    },
+    attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+  });
+}
+
 // helper function
 
 export async function CalculateLoanAssets (
@@ -243,7 +265,7 @@ export async function CalculateLoanAssets (
   console.log("start time is " + startTime + " interest rate: " + interestRate + " principal: " + principal)
 
   // Calculate the proportional interest based on elapsed time
-  let elapsedTime = time - startTime; // Time difference in milliseconds
+  let elapsedTime = (time + 3600000) - startTime; // Time difference in milliseconds
   let timeFactor = elapsedTime / 31556926000; // Convert to years (approx.)
 
   // Calculate the gain for the elapsed time
@@ -251,5 +273,5 @@ export async function CalculateLoanAssets (
 
   // Return the original amount plus interest
   console.log(principal + gain)
-  return Math.ceil(principal + gain + 1)
+  return Math.ceil(principal + gain)
 }

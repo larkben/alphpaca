@@ -11,9 +11,9 @@ import { PrivateKeyWallet } from "@alephium/web3-wallet";
 import { getSigners, testAddress } from "@alephium/web3-test";
 import { alph, CreateCoin, deployCreateToken, deployToken, randomP2PKHAddress } from "../create-token/utils";
 import { AcceptLoan, CreateTokenInstance, GamifyProtocolInstance, LoaneeMarketInstance, LoanFactoryInstance, LoanFactoryTestInstance, LoanInstance, LoanTestInstance, MutableNFTInstance, NFTPublicSaleCollectionSequentialWithRoyaltyInstance, TestOracleInstance, TokenInstance, UpdateTime } from "../../artifacts/ts";
-import { AcceptLoanService, CalculateLoanAssets, CancelLoanService, CreateLoanService, DeployLoan, DeployLoanFactory, DeployMarket, PayLoanService } from "./loan_services";
+import { AcceptLoanService, AddTokenMapping, CalculateLoanAssets, CancelLoanService, CreateLoanService, defaultSigner, DeployLoan, DeployLoanFactory, DeployMarket, PayLoanService } from "./loan_services";
 import { debug } from "console";
-import { DeployTimeOracle, UpdateOracleTime } from "./time_services";
+import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } from "./time_services";
   
   const nodeProvider = new NodeProvider("http://127.0.0.1:22973");
   
@@ -78,6 +78,22 @@ import { DeployTimeOracle, UpdateOracleTime } from "./time_services";
         let calculatedAmount = await CalculateLoanAssets(nodeProvider, contractAddress, 1738256564000 + 60480000)
 
         await PayLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, calculatedAmount)
+
+        // oracle pairs setup
+
+        await AddOraclePair(creator, oracleTemplate, "BTC/USD")
+        await AddOraclePair(creator, oracleTemplate, "ALPH/USD")
+        await AddOraclePair(creator, oracleTemplate, "ETH/USD")
+
+        await UpdateOracleValue(creator, oracleTemplate, "BTC/USD", 105189_08955622122)
+        await UpdateOracleValue(creator, oracleTemplate, "ALPH/USD", 8392017041720942)
+        await UpdateOracleValue(creator, oracleTemplate, "ETH/USD", 3271_7193267584776)
+
+        // create 2 tokens (btc and eth)
+
+        // add alph
+        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ALPH_TOKEN_ID, true, false, "")
+        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ALPH_TOKEN_ID, false, true, "ALPH/USD")
 
         /*
         // next test with various tokens (decimals, etc)
