@@ -12,6 +12,7 @@ export * from "./Loan";
 export * from "./LoanFactory";
 export * from "./LoanFactoryTest";
 export * from "./LoanTest";
+export * from "./LoaneeMarket";
 export * from "./MutableNFT";
 export * from "./NFT";
 export * from "./NFTPublicSaleCollectionRandom";

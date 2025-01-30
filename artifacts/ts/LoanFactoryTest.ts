@@ -110,6 +110,18 @@ export namespace LoanFactoryTestTypes {
       }>;
       result: CallContractResult<null>;
     };
+    acceptMarket: {
+      params: CallContractParams<{
+        tokenRequested: HexString;
+        tokenAmount: bigint;
+        collateralToken: HexString;
+        collateralAmount: bigint;
+        interest: bigint;
+        duration: bigint;
+        loaneeMarket: HexString;
+      }>;
+      result: CallContractResult<null>;
+    };
     accept: {
       params: CallContractParams<{ contractId: HexString }>;
       result: CallContractResult<null>;
@@ -228,6 +240,18 @@ export namespace LoanFactoryTestTypes {
         interest: bigint;
         duration: bigint;
         canLiquidate: boolean;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    acceptMarket: {
+      params: SignExecuteContractMethodParams<{
+        tokenRequested: HexString;
+        tokenAmount: bigint;
+        collateralToken: HexString;
+        collateralAmount: bigint;
+        interest: bigint;
+        duration: bigint;
+        loaneeMarket: HexString;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -414,6 +438,23 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResult<null, LoanFactoryTestTypes.Maps>> => {
       return testMethod(this, "createLoan", params, getContractByCodeHash);
     },
+    acceptMarket: async (
+      params: TestContractParams<
+        LoanFactoryTestTypes.Fields,
+        {
+          tokenRequested: HexString;
+          tokenAmount: bigint;
+          collateralToken: HexString;
+          collateralAmount: bigint;
+          interest: bigint;
+          duration: bigint;
+          loaneeMarket: HexString;
+        },
+        LoanFactoryTestTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LoanFactoryTestTypes.Maps>> => {
+      return testMethod(this, "acceptMarket", params, getContractByCodeHash);
+    },
     accept: async (
       params: TestContractParams<
         LoanFactoryTestTypes.Fields,
@@ -570,8 +611,8 @@ class Factory extends ContractFactory<
 export const LoanFactoryTest = new Factory(
   Contract.fromJson(
     LoanFactoryTestContractJson,
-    "=58-5+a=3-2+ba=2-1+d=3-2+e743ff=1431-1+9=29-1+9=7-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=15-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=9-1+8=7-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=13-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
-    "d7e8e6e228b36ba32ee497c5b6d2b2fd985d6525f54bf7c00492fd170f1908fa",
+    "=61-3=1-2+4=3-1=1+1=2-1+7=3+8e=1-1+4a6=1765-1+9=29-1+9=7-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=15-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=9-1+8=7-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=13-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
+    "9335cb3583e1bbd8472d7ac0b7349cb1043ed214750c71a81aed5b10e7c1ea6f",
     AllStructs
   )
 );
@@ -727,6 +768,17 @@ export class LoanFactoryTestInstance extends ContractInstance {
         LoanFactoryTest,
         this,
         "createLoan",
+        params,
+        getContractByCodeHash
+      );
+    },
+    acceptMarket: async (
+      params: LoanFactoryTestTypes.CallMethodParams<"acceptMarket">
+    ): Promise<LoanFactoryTestTypes.CallMethodResult<"acceptMarket">> => {
+      return callMethod(
+        LoanFactoryTest,
+        this,
+        "acceptMarket",
         params,
         getContractByCodeHash
       );
@@ -935,6 +987,13 @@ export class LoanFactoryTestInstance extends ContractInstance {
       params: LoanFactoryTestTypes.SignExecuteMethodParams<"createLoan">
     ): Promise<LoanFactoryTestTypes.SignExecuteMethodResult<"createLoan">> => {
       return signExecuteMethod(LoanFactoryTest, this, "createLoan", params);
+    },
+    acceptMarket: async (
+      params: LoanFactoryTestTypes.SignExecuteMethodParams<"acceptMarket">
+    ): Promise<
+      LoanFactoryTestTypes.SignExecuteMethodResult<"acceptMarket">
+    > => {
+      return signExecuteMethod(LoanFactoryTest, this, "acceptMarket", params);
     },
     accept: async (
       params: LoanFactoryTestTypes.SignExecuteMethodParams<"accept">

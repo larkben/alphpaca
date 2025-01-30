@@ -1,0 +1,145 @@
+{
+  "version": "v3.11.1",
+  "name": "LoaneeMarket",
+  "bytecode": "07071040244040405c407840ac40e9010000000204d34e7fad9dce01a00002010000000406d3ef451be6ce00a001a002a0030201000202000dd3fc263cceb4ce02450c7b1600ce00450d7b1601a10101000202000dd396bd21f1b4ce02450c7b1600ce00450d7b1601a10201000202000dd37771e519b4ce02450c7b1600ce00450d7b1601a103010302020018d39f7f9a91b4ce02450c7b1601a00031107bb21600ce01a000aab2160013c3038d7ea4c68000a7a00016012ba10001030303001ed33654b857b4ce02450c7b1600ce00450d7b1600b2ce011601aa1600b213c3038d7ea4c68000a716024c041600b2d1a7a00016012aa100",
+  "codeHash": "aa57a3173e0257f184f33b4cb9907791121d145288c609eaf929ba1d65336b99",
+  "fieldsSig": {
+    "names": [
+      "creator",
+      "token",
+      "tokenAmount",
+      "minInterest",
+      "maxTime",
+      "liquidation",
+      "parentContract"
+    ],
+    "types": [
+      "Address",
+      "ByteVec",
+      "U256",
+      "U256",
+      "U256",
+      "Bool",
+      "Address"
+    ],
+    "isMutable": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "eventsSig": [],
+  "functions": [
+    {
+      "name": "getLoaneeTokenDetails",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec",
+        "U256"
+      ]
+    },
+    {
+      "name": "getLoaneeDetails",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "Address",
+        "U256",
+        "U256",
+        "Bool"
+      ]
+    },
+    {
+      "name": "editMinInterest",
+      "paramNames": [
+        "caller",
+        "interest"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editMaxTime",
+      "paramNames": [
+        "caller",
+        "time"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editLiquidation",
+      "paramNames": [
+        "caller",
+        "liquidate"
+      ],
+      "paramTypes": [
+        "Address",
+        "Bool"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "delegate",
+      "paramNames": [
+        "caller",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "add",
+      "paramNames": [
+        "caller",
+        "amount",
+        "gas"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256",
+        "Bool"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": []
+}

@@ -80,7 +80,15 @@ Contract LoanFactoryTest (
 
     // contract functions
     @using(checkExternalCaller = false, preapprovedAssets = true, updateFields = true)
-    pub fn createLoan(tokenRequested: ByteVec, tokenAmount: U256, collateralToken: ByteVec, collateralAmount: U256, interest: U256, duration: U256, canLiquidate: Bool) -> () {
+    pub fn createLoan(
+        tokenRequested: ByteVec, 
+        tokenAmount: U256, 
+        collateralToken: ByteVec, 
+        collateralAmount: U256, 
+        interest: U256, 
+        duration: U256, 
+        canLiquidate: Bool
+    ) -> () {
         let caller = callerAddress!()
 
         checkTokenAmount(tokenAmount, rate)
@@ -100,6 +108,64 @@ Contract LoanFactoryTest (
             false,
             selfAddress!(),
             canLiquidate,
+            false,
+            nullContractAddress!(),
+            tokenAmount,
+            0,
+            oracle
+        )
+
+        let contractID = copyCreateContract!{caller -> ALPH: (minimalContractDeposit!() * 2), collateralToken: collateralAmount}(
+            loanTemplate,                                                                                  
+            encodeImmutableFields,
+            encodeMutableFields
+        )
+
+        activeLoans = activeLoans + 1
+
+        // emit event
+        emit NewLoan(contractID, tokenRequested, tokenAmount, collateralToken, collateralAmount, interest, duration, caller)
+    }
+
+    @using(checkExternalCaller = false, preapprovedAssets = true, updateFields = true)
+    pub fn acceptMarket(
+        tokenRequested: ByteVec, 
+        tokenAmount: U256, 
+        collateralToken: ByteVec, 
+        collateralAmount: U256, 
+        interest: U256, 
+        duration: U256,
+        loaneeMarket: ByteVec
+    ) -> () {
+        let caller = callerAddress!()
+        let market = LoaneeMarket(loaneeMarket)
+
+        checkTokenAmount(tokenAmount, rate)
+
+        let (loanee, min, int, liquid) = market.getLoaneeDetails()
+        let (token, amount) = market.getLoaneeTokenDetails()
+
+        assert!(tokenRequested == token, 2)
+        assert!(amount > tokenAmount, 3)
+        assert!(interest >= int, 4)
+        assert!(duration <= min, 5)
+
+        let (encodeImmutableFields, encodeMutableFields) = LoanTest.encodeFields!(
+            caller,
+            loanee,
+            tokenRequested,
+            tokenAmount,
+            // collateral
+            collateralToken,
+            collateralAmount,
+            interest,
+            rate,
+            duration,
+            // test oracle
+            oracle.getTime(),
+            true,
+            selfAddress!(),
+            liquid,
             false,
             nullContractAddress!(),
             tokenAmount,

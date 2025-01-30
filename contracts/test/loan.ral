@@ -74,7 +74,7 @@ Contract LoanTest (
         else {
             return 0
         }
-    }       
+    }
 
     // contract functions
     @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true)
