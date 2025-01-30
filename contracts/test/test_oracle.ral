@@ -44,3 +44,25 @@ Contract TestOracle (
         return currentTime
     }
 }
+
+TxScript UpdateValue (
+    oracle: TestOracle,
+    pair: ByteVec,
+    value: U256
+) {
+    oracle.updateValue(pair, value)
+}
+
+TxScript AddPair (
+    oracle: TestOracle,
+    pair: ByteVec
+) {
+    oracle.addPair{callerAddress!() -> ALPH: mapEntryDeposit!()}(pair)
+}
+
+TxScript UpdateTime (
+    oracle: TestOracle,
+    time: U256
+) {
+    oracle.updateTime(time)
+}

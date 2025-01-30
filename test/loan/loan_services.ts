@@ -27,7 +27,7 @@ import {
   import { off } from 'process'
   import { ValByteVec } from '@alephium/web3/dist/src/api/api-alephium'
   import { MinimalContractDeposit, NullContractAddress, token } from '@alephium/web3/dist/src/codec'
-import { AcceptLoan, AcceptLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoanTest, CreateToken, CreateTokenInstance, EditValidContract, GamifyProtocol, GamifyProtocolInstance, Loan, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, Supercharge, Token, TokenInstance, UpdateCreationFee } from '../../artifacts/ts'
+import { AcceptLoan, AcceptLoanTest, BidLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoanTest, CreateToken, CreateTokenInstance, EditValidContract, ForfeitLoanTest, GamifyProtocol, GamifyProtocolInstance, Loan, LoaneeMarket, LoaneeMarketInstance, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, RedeemLoanTest, Supercharge, TestOracleInstance, Token, TokenInstance, UpdateCreationFee } from '../../artifacts/ts'
 import { start } from 'repl'
   
   web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
@@ -38,32 +38,54 @@ import { start } from 'repl'
 
   // loan templates
 
-  export async function DeployLoan() {
+  export async function DeployLoan(oracle: TestOracleInstance) {
     return await LoanTest.deploy(defaultSigner, {
       initialFields: {
-          creator: defaultSigner.account.address,
-          loanee: ZERO_ADDRESS,
-          tokenRequested: '',
-          tokenAmount: 0n,
-          collateralToken: '',
-          collateralAmount: 0n,
-          interest: 0n,
-          rate: 0n,
-          duration: 0n,
-          startTime: 0n,
-          active: false,
-          parentContract: ZERO_ADDRESS
+        creator: defaultSigner.account.address,
+        loanee: ZERO_ADDRESS,
+        tokenRequested: '',
+        tokenAmount: 0n,
+        collateralToken: '',
+        collateralAmount: 0n,
+        interest: 0n,
+        rate: 0n,
+        duration: 0n,
+        startTime: 0n,
+        active: false,
+        parentContract: ZERO_ADDRESS,
+        canLiquidate: false,
+        liquidation: false,
+        highestBidder: '',
+        highestBid: 0n,
+        timeToEnd: 0n,
+        oracle: ZERO_ADDRESS // maybe it has to be contract id
       },
     });
   }
 
-  export async function DeployLoanFactory(loan: LoanTestInstance) {
+  export async function DeployMarket() {
+    return await LoaneeMarket.deploy(defaultSigner, {
+      initialFields: {
+        creator: defaultSigner.account.address,
+        token: '',
+        tokenAmount: 0n,
+        minInterest: 0n,
+        maxTime: 0n,
+        liquidation: false,
+        parentContract: ZERO_ADDRESS
+      },
+    });
+  }
+
+  export async function DeployLoanFactory(loan: LoanTestInstance, oracle: TestOracleInstance, market: LoaneeMarketInstance) {
     return await LoanFactoryTest.deploy(defaultSigner, {
       initialFields: {
-          admin: defaultSigner.account.address,
-          loanTemplate: loan.contractId,
-          activeLoans: 0n,
-          rate: 200n                            // 2%
+        admin: defaultSigner.account.address,
+        loanTemplate: loan.contractId,
+        marketTemplate: market.contractId,
+        activeLoans: 0n,
+        rate: 200n, // 2%
+        oracle: oracle.address
       },
     });
   }
@@ -76,19 +98,21 @@ import { start } from 'repl'
     collateralToken: string,
     collateralAmount: number,
     interest: number,
-    duration: number
+    duration: number,
+    liquidate: boolean
   ) {
     return await CreateLoanTest.execute(signer, {
       initialFields: {
-          loanFactory: loanFactory.contractId,
-          tokenRequested: tokenRequested,
-          tokenAmount: BigInt(tokenAmount),
-          collateralToken: collateralToken,
-          collateralAmount: BigInt(collateralAmount),
-          interest: BigInt(interest),
-          duration: BigInt(duration)
+        loanFactory: loanFactory.contractId,
+        tokenRequested: tokenRequested,
+        tokenAmount: BigInt(tokenAmount),
+        collateralToken: collateralToken,
+        collateralAmount: BigInt(collateralAmount),
+        interest: BigInt(interest),
+        duration: BigInt(duration),
+        canLiquidate: liquidate
       },
-      attoAlphAmount: (DUST_AMOUNT * 2n) + MINIMAL_CONTRACT_DEPOSIT, // 0.1 alph
+      attoAlphAmount: (DUST_AMOUNT * 2n) + (MINIMAL_CONTRACT_DEPOSIT * 2n), // 0.1 alph
       tokens: [{id: collateralToken, amount: BigInt(collateralAmount) }]
     });
   }
@@ -98,15 +122,12 @@ import { start } from 'repl'
     loanFactory: LoanFactoryTestInstance,
     contract: string,
     token: string,
-    amount: number,
-    startTime: number
+    amount: number
   ) {
     return await AcceptLoanTest.execute(signer, {
       initialFields: {
         loanFactory: loanFactory.contractId,
-        contract: contract,
-        interestTime: 0n,              // should always be zero in this case
-        startTime: BigInt(startTime)
+        contract: contract
       },
       attoAlphAmount: DUST_AMOUNT, // 0.1 alph
       tokens: [{id: token, amount: BigInt(amount) }]
@@ -132,17 +153,76 @@ import { start } from 'repl'
     loanFactory: LoanFactoryTestInstance,
     contract: string,
     token: string,
-    amount: number,
-    interestTime: number
+    amount: number
   ) {
     return await PayLoanTest.execute(signer, {
       initialFields: {
         loanFactory: loanFactory.contractId,
-        contract: contract,
-        interestTime: BigInt(interestTime)
+        contract: contract
       },
       attoAlphAmount: DUST_AMOUNT, // 0.1 alph
       tokens: [{id: token, amount: BigInt(amount) }]
+    });
+  }
+
+  export async function ForfeitLoanService (
+    signer: SignerProvider,
+    loanFactory: LoanFactoryTestInstance,
+    contract: string
+  ) {
+    return await ForfeitLoanTest.execute(signer, {
+      initialFields: {
+        loanFactory: loanFactory.contractId,
+        contract: contract
+      },
+      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+    });
+  }
+
+  export async function LiquidationLoanService (
+    signer: SignerProvider,
+    loanFactory: LoanFactoryTestInstance,
+    contract: string
+  ) {
+    return await ForfeitLoanTest.execute(signer, {
+      initialFields: {
+        loanFactory: loanFactory.contractId,
+        contract: contract
+      },
+      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+    });
+  }
+
+  export async function BidLoanService (
+    signer: SignerProvider,
+    loanFactory: LoanFactoryTestInstance,
+    contract: string,
+    bidAmount: number,
+    token: string
+  ) {
+    return await BidLoanTest.execute(signer, {
+      initialFields: {
+        loanFactory: loanFactory.contractId,
+        contract: contract,
+        bidAmount: BigInt(bidAmount),
+        token: token
+      },
+      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+      tokens: [{id: token, amount: BigInt(bidAmount)}]
+    });
+  }
+
+  export async function RedeemLoanService (
+    signer: SignerProvider,
+    loanFactory: LoanFactoryTestInstance,
+    contract: string
+  ) {
+    return await RedeemLoanTest.execute(signer, {
+      initialFields: {
+        loanFactory: loanFactory.contractId,
+        contract: contract
+      },
+      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
     });
   }
 

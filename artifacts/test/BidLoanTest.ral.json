@@ -1,0 +1,34 @@
+{
+  "version": "v3.11.1",
+  "name": "BidLoanTest",
+  "bytecodeTemplate": "0101030000000ab4{3}{2}a3{1}{2}0e0c{0}010b",
+  "fieldsSig": {
+    "names": [
+      "loanFactory",
+      "contract",
+      "bidAmount",
+      "token"
+    ],
+    "types": [
+      "LoanFactoryTest",
+      "ByteVec",
+      "U256",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

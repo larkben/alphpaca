@@ -15,6 +15,7 @@ Contract LoanFactoryTest (
     event AcceptedLoan(contract: ByteVec, who: Address)
     event LoanRemoved(contract: ByteVec, who: Address)
     event LoanWithdraw(contract: ByteVec, forfeit: Bool, who: Address)
+    event LoanLiquidation(contract: ByteVec, token: ByteVec, startingBid: U256)
 
     // loanee market
     event MarketCreated(contract: ByteVec, token: ByteVec, amount: U256, minInterest: U256, maxTime: U256, liquidation: Bool, who: Address)
@@ -271,7 +272,7 @@ Contract LoanFactoryTest (
 
         loan.activateLiquidation(ratio)
 
-        // ... emit liquidation
+        emit LoanLiquidation(contractId, token, amount)
     }
 
     // auction functions
@@ -287,13 +288,13 @@ Contract LoanFactoryTest (
 
         assert!(bidAmount > highestBid, 9)
 
-        let timeEnd = loan.bid{caller -> token: highestBid}(caller, bidAmount)
+        let timeEnd = loan.bid{caller -> token: bidAmount}(caller, bidAmount)
 
         // ... emit liquidation
         // ... emit newPotential time end
     }
 
-    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = true)
+    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false)
     pub fn redeem(contractId: ByteVec) -> () {
         let loan = LoanTest(contractId)
 
@@ -303,6 +304,8 @@ Contract LoanFactoryTest (
 
         // ... emit redeem
     }
+
+    // add collateral function
 
     // loanee market functions - editMinInt, editMaxTime, canLiquidate, add, withdraw, destroy 
     // --------------------------------------------------------------------------------------
@@ -564,6 +567,31 @@ TxScript ForfeitLoanTest (
     contract: ByteVec
 ) {
     loanFactory.forfeit(contract)
+}
+
+// liquidation and auctions
+
+TxScript LiquidationLoanTest (
+    loanFactory: LoanFactoryTest,
+    contract: ByteVec
+) {
+    loanFactory.liquidation(contract)
+}
+
+TxScript BidLoanTest (
+    loanFactory: LoanFactoryTest,
+    contract: ByteVec,
+    bidAmount: U256,
+    token: ByteVec
+) {
+    loanFactory.bid{callerAddress!() -> token: bidAmount}(contract, bidAmount)
+}
+
+TxScript RedeemLoanTest (
+    loanFactory: LoanFactoryTest,
+    contract: ByteVec
+) {
+    loanFactory.redeem(contract)
 }
 
 // create market
