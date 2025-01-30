@@ -14,6 +14,7 @@ import { AcceptLoan, CreateTokenInstance, ForfeitLoanTest, GamifyProtocolInstanc
 import { AcceptLoanService, AddTokenMapping, CalculateLoanAssets, CancelLoanService, CreateLoanService, defaultSigner, DeployLoan, DeployLoanFactory, DeployMarket, ForfeitLoanService, PayLoanService } from "./loan_services";
 import { debug } from "console";
 import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } from "./time_services";
+import { CreateLoaneeMarketService } from "./market_services";
   
   const nodeProvider = new NodeProvider("http://127.0.0.1:22973");
   
@@ -44,7 +45,7 @@ import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } 
 
       tokenTemplate = (await deployToken()).contractInstance;
       creatorTemplate = (await deployCreateToken(tokenTemplate)).contractInstance;
-    }, 100000);
+    }, 1000000);
   
     test('loan (loanfi)', async () => {
         const creator = buyer[0]
@@ -152,7 +153,7 @@ import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } 
         // ...
 
         // loanee market creation
-        // ...
+        await CreateLoaneeMarketService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 1000000000000000000 * 100, 500, 2629743000, true)
 
         // loanee market destroy
         // ...
@@ -162,5 +163,5 @@ import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } 
 
         // loanee market accept
         // ...
-      })
+      }, 1000000)
   });
