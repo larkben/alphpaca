@@ -1,23 +1,17 @@
 {
   "version": "v3.11.1",
   "name": "AcceptLoanTest",
-  "bytecodeTemplate": "01010300020013{1}04{2}0f0e{0}010017011700b416001601a3{1}{3}0e0c{0}0103",
+  "bytecodeTemplate": "01010300020011{1}040e0e{0}010217011700b416001601a3{1}0d0c{0}0105",
   "fieldsSig": {
     "names": [
       "loanFactory",
-      "contract",
-      "interestTime",
-      "startTime"
+      "contract"
     ],
     "types": [
       "LoanFactoryTest",
-      "ByteVec",
-      "U256",
-      "U256"
+      "ByteVec"
     ],
     "isMutable": [
-      false,
-      false,
       false,
       false
     ]

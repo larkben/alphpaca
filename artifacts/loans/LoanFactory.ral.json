@@ -1,26 +1,32 @@
 {
   "version": "v3.11.1",
   "name": "LoanFactory",
-  "bytecode": "040c4031405140b940ea410a414441634178418c41a541b941d1010002060217d374d67f01160017020c0e160201001704170316014c090c0d16020103170516031605024a031603160402000002030010160016012c1367102d170216001602330d7b1600136710340d7b0103060a004034d3f1f57cf8b417061601a0010001160616001601160216031604a0011605b2130964ca0c041303641708170716067ad113c3038d7ea4c680002aa216021603a3ce0116071608af1709a0000d2aa100051609160016011602160316041605160676010301050018d3ab87b3d416001701b417020c0e1601010017041703160216031604a316020d0c1601010506160016025f01000103000ed389ef220a16001701b4170216020d0c1601010607160016025f01030106001ed3738950ae16001701b417020c0e16010100170417030c0d160101031705160216031605a316020d0c160101080816000416026001000103000ed35637085316001701b417020c0c1601010908160003160260010001010008d366b0cd96b4ce00450c7b1600a101010200000008d3e29a24deb4ce00450c7bce00b001020303000bd3f5344303b4ce00450c7bb2160016011602aa010001010008d311423544b4ce00450c7b1600ba01000303000ad333c6b8dcb4ce00450c7b160016011602bb",
-  "codeHash": "7a724457bcb95cd904120601a4f0d4d7d989700c6be966e5fe791fd2b8f362ad",
+  "bytecode": "0613403f40b740e84108417141a241c241fc421b426642a542bf42d442e94366437a439343a743bf0000010300170c0d0d140a5f5f6d61705f5f315f5f160044cb01010d0ece02d4a0e6c2311702170116010c0e0c140a5f5f6d61705f5f305f5f160044cb01020000030a0240380c0d0d140a5f5f6d61705f5f315f5f160044cb01010d0ece02d4a0e6c23117071706160617030c0d0d140a5f5f6d61705f5f315f5f160144cb01010d0ece02d4a0e6c231170917081608170416030c2f4c030c040216041340642c16032d170516051602314c04160503024a0316050402010002060217d374d67f01160017020c0e160201001704170316014c090c0d16020104170516031605024a031603160402000002030010160016012c1367102d170216001602330d7b1600136710340d7b0103070b00403ad3c0e131f0b417071601a001000316071600160116021604a0011605b2a0021606130a64ca16030c0404ca16010c1308641709170816077ad10e2ca216021603a3ce0116081609af170aa0000d2aa10005160a160016011602160316041605160776010301050018d3ab87b3d416001701b417020c0e1601010017041703160216031604a316020d0c1601010606160016025f01000103000ed389ef220a16001701b4170216020d0c1601010707160016025f01030106001ed3738950ae16001701b417020c0e16010100170417030c0d160101041705160216031605a316020d0c160101090816000416026001000103000ed35637085316001701b417020c0c1601010a0816000316026001000109004025d3c1af036716001701b417020c0e16010100170417030c0e16010102170617051603000016050000160316051340960001170817071608031c13087b16070d0c1601010c01030207004020d3ead977d116001702b417030c0e160201001817040c0d160201011705160116053313097b160316041605a3160316010e0d1602010d170601030103000ad3363b59b616001701b4170216020d0c1601010e010001010008d366b0cd96b4ce00450c7b1600a101010001010008d334217b66b4ce00450c7b1600a10201030404004031d39c4df25fb4ce00450c7b16024c1516014c0ab4d1a2140a5f5f6d61705f5f315f5f160044b11603d201014a08b40d0c140a5f5f6d61705f5f315f5f160044cb01034a1416014c0ab4d1a2140a5f5f6d61705f5f305f5f160044b10cd201014a08b40d0c140a5f5f6d61705f5f305f5f160044cb0103010200000008d3e29a24deb4ce00450c7bce00b001020303000bd3f5344303b4ce00450c7bb2160016011602aa010001010008d311423544b4ce00450c7b1600ba01000303000ad333c6b8dcb4ce00450c7b160016011602bb",
+  "codeHash": "1d54bb9a61a5e1288ad6e99c1818d4b99b61dc439700bfde5ca049cb60b08ba2",
   "fieldsSig": {
     "names": [
       "admin",
       "loanTemplate",
       "activeLoans",
-      "rate"
+      "rate",
+      "liquidationBot",
+      "oracle"
     ],
     "types": [
       "Address",
       "ByteVec",
       "U256",
-      "U256"
+      "U256",
+      "Address",
+      "IDIAOracle"
     ],
     "isMutable": [
       false,
       false,
       true,
-      true
+      true,
+      true,
+      false
     ]
   },
   "eventsSig": [
@@ -85,6 +91,41 @@
   ],
   "functions": [
     {
+      "name": "updateTokenPrice",
+      "paramNames": [
+        "token"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "determineCollateralRatio",
+      "paramNames": [
+        "tokenRequested",
+        "collateralToken",
+        "threshhold"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256",
+        "Bool"
+      ]
+    },
+    {
       "name": "getRequiredTokens",
       "paramNames": [
         "contractId",
@@ -127,7 +168,8 @@
         "collateralToken",
         "collateralAmount",
         "interest",
-        "duration"
+        "duration",
+        "canLiquidate"
       ],
       "paramTypes": [
         "ByteVec",
@@ -135,9 +177,11 @@
         "ByteVec",
         "U256",
         "U256",
-        "U256"
+        "U256",
+        "Bool"
       ],
       "paramIsMutable": [
+        false,
         false,
         false,
         false,
@@ -200,6 +244,48 @@
       "returnTypes": []
     },
     {
+      "name": "liquidation",
+      "paramNames": [
+        "contractId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "bid",
+      "paramNames": [
+        "contractId",
+        "bidAmount"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "redeem",
+      "paramNames": [
+        "contractId"
+      ],
+      "paramTypes": [
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
       "name": "editRate",
       "paramNames": [
         "newRate"
@@ -208,6 +294,41 @@
         "U256"
       ],
       "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "editLiquidationBot",
+      "paramNames": [
+        "newBot"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "tokenMapping",
+      "paramNames": [
+        "token",
+        "add",
+        "pair",
+        "pairtoken"
+      ],
+      "paramTypes": [
+        "ByteVec",
+        "Bool",
+        "Bool",
+        "ByteVec"
+      ],
+      "paramIsMutable": [
+        false,
+        false,
+        false,
         false
       ],
       "returnTypes": []
@@ -292,5 +413,15 @@
         }
       ]
     }
-  ]
+  ],
+  "mapsSig": {
+    "names": [
+      "tokenPrices",
+      "tokenPairs"
+    ],
+    "types": [
+      "Map[ByteVec,U256]",
+      "Map[ByteVec,ByteVec]"
+    ]
+  }
 }

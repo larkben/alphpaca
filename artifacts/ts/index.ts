@@ -22,6 +22,7 @@ export * from "./OldNFTPublicSaleCollectionSequential";
 export * from "./OldNFTPublicSaleCollectionSequentialWithRoyalty";
 export * from "./Player";
 export * from "./PlayerBase";
+export * from "./TestOracle";
 export * from "./Token";
 export * from "./WrappedOgAlfProtocol";
 export * from "./WrappedWangProtocol";

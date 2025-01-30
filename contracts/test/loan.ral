@@ -1,4 +1,4 @@
-Contract Loan (
+Contract LoanTest (
     creator: Address,
     mut loanee: Address,
     tokenRequested: ByteVec,
@@ -14,13 +14,13 @@ Contract Loan (
     mut active: Bool,
     parentContract: Address,
     // liquidation
-    liquidationBot: Address,
     canLiquidate: Bool,
     mut liquidation: Bool,
     // auction
     mut highestBidder: Address,
     mut highestBid: U256,
-    mut timeToEnd: U256
+    mut timeToEnd: U256,
+    oracle: TestOracle
 ) {
     enum Loan {
         AuctionEnded = 0
@@ -45,7 +45,7 @@ Contract Loan (
         assert!(active == true, 1)
 
         // confirm the loan has completed it's time
-        assert!(blockTimeStamp!() > startTime + duration, 0)
+        assert!(oracle.getTime() > startTime + duration, 0)
 
         return true
     }
@@ -53,7 +53,7 @@ Contract Loan (
     pub fn getInterest() -> (U256) {
         if (interest > 0) {
             // Calculate elapsed time
-            let elapsedTime = blockTimeStamp!() - startTime
+            let elapsedTime = oracle.getTime() - startTime
     
             // Avoid integer truncation: multiply first, then divide
             let gain = (tokenAmount * interest * elapsedTime) / (31556926000 * 10000)
@@ -137,7 +137,7 @@ Contract Loan (
         checkCaller!(callerAddress!() == parentContract, 0)
 
         assert!(active == true, 3)
-        assert!(startTime + duration < blockTimeStamp!(), 4)
+        assert!(startTime + duration < oracle.getTime(), 4)
 
         // is the loan a liquidation loan?
         assert!(canLiquidate == false, 6)
@@ -182,7 +182,7 @@ Contract Loan (
 
         // liquidation to true
         liquidation = true
-        timeToEnd = blockTimeStamp!() + 3600000  // 1 hour to liquidate -> assets are just sent to loanee
+        timeToEnd = oracle.getTime() + 3600000  // 1 hour to liquidate -> assets are just sent to loanee
 
         // set the highest bid
         highestBid = tokenAmount
@@ -204,7 +204,7 @@ Contract Loan (
         assert!(bidAmount > highestBid, 7)
 
         // check time on auction
-        assert!(blockTimeStamp!() < timeToEnd, Loan.AuctionEnded)
+        assert!(oracle.getTime() < timeToEnd, Loan.AuctionEnded)
 
         // assert topBidder cannot bid up
         assert!(caller != highestBidder, Loan.InvalidCaller)
@@ -223,7 +223,7 @@ Contract Loan (
         transferToken!(caller, selfAddress!(), tokenRequested, bidAmount)
 
         // anti-sniping
-        if ((timeToEnd - blockTimeStamp!()) < 150000) {
+        if ((timeToEnd - oracle.getTime()) < 150000) {
             timeToEnd = timeToEnd + 150000 // 5 minutes in milliseconds
         }
 
@@ -242,7 +242,7 @@ Contract Loan (
         assert!(active == true, 3)
 
         // Ensure the auction has ended
-        assert!(blockTimeStamp!() > timeToEnd, Loan.AuctionActive)
+        assert!(oracle.getTime() > timeToEnd, Loan.AuctionActive)
 
         // send the highestBid - fee to loanee
         let factoryFeeLoanee = getCommission(highestBid)
@@ -265,7 +265,7 @@ Contract Loan (
     }
 }
 
-TxScript ForceCancel (
+TxScript ForceCancelTest (
     loan: LoanTest
 ) {
     loan.forceCancel()

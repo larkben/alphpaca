@@ -35,12 +35,10 @@ import { default as DestroyLoanFactoryTestScriptJson } from "../test/DestroyLoan
 import { default as DestroyOgAlfProtocolScriptJson } from "../walf/DestroyOgAlfProtocol.ral.json";
 import { default as DestroyWangProtocolScriptJson } from "../wang/DestroyWangProtocol.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
-import { default as EditActiveStatusScriptJson } from "../test/EditActiveStatus.ral.json";
 import { default as EditCollectionUriScriptJson } from "../gamefi/EditCollectionUri.ral.json";
 import { default as EditLoanRateScriptJson } from "../loans/EditLoanRate.ral.json";
 import { default as EditLoanRateTestScriptJson } from "../test/EditLoanRateTest.ral.json";
 import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.json";
-import { default as EditStartTimeScriptJson } from "../test/EditStartTime.ral.json";
 import { default as EditValidContractScriptJson } from "../gamefi/EditValidContract.ral.json";
 import { default as EditWangFeesScriptJson } from "../wang/EditWangFees.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
@@ -84,7 +82,7 @@ import { default as WithdrawFromPublicSaleCollectionSequentialScriptJson } from 
 import { default as WithdrawLoanFactoryFeesScriptJson } from "../loans/WithdrawLoanFactoryFees.ral.json";
 import { default as WithdrawLoanFactoryFeesTestScriptJson } from "../test/WithdrawLoanFactoryFeesTest.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
-import { DIAOracleValue, PlayerData, AllStructs } from "./types";
+import { DIAOracleValue, PlayerData, TokenData, AllStructs } from "./types";
 
 export const AcceptLoan = new ExecutableScript<{
   loanFactory: HexString;
@@ -97,8 +95,6 @@ export const AcceptLoan = new ExecutableScript<{
 export const AcceptLoanTest = new ExecutableScript<{
   loanFactory: HexString;
   contract: HexString;
-  interestTime: bigint;
-  startTime: bigint;
 }>(
   Script.fromJson(AcceptLoanTestScriptJson, "", AllStructs),
   getContractByCodeHash
@@ -178,6 +174,7 @@ export const CreateLoan = new ExecutableScript<{
   collateralAmount: bigint;
   interest: bigint;
   duration: bigint;
+  canLiquidate: boolean;
 }>(
   Script.fromJson(CreateLoanScriptJson, "", AllStructs),
   getContractByCodeHash
@@ -191,6 +188,7 @@ export const CreateLoanTest = new ExecutableScript<{
   collateralAmount: bigint;
   interest: bigint;
   duration: bigint;
+  canLiquidate: boolean;
 }>(
   Script.fromJson(CreateLoanTestScriptJson, "", AllStructs),
   getContractByCodeHash
@@ -285,14 +283,6 @@ export const Destroycreator = new ExecutableScript<{ contract: HexString }>(
   getContractByCodeHash
 );
 
-export const EditActiveStatus = new ExecutableScript<{
-  loan: HexString;
-  newStatus: boolean;
-}>(
-  Script.fromJson(EditActiveStatusScriptJson, "", AllStructs),
-  getContractByCodeHash
-);
-
 export const EditCollectionUri = new ExecutableScript<{
   collection: HexString;
   newCollectionUri: HexString;
@@ -322,14 +312,6 @@ export const EditOgAlfFees = new ExecutableScript<{
   newfee: bigint;
 }>(
   Script.fromJson(EditOgAlfFeesScriptJson, "", AllStructs),
-  getContractByCodeHash
-);
-
-export const EditStartTime = new ExecutableScript<{
-  loan: HexString;
-  newTime: bigint;
-}>(
-  Script.fromJson(EditStartTimeScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
@@ -381,7 +363,6 @@ export const ForfeitLoan = new ExecutableScript<{
 export const ForfeitLoanTest = new ExecutableScript<{
   loanFactory: HexString;
   contract: HexString;
-  time: bigint;
 }>(
   Script.fromJson(ForfeitLoanTestScriptJson, "", AllStructs),
   getContractByCodeHash
@@ -457,7 +438,6 @@ export const PayLoan = new ExecutableScript<{
 export const PayLoanTest = new ExecutableScript<{
   loanFactory: HexString;
   contract: HexString;
-  interestTime: bigint;
 }>(
   Script.fromJson(PayLoanTestScriptJson, "", AllStructs),
   getContractByCodeHash

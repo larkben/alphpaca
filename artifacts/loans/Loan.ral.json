@@ -1,8 +1,8 @@
 {
   "version": "v3.11.1",
   "name": "Loan",
-  "bytecode": "0c0a104020403c4074409240bc40d640f04129415a010000000204d3b59689b5ce01ce0202010000000204d333ef9886ce03ce040201000000010fd343275b7da002031c0d7b56a001ce072a330c7b030201000002011ad392ef9a72ce050c334c1356a0012b1700ce02ce052c16002c13c10758f07a301367102c2d1701ce0216012a024a02ce020200000102010fce060c334c091600ce062c1367102d17011601024a020c02010301010016d3fcbd3992b4ce08450c7ba002041c107b1600ce00ce01ce02aa03a10256a1011600a10001020101000dd380fcd2c8b4ce08450c7ba002041c0d7b1600b001020000000dd3658f8d67b4ce0045117ba002041c0d7bce00b001010103001ed3f395b36cb4ce08450c7ba002031c0e7b000317011601000417021600a000ce01160116022baa1600ce08ce011602aace00b001020001001cd337415551b4ce08450c7ba002031c0f7ba001ce072a5631107bce0400041700b2ce08ce031600aaa000b0",
-  "codeHash": "687923567da4068285205d0659d47fc0157fbb51b576ac787c008818d08a24de",
+  "bytecode": "120f101e402e404a408240a040ca40e440fe4137417041a041ce425342d4010000000204d3b59689b5ce01ce0202010000000103d39da1c49fa00602010000000204d333ef9886ce03a0010201000000010fd343275b7da003031c0d7b56a002ce062a330c7b030201000002011ad392ef9a72ce040c334c1356a0022b1700ce02ce042c16002c13c10758f07a301367102c2d1701ce0216012a024a02ce020200000102010fce050c334c091600ce052c1367102d17011601024a020c02010301010016d3fcbd3992b4ce07450c7ba003041c107b1600ce00ce01ce02aa03a10356a1021600a10001020101000dd380fcd2c8b4ce07450c7ba003041c0d7b1600b001020000000dd3658f8d67b4ce0045117ba003041c0d7bce00b001010103001ed3f395b36cb4ce07450c7ba003031c0e7b000417011601000517021600a000ce01160116022baa1600ce07ce011602aace00b001020001004021d337415551b4ce07450c7ba003031c0f7ba002ce062a5631107bce09041c13067ba00100051700b2ce07ce031600aaa000b001020202011bd3d0bcecf4b4ce07450c7bce09031c13067ba003031c0f7b1600b2ce031601aaa00116012aa101a00102010001010018d36d21d778b4ce07450c7bce09031c13067ba003031c0f7b03a10456138036ee802aa107ce02a10601010202014045d39e143d97b4ce07450c7bce09031c13067ba003031c0f7b1601a0063313077b56a007310c7b1600a005460d7ba005ca464c09b2a00513c3038d7ea4c68000a7b2a005ce01a006aa1600a1051601a1061600b213c3038d7ea4c68000a71600b2ce011601aaa007562b13800249f0314c04a00713800249f02aa107a0070201020103004041d3f1331ecab4ce07450c7bce09031c13067ba003031c0f7b56a007330e7ba00600051701a00600051702b2a00013c3038d7ea4c68000a7b2a000ce01a00616012baab2a00513c3038d7ea4c68000a7b2a005ce03a00116022baab2ce0713c3038d7ea4c68000a7b2ce07ce011601aab2ce07ce031602aace00b0",
+  "codeHash": "f26a4e649ac8c56104660b08349cede1ebeffa7f46da60055c39477b3caeb47e",
   "fieldsSig": {
     "names": [
       "creator",
@@ -16,7 +16,13 @@
       "duration",
       "startTime",
       "active",
-      "parentContract"
+      "parentContract",
+      "liquidationBot",
+      "canLiquidate",
+      "liquidation",
+      "highestBidder",
+      "highestBid",
+      "timeToEnd"
     ],
     "types": [
       "Address",
@@ -30,7 +36,13 @@
       "U256",
       "U256",
       "Bool",
-      "Address"
+      "Address",
+      "Address",
+      "Bool",
+      "Bool",
+      "Address",
+      "U256",
+      "U256"
     ],
     "isMutable": [
       false,
@@ -38,13 +50,19 @@
       false,
       false,
       false,
-      false,
+      true,
       false,
       false,
       false,
       true,
       true,
-      false
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true
     ]
   },
   "eventsSig": [],
@@ -56,6 +74,15 @@
       "paramIsMutable": [],
       "returnTypes": [
         "ByteVec",
+        "U256"
+      ]
+    },
+    {
+      "name": "getHighestBid",
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
         "U256"
       ]
     },
@@ -154,8 +181,97 @@
       "paramTypes": [],
       "paramIsMutable": [],
       "returnTypes": []
+    },
+    {
+      "name": "addCollateral",
+      "paramNames": [
+        "caller",
+        "collateralAdded"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "activateLiquidation",
+      "paramNames": [
+        "collateralLevel"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "bid",
+      "paramNames": [
+        "caller",
+        "bidAmount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "redeem",
+      "paramNames": [
+        "caller"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
     }
   ],
   "constants": [],
-  "enums": []
+  "enums": [
+    {
+      "name": "Loan",
+      "fields": [
+        {
+          "name": "AuctionEnded",
+          "value": {
+            "type": "U256",
+            "value": "0"
+          }
+        },
+        {
+          "name": "InvalidCaller",
+          "value": {
+            "type": "U256",
+            "value": "1"
+          }
+        },
+        {
+          "name": "AuctionActive",
+          "value": {
+            "type": "U256",
+            "value": "2"
+          }
+        }
+      ]
+    }
+  ]
 }

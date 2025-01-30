@@ -1,10 +1,9 @@
-Contract LoanFactory (
+Contract LoanFactoryTest (
     admin: Address,
     loanTemplate: ByteVec,
     mut activeLoans: U256,
     mut rate: U256,
-    mut liquidationBot: Address,
-    oracle: IDIAOracle
+    oracle: TestOracle
 ) {
     // price mappings
     mapping [ByteVec, U256] tokenPrices
@@ -54,7 +53,7 @@ Contract LoanFactory (
     }
 
     pub fn getRequiredTokens(contractId: ByteVec, withInterest: Bool) -> (ByteVec, U256) {
-        let loan = Loan(contractId)
+        let loan = LoanTest(contractId)
 
         let (token, amount) = loan.getTokenRequested()
 
@@ -86,7 +85,7 @@ Contract LoanFactory (
 
         checkTokenAmount(tokenAmount, rate)
 
-        let (encodeImmutableFields, encodeMutableFields) = Loan.encodeFields!(
+        let (encodeImmutableFields, encodeMutableFields) = LoanTest.encodeFields!(
             caller,
             nullContractAddress!(),
             tokenRequested,
@@ -100,12 +99,12 @@ Contract LoanFactory (
             0,
             false,
             selfAddress!(),
-            liquidationBot,
             canLiquidate,
             false,
             nullContractAddress!(),
             tokenAmount,
-            0
+            0,
+            oracle
         )
 
         let contractID = copyCreateContract!{caller -> ALPH: (minimalContractDeposit!() * 2), collateralToken: collateralAmount}(
@@ -122,7 +121,7 @@ Contract LoanFactory (
 
     @using(checkExternalCaller = false, preapprovedAssets = true)
     pub fn accept(contractId: ByteVec) -> () {
-        let loan = Loan(contractId)
+        let loan = LoanTest(contractId)
 
         let caller = callerAddress!()
 
@@ -136,7 +135,7 @@ Contract LoanFactory (
 
     @using(checkExternalCaller = false, preapprovedAssets = false)
     pub fn cancel(contractId: ByteVec) -> () {
-        let loan = Loan(contractId)
+        let loan = LoanTest(contractId)
 
         let caller = callerAddress!()
 
@@ -148,7 +147,7 @@ Contract LoanFactory (
 
     @using(checkExternalCaller = false, preapprovedAssets = true)
     pub fn pay(contractId: ByteVec) -> () {
-        let loan = Loan(contractId)
+        let loan = LoanTest(contractId)
 
         let caller = callerAddress!()
 
@@ -164,7 +163,7 @@ Contract LoanFactory (
     // liquidation
     @using(checkExternalCaller = false, preapprovedAssets = false)
     pub fn forfeit(contractId: ByteVec) -> () {
-        let loan = Loan(contractId)
+        let loan = LoanTest(contractId)
 
         let caller = callerAddress!()
 
@@ -179,7 +178,7 @@ Contract LoanFactory (
     // check liquidation
     @using(checkExternalCaller = false, updateFields = false)
     pub fn liquidation(contractId: ByteVec) -> () {
-        let loan = Loan(contractId)
+        let loan = LoanTest(contractId)
 
         let caller = callerAddress!()
 
@@ -203,7 +202,7 @@ Contract LoanFactory (
     // auction functions
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = true)
     pub fn bid(contractId: ByteVec, bidAmount: U256) -> () {
-        let loan = Loan(contractId)
+        let loan = LoanTest(contractId)
 
         let caller = callerAddress!()
 
@@ -221,7 +220,7 @@ Contract LoanFactory (
 
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = true)
     pub fn redeem(contractId: ByteVec) -> () {
-        let loan = Loan(contractId)
+        let loan = LoanTest(contractId)
 
         let caller = callerAddress!()
 
@@ -236,13 +235,6 @@ Contract LoanFactory (
         checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
 
         rate = newRate
-    }
-
-    @using(checkExternalCaller = true, preapprovedAssets = false, updateFields = true)
-    pub fn editLiquidationBot(newBot: Address) -> () {
-        checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
-
-        liquidationBot = newBot
     }
 
     // ... complete this
@@ -307,8 +299,8 @@ Contract LoanFactory (
     
 }
 
-TxScript CreateLoan (
-    loanFactory: LoanFactory,
+TxScript CreateLoanTest (
+    loanFactory: LoanFactoryTest,
     tokenRequested: ByteVec,
     tokenAmount: U256,
     collateralToken: ByteVec,
@@ -317,7 +309,7 @@ TxScript CreateLoan (
     duration: U256,
     canLiquidate: Bool
 ) {
-    loanFactory.createLoan{callerAddress!() -> ALPH: minimalContractDeposit!() + dustAmount!(), collateralToken: collateralAmount}(
+    loanFactory.createLoan{callerAddress!() -> ALPH: (minimalContractDeposit!() * 2), collateralToken: collateralAmount}(
         tokenRequested,
         tokenAmount,
         collateralToken,
@@ -328,8 +320,8 @@ TxScript CreateLoan (
     )
 }
 
-TxScript AcceptLoan (
-    loanFactory: LoanFactory,
+TxScript AcceptLoanTest (
+    loanFactory: LoanFactoryTest,
     contract: ByteVec
 ) {
     let (token, amount) = loanFactory.getRequiredTokens(contract, false)
@@ -337,15 +329,15 @@ TxScript AcceptLoan (
     loanFactory.accept{callerAddress!() -> token: amount}(contract)
 }
 
-TxScript CancelLoan (
-    loanFactory: LoanFactory,
+TxScript CancelLoanTest (
+    loanFactory: LoanFactoryTest,
     contract: ByteVec
 ) {
     loanFactory.cancel(contract)
 }
 
-TxScript PayLoan (
-    loanFactory: LoanFactory,
+TxScript PayLoanTest (
+    loanFactory: LoanFactoryTest,
     contract: ByteVec
 ) {
     let (token, amount) = loanFactory.getRequiredTokens(contract, true)
@@ -353,8 +345,8 @@ TxScript PayLoan (
     loanFactory.pay{callerAddress!() -> token: amount}(contract)
 }
 
-TxScript ForfeitLoan (
-    loanFactory: LoanFactory,
+TxScript ForfeitLoanTest (
+    loanFactory: LoanFactoryTest,
     contract: ByteVec
 ) {
     loanFactory.forfeit(contract)
@@ -362,15 +354,15 @@ TxScript ForfeitLoan (
 
 // admin
 
-TxScript EditLoanRate (
-    loanFactory: LoanFactory,
+TxScript EditLoanRateTest (
+    loanFactory: LoanFactoryTest,
     newRate: U256
 ) {
     loanFactory.editRate(newRate)
 }
 
-TxScript WithdrawLoanFactoryFees (
-    loanFactory: LoanFactory,
+TxScript WithdrawLoanFactoryFeesTest (
+    loanFactory: LoanFactoryTest,
     who: Address,
     token: ByteVec,
     amount: U256
@@ -380,15 +372,15 @@ TxScript WithdrawLoanFactoryFees (
 
 // upgrade / destroy
 
-TxScript UpdateLoanFactoryCode (
-    loanFactory: LoanFactory,
+TxScript UpdateLoanFactoryCodeTest (
+    loanFactory: LoanFactoryTest,
     newCode: ByteVec
 ) {
     loanFactory.updateLoanFactoryCode(newCode)
 }
 
-TxScript UpdateLoanFactoryFields (
-    loanFactory: LoanFactory,
+TxScript UpdateLoanFactoryFieldsTest (
+    loanFactory: LoanFactoryTest,
     newCode: ByteVec, 
     immFields: ByteVec, 
     mutFields: ByteVec
@@ -396,8 +388,8 @@ TxScript UpdateLoanFactoryFields (
     loanFactory.updateLoanFactoryFields(newCode, immFields, mutFields)
 }
 
-TxScript DestroyLoanFactory (
-    loanFactory: LoanFactory
+TxScript DestroyLoanFactoryTest (
+    loanFactory: LoanFactoryTest
 ) {
     loanFactory.destroyLoanFactory()
 }
