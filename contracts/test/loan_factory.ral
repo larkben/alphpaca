@@ -7,7 +7,6 @@ Contract LoanFactoryTest (
     oracle: TestOracle
 ) {
     // price mappings
-    mapping [ByteVec, U256] tokenPrices
     mapping [ByteVec, ByteVec] tokenPairs
 
     // events
@@ -25,13 +24,6 @@ Contract LoanFactoryTest (
     enum LoanCodes {
         NotAdmin = 0
         TokenSizeTooSmall = 1
-    }
-
-    // oracle price updater
-    fn updateTokenPrice(token: ByteVec) -> () {
-        // maybe assert that the token is in the mapping
-
-        tokenPrices[token] = oracle.getValue(tokenPairs[token]).value
     }
 
     // health / collateral value calculation
@@ -237,7 +229,7 @@ Contract LoanFactoryTest (
     }
     
     // liquidation
-    @using(checkExternalCaller = false, preapprovedAssets = false)
+    @using(checkExternalCaller = false, preapprovedAssets = false, assetsInContract = enforced)
     pub fn forfeit(contractId: ByteVec) -> () {
         let loan = LoanTest(contractId)
 
@@ -260,9 +252,6 @@ Contract LoanFactoryTest (
 
         let (token, amount) = loan.getTokenRequested()
         let (collateral, collateralAmount) = loan.getTokenCollateral()
-
-        updateTokenPrice(token)
-        updateTokenPrice(collateral)
 
         // get liquidation threshold from loan (could be a cool feature)
 
@@ -438,25 +427,14 @@ Contract LoanFactoryTest (
 
     // ... complete this
     @using(checkExternalCaller = true, preapprovedAssets = true, updateFields = false)
-    pub fn tokenMapping(token: ByteVec, add: Bool, pair: Bool, pairtoken: ByteVec) -> () {
+    pub fn tokenMapping(token: ByteVec, add: Bool, pairtoken: ByteVec) -> () {
         checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
 
-        // create mapping
-        if (pair) {
-            if (add) {
-                tokenPairs.insert!(callerAddress!(), token, pairtoken)
-            }
-            else {
-                tokenPairs.remove!(callerAddress!(), token)
-            }
+        if (add) {
+            tokenPairs.insert!(callerAddress!(), token, pairtoken)
         }
         else {
-            if (add) {
-                tokenPrices.insert!(callerAddress!(), token, 0) // token starts at zero
-            }
-            else {
-                tokenPrices.remove!(callerAddress!(), token)
-            }
+            tokenPairs.remove!(callerAddress!(), token)
         }
     }
 
@@ -690,11 +668,10 @@ TxScript WithdrawLoanFactoryFeesTest (
 TxScript TokenMapping (
     loanFactory: LoanFactoryTest,
     token: ByteVec, 
-    add: Bool, 
-    pair: Bool, 
+    add: Bool,
     pairtoken: ByteVec
 ) {
-    loanFactory.tokenMapping{callerAddress!() -> ALPH: mapEntryDeposit!()}(token, add, pair, pairtoken)
+    loanFactory.tokenMapping{callerAddress!() -> ALPH: mapEntryDeposit!()}(token, add, pairtoken)
 }
 
 // upgrade / destroy

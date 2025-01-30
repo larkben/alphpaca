@@ -1,7 +1,7 @@
 {
   "version": "v3.11.1",
   "name": "EditLiquidateTest",
-  "bytecodeTemplate": "01010300000006{1}{2}0e0c{0}0110",
+  "bytecodeTemplate": "01010300000006{1}{2}0e0c{0}010f",
   "fieldsSig": {
     "names": [
       "loanFactory",

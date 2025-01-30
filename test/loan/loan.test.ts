@@ -10,8 +10,8 @@ import {
 import { PrivateKeyWallet } from "@alephium/web3-wallet";
 import { getSigners, testAddress } from "@alephium/web3-test";
 import { alph, CreateCoin, deployCreateToken, deployToken, randomP2PKHAddress } from "../create-token/utils";
-import { AcceptLoan, CreateTokenInstance, GamifyProtocolInstance, LoaneeMarketInstance, LoanFactoryInstance, LoanFactoryTestInstance, LoanInstance, LoanTestInstance, MutableNFTInstance, NFTPublicSaleCollectionSequentialWithRoyaltyInstance, TestOracleInstance, TokenInstance, UpdateTime } from "../../artifacts/ts";
-import { AcceptLoanService, AddTokenMapping, CalculateLoanAssets, CancelLoanService, CreateLoanService, defaultSigner, DeployLoan, DeployLoanFactory, DeployMarket, PayLoanService } from "./loan_services";
+import { AcceptLoan, CreateTokenInstance, ForfeitLoanTest, GamifyProtocolInstance, LoaneeMarketInstance, LoanFactoryInstance, LoanFactoryTestInstance, LoanInstance, LoanTestInstance, MutableNFTInstance, NFTPublicSaleCollectionSequentialWithRoyaltyInstance, TestOracleInstance, TokenInstance, UpdateTime } from "../../artifacts/ts";
+import { AcceptLoanService, AddTokenMapping, CalculateLoanAssets, CancelLoanService, CreateLoanService, defaultSigner, DeployLoan, DeployLoanFactory, DeployMarket, ForfeitLoanService, PayLoanService } from "./loan_services";
 import { debug } from "console";
 import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } from "./time_services";
   
@@ -44,7 +44,7 @@ import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } 
 
       tokenTemplate = (await deployToken()).contractInstance;
       creatorTemplate = (await deployCreateToken(tokenTemplate)).contractInstance;
-    });
+    }, 100000);
   
     test('loan (loanfi)', async () => {
         const creator = buyer[0]
@@ -91,18 +91,20 @@ import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } 
 
         // create 2 tokens (btc and eth)
 
-        // add alph
-        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ALPH_TOKEN_ID, true, false, "")
-        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ALPH_TOKEN_ID, false, true, "ALPH/USD")
+        // add the other token here
+        //await AddTokenMapping(defaultSigner, loanFactoryTemplate, ALPH_TOKEN_ID, true, "BTC/USD")
+        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ALPH_TOKEN_ID, true, "ALPH/USD")
 
-        /*
         // next test with various tokens (decimals, etc)
-        let tokenDetails = await CreateCoin(creator, creatorTemplate, "test", "prototype", 18, 100000000000000000000); // 18 decimals
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
+
+        let tokenDetails = await CreateCoin(creator, creatorTemplate, "test", "prototype", 6, 100000000000000000000); // 18 decimals
 
         let assets = await nodeProvider.addresses.getAddressesAddressBalance(creator.address)
         const ids = assets.tokenBalances?.map(token => token.id) ?? [];
 
-        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ids[0], 20000, ALPH_TOKEN_ID, 10000000000000000000, 800, 3000, false)
+        // minimum on 2000 tokens is 20,000 seconds or 5.5 hours with 8% apr
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ids[0], 20000, ALPH_TOKEN_ID, 10000000000000000000, 800, 20000000, false)
 
         details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
         contractAddress = details.generatedOutputs[0].address
@@ -112,9 +114,53 @@ import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } 
 
         await AcceptLoanService(creator, loanFactoryTemplate, hexString, ids[0], 20000)
 
-        calculatedAmount = await CalculateLoanAssets(nodeProvider, contractAddress, 1751130767000)
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 20000000)
+
+        calculatedAmount = await CalculateLoanAssets(nodeProvider, contractAddress, 1738256564000 + 20000000)
 
         await PayLoanService(creator, loanFactoryTemplate, hexString, ids[0], calculatedAmount)
-        */
+
+        // testing forfeit
+
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
+
+        // minimum on 2000 tokens is 20,000 seconds or 5.5 hours with 8% apr
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ids[0], 40000, ALPH_TOKEN_ID, 10000000000000000000, 800, 20000000, false)
+
+        details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
+        contractAddress = details.generatedOutputs[0].address
+
+        loanId = contractIdFromAddress(details.generatedOutputs[0].address)
+        hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
+
+        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ids[0], 40000)
+
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 21000000)
+
+        await ForfeitLoanService(creator, loanFactoryTemplate, hexString)
+
+        // confirm forefit does not work on liquidation loan
+        // ...
+
+        // test liquidation loans
+        // ...
+
+        // bidding
+        // ...
+
+        // redeem
+        // ...
+
+        // loanee market creation
+        // ...
+
+        // loanee market destroy
+        // ...
+
+        // loanee market edits / withdraw and funding
+        // ...
+
+        // loanee market accept
+        // ...
       })
   });

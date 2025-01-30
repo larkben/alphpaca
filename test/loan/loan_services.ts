@@ -233,18 +233,16 @@ export async function AddTokenMapping (
   loanFactory: LoanFactoryTestInstance,
   token: string,
   add: boolean,
-  pair: boolean,
   pairToken: string
 ) {
   return await TokenMapping.execute(signer, {
     initialFields: {
       loanFactory: loanFactory.contractId,
-      token: '',
-      add: false,
-      pair: false,
-      pairtoken: ''
+      token: token,
+      add: add,
+      pairtoken: stringToHex(pairToken)
     },
-    attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+    attoAlphAmount: DUST_AMOUNT + MINIMAL_CONTRACT_DEPOSIT, // 0.1 alph
   });
 }
 
@@ -265,7 +263,7 @@ export async function CalculateLoanAssets (
   console.log("start time is " + startTime + " interest rate: " + interestRate + " principal: " + principal)
 
   // Calculate the proportional interest based on elapsed time
-  let elapsedTime = (time + 3600000) - startTime; // Time difference in milliseconds
+  let elapsedTime = (time + 7800000) - startTime; // Time difference in milliseconds
   let timeFactor = elapsedTime / 31556926000; // Convert to years (approx.)
 
   // Calculate the gain for the elapsed time
@@ -273,5 +271,5 @@ export async function CalculateLoanAssets (
 
   // Return the original amount plus interest
   console.log(principal + gain)
-  return Math.ceil(principal + gain)
+  return Math.ceil(principal + gain + 1)
 }

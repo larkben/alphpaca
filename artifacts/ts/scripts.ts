@@ -590,7 +590,6 @@ export const TokenMapping = new ExecutableScript<{
   loanFactory: HexString;
   token: HexString;
   add: boolean;
-  pair: boolean;
   pairtoken: HexString;
 }>(
   Script.fromJson(TokenMappingScriptJson, "", AllStructs),

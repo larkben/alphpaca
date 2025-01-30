@@ -102,10 +102,6 @@ export namespace LoanFactoryTestTypes {
   }>;
 
   export interface CallMethodTable {
-    updateTokenPrice: {
-      params: CallContractParams<{ token: HexString }>;
-      result: CallContractResult<null>;
-    };
     determineCollateralRatio: {
       params: CallContractParams<{
         tokenRequested: HexString;
@@ -231,7 +227,6 @@ export namespace LoanFactoryTestTypes {
       params: CallContractParams<{
         token: HexString;
         add: boolean;
-        pair: boolean;
         pairtoken: HexString;
       }>;
       result: CallContractResult<null>;
@@ -278,10 +273,6 @@ export namespace LoanFactoryTestTypes {
   };
 
   export interface SignExecuteMethodTable {
-    updateTokenPrice: {
-      params: SignExecuteContractMethodParams<{ token: HexString }>;
-      result: SignExecuteScriptTxResult;
-    };
     determineCollateralRatio: {
       params: SignExecuteContractMethodParams<{
         tokenRequested: HexString;
@@ -419,7 +410,6 @@ export namespace LoanFactoryTestTypes {
       params: SignExecuteContractMethodParams<{
         token: HexString;
         add: boolean;
-        pair: boolean;
         pairtoken: HexString;
       }>;
       result: SignExecuteScriptTxResult;
@@ -454,10 +444,7 @@ export namespace LoanFactoryTestTypes {
   export type SignExecuteMethodResult<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["result"];
 
-  export type Maps = {
-    tokenPrices?: Map<HexString, bigint>;
-    tokenPairs?: Map<HexString, HexString>;
-  };
+  export type Maps = { tokenPairs?: Map<HexString, HexString> };
 }
 
 class Factory extends ContractFactory<
@@ -491,20 +478,6 @@ class Factory extends ContractFactory<
   }
 
   tests = {
-    updateTokenPrice: async (
-      params: TestContractParams<
-        LoanFactoryTestTypes.Fields,
-        { token: HexString },
-        LoanFactoryTestTypes.Maps
-      >
-    ): Promise<TestContractResult<null, LoanFactoryTestTypes.Maps>> => {
-      return testMethod(
-        this,
-        "updateTokenPrice",
-        params,
-        getContractByCodeHash
-      );
-    },
     determineCollateralRatio: async (
       params: TestContractParams<
         LoanFactoryTestTypes.Fields,
@@ -738,7 +711,7 @@ class Factory extends ContractFactory<
     tokenMapping: async (
       params: TestContractParams<
         LoanFactoryTestTypes.Fields,
-        { token: HexString; add: boolean; pair: boolean; pairtoken: HexString },
+        { token: HexString; add: boolean; pairtoken: HexString },
         LoanFactoryTestTypes.Maps
       >
     ): Promise<TestContractResult<null, LoanFactoryTestTypes.Maps>> => {
@@ -819,8 +792,8 @@ class Factory extends ContractFactory<
 export const LoanFactoryTest = new Factory(
   Contract.fromJson(
     LoanFactoryTestContractJson,
-    "=89-2+63a4=2-1=1-1=2-2+67=2-1=1+b=2-2+93=2751-1+9=29-1+9=7-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=15-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=9-1+8=7-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=13-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
-    "993c871886661513576e62244cf3054d0b286cdca9f83b19acc87e3f95278ae6",
+    "=86-2+8d=2-2+a1=2-2+ba=2-1=1+e=2-2+e6=2617-1+e=29-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=15-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
+    "daac04e1ed3e8296b1c350f4cbc8ff1deb9d77b2583dfb2c87891a88d8537651",
     AllStructs
   )
 );
@@ -833,11 +806,6 @@ export class LoanFactoryTestInstance extends ContractInstance {
   }
 
   maps = {
-    tokenPrices: new RalphMap<HexString, bigint>(
-      LoanFactoryTest.contract,
-      this.contractId,
-      "tokenPrices"
-    ),
     tokenPairs: new RalphMap<HexString, HexString>(
       LoanFactoryTest.contract,
       this.contractId,
@@ -979,17 +947,6 @@ export class LoanFactoryTestInstance extends ContractInstance {
   }
 
   view = {
-    updateTokenPrice: async (
-      params: LoanFactoryTestTypes.CallMethodParams<"updateTokenPrice">
-    ): Promise<LoanFactoryTestTypes.CallMethodResult<"updateTokenPrice">> => {
-      return callMethod(
-        LoanFactoryTest,
-        this,
-        "updateTokenPrice",
-        params,
-        getContractByCodeHash
-      );
-    },
     determineCollateralRatio: async (
       params: LoanFactoryTestTypes.CallMethodParams<"determineCollateralRatio">
     ): Promise<
@@ -1276,18 +1233,6 @@ export class LoanFactoryTestInstance extends ContractInstance {
   };
 
   transact = {
-    updateTokenPrice: async (
-      params: LoanFactoryTestTypes.SignExecuteMethodParams<"updateTokenPrice">
-    ): Promise<
-      LoanFactoryTestTypes.SignExecuteMethodResult<"updateTokenPrice">
-    > => {
-      return signExecuteMethod(
-        LoanFactoryTest,
-        this,
-        "updateTokenPrice",
-        params
-      );
-    },
     determineCollateralRatio: async (
       params: LoanFactoryTestTypes.SignExecuteMethodParams<"determineCollateralRatio">
     ): Promise<
