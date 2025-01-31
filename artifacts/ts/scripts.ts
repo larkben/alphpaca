@@ -97,7 +97,13 @@ import { default as WithdrawFundsTestScriptJson } from "../test/WithdrawFundsTes
 import { default as WithdrawLoanFactoryFeesScriptJson } from "../loans/WithdrawLoanFactoryFees.ral.json";
 import { default as WithdrawLoanFactoryFeesTestScriptJson } from "../test/WithdrawLoanFactoryFeesTest.ral.json";
 import { default as WithdrawlassetsScriptJson } from "../scripts/Withdrawlassets.ral.json";
-import { DIAOracleValue, PlayerData, TokenData, AllStructs } from "./types";
+import {
+  DIAOracleValue,
+  PairInfo,
+  PlayerData,
+  TokenData,
+  AllStructs,
+} from "./types";
 
 export const AcceptLoan = new ExecutableScript<{
   loanFactory: HexString;
@@ -591,6 +597,7 @@ export const TokenMapping = new ExecutableScript<{
   token: HexString;
   add: boolean;
   pairtoken: HexString;
+  decimals: bigint;
 }>(
   Script.fromJson(TokenMappingScriptJson, "", AllStructs),
   getContractByCodeHash

@@ -78,7 +78,7 @@ import { CreateLoaneeMarketService } from "./market_services";
         console.log(contractAddress)
         let calculatedAmount = await CalculateLoanAssets(nodeProvider, contractAddress, 1738256564000 + 60480000)
 
-        await PayLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, calculatedAmount)
+        // await PayLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, calculatedAmount)
 
         // oracle pairs setup
 
@@ -94,7 +94,7 @@ import { CreateLoaneeMarketService } from "./market_services";
 
         // add the other token here
         //await AddTokenMapping(defaultSigner, loanFactoryTemplate, ALPH_TOKEN_ID, true, "BTC/USD")
-        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ALPH_TOKEN_ID, true, "ALPH/USD")
+        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ALPH_TOKEN_ID, true, "ALPH/USD", 18)
 
         // next test with various tokens (decimals, etc)
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
@@ -119,11 +119,11 @@ import { CreateLoaneeMarketService } from "./market_services";
 
         calculatedAmount = await CalculateLoanAssets(nodeProvider, contractAddress, 1738256564000 + 20000000)
 
-        await PayLoanService(creator, loanFactoryTemplate, hexString, ids[0], calculatedAmount)
+        // await PayLoanService(creator, loanFactoryTemplate, hexString, ids[0], calculatedAmount)
 
         // assign token to mapping for oracle
 
-        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ids[0], true, "BTC/USD")
+        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ids[0], true, "BTC/USD", 6)
 
         // testing forfeit
 
@@ -166,7 +166,7 @@ import { CreateLoaneeMarketService } from "./market_services";
         // test liquidation loans
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
 
-        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ids[0], 1000000, ALPH_TOKEN_ID, 10000000000000000000, 800, 20000000, true) // 1 bitcoin and 10 alph
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 10000000000000000000, ALPH_TOKEN_ID, 10000000000000000000, 800, 20000000, true) // 1 bitcoin and 10 alph
 
         details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
         contractAddress = details.generatedOutputs[0].address
@@ -174,9 +174,12 @@ import { CreateLoaneeMarketService } from "./market_services";
         loanId = contractIdFromAddress(details.generatedOutputs[0].address)
         hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
 
-        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ids[0], 1000000)
+        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 10000000000000000000)
 
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 21000000)
+
+        let liq = await nodeProvider.contracts.getContractsAddressState(contractAddress)
+        console.log(liq)
 
         await LiquidationLoanService(creator, loanFactoryTemplate, hexString)
 

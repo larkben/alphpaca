@@ -35,7 +35,13 @@ import {
 } from "@alephium/web3";
 import { default as PlayerContractJson } from "../gamefi/Player.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { DIAOracleValue, PlayerData, TokenData, AllStructs } from "./types";
+import {
+  DIAOracleValue,
+  PairInfo,
+  PlayerData,
+  TokenData,
+  AllStructs,
+} from "./types";
 
 // Custom types for the contract
 export namespace PlayerTypes {

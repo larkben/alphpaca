@@ -35,7 +35,13 @@ import {
 } from "@alephium/web3";
 import { default as LoanFactoryTestContractJson } from "../test/LoanFactoryTest.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { DIAOracleValue, PlayerData, TokenData, AllStructs } from "./types";
+import {
+  DIAOracleValue,
+  PairInfo,
+  PlayerData,
+  TokenData,
+  AllStructs,
+} from "./types";
 import { RalphMap } from "@alephium/web3";
 
 // Custom types for the contract
@@ -105,7 +111,9 @@ export namespace LoanFactoryTestTypes {
     determineCollateralRatio: {
       params: CallContractParams<{
         tokenRequested: HexString;
+        tokenAmount: bigint;
         collateralToken: HexString;
+        collateralAmount: bigint;
         threshhold: bigint;
       }>;
       result: CallContractResult<[bigint, boolean]>;
@@ -228,6 +236,7 @@ export namespace LoanFactoryTestTypes {
         token: HexString;
         add: boolean;
         pairtoken: HexString;
+        decimals: bigint;
       }>;
       result: CallContractResult<null>;
     };
@@ -276,7 +285,9 @@ export namespace LoanFactoryTestTypes {
     determineCollateralRatio: {
       params: SignExecuteContractMethodParams<{
         tokenRequested: HexString;
+        tokenAmount: bigint;
         collateralToken: HexString;
+        collateralAmount: bigint;
         threshhold: bigint;
       }>;
       result: SignExecuteScriptTxResult;
@@ -411,6 +422,7 @@ export namespace LoanFactoryTestTypes {
         token: HexString;
         add: boolean;
         pairtoken: HexString;
+        decimals: bigint;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -444,7 +456,7 @@ export namespace LoanFactoryTestTypes {
   export type SignExecuteMethodResult<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["result"];
 
-  export type Maps = { tokenPairs?: Map<HexString, HexString> };
+  export type Maps = { tokenPairs?: Map<HexString, PairInfo> };
 }
 
 class Factory extends ContractFactory<
@@ -483,7 +495,9 @@ class Factory extends ContractFactory<
         LoanFactoryTestTypes.Fields,
         {
           tokenRequested: HexString;
+          tokenAmount: bigint;
           collateralToken: HexString;
+          collateralAmount: bigint;
           threshhold: bigint;
         },
         LoanFactoryTestTypes.Maps
@@ -711,7 +725,12 @@ class Factory extends ContractFactory<
     tokenMapping: async (
       params: TestContractParams<
         LoanFactoryTestTypes.Fields,
-        { token: HexString; add: boolean; pairtoken: HexString },
+        {
+          token: HexString;
+          add: boolean;
+          pairtoken: HexString;
+          decimals: bigint;
+        },
         LoanFactoryTestTypes.Maps
       >
     ): Promise<TestContractResult<null, LoanFactoryTestTypes.Maps>> => {
@@ -792,8 +811,8 @@ class Factory extends ContractFactory<
 export const LoanFactoryTest = new Factory(
   Contract.fromJson(
     LoanFactoryTestContractJson,
-    "=86-2+8d=2-2+a1=2-2+ba=2-1=1+e=2-2+e6=2617-1+e=29-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=15-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
-    "f42b0c0686ede762c921c59e03d45ebc55396e6ee91f07830ac3b2c0bf3de809",
+    "=86-2+8d=2-2+a1=2-2+ba=2-2+ce=2-2+e6=3106-2+4023=28-2+11=52+7a7e0214696e73657274206174206d617020706174683a2000=19-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
+    "3fd3b570b9e29d0781b5968e05d2264cb7b59e9cadf2b1eb653e50cc7b66b404",
     AllStructs
   )
 );
@@ -806,7 +825,7 @@ export class LoanFactoryTestInstance extends ContractInstance {
   }
 
   maps = {
-    tokenPairs: new RalphMap<HexString, HexString>(
+    tokenPairs: new RalphMap<HexString, PairInfo>(
       LoanFactoryTest.contract,
       this.contractId,
       "tokenPairs"

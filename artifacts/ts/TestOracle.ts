@@ -35,7 +35,13 @@ import {
 } from "@alephium/web3";
 import { default as TestOracleContractJson } from "../test/TestOracle.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { DIAOracleValue, PlayerData, TokenData, AllStructs } from "./types";
+import {
+  DIAOracleValue,
+  PairInfo,
+  PlayerData,
+  TokenData,
+  AllStructs,
+} from "./types";
 import { RalphMap } from "@alephium/web3";
 
 // Custom types for the contract

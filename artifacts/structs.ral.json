@@ -48,6 +48,21 @@
     ]
   },
   {
+    "name": "PairInfo",
+    "fieldNames": [
+      "pair",
+      "decimals"
+    ],
+    "fieldTypes": [
+      "ByteVec",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      true
+    ]
+  },
+  {
     "name": "TokenData",
     "fieldNames": [
       "value"

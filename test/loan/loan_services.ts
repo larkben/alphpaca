@@ -27,7 +27,7 @@ import {
   import { off } from 'process'
   import { ValByteVec } from '@alephium/web3/dist/src/api/api-alephium'
   import { MinimalContractDeposit, NullContractAddress, token } from '@alephium/web3/dist/src/codec'
-import { AcceptLoan, AcceptLoanTest, BidLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoanTest, CreateToken, CreateTokenInstance, EditValidContract, ForfeitLoanTest, GamifyProtocol, GamifyProtocolInstance, Loan, LoaneeMarket, LoaneeMarketInstance, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, RedeemLoanTest, Supercharge, TestOracleInstance, Token, TokenInstance, TokenMapping, UpdateCreationFee } from '../../artifacts/ts'
+import { AcceptLoan, AcceptLoanTest, BidLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoanTest, CreateToken, CreateTokenInstance, EditValidContract, ForfeitLoanTest, GamifyProtocol, GamifyProtocolInstance, LiquidationLoanTest, Loan, LoaneeMarket, LoaneeMarketInstance, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, RedeemLoanTest, Supercharge, TestOracleInstance, Token, TokenInstance, TokenMapping, UpdateCreationFee } from '../../artifacts/ts'
 import { start } from 'repl'
   
   web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
@@ -55,6 +55,7 @@ import { start } from 'repl'
         parentContract: ZERO_ADDRESS,
         canLiquidate: false,
         liquidation: false,
+        ratio: 0n,
         highestBidder: ZERO_ADDRESS,
         highestBid: 0n,
         timeToEnd: 0n,
@@ -184,7 +185,7 @@ import { start } from 'repl'
     loanFactory: LoanFactoryTestInstance,
     contract: string
   ) {
-    return await ForfeitLoanTest.execute(signer, {
+    return await LiquidationLoanTest.execute(signer, {
       initialFields: {
         loanFactory: loanFactory.contractId,
         contract: contract
@@ -233,14 +234,16 @@ export async function AddTokenMapping (
   loanFactory: LoanFactoryTestInstance,
   token: string,
   add: boolean,
-  pairToken: string
+  pairToken: string,
+  decimals: number
 ) {
   return await TokenMapping.execute(signer, {
     initialFields: {
       loanFactory: loanFactory.contractId,
       token: token,
       add: add,
-      pairtoken: stringToHex(pairToken)
+      pairtoken: stringToHex(pairToken),
+      decimals: BigInt(decimals)
     },
     attoAlphAmount: DUST_AMOUNT + MINIMAL_CONTRACT_DEPOSIT, // 0.1 alph
   });

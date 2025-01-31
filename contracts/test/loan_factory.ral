@@ -1,3 +1,9 @@
+struct PairInfo {
+    // need to have decimals for liquidation
+    pair: ByteVec,
+    mut decimals: U256 
+}
+
 Contract LoanFactoryTest (
     admin: Address,
     loanTemplate: ByteVec,
@@ -7,7 +13,7 @@ Contract LoanFactoryTest (
     oracle: TestOracle
 ) {
     // price mappings
-    mapping [ByteVec, ByteVec] tokenPairs
+    mapping [ByteVec, PairInfo] tokenPairs
 
     // events
     event NewLoan(contract: ByteVec, tokenRequested: ByteVec, tokenAmount: U256, collateralToken: ByteVec, collateralAmount: U256, interest: U256, duration: U256, who: Address)
@@ -29,26 +35,55 @@ Contract LoanFactoryTest (
     // health / collateral value calculation
     fn determineCollateralRatio(
         tokenRequested: ByteVec,
+        tokenAmount: U256,
         collateralToken: ByteVec, 
+        collateralAmount: U256,
         threshhold: U256
     ) -> (U256, Bool) {
-        let loan_value = oracle.getValue(tokenPairs[tokenRequested]).value
+        if (tokenPairs.contains!(tokenRequested) == true && tokenPairs.contains!(collateralToken)) {
+            let mut loan_value = oracle.getValue(tokenPairs[tokenRequested].pair).value
 
-        let collateral_value = oracle.getValue(tokenPairs[collateralToken]).value
+            let mut collateral_value = oracle.getValue(tokenPairs[collateralToken].pair).value
 
-        if (loan_value == 0) {
-            return 0, false
-        }
+            if (loan_value == 0) {
+                return 0, false
+            }
+
+            let collateral_decimals = tokenPairs[collateralToken].decimals
+            let token_decimals = tokenPairs[tokenRequested].decimals
+
+            let token_scale = 10 ** (token_decimals)
+            let collateral_scale = 10 ** (collateral_decimals)
+
+            // Normalize values to the higher decimal scale
+            if (token_decimals > collateral_decimals) {
+                let scale_factor = 10 ** (token_decimals - collateral_decimals)
+                loan_value = (loan_value * tokenAmount) / token_scale
+                collateral_value = (collateral_value * scale_factor * collateralAmount) / collateral_scale
+            } 
+            else if (token_decimals < collateral_decimals) {
+                let scale_factor = 10 ** (collateral_decimals - token_decimals)
+                loan_value = (loan_value * scale_factor * tokenAmount) / token_scale
+                collateral_value = (collateral_value * collateralAmount) / collateral_scale
+            } 
+            else {
+                // No scaling needed if decimals are equal
+                loan_value = (loan_value * tokenAmount) / token_scale
+                collateral_value = (collateral_value * collateralAmount) / collateral_scale
+            }
         
-        let collateral_ratio = (collateral_value * 100) / loan_value
+            let collateral_ratio = (collateral_value * 100) / loan_value
 
-        if (collateral_ratio < threshhold) {
-            return collateral_ratio, true
+            if (collateral_ratio < threshhold) {
+                return collateral_ratio, true
+            }
+
+            else {
+                return collateral_ratio, false
+            }
         }
 
-        else {
-            return collateral_ratio, false
-        }
+        return 0, false
     }
 
     pub fn getRequiredTokens(contractId: ByteVec, withInterest: Bool) -> (ByteVec, U256) {
@@ -93,6 +128,14 @@ Contract LoanFactoryTest (
 
         checkTokenAmount(tokenAmount, rate)
 
+        let (ratio, condition) = determineCollateralRatio(
+            tokenRequested, 
+            tokenAmount, 
+            collateralToken, 
+            collateralAmount, 
+            150
+        )
+
         let (encodeImmutableFields, encodeMutableFields) = LoanTest.encodeFields!(
             caller,
             nullContractAddress!(),
@@ -109,6 +152,7 @@ Contract LoanFactoryTest (
             selfAddress!(),
             canLiquidate,
             false,
+            ratio,
             nullContractAddress!(),
             tokenAmount,
             0,
@@ -152,6 +196,14 @@ Contract LoanFactoryTest (
 
         market.delegate(caller, tokenAmount)
 
+        let (ratio, condition) = determineCollateralRatio(
+            tokenRequested, 
+            tokenAmount, 
+            collateralToken, 
+            collateralAmount, 
+            150
+        )
+
         let (encodeImmutableFields, encodeMutableFields) = LoanTest.encodeFields!(
             caller,
             loanee,
@@ -163,12 +215,12 @@ Contract LoanFactoryTest (
             interest,
             rate,
             duration,
-            // test oracle
-            oracle.getTime(),
+            0,
             true,
             selfAddress!(),
             liquid,
             false,
+            ratio,
             nullContractAddress!(),
             tokenAmount,
             0,
@@ -255,7 +307,7 @@ Contract LoanFactoryTest (
 
         // get liquidation threshold from loan (could be a cool feature)
 
-        let (ratio, liquidate) = determineCollateralRatio(token, collateral, 150)
+        let (ratio, liquidate) = determineCollateralRatio(token, amount, collateral, collateralAmount, 150)
 
         assert!(liquidate == true, 8)
 
@@ -427,11 +479,16 @@ Contract LoanFactoryTest (
 
     // ... complete this
     @using(checkExternalCaller = true, preapprovedAssets = true, updateFields = false)
-    pub fn tokenMapping(token: ByteVec, add: Bool, pairtoken: ByteVec) -> () {
+    pub fn tokenMapping(token: ByteVec, add: Bool, pairtoken: ByteVec, decimals: U256) -> () {
         checkCaller!(callerAddress!() == admin, LoanCodes.NotAdmin)
 
         if (add) {
-            tokenPairs.insert!(callerAddress!(), token, pairtoken)
+            let b = PairInfo {
+                pair: pairtoken,
+                decimals: decimals
+            }
+
+            tokenPairs.insert!(callerAddress!(), token, b)
         }
         else {
             tokenPairs.remove!(callerAddress!(), token)
@@ -669,9 +726,10 @@ TxScript TokenMapping (
     loanFactory: LoanFactoryTest,
     token: ByteVec, 
     add: Bool,
-    pairtoken: ByteVec
+    pairtoken: ByteVec,
+    decimals: U256
 ) {
-    loanFactory.tokenMapping{callerAddress!() -> ALPH: mapEntryDeposit!()}(token, add, pairtoken)
+    loanFactory.tokenMapping{callerAddress!() -> ALPH: mapEntryDeposit!()}(token, add, pairtoken, decimals)
 }
 
 // upgrade / destroy

@@ -35,7 +35,13 @@ import {
 } from "@alephium/web3";
 import { default as LoanTestContractJson } from "../test/LoanTest.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { DIAOracleValue, PlayerData, TokenData, AllStructs } from "./types";
+import {
+  DIAOracleValue,
+  PairInfo,
+  PlayerData,
+  TokenData,
+  AllStructs,
+} from "./types";
 
 // Custom types for the contract
 export namespace LoanTestTypes {
@@ -54,6 +60,7 @@ export namespace LoanTestTypes {
     parentContract: Address;
     canLiquidate: boolean;
     liquidation: boolean;
+    ratio: bigint;
     highestBidder: Address;
     highestBid: bigint;
     timeToEnd: bigint;
@@ -387,7 +394,7 @@ export const LoanTest = new Factory(
   Contract.fromJson(
     LoanTestContractJson,
     "",
-    "50cb958c507eb6177e662304722e63826118e3b207921f81694584be83650fe0",
+    "c87b0507b7d5d5118c446e601507e2f94478034847bd4633a0786488bd7f31cb",
     AllStructs
   )
 );
