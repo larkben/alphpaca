@@ -86,9 +86,9 @@ import { CreateLoaneeMarketService } from "./market_services";
         await AddOraclePair(creator, oracleTemplate, "ALPH/USD")
         await AddOraclePair(creator, oracleTemplate, "ETH/USD")
 
-        await UpdateOracleValue(creator, oracleTemplate, "BTC/USD", 105189_08955622122)
-        await UpdateOracleValue(creator, oracleTemplate, "ALPH/USD", 8392017041720942)
-        await UpdateOracleValue(creator, oracleTemplate, "ETH/USD", 3271_7193267584776)
+        await UpdateOracleValue(creator, oracleTemplate, "BTC/USD", 10534011153980)
+        await UpdateOracleValue(creator, oracleTemplate, "ALPH/USD", 163418282)
+        await UpdateOracleValue(creator, oracleTemplate, "ETH/USD", 3271_7193267584776) // update this!!!
 
         // create 2 tokens (btc and eth)
 
@@ -130,7 +130,7 @@ import { CreateLoaneeMarketService } from "./market_services";
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
 
         // minimum on 2000 tokens is 20,000 seconds or 5.5 hours with 8% apr
-        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ids[0], 40000, ALPH_TOKEN_ID, 10000000000000000000, 800, 20000000, false)
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 10000000000000000000, ids[0], 1000000, 800, 20000000, false)
 
         details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
         contractAddress = details.generatedOutputs[0].address
@@ -138,7 +138,7 @@ import { CreateLoaneeMarketService } from "./market_services";
         loanId = contractIdFromAddress(details.generatedOutputs[0].address)
         hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
 
-        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ids[0], 40000)
+        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 10000000000000000000)
 
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 21000000)
 
@@ -166,7 +166,7 @@ import { CreateLoaneeMarketService } from "./market_services";
         // test liquidation loans
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
 
-        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 10000000000000000000, ALPH_TOKEN_ID, 10000000000000000000, 800, 20000000, true) // 1 bitcoin and 10 alph
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 1000000000000000000, ids[0], 1000000, 800, 20000000, false) // 1 bitcoin and 10 alph
 
         details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
         contractAddress = details.generatedOutputs[0].address

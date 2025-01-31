@@ -45,7 +45,7 @@ Contract LoanFactoryTest (
 
             let mut collateral_value = oracle.getValue(tokenPairs[collateralToken].pair).value
 
-            if (loan_value == 0) {
+            if (loan_value == 0 || collateral_value == 0) {
                 return 0, false
             }
 
