@@ -85,6 +85,15 @@ export namespace LoanFactoryTestTypes {
     token: HexString;
     startingBid: bigint;
   }>;
+  export type AuctionRedeemEvent = ContractEvent<{
+    contract: HexString;
+    who: Address;
+  }>;
+  export type AuctionBidEvent = ContractEvent<{
+    contract: HexString;
+    who: Address;
+    amount: bigint;
+  }>;
   export type MarketCreatedEvent = ContractEvent<{
     contract: HexString;
     token: HexString;
@@ -472,9 +481,11 @@ class Factory extends ContractFactory<
     LoanRemoved: 2,
     LoanWithdraw: 3,
     LoanLiquidation: 4,
-    MarketCreated: 5,
-    MarketUpdated: 6,
-    MarketDestroyed: 7,
+    AuctionRedeem: 5,
+    AuctionBid: 6,
+    MarketCreated: 7,
+    MarketUpdated: 8,
+    MarketDestroyed: 9,
   };
   consts = {
     LoanCodes: { NotAdmin: BigInt("0"), TokenSizeTooSmall: BigInt("1") },
@@ -804,8 +815,8 @@ class Factory extends ContractFactory<
 export const LoanFactoryTest = new Factory(
   Contract.fromJson(
     LoanFactoryTestContractJson,
-    "=77-2=1+09=1-3+61d=2-1=1+6=2-2+4a=2+6=1-1=2842-2+4023=28-2+11=52+7a7e0214696e73657274206174206d617020706174683a2000=19-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
-    "f025f35b8187da0db2538fb6cd6a8ccfc966819c84cae3e20de368d14dacdc97",
+    "=77-2=1+19=1-3+62d=2-2=2-2+465a=2-2+72=2874-2+4023=28-2+11=52+7a7e0214696e73657274206174206d617020706174683a2000=19-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
+    "8adf04e020f150bc57184e33939dd456b1334905590ac280532a281926eeb404",
     AllStructs
   )
 );
@@ -898,6 +909,32 @@ export class LoanFactoryTestInstance extends ContractInstance {
     );
   }
 
+  subscribeAuctionRedeemEvent(
+    options: EventSubscribeOptions<LoanFactoryTestTypes.AuctionRedeemEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      LoanFactoryTest.contract,
+      this,
+      options,
+      "AuctionRedeem",
+      fromCount
+    );
+  }
+
+  subscribeAuctionBidEvent(
+    options: EventSubscribeOptions<LoanFactoryTestTypes.AuctionBidEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      LoanFactoryTest.contract,
+      this,
+      options,
+      "AuctionBid",
+      fromCount
+    );
+  }
+
   subscribeMarketCreatedEvent(
     options: EventSubscribeOptions<LoanFactoryTestTypes.MarketCreatedEvent>,
     fromCount?: number
@@ -944,6 +981,8 @@ export class LoanFactoryTestInstance extends ContractInstance {
       | LoanFactoryTestTypes.LoanRemovedEvent
       | LoanFactoryTestTypes.LoanWithdrawEvent
       | LoanFactoryTestTypes.LoanLiquidationEvent
+      | LoanFactoryTestTypes.AuctionRedeemEvent
+      | LoanFactoryTestTypes.AuctionBidEvent
       | LoanFactoryTestTypes.MarketCreatedEvent
       | LoanFactoryTestTypes.MarketUpdatedEvent
       | LoanFactoryTestTypes.MarketDestroyedEvent

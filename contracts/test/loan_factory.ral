@@ -22,6 +22,9 @@ Contract LoanFactoryTest (
     event LoanWithdraw(contract: ByteVec, forfeit: Bool, who: Address)
     event LoanLiquidation(contract: ByteVec, token: ByteVec, startingBid: U256)
 
+    event AuctionRedeem(contract: ByteVec, who: Address)
+    event AuctionBid(contract: ByteVec, who: Address, amount: U256)
+
     // loanee market
     event MarketCreated(contract: ByteVec, token: ByteVec, amount: U256, minInterest: U256, maxTime: U256, liquidation: Bool, who: Address)
     event MarketUpdated(contract: ByteVec, token: ByteVec, amount: U256, minTokenBorrow: U256, minInterest: U256, maxTime: U256, liquidation: Bool)
@@ -324,7 +327,7 @@ Contract LoanFactoryTest (
         let timeEnd = loan.bid{caller -> token: bidAmount, ALPH: dustAmount!()}(caller, bidAmount)
 
         // ... emit liquidation
-        // ... emit newPotential time end
+        emit AuctionBid(contractId, caller, bidAmount)
     }
 
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false, assetsInContract = enforced)
@@ -335,7 +338,7 @@ Contract LoanFactoryTest (
 
         loan.redeem(caller)
 
-        // ... emit redeem
+        emit AuctionRedeem(contractId, caller)
     }
 
     // add collateral function
