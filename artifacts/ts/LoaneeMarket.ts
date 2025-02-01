@@ -53,6 +53,8 @@ export namespace LoaneeMarketTypes {
     minInterest: bigint;
     maxTime: bigint;
     liquidation: boolean;
+    collateralRatioRequired: boolean;
+    ratioRequired: bigint;
     parentContract: Address;
   };
 
@@ -67,6 +69,10 @@ export namespace LoaneeMarketTypes {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<[Address, bigint, bigint, bigint, boolean]>;
     };
+    getCollateralDetails: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<[boolean, bigint]>;
+    };
     editMarketValues: {
       params: CallContractParams<{
         caller: Address;
@@ -74,6 +80,8 @@ export namespace LoaneeMarketTypes {
         newInterest: bigint;
         newTime: bigint;
         canBeLiq: boolean;
+        collateral: boolean;
+        ratio: bigint;
       }>;
       result: CallContractResult<null>;
     };
@@ -123,6 +131,10 @@ export namespace LoaneeMarketTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
+    getCollateralDetails: {
+      params: Omit<SignExecuteContractMethodParams<{}>, "args">;
+      result: SignExecuteScriptTxResult;
+    };
     editMarketValues: {
       params: SignExecuteContractMethodParams<{
         caller: Address;
@@ -130,6 +142,8 @@ export namespace LoaneeMarketTypes {
         newInterest: bigint;
         newTime: bigint;
         canBeLiq: boolean;
+        collateral: boolean;
+        ratio: bigint;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -211,6 +225,19 @@ class Factory extends ContractFactory<
         getContractByCodeHash
       );
     },
+    getCollateralDetails: async (
+      params: Omit<
+        TestContractParamsWithoutMaps<LoaneeMarketTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResultWithoutMaps<[boolean, bigint]>> => {
+      return testMethod(
+        this,
+        "getCollateralDetails",
+        params,
+        getContractByCodeHash
+      );
+    },
     editMarketValues: async (
       params: TestContractParamsWithoutMaps<
         LoaneeMarketTypes.Fields,
@@ -220,6 +247,8 @@ class Factory extends ContractFactory<
           newInterest: bigint;
           newTime: bigint;
           canBeLiq: boolean;
+          collateral: boolean;
+          ratio: bigint;
         }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -278,7 +307,7 @@ export const LoaneeMarket = new Factory(
   Contract.fromJson(
     LoaneeMarketContractJson,
     "",
-    "1ae6139a0303d73f0cf5aa0e142a74d2d87b64e49e025b79766b3e277679dc0f",
+    "a9cc0b2ee9caa208dc8ca365d3db5b86d548798aafe8f9cf94f1653636b0a676",
     AllStructs
   )
 );
@@ -313,6 +342,17 @@ export class LoaneeMarketInstance extends ContractInstance {
         LoaneeMarket,
         this,
         "getLoaneeDetails",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getCollateralDetails: async (
+      params?: LoaneeMarketTypes.CallMethodParams<"getCollateralDetails">
+    ): Promise<LoaneeMarketTypes.CallMethodResult<"getCollateralDetails">> => {
+      return callMethod(
+        LoaneeMarket,
+        this,
+        "getCollateralDetails",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
@@ -393,6 +433,18 @@ export class LoaneeMarketInstance extends ContractInstance {
       LoaneeMarketTypes.SignExecuteMethodResult<"getLoaneeDetails">
     > => {
       return signExecuteMethod(LoaneeMarket, this, "getLoaneeDetails", params);
+    },
+    getCollateralDetails: async (
+      params: LoaneeMarketTypes.SignExecuteMethodParams<"getCollateralDetails">
+    ): Promise<
+      LoaneeMarketTypes.SignExecuteMethodResult<"getCollateralDetails">
+    > => {
+      return signExecuteMethod(
+        LoaneeMarket,
+        this,
+        "getCollateralDetails",
+        params
+      );
     },
     editMarketValues: async (
       params: LoaneeMarketTypes.SignExecuteMethodParams<"editMarketValues">

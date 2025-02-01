@@ -190,6 +190,8 @@ export namespace LoanFactoryTestTypes {
         minInterest: bigint;
         maxTime: bigint;
         liquidation: boolean;
+        collateral: boolean;
+        ratio: bigint;
       }>;
       result: CallContractResult<null>;
     };
@@ -200,6 +202,8 @@ export namespace LoanFactoryTestTypes {
         newInterest: bigint;
         newTime: bigint;
         liq: boolean;
+        collateral: boolean;
+        ratio: bigint;
       }>;
       result: CallContractResult<null>;
     };
@@ -366,6 +370,8 @@ export namespace LoanFactoryTestTypes {
         minInterest: bigint;
         maxTime: bigint;
         liquidation: boolean;
+        collateral: boolean;
+        ratio: bigint;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -376,6 +382,8 @@ export namespace LoanFactoryTestTypes {
         newInterest: bigint;
         newTime: bigint;
         liq: boolean;
+        collateral: boolean;
+        ratio: bigint;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -636,6 +644,8 @@ class Factory extends ContractFactory<
           minInterest: bigint;
           maxTime: bigint;
           liquidation: boolean;
+          collateral: boolean;
+          ratio: bigint;
         },
         LoanFactoryTestTypes.Maps
       >
@@ -651,6 +661,8 @@ class Factory extends ContractFactory<
           newInterest: bigint;
           newTime: bigint;
           liq: boolean;
+          collateral: boolean;
+          ratio: bigint;
         },
         LoanFactoryTestTypes.Maps
       >
@@ -792,8 +804,8 @@ class Factory extends ContractFactory<
 export const LoanFactoryTest = new Factory(
   Contract.fromJson(
     LoanFactoryTestContractJson,
-    "=78-8=1-1+f=2-2+f3=3-1+c46204638=2758-2+4023=28-2+11=52+7a7e0214696e73657274206174206d617020706174683a2000=19-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
-    "5110af0ef2d86496dae05cb6f98b6dbbdce618136b7ffd86f7d5d07751e03870",
+    "=77-2=1+09=1-3+61d=2-1=1+6=2-2+4a=2+6=1-1=2842-2+4023=28-2+11=52+7a7e0214696e73657274206174206d617020706174683a2000=19-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
+    "f025f35b8187da0db2538fb6cd6a8ccfc966819c84cae3e20de368d14dacdc97",
     AllStructs
   )
 );

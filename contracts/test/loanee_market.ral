@@ -7,6 +7,9 @@ Contract LoaneeMarket (
     mut minInterest: U256,
     mut maxTime: U256,
     mut liquidation: Bool,
+    // collateral
+    mut collateralRatioRequired: Bool,
+    mut ratioRequired: U256,
     parentContract: Address
 ) {
     pub fn getLoaneeTokenDetails() -> (ByteVec, U256) {
@@ -17,13 +20,19 @@ Contract LoaneeMarket (
         return creator, minTokenAmount, minInterest, maxTime, liquidation
     }
 
-    // edit min interest
+    pub fn getCollateralDetails() -> (Bool, U256) {
+        return collateralRatioRequired, ratioRequired
+    }
+
+    // edit market values
     @using(checkExternalCaller = true, updateFields = true)
-    pub fn editMarketValues(caller: Address, newMinAmount: U256, newInterest: U256, newTime: U256, canBeLiq: Bool) -> () {
+    pub fn editMarketValues(caller: Address, newMinAmount: U256, newInterest: U256, newTime: U256, canBeLiq: Bool, collateral: Bool, ratio: U256) -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
 
         assert!(caller == creator, 1)
 
+        collateralRatioRequired = collateral
+        ratioRequired = ratio
         minTokenAmount = newMinAmount
         minInterest = newInterest
         maxTime = newTime
@@ -43,7 +52,7 @@ Contract LoaneeMarket (
         tokenAmount = tokenAmount - amount
     }
 
-    @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true)
+    @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true, assetsInContract = true)
     pub fn add(caller: Address, amount: U256, gas: Bool) -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
 

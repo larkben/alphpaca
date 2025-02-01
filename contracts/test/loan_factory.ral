@@ -96,7 +96,7 @@ Contract LoanFactoryTest (
         assert!(priceIn > commission, LoanCodes.TokenSizeTooSmall)
 
         // Additional optional check for a minimum base token amount
-        assert!(priceIn >= 10000, LoanCodes.TokenSizeTooSmall)
+        assert!(priceIn >= 1000, LoanCodes.TokenSizeTooSmall)
     }
 
     // create loans (creator)
@@ -173,8 +173,9 @@ Contract LoanFactoryTest (
 
         checkTokenAmount(tokenAmount, rate)
 
-        let (loanee, borrow, min, int, liquid) = market.getLoaneeDetails()
+        let (loanee, borrow, int, min, liquid) = market.getLoaneeDetails()
         let (token, amount) = market.getLoaneeTokenDetails()
+        let (collateral, ratio) = market.getCollateralDetails()
 
         assert!(tokenRequested == token, 2)
         assert!(amount > tokenAmount, 3)
@@ -182,15 +183,18 @@ Contract LoanFactoryTest (
         assert!(duration <= min, 5)
         assert!(tokenAmount >= borrow, 6)
 
-        market.delegate(caller, tokenAmount)
+        if (collateral) {
+            let (r, condition) = determineCollateralRatio(
+                tokenRequested, 
+                tokenAmount, 
+                collateralToken, 
+                collateralAmount, 
+                150
+            )
+            assert!(r >= ratio, 7)
+        }
 
-        let (ratio, condition) = determineCollateralRatio(
-            tokenRequested, 
-            tokenAmount, 
-            collateralToken, 
-            collateralAmount, 
-            150
-        )
+        market.delegate(caller, tokenAmount)
 
         let (encodeImmutableFields, encodeMutableFields) = LoanTest.encodeFields!(
             caller,
@@ -317,13 +321,13 @@ Contract LoanFactoryTest (
 
         assert!(bidAmount > highestBid, 9)
 
-        let timeEnd = loan.bid{caller -> token: bidAmount}(caller, bidAmount)
+        let timeEnd = loan.bid{caller -> token: bidAmount, ALPH: dustAmount!()}(caller, bidAmount)
 
         // ... emit liquidation
         // ... emit newPotential time end
     }
 
-    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false)
+    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false, assetsInContract = enforced)
     pub fn redeem(contractId: ByteVec) -> () {
         let loan = LoanTest(contractId)
 
@@ -346,7 +350,9 @@ Contract LoanFactoryTest (
         minTokenAmount: U256,
         minInterest: U256,
         maxTime: U256,
-        liquidation: Bool
+        liquidation: Bool,
+        collateral: Bool,
+        ratio: U256
     ) -> () {
         // get caller
         let caller = callerAddress!()
@@ -360,6 +366,8 @@ Contract LoanFactoryTest (
             minInterest,
             maxTime,
             liquidation,
+            collateral,
+            ratio,
             selfAddress!()
         )
 
@@ -376,12 +384,12 @@ Contract LoanFactoryTest (
 
     // update loanee market -> simplify
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false)
-    pub fn editMarketValues(contractId: ByteVec, newBorrowAmount: U256, newInterest: U256, newTime: U256, liq: Bool) -> () {
+    pub fn editMarketValues(contractId: ByteVec, newBorrowAmount: U256, newInterest: U256, newTime: U256, liq: Bool, collateral: Bool, ratio: U256) -> () {
         let market = LoaneeMarket(contractId)
 
         let caller = callerAddress!()
 
-        market.editMarketValues(caller, newBorrowAmount, newInterest, newTime, liq)
+        market.editMarketValues(caller, newBorrowAmount, newInterest, newTime, liq, collateral, ratio)
 
         let (token, newAmount) = market.getLoaneeTokenDetails()
         let (_, minBorrow, min, int, l) = market.getLoaneeDetails()
@@ -585,7 +593,7 @@ TxScript BidLoanTest (
     bidAmount: U256,
     token: ByteVec
 ) {
-    loanFactory.bid{callerAddress!() -> token: bidAmount}(contract, bidAmount)
+    loanFactory.bid{callerAddress!() -> token: bidAmount, ALPH: dustAmount!()}(contract, bidAmount)
 }
 
 TxScript RedeemLoanTest (
@@ -604,7 +612,9 @@ TxScript CreateLoaneeMarketTest (
     minTokenAmount: U256,
     minInterest: U256,
     maxTime: U256,
-    liquidation: Bool
+    liquidation: Bool,
+    collateral: Bool,
+    ratio: U256
 ) {
     loanFactory.loaneeMarket{callerAddress!() -> ALPH: (minimalContractDeposit!() * 3), token: tokenAmount}(
         token,
@@ -612,7 +622,9 @@ TxScript CreateLoaneeMarketTest (
         minTokenAmount,
         minInterest,
         maxTime,
-        liquidation
+        liquidation,
+        collateral,
+        ratio
     )
 }
 
@@ -622,9 +634,11 @@ TxScript EditMarketValues (
     newBorrowAmount: U256, 
     newInterest: U256, 
     newTime: U256, 
-    liq: Bool
+    liq: Bool,
+    collateral: Bool,
+    ratio: U256
 ) {
-    loanFactory.editMarketValues(contractId, newBorrowAmount, newInterest, newTime, liq)
+    loanFactory.editMarketValues(contractId, newBorrowAmount, newInterest, newTime, liq, collateral, ratio)
 }
 
 TxScript AddFundsTest (

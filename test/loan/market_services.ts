@@ -27,7 +27,7 @@ import {
   import { off } from 'process'
   import { ValByteVec } from '@alephium/web3/dist/src/api/api-alephium'
   import { MinimalContractDeposit, NullContractAddress, token } from '@alephium/web3/dist/src/codec'
-import { AcceptLoan, AcceptLoanTest, AddFundsTest, BidLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoaneeMarketTest, CreateLoanTest, CreateToken, CreateTokenInstance, DestroyMarketTest, EditMarketValues, EditValidContract, ForfeitLoanTest, GamifyProtocol, GamifyProtocolInstance, Loan, LoaneeMarket, LoaneeMarketInstance, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, RedeemLoanTest, Supercharge, TestOracleInstance, Token, TokenInstance, UpdateCreationFee, WithdrawFundsTest } from '../../artifacts/ts'
+import { AcceptLoan, AcceptLoanTest, AcceptMarketTest, AddFundsTest, BidLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoaneeMarketTest, CreateLoanTest, CreateToken, CreateTokenInstance, DestroyMarketTest, EditMarketValues, EditValidContract, ForfeitLoanTest, GamifyProtocol, GamifyProtocolInstance, Loan, LoaneeMarket, LoaneeMarketInstance, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, RedeemLoanTest, Supercharge, TestOracleInstance, Token, TokenInstance, UpdateCreationFee, WithdrawFundsTest } from '../../artifacts/ts'
 import { start } from 'repl'
   
   web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
@@ -55,6 +55,8 @@ export async function CreateLoaneeMarketService (
         minInterest: BigInt(minInterest),
         maxTime: BigInt(maxTime),
         liquidation: liquidation,
+        collateral: true,
+        ratio: 150n
       },
       attoAlphAmount: DUST_AMOUNT + (MINIMAL_CONTRACT_DEPOSIT * 3n), // 0.1 alph
       tokens: [{id: token, amount: tokenAmount}]
@@ -77,7 +79,9 @@ export async function CreateLoaneeMarketService (
         newInterest: BigInt(interest),
         newBorrowAmount: BigInt(newBorrowAmount),
         newTime: BigInt(newTime),
-        liq: liq
+        liq: liq,
+        collateral: true,
+        ratio: 150n
       },
       attoAlphAmount: DUST_AMOUNT, // 0.1 alph
     });
@@ -148,5 +152,32 @@ export async function CreateLoaneeMarketService (
           contractId: contractId
       },
       attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+    });
+  }
+
+  export async function AcceptLoanMarket (
+    signer: SignerProvider,
+    loanFactory: LoanFactoryTestInstance,
+    token: string,
+    tokenAmount: number,
+    collateralToken: string,
+    collateralAmount: number,
+    interest: number,
+    duration: number,
+    contractId: string
+  ) {
+    return await AcceptMarketTest.execute(signer, {
+      initialFields: {
+        loanFactory: loanFactory.contractId,
+        tokenRequested: token,
+        tokenAmount: BigInt(tokenAmount),
+        collateralToken: collateralToken,
+        collateralAmount: BigInt(collateralAmount),
+        interest: BigInt(interest),
+        duration: BigInt(duration),
+        loaneeMarket: contractId
+      },
+      attoAlphAmount: DUST_AMOUNT + (MINIMAL_CONTRACT_DEPOSIT * 2n), // 0.1 alph
+      tokens: [{id: collateralToken, amount: BigInt(collateralAmount)}]
     });
   }

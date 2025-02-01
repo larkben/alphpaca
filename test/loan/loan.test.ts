@@ -11,10 +11,10 @@ import { PrivateKeyWallet } from "@alephium/web3-wallet";
 import { getSigners, testAddress } from "@alephium/web3-test";
 import { alph, CreateCoin, deployCreateToken, deployToken, randomP2PKHAddress } from "../create-token/utils";
 import { AcceptLoan, CreateTokenInstance, ForfeitLoanTest, GamifyProtocolInstance, LoaneeMarketInstance, LoanFactoryInstance, LoanFactoryTestInstance, LoanInstance, LoanTestInstance, MutableNFTInstance, NFTPublicSaleCollectionSequentialWithRoyaltyInstance, TestOracleInstance, TokenInstance, UpdateTime } from "../../artifacts/ts";
-import { AcceptLoanService, AddTokenMapping, CalculateLoanAssets, CancelLoanService, CreateLoanService, defaultSigner, DeployLoan, DeployLoanFactory, DeployMarket, ForfeitLoanService, LiquidationLoanService, PayLoanService } from "./loan_services";
+import { AcceptLoanService, AddTokenMapping, BidLoanService, CalculateLoanAssets, CancelLoanService, CreateLoanService, defaultSigner, DeployLoan, DeployLoanFactory, DeployMarket, ForfeitLoanService, LiquidationLoanService, PayLoanService, RedeemLoanService } from "./loan_services";
 import { debug } from "console";
 import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } from "./time_services";
-import { AddFundsService, CreateLoaneeMarketService, DestroyMarketService, MarketUpdateService, WithdrawFundsService } from "./market_services";
+import { AcceptLoanMarket, AddFundsService, CreateLoaneeMarketService, DestroyMarketService, MarketUpdateService, WithdrawFundsService } from "./market_services";
   
   const nodeProvider = new NodeProvider("http://127.0.0.1:22973");
   
@@ -99,7 +99,7 @@ import { AddFundsService, CreateLoaneeMarketService, DestroyMarketService, Marke
         // next test with various tokens (decimals, etc)
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
 
-        let tokenDetails = await CreateCoin(creator, creatorTemplate, "test", "prototype", 6, 100000000000000000000); // 18 decimals
+        let tokenDetails = await CreateCoin(creator, creatorTemplate, "test", "prototype", 8, 100000000000000000000); // 18 decimals
 
         let assets = await nodeProvider.addresses.getAddressesAddressBalance(creator.address)
         const ids = assets.tokenBalances?.map(token => token.id) ?? [];
@@ -123,7 +123,7 @@ import { AddFundsService, CreateLoaneeMarketService, DestroyMarketService, Marke
 
         // assign token to mapping for oracle
 
-        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ids[0], true, "BTC/USD", 6)
+        await AddTokenMapping(defaultSigner, loanFactoryTemplate, ids[0], true, "BTC/USD", 8)
 
         // testing forfeit
 
@@ -166,7 +166,7 @@ import { AddFundsService, CreateLoaneeMarketService, DestroyMarketService, Marke
         // test liquidation loans
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
 
-        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 1000000000000000000, ALPH_TOKEN_ID, 1000000000000000000, 800, 20000000, true) // 1 bitcoin and 10 alph
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ids[0], 1500, ALPH_TOKEN_ID, 1000000000000000000, 800, 20000000, true) // 1 bitcoin and 10 alph
 
         details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
         contractAddress = details.generatedOutputs[0].address
@@ -174,20 +174,24 @@ import { AddFundsService, CreateLoaneeMarketService, DestroyMarketService, Marke
         loanId = contractIdFromAddress(details.generatedOutputs[0].address)
         hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
 
-        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 1000000000000000000)
+        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ids[0], 1500)
 
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 20000000)
 
-        let liq = await nodeProvider.contracts.getContractsAddressState(contractAddress)
+        // let liq = await nodeProvider.contracts.getContractsAddressState(contractAddress)
         // console.log(liq)
 
         await LiquidationLoanService(creator, loanFactoryTemplate, hexString)
 
         // bidding
-        // ...
+        await BidLoanService(creator, loanFactoryTemplate, hexString, 1600, ids[0])
+
+        // increment time
+
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 20000000 + 3600001)
 
         // redeem
-        // ...
+        await RedeemLoanService(creator, loanFactoryTemplate, hexString)
 
         let market = await CreateLoaneeMarketService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, BigInt(100_000000_000000_000000), 10_000000_000000_000000, 500, 2629743000, true) // 100 alph | 10 alph minimum
 
@@ -215,12 +219,13 @@ import { AddFundsService, CreateLoaneeMarketService, DestroyMarketService, Marke
         // loanee market accept
         await WithdrawFundsService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 10_000000_000000_000000)
         let m = await nodeProvider.contracts.getContractsAddressState(addressFromContractId(hexString))
-        console.log(m)
+        //console.log(m)
 
-        /*
-        await AddFundsService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 10_000000_000000_000000, true)
+        await AddFundsService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 5_000000_000000_000000, true)
         m = await nodeProvider.contracts.getContractsAddressState(addressFromContractId(hexString))
-        console.log(m)
-        */
+        //console.log(m)
+
+        // request loan from loanee market
+        await AcceptLoanMarket(spender, loanFactoryTemplate, ALPH_TOKEN_ID, 5_000000_000000_000000, ALPH_TOKEN_ID, 15_000000_000000_000000, 1000, 20000000, hexString)
       }, 1000000)
   });

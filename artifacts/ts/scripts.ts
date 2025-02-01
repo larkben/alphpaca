@@ -261,6 +261,8 @@ export const CreateLoaneeMarketTest = new ExecutableScript<{
   minInterest: bigint;
   maxTime: bigint;
   liquidation: boolean;
+  collateral: boolean;
+  ratio: bigint;
 }>(
   Script.fromJson(CreateLoaneeMarketTestScriptJson, "", AllStructs),
   getContractByCodeHash
@@ -394,6 +396,8 @@ export const EditMarketValues = new ExecutableScript<{
   newInterest: bigint;
   newTime: bigint;
   liq: boolean;
+  collateral: boolean;
+  ratio: bigint;
 }>(
   Script.fromJson(EditMarketValuesScriptJson, "", AllStructs),
   getContractByCodeHash

@@ -1,7 +1,7 @@
 {
   "version": "v3.11.1",
   "name": "BidLoanTest",
-  "bytecodeTemplate": "0101030000000ab4{3}{2}a3{1}{2}0e0c{0}010a",
+  "bytecodeTemplate": "0101030000000db47a{3}{2}a313c3038d7ea4c68000a2{1}{2}0e0c{0}010a",
   "fieldsSig": {
     "names": [
       "loanFactory",

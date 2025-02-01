@@ -74,7 +74,9 @@ import { start } from 'repl'
         minInterest: 0n,
         maxTime: 0n,
         liquidation: false,
-        parentContract: ZERO_ADDRESS
+        parentContract: ZERO_ADDRESS,
+        collateralRatioRequired: false,
+        ratioRequired: 0n
       },
     });
   }
@@ -209,7 +211,7 @@ import { start } from 'repl'
         bidAmount: BigInt(bidAmount),
         token: token
       },
-      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+      attoAlphAmount: DUST_AMOUNT * 2n, // 0.1 alph
       tokens: [{id: token, amount: BigInt(bidAmount)}]
     });
   }
