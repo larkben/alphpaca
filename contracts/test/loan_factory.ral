@@ -24,7 +24,7 @@ Contract LoanFactoryTest (
 
     // loanee market
     event MarketCreated(contract: ByteVec, token: ByteVec, amount: U256, minInterest: U256, maxTime: U256, liquidation: Bool, who: Address)
-    event MarketUpdated(contract: ByteVec, token: ByteVec, amount: U256, minInterest: U256, maxTime: U256, liquidation: Bool)
+    event MarketUpdated(contract: ByteVec, token: ByteVec, amount: U256, minTokenBorrow: U256, minInterest: U256, maxTime: U256, liquidation: Bool)
     event MarketDestroyed(contract: ByteVec, who: Address)
 
     enum LoanCodes {
@@ -41,9 +41,9 @@ Contract LoanFactoryTest (
         threshhold: U256
     ) -> (U256, Bool) {
         if (tokenPairs.contains!(tokenRequested) == true && tokenPairs.contains!(collateralToken)) {
-            let mut loan_value = oracle.getValue(tokenPairs[tokenRequested].pair).value
+            let loan_value = oracle.getValue(tokenPairs[tokenRequested].pair).value
 
-            let mut collateral_value = oracle.getValue(tokenPairs[collateralToken].pair).value
+            let collateral_value = oracle.getValue(tokenPairs[collateralToken].pair).value
 
             if (loan_value == 0 || collateral_value == 0) {
                 return 0, false
@@ -52,34 +52,21 @@ Contract LoanFactoryTest (
             let collateral_decimals = tokenPairs[collateralToken].decimals
             let token_decimals = tokenPairs[tokenRequested].decimals
 
-            let token_scale = 10 ** (token_decimals)
-            let collateral_scale = 10 ** (collateral_decimals)
+            // Normalize collateral amount to 18 decimals
+            let collateralValueUSD = (collateralAmount * collateral_value * 10 ** (18 - collateral_decimals)) / 10 ** (8)
 
-            // Normalize values to the higher decimal scale
-            if (token_decimals > collateral_decimals) {
-                let scale_factor = 10 ** (token_decimals - collateral_decimals)
-                loan_value = (loan_value * tokenAmount) / token_scale
-                collateral_value = (collateral_value * scale_factor * collateralAmount) / collateral_scale
-            } 
-            else if (token_decimals < collateral_decimals) {
-                let scale_factor = 10 ** (collateral_decimals - token_decimals)
-                loan_value = (loan_value * scale_factor * tokenAmount) / token_scale
-                collateral_value = (collateral_value * collateralAmount) / collateral_scale
-            } 
-            else {
-                // No scaling needed if decimals are equal
-                loan_value = (loan_value * tokenAmount) / token_scale
-                collateral_value = (collateral_value * collateralAmount) / collateral_scale
-            }
-        
-            let collateral_ratio = (collateral_value * 100) / loan_value
+            // Normalize loan amount to 18 decimals
+            let loanValueUSD = (tokenAmount * loan_value * 10 ** (18 - token_decimals)) / 10 ** (8)
 
-            if (collateral_ratio < threshhold) {
-                return collateral_ratio, true
+            // Compute collateral-to-loan ratio in basis points (10000 = 100%)
+            let ratio = (collateralValueUSD * 100) / loanValueUSD
+
+            if (ratio < threshhold) {
+                return ratio, true
             }
 
             else {
-                return collateral_ratio, false
+                return ratio, false
             }
         }
 
@@ -186,13 +173,14 @@ Contract LoanFactoryTest (
 
         checkTokenAmount(tokenAmount, rate)
 
-        let (loanee, min, int, liquid) = market.getLoaneeDetails()
+        let (loanee, borrow, min, int, liquid) = market.getLoaneeDetails()
         let (token, amount) = market.getLoaneeTokenDetails()
 
         assert!(tokenRequested == token, 2)
         assert!(amount > tokenAmount, 3)
         assert!(interest >= int, 4)
         assert!(duration <= min, 5)
+        assert!(tokenAmount >= borrow, 6)
 
         market.delegate(caller, tokenAmount)
 
@@ -355,23 +343,28 @@ Contract LoanFactoryTest (
         token: ByteVec,
         tokenAmount: U256,
         // specs
+        minTokenAmount: U256,
         minInterest: U256,
         maxTime: U256,
         liquidation: Bool
     ) -> () {
+        // get caller
         let caller = callerAddress!()
 
+        // encode fields
         let (encodeImmutableFields, encodeMutableFields) = LoaneeMarket.encodeFields!(
             caller,
             token,
             tokenAmount,
+            minTokenAmount,
             minInterest,
             maxTime,
             liquidation,
             selfAddress!()
         )
 
-        let contractID = copyCreateContract!{caller -> token: tokenAmount, ALPH: minimalContractDeposit!() * 3}(
+        // create loanee template -> token: tokenAmount
+        let contractID = copyCreateContract!{caller -> ALPH: (minimalContractDeposit!() * 3), token: tokenAmount}(
             marketTemplate,                                                                                  
             encodeImmutableFields,
             encodeMutableFields
@@ -381,49 +374,22 @@ Contract LoanFactoryTest (
         emit MarketCreated(contractID, token, tokenAmount, minInterest, maxTime, liquidation, caller)
     }
 
+    // update loanee market -> simplify
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false)
-    pub fn editInterest(contractId: ByteVec, newInterest: U256) -> () {
+    pub fn editMarketValues(contractId: ByteVec, newBorrowAmount: U256, newInterest: U256, newTime: U256, liq: Bool) -> () {
         let market = LoaneeMarket(contractId)
 
         let caller = callerAddress!()
 
-        market.editMinInterest(caller, newInterest)
+        market.editMarketValues(caller, newBorrowAmount, newInterest, newTime, liq)
 
         let (token, newAmount) = market.getLoaneeTokenDetails()
-        let (_, min, int, l) = market.getLoaneeDetails()
+        let (_, minBorrow, min, int, l) = market.getLoaneeDetails()
 
-        emit MarketUpdated(contractId, token, newAmount, min, int, l)
+        emit MarketUpdated(contractId, token, newAmount, minBorrow, min, int, l)
     }
 
-    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false)
-    pub fn editTime(contractId: ByteVec, newTime: U256) -> () {
-        let market = LoaneeMarket(contractId)
-
-        let caller = callerAddress!()
-
-        market.editMaxTime(caller, newTime)
-
-        let (token, newAmount) = market.getLoaneeTokenDetails()
-        let (_, min, int, l) = market.getLoaneeDetails()
-
-        emit MarketUpdated(contractId, token, newAmount, min, int, l)
-    }
-
-    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false)
-    pub fn canLiquidate(contractId: ByteVec, liquid: Bool) -> () {
-        let market = LoaneeMarket(contractId)
-
-        let caller = callerAddress!()
-
-        market.editLiquidation(caller, liquid)
-
-        let (token, newAmount) = market.getLoaneeTokenDetails()
-        let (_, min, int, l) = market.getLoaneeDetails()
-
-        emit MarketUpdated(contractId, token, newAmount, min, int, l)
-    }
-
-    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = true)
+    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = true, assetsInContract = enforced)
     pub fn addFunds(contractId: ByteVec, token: ByteVec, amount: U256, gas: Bool) -> () {
         let market = LoaneeMarket(contractId)
 
@@ -438,12 +404,12 @@ Contract LoanFactoryTest (
         market.add{caller -> token: amount, ALPH: totalALPH}(caller, amount, gas)
 
         let (_, newAmount) = market.getLoaneeTokenDetails()
-        let (_, min, int, liquid) = market.getLoaneeDetails()
+        let (_, borrow, min, int, liquid) = market.getLoaneeDetails()
 
-        emit MarketUpdated(contractId, token, newAmount, min, int, liquid)
+        emit MarketUpdated(contractId, token, newAmount, borrow, min, int, liquid)
     }
 
-    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false)
+    @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false, assetsInContract = enforced)
     pub fn withdrawFunds(contractId: ByteVec, token: ByteVec, amount: U256) -> () {
         let market = LoaneeMarket(contractId)
 
@@ -452,9 +418,9 @@ Contract LoanFactoryTest (
         market.withdraw(caller, amount)
 
         let (_, newAmount) = market.getLoaneeTokenDetails()
-        let (_, min, int, liquid) = market.getLoaneeDetails()
+        let (_, borrow, min, int, liquid) = market.getLoaneeDetails()
 
-        emit MarketUpdated(contractId, token, newAmount, min, int, liquid)
+        emit MarketUpdated(contractId, token, newAmount, borrow, min, int, liquid)
     }
 
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false)
@@ -635,41 +601,30 @@ TxScript CreateLoaneeMarketTest (
     loanFactory: LoanFactoryTest,
     token: ByteVec,
     tokenAmount: U256,
+    minTokenAmount: U256,
     minInterest: U256,
     maxTime: U256,
     liquidation: Bool
 ) {
-    loanFactory.loaneeMarket{callerAddress!() -> token: tokenAmount, ALPH: minimalContractDeposit!() * 3}(
+    loanFactory.loaneeMarket{callerAddress!() -> ALPH: (minimalContractDeposit!() * 3), token: tokenAmount}(
         token,
         tokenAmount,
+        minTokenAmount,
         minInterest,
         maxTime,
         liquidation
     )
 }
 
-TxScript EditInterestTest (
+TxScript EditMarketValues (
     loanFactory: LoanFactoryTest,
     contractId: ByteVec,
-    newInterest: U256
+    newBorrowAmount: U256, 
+    newInterest: U256, 
+    newTime: U256, 
+    liq: Bool
 ) {
-    loanFactory.editInterest(contractId, newInterest)
-}
-
-TxScript EditTimeTest (
-    loanFactory: LoanFactoryTest,
-    contractId: ByteVec,
-    newTime: U256
-) {
-    loanFactory.editTime(contractId, newTime)
-}
-
-TxScript EditLiquidateTest (
-    loanFactory: LoanFactoryTest,
-    contractId: ByteVec,
-    liquid: Bool
-) {
-    loanFactory.canLiquidate(contractId, liquid)
+    loanFactory.editMarketValues(contractId, newBorrowAmount, newInterest, newTime, liq)
 }
 
 TxScript AddFundsTest (

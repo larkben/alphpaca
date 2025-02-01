@@ -27,7 +27,7 @@ import {
   import { off } from 'process'
   import { ValByteVec } from '@alephium/web3/dist/src/api/api-alephium'
   import { MinimalContractDeposit, NullContractAddress, token } from '@alephium/web3/dist/src/codec'
-import { AcceptLoan, AcceptLoanTest, AddFundsTest, BidLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoaneeMarketTest, CreateLoanTest, CreateToken, CreateTokenInstance, DestroyMarketTest, EditInterestTest, EditLiquidateTest, EditTimeTest, EditValidContract, ForfeitLoanTest, GamifyProtocol, GamifyProtocolInstance, Loan, LoaneeMarket, LoaneeMarketInstance, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, RedeemLoanTest, Supercharge, TestOracleInstance, Token, TokenInstance, UpdateCreationFee, WithdrawFundsTest } from '../../artifacts/ts'
+import { AcceptLoan, AcceptLoanTest, AddFundsTest, BidLoanTest, Buildtoken, CancelLoan, CancelLoanTest, CollectFees, CreateLoan, CreateLoaneeMarketTest, CreateLoanTest, CreateToken, CreateTokenInstance, DestroyMarketTest, EditMarketValues, EditValidContract, ForfeitLoanTest, GamifyProtocol, GamifyProtocolInstance, Loan, LoaneeMarket, LoaneeMarketInstance, LoanFactory, LoanFactoryInstance, LoanFactoryTest, LoanFactoryTestInstance, LoanInstance, LoanTest, LoanTestInstance, PayLoan, PayLoanTest, RedeemLoanTest, Supercharge, TestOracleInstance, Token, TokenInstance, UpdateCreationFee, WithdrawFundsTest } from '../../artifacts/ts'
 import { start } from 'repl'
   
   web3.setCurrentNodeProvider('http://127.0.0.1:22973', undefined, fetch)
@@ -41,51 +41,43 @@ export async function CreateLoaneeMarketService (
     loanFactory: LoanFactoryTestInstance,
     token: string,
     tokenAmount: bigint,
+    minBorrowAmount: number,
     minInterest: number,
     maxTime: number,
     liquidation: boolean
   ) {
     return await CreateLoaneeMarketTest.execute(signer, {
       initialFields: {
-          loanFactory: loanFactory.contractId,
-          token: token,
-          tokenAmount: tokenAmount,
-          minInterest: BigInt(minInterest),
-          maxTime: BigInt(maxTime),
-          liquidation: liquidation
+        loanFactory: loanFactory.contractId,
+        token: token,
+        tokenAmount: tokenAmount,
+        minTokenAmount: BigInt(minBorrowAmount),
+        minInterest: BigInt(minInterest),
+        maxTime: BigInt(maxTime),
+        liquidation: liquidation,
       },
-      attoAlphAmount: DUST_AMOUNT * (MINIMAL_CONTRACT_DEPOSIT * 3n), // 0.1 alph
-      tokens: [{id: token, amount: BigInt(1)}]
+      attoAlphAmount: DUST_AMOUNT + (MINIMAL_CONTRACT_DEPOSIT * 3n), // 0.1 alph
+      tokens: [{id: token, amount: tokenAmount}]
     });
   }
 
-  export async function EditInterestService (
+  export async function MarketUpdateService (
     signer: SignerProvider,
-    loanFactory: LoanFactoryInstance,
+    loanFactory: LoanFactoryTestInstance,
     contractId: string,
-    interest: number
+    newBorrowAmount: number,
+    interest: number,
+    newTime: number,
+    liq: boolean
   ) {
-    return await EditInterestTest.execute(signer, {
+    return await EditMarketValues.execute(signer, {
       initialFields: {
-          loanFactory: loanFactory.contractId,
-          contractId: contractId,
-          newInterest: BigInt(interest)
-      },
-      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
-    });
-  }
-
-  export async function EditMaxTimeService (
-    signer: SignerProvider,
-    loanFactory: LoanFactoryInstance,
-    contractId: string,
-    time: number
-  ) {
-    return await EditTimeTest.execute(signer, {
-      initialFields: {
-          loanFactory: loanFactory.contractId,
-          contractId: contractId,
-          newTime: BigInt(time)
+        loanFactory: loanFactory.contractId,
+        contractId: contractId,
+        newInterest: BigInt(interest),
+        newBorrowAmount: BigInt(newBorrowAmount),
+        newTime: BigInt(newTime),
+        liq: liq
       },
       attoAlphAmount: DUST_AMOUNT, // 0.1 alph
     });
@@ -93,7 +85,7 @@ export async function CreateLoaneeMarketService (
 
   export async function WithdrawFundsService (
     signer: SignerProvider,
-    loanFactory: LoanFactoryInstance,
+    loanFactory: LoanFactoryTestInstance,
     contractId: string,
     token: string,
     amount: number
@@ -109,45 +101,45 @@ export async function CreateLoaneeMarketService (
     });
   }
 
-  export async function EditLiquidateService (
-    signer: SignerProvider,
-    loanFactory: LoanFactoryInstance,
-    contractId: string,
-    liquid: boolean
-  ) {
-    return await EditLiquidateTest.execute(signer, {
-      initialFields: {
-          loanFactory: loanFactory.contractId,
-          contractId: contractId,
-          liquid: liquid
-      },
-      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
-    });
-  }
-
   export async function AddFundsService (
     signer: SignerProvider,
-    loanFactory: LoanFactoryInstance,
+    loanFactory: LoanFactoryTestInstance,
     contractId: string,
     token: string,
     amount: number,
     gas: boolean
   ) {
-    return await AddFundsTest.execute(signer, {
-      initialFields: {
-          loanFactory: loanFactory.contractId,
-          contractId: contractId,
-          token: token,
-          amount: BigInt(amount),
-          gas: gas
-      },
-      attoAlphAmount: DUST_AMOUNT, // 0.1 alph
+    if (gas) {
+      return await AddFundsTest.execute(signer, {
+        initialFields: {
+            loanFactory: loanFactory.contractId,
+            contractId: contractId,
+            token: token,
+            amount: BigInt(amount),
+            gas: gas
+        },
+        attoAlphAmount: DUST_AMOUNT * 2n + MINIMAL_CONTRACT_DEPOSIT, // 0.1 alph
+        tokens: [{id: token, amount: BigInt(amount)}]
+      });
+    }
+    else {
+      return await AddFundsTest.execute(signer, {
+        initialFields: {
+            loanFactory: loanFactory.contractId,
+            contractId: contractId,
+            token: token,
+            amount: BigInt(amount),
+            gas: gas
+        },
+        attoAlphAmount: DUST_AMOUNT * 2n, // 0.1 alph
+        tokens: [{id: token, amount: BigInt(amount)}]
     });
   }
+}
 
   export async function DestroyMarketService (
     signer: SignerProvider,
-    loanFactory: LoanFactoryInstance,
+    loanFactory: LoanFactoryTestInstance,
     contractId: string
   ) {
     return await DestroyMarketTest.execute(signer, {

@@ -1,13 +1,14 @@
 {
   "version": "v3.11.1",
   "name": "LoaneeMarket",
-  "bytecode": "07091040244040405c407840ac40e9411d4138010000000204d34e7fad9dce01a00002010000000406d3ef451be6ce00a001a002a0030201000202000dd3fc263cceb4ce02450c7b1600ce00450d7b1601a10101000202000dd396bd21f1b4ce02450c7b1600ce00450d7b1601a10201000202000dd37771e519b4ce02450c7b1600ce00450d7b1601a103010202020018d39f7f9a91b4ce02450c7b1601a00031107bb21600ce01a000aab2160013c3038d7ea4c68000a7a00016012ba10001030303001ed33654b857b4ce02450c7b1600ce00450d7b1600b2ce011601aa1600b213c3038d7ea4c68000a716024c041600b2d1a7a00016012aa100010202020018d3f1ab4760b4ce02450c7b1600ce00450d7bb21600ce011601aab2160013c3038d7ea4c68000a7a00016012ba10001020101000dd320f98f62b4ce02450c7b1600ce00450d7bce00b0",
-  "codeHash": "5a2abbbfb35b570a59770734429906c2701f5a954c610eee322c132c8181bc56",
+  "bytecode": "0807104026404e408240bf40f3410e010000000204d34e7fad9dce01a00002010000000507d32987d7a4ce00a001a002a003a00402010005050013d399339904b4ce02450c7b1600ce00450d7b1601a1011602a1021603a1031604a104010202020018d39f7f9a91b4ce02450c7b1601a00031107bb21600ce01a000aab2160013c3038d7ea4c68000a7a00016012ba10001030303001ed33654b857b4ce02450c7b1600ce00450d7b1600b2ce011601aa1600b213c3038d7ea4c68000a716024c041600b2d1a7a00016012aa100010202020018d3f1ab4760b4ce02450c7b1600ce00450d7bb21600ce011601aab2160013c3038d7ea4c68000a7a00016012ba10001020101000dd320f98f62b4ce02450c7b1600ce00450d7bce00b0",
+  "codeHash": "1ae6139a0303d73f0cf5aa0e142a74d2d87b64e49e025b79766b3e277679dc0f",
   "fieldsSig": {
     "names": [
       "creator",
       "token",
       "tokenAmount",
+      "minTokenAmount",
       "minInterest",
       "maxTime",
       "liquidation",
@@ -19,12 +20,14 @@
       "U256",
       "U256",
       "U256",
+      "U256",
       "Bool",
       "Address"
     ],
     "isMutable": [
       false,
       false,
+      true,
       true,
       true,
       true,
@@ -53,52 +56,30 @@
         "Address",
         "U256",
         "U256",
+        "U256",
         "Bool"
       ]
     },
     {
-      "name": "editMinInterest",
+      "name": "editMarketValues",
       "paramNames": [
         "caller",
-        "interest"
+        "newMinAmount",
+        "newInterest",
+        "newTime",
+        "canBeLiq"
       ],
       "paramTypes": [
         "Address",
-        "U256"
-      ],
-      "paramIsMutable": [
-        false,
-        false
-      ],
-      "returnTypes": []
-    },
-    {
-      "name": "editMaxTime",
-      "paramNames": [
-        "caller",
-        "time"
-      ],
-      "paramTypes": [
-        "Address",
-        "U256"
-      ],
-      "paramIsMutable": [
-        false,
-        false
-      ],
-      "returnTypes": []
-    },
-    {
-      "name": "editLiquidation",
-      "paramNames": [
-        "caller",
-        "liquidate"
-      ],
-      "paramTypes": [
-        "Address",
+        "U256",
+        "U256",
+        "U256",
         "Bool"
       ],
       "paramIsMutable": [
+        false,
+        false,
+        false,
         false,
         false
       ],

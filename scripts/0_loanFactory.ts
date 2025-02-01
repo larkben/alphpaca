@@ -2,6 +2,7 @@ import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
 import { loadDeployments } from '../artifacts/ts/deployments'
 import { Loan, LoanFactory } from '../artifacts/ts';
+import { ZERO_ADDRESS } from '../test/create-token/utils';
 
 const deployLoanFactory: DeployFunction<Settings> = async (
   deployer: Deployer,
@@ -10,9 +11,11 @@ const deployLoanFactory: DeployFunction<Settings> = async (
   const result = await deployer.deployContract(LoanFactory, {
     initialFields: {
       admin: deployer.account.address,
-      loanTemplate: '78f54e186e2a8d5eeb9a4c941860a390d4c6f33eaf18c60b1722b953dc6ef800',
+      loanTemplate: '',
       activeLoans: 0n,
-      rate: 200n        // 2%
+      rate: 300n,                     // 3%
+      liquidationBot: ZERO_ADDRESS,   // edit this!!!!!
+      oracle: ZERO_ADDRESS            // edit this!!!!!
     }
   })
   const contractId = result.contractInstance.contractId

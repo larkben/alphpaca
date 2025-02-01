@@ -3,6 +3,7 @@ Contract LoaneeMarket (
     token: ByteVec,
     mut tokenAmount: U256,
     // specs
+    mut minTokenAmount: U256,
     mut minInterest: U256,
     mut maxTime: U256,
     mut liquidation: Bool,
@@ -12,37 +13,21 @@ Contract LoaneeMarket (
         return token, tokenAmount
     }
 
-    pub fn getLoaneeDetails() -> (Address, U256, U256, Bool) {
-        return creator, minInterest, maxTime, liquidation
+    pub fn getLoaneeDetails() -> (Address, U256, U256, U256, Bool) {
+        return creator, minTokenAmount, minInterest, maxTime, liquidation
     }
 
     // edit min interest
     @using(checkExternalCaller = true, updateFields = true)
-    pub fn editMinInterest(caller: Address, interest: U256) -> () {
+    pub fn editMarketValues(caller: Address, newMinAmount: U256, newInterest: U256, newTime: U256, canBeLiq: Bool) -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
 
         assert!(caller == creator, 1)
 
-        minInterest = interest
-    }
-
-    // edit max time
-    @using(checkExternalCaller = true, updateFields = true)
-    pub fn editMaxTime(caller: Address, time: U256) -> () {
-        checkCaller!(callerAddress!() == parentContract, 0)
-
-        assert!(caller == creator, 1)
-
-        maxTime = time
-    }
-
-    @using(checkExternalCaller = true, updateFields = true)
-    pub fn editLiquidation(caller: Address, liquidate: Bool) -> () {
-        checkCaller!(callerAddress!() == parentContract, 0)
-
-        assert!(caller == creator, 1)
-
-        liquidation = liquidate
+        minTokenAmount = newMinAmount
+        minInterest = newInterest
+        maxTime = newTime
+        liquidation = canBeLiq
     }
 
     // delegate

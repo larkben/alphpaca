@@ -10,8 +10,8 @@ const deployLoan: DeployFunction<Settings> = async (
 ): Promise<void> => {
   const result = await deployer.deployContract(Loan, {
     initialFields: {
-      creator: deployer.account.address,
-      loanee: ZERO_ADDRESS,
+      creator: '',
+      loanee: '',
       tokenRequested: '',
       tokenAmount: 0n,
       collateralToken: '',
@@ -21,7 +21,13 @@ const deployLoan: DeployFunction<Settings> = async (
       duration: 0n,
       startTime: 0n,
       active: false,
-      parentContract: ZERO_ADDRESS
+      parentContract: '',
+      liquidationBot: '',
+      canLiquidate: false,
+      liquidation: false,
+      highestBidder: '',
+      highestBid: 0n,
+      timeToEnd: 0n
     }
   })
   const contractId = result.contractInstance.contractId

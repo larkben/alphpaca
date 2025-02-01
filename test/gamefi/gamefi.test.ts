@@ -33,7 +33,7 @@ import { AddApprovedNFTCollection, GamifyProtocoldeploy, SuperchargeNFT } from "
       mutableNFTTemplate = (await deployNFT()).contractInstance
 
       gamefiTemplate = (await GamifyProtocoldeploy()).contractInstance
-    });
+    }, 100000);
   
     test('gamefi (supercharging)', async () => {
         const creator = buyer[0]

@@ -90,7 +90,7 @@ Contract LoanTest (
 
         // assignment
         active = true
-        startTime = blockTimeStamp!()
+        startTime = oracle.getTime()
         loanee = acceptor
     }
 
@@ -139,7 +139,7 @@ Contract LoanTest (
         checkCaller!(callerAddress!() == parentContract, 0)
 
         assert!(active == true, 3)
-        assert!(startTime + duration > oracle.getTime(), 4)
+        assert!(startTime + duration < oracle.getTime(), 4)
 
         // is the loan a liquidation loan?
         assert!(canLiquidate == false, 6)

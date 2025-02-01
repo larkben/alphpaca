@@ -14,7 +14,7 @@ import { AcceptLoan, CreateTokenInstance, ForfeitLoanTest, GamifyProtocolInstanc
 import { AcceptLoanService, AddTokenMapping, CalculateLoanAssets, CancelLoanService, CreateLoanService, defaultSigner, DeployLoan, DeployLoanFactory, DeployMarket, ForfeitLoanService, LiquidationLoanService, PayLoanService } from "./loan_services";
 import { debug } from "console";
 import { AddOraclePair, DeployTimeOracle, UpdateOracleTime, UpdateOracleValue } from "./time_services";
-import { CreateLoaneeMarketService } from "./market_services";
+import { AddFundsService, CreateLoaneeMarketService, DestroyMarketService, MarketUpdateService, WithdrawFundsService } from "./market_services";
   
   const nodeProvider = new NodeProvider("http://127.0.0.1:22973");
   
@@ -35,7 +35,7 @@ import { CreateLoaneeMarketService } from "./market_services";
   
     beforeEach(async () => {
       lister = randomP2PKHAddress(groupIndex);
-      buyer = await getSigners(2, alph(1000), groupIndex);
+      buyer = await getSigners(2, alph(10000), groupIndex);
 
       oracleTemplate = (await DeployTimeOracle()).contractInstance
 
@@ -78,7 +78,7 @@ import { CreateLoaneeMarketService } from "./market_services";
         console.log(contractAddress)
         let calculatedAmount = await CalculateLoanAssets(nodeProvider, contractAddress, 1738256564000 + 60480000)
 
-        // await PayLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, calculatedAmount)
+        await PayLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, calculatedAmount)
 
         // oracle pairs setup
 
@@ -105,7 +105,7 @@ import { CreateLoaneeMarketService } from "./market_services";
         const ids = assets.tokenBalances?.map(token => token.id) ?? [];
 
         // minimum on 2000 tokens is 20,000 seconds or 5.5 hours with 8% apr
-        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ids[0], 20000, ALPH_TOKEN_ID, 10000000000000000000, 800, 20000000, false)
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ids[0], 20000, ALPH_TOKEN_ID, 10000000000000000000, 1000, 20000000, false)
 
         details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
         contractAddress = details.generatedOutputs[0].address
@@ -119,7 +119,7 @@ import { CreateLoaneeMarketService } from "./market_services";
 
         calculatedAmount = await CalculateLoanAssets(nodeProvider, contractAddress, 1738256564000 + 20000000)
 
-        // await PayLoanService(creator, loanFactoryTemplate, hexString, ids[0], calculatedAmount)
+        await PayLoanService(creator, loanFactoryTemplate, hexString, ids[0], calculatedAmount)
 
         // assign token to mapping for oracle
 
@@ -130,7 +130,7 @@ import { CreateLoaneeMarketService } from "./market_services";
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
 
         // minimum on 2000 tokens is 20,000 seconds or 5.5 hours with 8% apr
-        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 10000000000000000000, ids[0], 1000000, 800, 20000000, false)
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 10000000000000000000, ids[0], 1000000, 1000, 20000000, false)
 
         details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
         contractAddress = details.generatedOutputs[0].address
@@ -140,7 +140,7 @@ import { CreateLoaneeMarketService } from "./market_services";
 
         await AcceptLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 10000000000000000000)
 
-        await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 21000000)
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 21000000) // forefit after 2.1m seconds
 
         await ForfeitLoanService(creator, loanFactoryTemplate, hexString)
 
@@ -166,7 +166,7 @@ import { CreateLoaneeMarketService } from "./market_services";
         // test liquidation loans
         await UpdateOracleTime(creator, oracleTemplate, 1738256564000)
 
-        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 1000000000000000000, ids[0], 1000000, 800, 20000000, false) // 1 bitcoin and 10 alph
+        loanOne = await CreateLoanService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, 1000000000000000000, ALPH_TOKEN_ID, 1000000000000000000, 800, 20000000, true) // 1 bitcoin and 10 alph
 
         details = await nodeProvider.transactions.getTransactionsDetailsTxid((loanOne).txId)
         contractAddress = details.generatedOutputs[0].address
@@ -174,12 +174,12 @@ import { CreateLoaneeMarketService } from "./market_services";
         loanId = contractIdFromAddress(details.generatedOutputs[0].address)
         hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
 
-        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 10000000000000000000)
+        await AcceptLoanService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 1000000000000000000)
 
-        await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 21000000)
+        await UpdateOracleTime(creator, oracleTemplate, 1738256564000 + 20000000)
 
         let liq = await nodeProvider.contracts.getContractsAddressState(contractAddress)
-        console.log(liq)
+        // console.log(liq)
 
         await LiquidationLoanService(creator, loanFactoryTemplate, hexString)
 
@@ -189,16 +189,38 @@ import { CreateLoaneeMarketService } from "./market_services";
         // redeem
         // ...
 
-        // loanee market creation ~  Failed to request postContractsUnsignedTxExecuteScript, error: [API Error] - Not enough balance: got 988398622418706283369, expected 300000000000000005627500000000001 - Status code: 400
-        // await CreateLoaneeMarketService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, alph(10), 500, 2629743000, true)
+        let market = await CreateLoaneeMarketService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, BigInt(100_000000_000000_000000), 10_000000_000000_000000, 500, 2629743000, true) // 100 alph | 10 alph minimum
+
+        details = await nodeProvider.transactions.getTransactionsDetailsTxid((market).txId)
+        contractAddress = details.generatedOutputs[0].address
+
+        loanId = contractIdFromAddress(details.generatedOutputs[0].address)
+        hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
 
         // loanee market destroy
-        // ...
+        await DestroyMarketService(creator, loanFactoryTemplate, hexString)
+
+        // create for edits testing
+        market = await CreateLoaneeMarketService(creator, loanFactoryTemplate, ALPH_TOKEN_ID, BigInt(100_000000_000000_000000), 10_000000_000000_000000, 500, 2629743000, true) // 100 alph | 10 alph minimum
+
+        details = await nodeProvider.transactions.getTransactionsDetailsTxid((market).txId)
+        contractAddress = details.generatedOutputs[0].address
+
+        loanId = contractIdFromAddress(details.generatedOutputs[0].address)
+        hexString = Array.from(loanId, byte => byte.toString(16).padStart(2, '0')).join('');
 
         // loanee market edits / withdraw and funding
-        // ...
+        await MarketUpdateService(creator, loanFactoryTemplate, hexString, 5_000000_000000_000000, 600, 2329743000, false)
 
         // loanee market accept
-        // ...
+        await WithdrawFundsService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 10_000000_000000_000000)
+        let m = await nodeProvider.contracts.getContractsAddressState(addressFromContractId(hexString))
+        console.log(m)
+
+        /*
+        await AddFundsService(creator, loanFactoryTemplate, hexString, ALPH_TOKEN_ID, 10_000000_000000_000000, true)
+        m = await nodeProvider.contracts.getContractsAddressState(addressFromContractId(hexString))
+        console.log(m)
+        */
       }, 1000000)
   });

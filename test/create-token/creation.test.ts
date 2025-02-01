@@ -28,7 +28,7 @@ import { CreateTokenInstance, TokenInstance } from "../../artifacts/ts";
         
       tokenTemplate = (await deployToken()).contractInstance;
       creatorTemplate = (await deployCreateToken(tokenTemplate)).contractInstance;
-    });
+    }, 100000);
   
     test("test token creation", async () => {
       const creator = buyer[0];

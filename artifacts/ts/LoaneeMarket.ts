@@ -49,6 +49,7 @@ export namespace LoaneeMarketTypes {
     creator: Address;
     token: HexString;
     tokenAmount: bigint;
+    minTokenAmount: bigint;
     minInterest: bigint;
     maxTime: bigint;
     liquidation: boolean;
@@ -64,18 +65,16 @@ export namespace LoaneeMarketTypes {
     };
     getLoaneeDetails: {
       params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<[Address, bigint, bigint, boolean]>;
+      result: CallContractResult<[Address, bigint, bigint, bigint, boolean]>;
     };
-    editMinInterest: {
-      params: CallContractParams<{ caller: Address; interest: bigint }>;
-      result: CallContractResult<null>;
-    };
-    editMaxTime: {
-      params: CallContractParams<{ caller: Address; time: bigint }>;
-      result: CallContractResult<null>;
-    };
-    editLiquidation: {
-      params: CallContractParams<{ caller: Address; liquidate: boolean }>;
+    editMarketValues: {
+      params: CallContractParams<{
+        caller: Address;
+        newMinAmount: bigint;
+        newInterest: bigint;
+        newTime: bigint;
+        canBeLiq: boolean;
+      }>;
       result: CallContractResult<null>;
     };
     delegate: {
@@ -124,24 +123,13 @@ export namespace LoaneeMarketTypes {
       params: Omit<SignExecuteContractMethodParams<{}>, "args">;
       result: SignExecuteScriptTxResult;
     };
-    editMinInterest: {
+    editMarketValues: {
       params: SignExecuteContractMethodParams<{
         caller: Address;
-        interest: bigint;
-      }>;
-      result: SignExecuteScriptTxResult;
-    };
-    editMaxTime: {
-      params: SignExecuteContractMethodParams<{
-        caller: Address;
-        time: bigint;
-      }>;
-      result: SignExecuteScriptTxResult;
-    };
-    editLiquidation: {
-      params: SignExecuteContractMethodParams<{
-        caller: Address;
-        liquidate: boolean;
+        newMinAmount: bigint;
+        newInterest: bigint;
+        newTime: bigint;
+        canBeLiq: boolean;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -214,7 +202,7 @@ class Factory extends ContractFactory<
         "testArgs"
       >
     ): Promise<
-      TestContractResultWithoutMaps<[Address, bigint, bigint, boolean]>
+      TestContractResultWithoutMaps<[Address, bigint, bigint, bigint, boolean]>
     > => {
       return testMethod(
         this,
@@ -223,29 +211,24 @@ class Factory extends ContractFactory<
         getContractByCodeHash
       );
     },
-    editMinInterest: async (
+    editMarketValues: async (
       params: TestContractParamsWithoutMaps<
         LoaneeMarketTypes.Fields,
-        { caller: Address; interest: bigint }
+        {
+          caller: Address;
+          newMinAmount: bigint;
+          newInterest: bigint;
+          newTime: bigint;
+          canBeLiq: boolean;
+        }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "editMinInterest", params, getContractByCodeHash);
-    },
-    editMaxTime: async (
-      params: TestContractParamsWithoutMaps<
-        LoaneeMarketTypes.Fields,
-        { caller: Address; time: bigint }
-      >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "editMaxTime", params, getContractByCodeHash);
-    },
-    editLiquidation: async (
-      params: TestContractParamsWithoutMaps<
-        LoaneeMarketTypes.Fields,
-        { caller: Address; liquidate: boolean }
-      >
-    ): Promise<TestContractResultWithoutMaps<null>> => {
-      return testMethod(this, "editLiquidation", params, getContractByCodeHash);
+      return testMethod(
+        this,
+        "editMarketValues",
+        params,
+        getContractByCodeHash
+      );
     },
     delegate: async (
       params: TestContractParamsWithoutMaps<
@@ -295,7 +278,7 @@ export const LoaneeMarket = new Factory(
   Contract.fromJson(
     LoaneeMarketContractJson,
     "",
-    "5a2abbbfb35b570a59770734429906c2701f5a954c610eee322c132c8181bc56",
+    "1ae6139a0303d73f0cf5aa0e142a74d2d87b64e49e025b79766b3e277679dc0f",
     AllStructs
   )
 );
@@ -334,35 +317,13 @@ export class LoaneeMarketInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
-    editMinInterest: async (
-      params: LoaneeMarketTypes.CallMethodParams<"editMinInterest">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"editMinInterest">> => {
+    editMarketValues: async (
+      params: LoaneeMarketTypes.CallMethodParams<"editMarketValues">
+    ): Promise<LoaneeMarketTypes.CallMethodResult<"editMarketValues">> => {
       return callMethod(
         LoaneeMarket,
         this,
-        "editMinInterest",
-        params,
-        getContractByCodeHash
-      );
-    },
-    editMaxTime: async (
-      params: LoaneeMarketTypes.CallMethodParams<"editMaxTime">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"editMaxTime">> => {
-      return callMethod(
-        LoaneeMarket,
-        this,
-        "editMaxTime",
-        params,
-        getContractByCodeHash
-      );
-    },
-    editLiquidation: async (
-      params: LoaneeMarketTypes.CallMethodParams<"editLiquidation">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"editLiquidation">> => {
-      return callMethod(
-        LoaneeMarket,
-        this,
-        "editLiquidation",
+        "editMarketValues",
         params,
         getContractByCodeHash
       );
@@ -433,24 +394,12 @@ export class LoaneeMarketInstance extends ContractInstance {
     > => {
       return signExecuteMethod(LoaneeMarket, this, "getLoaneeDetails", params);
     },
-    editMinInterest: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"editMinInterest">
+    editMarketValues: async (
+      params: LoaneeMarketTypes.SignExecuteMethodParams<"editMarketValues">
     ): Promise<
-      LoaneeMarketTypes.SignExecuteMethodResult<"editMinInterest">
+      LoaneeMarketTypes.SignExecuteMethodResult<"editMarketValues">
     > => {
-      return signExecuteMethod(LoaneeMarket, this, "editMinInterest", params);
-    },
-    editMaxTime: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"editMaxTime">
-    ): Promise<LoaneeMarketTypes.SignExecuteMethodResult<"editMaxTime">> => {
-      return signExecuteMethod(LoaneeMarket, this, "editMaxTime", params);
-    },
-    editLiquidation: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"editLiquidation">
-    ): Promise<
-      LoaneeMarketTypes.SignExecuteMethodResult<"editLiquidation">
-    > => {
-      return signExecuteMethod(LoaneeMarket, this, "editLiquidation", params);
+      return signExecuteMethod(LoaneeMarket, this, "editMarketValues", params);
     },
     delegate: async (
       params: LoaneeMarketTypes.SignExecuteMethodParams<"delegate">

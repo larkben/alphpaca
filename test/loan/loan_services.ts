@@ -70,6 +70,7 @@ import { start } from 'repl'
         creator: defaultSigner.account.address,
         token: '',
         tokenAmount: 0n,
+        minTokenAmount: 0n,
         minInterest: 0n,
         maxTime: 0n,
         liquidation: false,
@@ -263,7 +264,7 @@ export async function CalculateLoanAssets (
   let interestRate = Number(details.immFields[5].value); // Assuming interest is at index 2
   let principal = Number(details.immFields[2].value); // Assuming principal is at index 0
 
-  console.log("start time is " + startTime + " interest rate: " + interestRate + " principal: " + principal)
+  // console.log("start time is " + startTime + " interest rate: " + interestRate + " principal: " + principal)
 
   // Calculate the proportional interest based on elapsed time
   let elapsedTime = (time + 7800000) - startTime; // Time difference in milliseconds
@@ -273,6 +274,6 @@ export async function CalculateLoanAssets (
   let gain = (principal * interestRate * timeFactor) / 10000;
 
   // Return the original amount plus interest
-  console.log(principal + gain)
+  // console.log(gain)
   return Math.ceil(principal + gain + 1)
 }

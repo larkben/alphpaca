@@ -42,12 +42,10 @@ import { default as DestroyOgAlfProtocolScriptJson } from "../walf/DestroyOgAlfP
 import { default as DestroyWangProtocolScriptJson } from "../wang/DestroyWangProtocol.ral.json";
 import { default as DestroycreatorScriptJson } from "../createtoken/Destroycreator.ral.json";
 import { default as EditCollectionUriScriptJson } from "../gamefi/EditCollectionUri.ral.json";
-import { default as EditInterestTestScriptJson } from "../test/EditInterestTest.ral.json";
-import { default as EditLiquidateTestScriptJson } from "../test/EditLiquidateTest.ral.json";
 import { default as EditLoanRateScriptJson } from "../loans/EditLoanRate.ral.json";
 import { default as EditLoanRateTestScriptJson } from "../test/EditLoanRateTest.ral.json";
+import { default as EditMarketValuesScriptJson } from "../test/EditMarketValues.ral.json";
 import { default as EditOgAlfFeesScriptJson } from "../walf/EditOgAlfFees.ral.json";
-import { default as EditTimeTestScriptJson } from "../test/EditTimeTest.ral.json";
 import { default as EditValidContractScriptJson } from "../gamefi/EditValidContract.ral.json";
 import { default as EditWangFeesScriptJson } from "../wang/EditWangFees.ral.json";
 import { default as EditfeeScriptJson } from "../scripts/Editfee.ral.json";
@@ -259,6 +257,7 @@ export const CreateLoaneeMarketTest = new ExecutableScript<{
   loanFactory: HexString;
   token: HexString;
   tokenAmount: bigint;
+  minTokenAmount: bigint;
   minInterest: bigint;
   maxTime: bigint;
   liquidation: boolean;
@@ -372,24 +371,6 @@ export const EditCollectionUri = new ExecutableScript<{
   getContractByCodeHash
 );
 
-export const EditInterestTest = new ExecutableScript<{
-  loanFactory: HexString;
-  contractId: HexString;
-  newInterest: bigint;
-}>(
-  Script.fromJson(EditInterestTestScriptJson, "", AllStructs),
-  getContractByCodeHash
-);
-
-export const EditLiquidateTest = new ExecutableScript<{
-  loanFactory: HexString;
-  contractId: HexString;
-  liquid: boolean;
-}>(
-  Script.fromJson(EditLiquidateTestScriptJson, "", AllStructs),
-  getContractByCodeHash
-);
-
 export const EditLoanRate = new ExecutableScript<{
   loanFactory: HexString;
   newRate: bigint;
@@ -406,20 +387,23 @@ export const EditLoanRateTest = new ExecutableScript<{
   getContractByCodeHash
 );
 
+export const EditMarketValues = new ExecutableScript<{
+  loanFactory: HexString;
+  contractId: HexString;
+  newBorrowAmount: bigint;
+  newInterest: bigint;
+  newTime: bigint;
+  liq: boolean;
+}>(
+  Script.fromJson(EditMarketValuesScriptJson, "", AllStructs),
+  getContractByCodeHash
+);
+
 export const EditOgAlfFees = new ExecutableScript<{
   contract: HexString;
   newfee: bigint;
 }>(
   Script.fromJson(EditOgAlfFeesScriptJson, "", AllStructs),
-  getContractByCodeHash
-);
-
-export const EditTimeTest = new ExecutableScript<{
-  loanFactory: HexString;
-  contractId: HexString;
-  newTime: bigint;
-}>(
-  Script.fromJson(EditTimeTestScriptJson, "", AllStructs),
   getContractByCodeHash
 );
 
