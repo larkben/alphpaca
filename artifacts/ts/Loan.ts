@@ -35,13 +35,7 @@ import {
 } from "@alephium/web3";
 import { default as LoanContractJson } from "../loans/Loan.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import {
-  DIAOracleValue,
-  PairInfo,
-  PlayerData,
-  TokenData,
-  AllStructs,
-} from "./types";
+import { DIAOracleValue, PairInfo, PlayerData, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace LoanTypes {
@@ -58,9 +52,9 @@ export namespace LoanTypes {
     startTime: bigint;
     active: boolean;
     parentContract: Address;
-    liquidationBot: Address;
     canLiquidate: boolean;
     liquidation: boolean;
+    ratio: bigint;
     highestBidder: Address;
     highestBid: bigint;
     timeToEnd: bigint;
@@ -127,6 +121,18 @@ export namespace LoanTypes {
     };
     redeem: {
       params: CallContractParams<{ caller: Address }>;
+      result: CallContractResult<null>;
+    };
+    updateLoanCode: {
+      params: CallContractParams<{ newCode: HexString }>;
+      result: CallContractResult<null>;
+    };
+    updateLoanFields: {
+      params: CallContractParams<{
+        newCode: HexString;
+        immFields: HexString;
+        mutFields: HexString;
+      }>;
       result: CallContractResult<null>;
     };
   }
@@ -211,6 +217,18 @@ export namespace LoanTypes {
     };
     redeem: {
       params: SignExecuteContractMethodParams<{ caller: Address }>;
+      result: SignExecuteScriptTxResult;
+    };
+    updateLoanCode: {
+      params: SignExecuteContractMethodParams<{ newCode: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    updateLoanFields: {
+      params: SignExecuteContractMethodParams<{
+        newCode: HexString;
+        immFields: HexString;
+        mutFields: HexString;
+      }>;
       result: SignExecuteScriptTxResult;
     };
   }
@@ -374,6 +392,27 @@ class Factory extends ContractFactory<LoanInstance, LoanTypes.Fields> {
     ): Promise<TestContractResultWithoutMaps<null>> => {
       return testMethod(this, "redeem", params, getContractByCodeHash);
     },
+    updateLoanCode: async (
+      params: TestContractParamsWithoutMaps<
+        LoanTypes.Fields,
+        { newCode: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(this, "updateLoanCode", params, getContractByCodeHash);
+    },
+    updateLoanFields: async (
+      params: TestContractParamsWithoutMaps<
+        LoanTypes.Fields,
+        { newCode: HexString; immFields: HexString; mutFields: HexString }
+      >
+    ): Promise<TestContractResultWithoutMaps<null>> => {
+      return testMethod(
+        this,
+        "updateLoanFields",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   stateForTest(initFields: LoanTypes.Fields, asset?: Asset, address?: string) {
@@ -386,7 +425,7 @@ export const Loan = new Factory(
   Contract.fromJson(
     LoanContractJson,
     "",
-    "f26a4e649ac8c56104660b08349cede1ebeffa7f46da60055c39477b3caeb47e",
+    "83905f562f0aa3793c9eefbcb44886fa76a4b3cb2e2b3a48a71b04c5d2cbe8da",
     AllStructs
   )
 );
@@ -550,6 +589,28 @@ export class LoanInstance extends ContractInstance {
     ): Promise<LoanTypes.CallMethodResult<"redeem">> => {
       return callMethod(Loan, this, "redeem", params, getContractByCodeHash);
     },
+    updateLoanCode: async (
+      params: LoanTypes.CallMethodParams<"updateLoanCode">
+    ): Promise<LoanTypes.CallMethodResult<"updateLoanCode">> => {
+      return callMethod(
+        Loan,
+        this,
+        "updateLoanCode",
+        params,
+        getContractByCodeHash
+      );
+    },
+    updateLoanFields: async (
+      params: LoanTypes.CallMethodParams<"updateLoanFields">
+    ): Promise<LoanTypes.CallMethodResult<"updateLoanFields">> => {
+      return callMethod(
+        Loan,
+        this,
+        "updateLoanFields",
+        params,
+        getContractByCodeHash
+      );
+    },
   };
 
   transact = {
@@ -627,6 +688,16 @@ export class LoanInstance extends ContractInstance {
       params: LoanTypes.SignExecuteMethodParams<"redeem">
     ): Promise<LoanTypes.SignExecuteMethodResult<"redeem">> => {
       return signExecuteMethod(Loan, this, "redeem", params);
+    },
+    updateLoanCode: async (
+      params: LoanTypes.SignExecuteMethodParams<"updateLoanCode">
+    ): Promise<LoanTypes.SignExecuteMethodResult<"updateLoanCode">> => {
+      return signExecuteMethod(Loan, this, "updateLoanCode", params);
+    },
+    updateLoanFields: async (
+      params: LoanTypes.SignExecuteMethodParams<"updateLoanFields">
+    ): Promise<LoanTypes.SignExecuteMethodResult<"updateLoanFields">> => {
+      return signExecuteMethod(Loan, this, "updateLoanFields", params);
     },
   };
 

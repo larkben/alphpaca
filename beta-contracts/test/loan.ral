@@ -14,42 +14,48 @@ Contract LoanTest (
     mut active: Bool,
     parentContract: Address,
     // liquidation
-    liquidationBot: Address,
     canLiquidate: Bool,
-    liquidation: Bool
+    mut liquidation: Bool,
+    mut ratio: U256,
     // auction
     mut highestBidder: Address,
     mut highestBid: U256,
-    mut timeToEnd: U256
+    mut timeToEnd: U256,
+    oracle: TestOracle
 ) {
-
     enum Loan {
         AuctionEnded = 0
-        AuctionActive = 1
+        InvalidCaller = 1
+        AuctionActive = 2
     }
 
     // helper functions
     pub fn getTokenRequested() -> (ByteVec, U256) {
+        ratio = ratio
         return tokenRequested, tokenAmount
+    }
+
+    pub fn getHighestBid() -> (U256) {
+        return highestBid
     }
 
     pub fn getTokenCollateral() -> (ByteVec, U256) {
         return collateralToken, collateralAmount
     }
 
-    pub fn isLoanComplete(time: U256) -> (Bool) {
+    pub fn isLoanComplete() -> (Bool) {
         assert!(active == true, 1)
 
         // confirm the loan has completed it's time
-        assert!(time > startTime + duration, 0)
+        assert!(oracle.getTime() > startTime + duration, 0)
 
         return true
     }
 
-    pub fn getInterest(time: U256) -> (U256) {
+    pub fn getInterest() -> (U256) {
         if (interest > 0) {
             // Calculate elapsed time
-            let elapsedTime = time - startTime
+            let elapsedTime = oracle.getTime() - startTime
     
             // Avoid integer truncation: multiply first, then divide
             let gain = (tokenAmount * interest * elapsedTime) / (31556926000 * 10000)
@@ -70,11 +76,11 @@ Contract LoanTest (
         else {
             return 0
         }
-    }       
+    }
 
     // contract functions
     @using(checkExternalCaller = true, updateFields = true, preapprovedAssets = true)
-    pub fn acceptLoan(acceptor: Address, time: U256) -> () {
+    pub fn acceptLoan(acceptor: Address) -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
 
         assert!(active == false, 4)
@@ -84,7 +90,7 @@ Contract LoanTest (
 
         // assignment
         active = true
-        startTime = time
+        startTime = oracle.getTime()
         loanee = acceptor
     }
 
@@ -98,7 +104,7 @@ Contract LoanTest (
         destroySelf!(caller)
     }
 
-    @using(checkExternalCaller = true, assetsInContract = true)
+    @using(checkExternalCaller = false, assetsInContract = true)
     pub fn forceCancel() -> () {
         checkCaller!(callerAddress!() == creator, 5)
 
@@ -108,14 +114,14 @@ Contract LoanTest (
     }
 
     @using(checkExternalCaller = true, preapprovedAssets = true, assetsInContract = true)
-    pub fn payLoan(caller: Address, interestTime: U256) -> () {
+    pub fn payLoan(caller: Address) -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
 
         // payback the loan
         assert!(active == true, 2)
 
         // transfer back assets plus the interest
-        let totalPayment = getInterest(interestTime)
+        let totalPayment = getInterest()
 
         let totalCommission = getCommission(totalPayment)
 
@@ -129,12 +135,13 @@ Contract LoanTest (
     }
 
     @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
-    pub fn acceptForfeit(time: U256) -> () {
+    pub fn acceptForfeit() -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
 
         assert!(active == true, 3)
-        assert!(startTime + duration < time, 4)
+        assert!(startTime + duration < oracle.getTime(), 4)
 
+        // is the loan a liquidation loan?
         assert!(canLiquidate == false, 6)
 
         let totalCommission = getCommission(collateralAmount)
@@ -144,33 +151,53 @@ Contract LoanTest (
         destroySelf!(loanee)
     }
 
-    // activate the liquidation process ~ under 150% collateral
+    // liquidation functions
     // ---------------------------------------------------------
 
-    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
-    pub fn activateLiquidation(collateralLevel: U256, startingBid: U256) -> () {
+    // returns the amount of collateral after added
+    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true, updateFields = true)
+    pub fn addCollateral(caller: Address, collateralAdded: U256) -> (U256) {
         checkCaller!(callerAddress!() == parentContract, 0)
 
         // confirm the contract is a liquid contracts
-        assert!(canLiquidate = true, 6)
+        assert!(canLiquidate == true, 6)
+
+        // confirm it's active
+        assert!(active == true, 3)
+
+        // transfer additional collateral to offset liquidation
+        transferToken!(caller, selfAddress!(), collateralToken, collateralAdded)
+        collateralAmount = collateralAmount + collateralAdded
+
+        return collateralAmount
+    }
+
+    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = false, updateFields = true)
+    pub fn activateLiquidation(collateralLevel: U256) -> () {
+        checkCaller!(callerAddress!() == parentContract, 0)
+
+        // confirm the contract is a liquid contracts
+        assert!(canLiquidate == true, 6)
 
         // confirm it's active
         assert!(active == true, 3)
 
         // liquidation to true
         liquidation = true
-        timeToEnd = blockTimeStamp!() + 1800000  // 30 min to liquidate
+        timeToEnd = oracle.getTime() + 3600000  // 1 hour to liquidate -> assets are just sent to loanee
 
         // set the highest bid
-        highestBid = startingBid
+        highestBid = tokenAmount
     }
 
-    @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
-    pub fn bid(caller: Address, bidAmount: U256) -> () {
+    // should return timeEnd + token + newHighestBid + newHighestBidder
+    @using(checkExternalCaller = true, preapprovedAssets = true, assetsInContract = true, updateFields = true)
+    pub fn bid(caller: Address, bidAmount: U256) -> (U256) {    
+        // confirm this loan is called from the factory
         checkCaller!(callerAddress!() == parentContract, 0)
 
         // confirm the contract is a liquid contracts
-        assert!(canLiquidate = true, 6)
+        assert!(canLiquidate == true, 6)
 
         // confirm it's active
         assert!(active == true, 3)
@@ -179,84 +206,69 @@ Contract LoanTest (
         assert!(bidAmount > highestBid, 7)
 
         // check time on auction
-        assert!(blockTimeStamp!() < timeToEnd, Loan.AuctionEnded)
+        assert!(oracle.getTime() < timeToEnd, Loan.AuctionEnded)
 
         // assert topBidder cannot bid up
-        assert!(callerAddress!() != auctions[token].topBidder, AuctionCodes.InvalidCaller)
+        assert!(caller != highestBidder, Loan.InvalidCaller)
 
         // return previous top bid if not origin
         if (highestBidder != nullContractAddress!()) {
+            transferToken!(selfAddress!(), highestBidder, ALPH, dustAmount!())
             transferToken!(selfAddress!(), highestBidder, tokenRequested, highestBid)
         }
 
-        topBidder = callerAddress!()
+        highestBidder = caller
         highestBid = bidAmount
 
         // Then transfer tokens
-        transferToken!(callerAddress!(), selfAddress!(), tokenRequested, bidAmount)
+        transferToken!(caller, selfAddress!(), ALPH, dustAmount!())
+        transferToken!(caller, selfAddress!(), tokenRequested, bidAmount)
 
         // anti-sniping
-        if ((timeToEnd - blockTimeStamp!()) < 150000) {
+        if ((timeToEnd - oracle.getTime()) < 150000) {
             timeToEnd = timeToEnd + 150000 // 5 minutes in milliseconds
         }
 
-        emit BidAuction(callerAddress!(), asset, totalBid, interval, timeToEnd)
+        return timeToEnd
     }
 
+    // redeem the auction
     @using(checkExternalCaller = true, preapprovedAssets = false, assetsInContract = true)
     pub fn redeem(caller: Address) -> () {
         checkCaller!(callerAddress!() == parentContract, 0)
 
         // confirm the contract is a liquid contracts
-        assert!(canLiquidate = true, 6)
+        assert!(canLiquidate == true, 6)
 
         // confirm it's active
         assert!(active == true, 3)
 
         // Ensure the auction has ended
-        assert!(blockTimeStamp!() > timeToEnd, Loan.AuctionActive)
+        assert!(oracle.getTime() > timeToEnd, Loan.AuctionActive)
 
-        // implement redemption mechanics
+        // send the highestBid - fee to loanee
+        let factoryFeeLoanee = getCommission(highestBid)
+        let factoryFeeBidder = getCommission(highestBid)
+
+        // transfer requested token back
+        transferToken!(selfAddress!(), loanee, ALPH, dustAmount!())
+        transferToken!(selfAddress!(), loanee, tokenRequested, highestBid - factoryFeeLoanee)
+
+        // transfer collateral to auction winner
+        transferToken!(selfAddress!(), highestBidder, ALPH, dustAmount!())
+        transferToken!(selfAddress!(), highestBidder, collateralToken, collateralAmount - factoryFeeBidder)
+
+        // factory fees
+        transferToken!(selfAddress!(), parentContract, ALPH, dustAmount!())
+        transferToken!(selfAddress!(), parentContract, tokenRequested, factoryFeeLoanee)
+        transferToken!(selfAddress!(), parentContract, collateralToken, factoryFeeBidder)
+
+        destroySelf!(creator)
     }
-
-    // debug functions
-    // - edit active status
-    // - edit startTime
-
-    @using(checkExternalCaller = true, updateFields = true)
-    pub fn editActiveStatus(newStatus: Bool) -> () {
-        checkCaller!(callerAddress!() == creator, 5)
-
-        active = newStatus
-    }
-
-    @using(checkExternalCaller = true, updateFields = true)
-    pub fn editStartTime(newTime: U256) -> () {
-        checkCaller!(callerAddress!() == creator, 5)
-
-        startTime = newTime
-    }
-
 }
 
 TxScript ForceCancelTest (
     loan: LoanTest
 ) {
     loan.forceCancel()
-}
-
-// debug functions
-
-TxScript EditActiveStatus (
-    loan: LoanTest,
-    newStatus: Bool
-) {
-    loan.editActiveStatus(newStatus)
-}
-
-TxScript EditStartTime (
-    loan: LoanTest,
-    newTime: U256
-) {
-    loan.editStartTime(newTime)
 }

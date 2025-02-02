@@ -1,4 +1,4 @@
-Contract LoaneeMarket (
+Contract LoanMarket (
     creator: Address,
     token: ByteVec,
     mut tokenAmount: U256,

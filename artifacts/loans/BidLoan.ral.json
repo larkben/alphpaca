@@ -1,17 +1,23 @@
 {
   "version": "v3.11.1",
-  "name": "ForfeitLoanTest",
-  "bytecodeTemplate": "01010300000005{1}0d0c{0}0108",
+  "name": "BidLoan",
+  "bytecodeTemplate": "0101030000000db47a{3}{2}a313c3038d7ea4c68000a2{1}{2}0e0c{0}010a",
   "fieldsSig": {
     "names": [
       "loanFactory",
-      "contract"
+      "contract",
+      "bidAmount",
+      "token"
     ],
     "types": [
-      "LoanFactoryTest",
+      "LoanFactory",
+      "ByteVec",
+      "U256",
       "ByteVec"
     ],
     "isMutable": [
+      false,
+      false,
       false,
       false
     ]

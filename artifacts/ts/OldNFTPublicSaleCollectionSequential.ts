@@ -35,13 +35,7 @@ import {
 } from "@alephium/web3";
 import { default as OldNFTPublicSaleCollectionSequentialContractJson } from "../nfts/publicsale/old_nfts/OldNFTPublicSaleCollectionSequential.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import {
-  DIAOracleValue,
-  PairInfo,
-  PlayerData,
-  TokenData,
-  AllStructs,
-} from "./types";
+import { DIAOracleValue, PairInfo, PlayerData, AllStructs } from "./types";
 
 // Custom types for the contract
 export namespace OldNFTPublicSaleCollectionSequentialTypes {

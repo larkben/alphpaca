@@ -7,7 +7,7 @@
       "loan"
     ],
     "types": [
-      "LoanTest"
+      "Loan"
     ],
     "isMutable": [
       false

@@ -35,13 +35,7 @@ import {
 } from "@alephium/web3";
 import { default as LoanFactoryContractJson } from "../loans/LoanFactory.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import {
-  DIAOracleValue,
-  PairInfo,
-  PlayerData,
-  TokenData,
-  AllStructs,
-} from "./types";
+import { DIAOracleValue, PairInfo, PlayerData, AllStructs } from "./types";
 import { RalphMap } from "@alephium/web3";
 
 // Custom types for the contract
@@ -49,9 +43,9 @@ export namespace LoanFactoryTypes {
   export type Fields = {
     admin: Address;
     loanTemplate: HexString;
+    marketTemplate: HexString;
     activeLoans: bigint;
     rate: bigint;
-    liquidationBot: Address;
     oracle: HexString;
   };
 
@@ -80,16 +74,50 @@ export namespace LoanFactoryTypes {
     forfeit: boolean;
     who: Address;
   }>;
+  export type LoanLiquidationEvent = ContractEvent<{
+    contract: HexString;
+    token: HexString;
+    startingBid: bigint;
+  }>;
+  export type AuctionRedeemEvent = ContractEvent<{
+    contract: HexString;
+    who: Address;
+  }>;
+  export type AuctionBidEvent = ContractEvent<{
+    contract: HexString;
+    who: Address;
+    amount: bigint;
+  }>;
+  export type MarketCreatedEvent = ContractEvent<{
+    contract: HexString;
+    token: HexString;
+    amount: bigint;
+    minInterest: bigint;
+    maxTime: bigint;
+    liquidation: boolean;
+    who: Address;
+  }>;
+  export type MarketUpdatedEvent = ContractEvent<{
+    contract: HexString;
+    token: HexString;
+    amount: bigint;
+    minTokenBorrow: bigint;
+    minInterest: bigint;
+    maxTime: bigint;
+    liquidation: boolean;
+  }>;
+  export type MarketDestroyedEvent = ContractEvent<{
+    contract: HexString;
+    who: Address;
+  }>;
 
   export interface CallMethodTable {
-    updateTokenPrice: {
-      params: CallContractParams<{ token: HexString }>;
-      result: CallContractResult<null>;
-    };
     determineCollateralRatio: {
       params: CallContractParams<{
         tokenRequested: HexString;
+        tokenAmount: bigint;
         collateralToken: HexString;
+        collateralAmount: bigint;
         threshhold: bigint;
       }>;
       result: CallContractResult<[bigint, boolean]>;
@@ -114,6 +142,18 @@ export namespace LoanFactoryTypes {
         interest: bigint;
         duration: bigint;
         canLiquidate: boolean;
+      }>;
+      result: CallContractResult<null>;
+    };
+    acceptMarket: {
+      params: CallContractParams<{
+        tokenRequested: HexString;
+        tokenAmount: bigint;
+        collateralToken: HexString;
+        collateralAmount: bigint;
+        interest: bigint;
+        duration: bigint;
+        loaneeMarket: HexString;
       }>;
       result: CallContractResult<null>;
     };
@@ -145,20 +185,62 @@ export namespace LoanFactoryTypes {
       params: CallContractParams<{ contractId: HexString }>;
       result: CallContractResult<null>;
     };
-    editRate: {
-      params: CallContractParams<{ newRate: bigint }>;
+    loaneeMarket: {
+      params: CallContractParams<{
+        token: HexString;
+        tokenAmount: bigint;
+        minTokenAmount: bigint;
+        minInterest: bigint;
+        maxTime: bigint;
+        liquidation: boolean;
+        collateral: boolean;
+        ratio: bigint;
+      }>;
       result: CallContractResult<null>;
     };
-    editLiquidationBot: {
-      params: CallContractParams<{ newBot: Address }>;
+    editMarketValues: {
+      params: CallContractParams<{
+        contractId: HexString;
+        newBorrowAmount: bigint;
+        newInterest: bigint;
+        newTime: bigint;
+        liq: boolean;
+        collateral: boolean;
+        ratio: bigint;
+      }>;
+      result: CallContractResult<null>;
+    };
+    addFunds: {
+      params: CallContractParams<{
+        contractId: HexString;
+        token: HexString;
+        amount: bigint;
+        gas: boolean;
+      }>;
+      result: CallContractResult<null>;
+    };
+    withdrawFunds: {
+      params: CallContractParams<{
+        contractId: HexString;
+        token: HexString;
+        amount: bigint;
+      }>;
+      result: CallContractResult<null>;
+    };
+    destroyMarket: {
+      params: CallContractParams<{ contractId: HexString }>;
+      result: CallContractResult<null>;
+    };
+    editRate: {
+      params: CallContractParams<{ newRate: bigint }>;
       result: CallContractResult<null>;
     };
     tokenMapping: {
       params: CallContractParams<{
         token: HexString;
         add: boolean;
-        pair: boolean;
         pairtoken: HexString;
+        decimals: bigint;
       }>;
       result: CallContractResult<null>;
     };
@@ -204,14 +286,12 @@ export namespace LoanFactoryTypes {
   };
 
   export interface SignExecuteMethodTable {
-    updateTokenPrice: {
-      params: SignExecuteContractMethodParams<{ token: HexString }>;
-      result: SignExecuteScriptTxResult;
-    };
     determineCollateralRatio: {
       params: SignExecuteContractMethodParams<{
         tokenRequested: HexString;
+        tokenAmount: bigint;
         collateralToken: HexString;
+        collateralAmount: bigint;
         threshhold: bigint;
       }>;
       result: SignExecuteScriptTxResult;
@@ -239,6 +319,18 @@ export namespace LoanFactoryTypes {
         interest: bigint;
         duration: bigint;
         canLiquidate: boolean;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    acceptMarket: {
+      params: SignExecuteContractMethodParams<{
+        tokenRequested: HexString;
+        tokenAmount: bigint;
+        collateralToken: HexString;
+        collateralAmount: bigint;
+        interest: bigint;
+        duration: bigint;
+        loaneeMarket: HexString;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -273,20 +365,62 @@ export namespace LoanFactoryTypes {
       params: SignExecuteContractMethodParams<{ contractId: HexString }>;
       result: SignExecuteScriptTxResult;
     };
-    editRate: {
-      params: SignExecuteContractMethodParams<{ newRate: bigint }>;
+    loaneeMarket: {
+      params: SignExecuteContractMethodParams<{
+        token: HexString;
+        tokenAmount: bigint;
+        minTokenAmount: bigint;
+        minInterest: bigint;
+        maxTime: bigint;
+        liquidation: boolean;
+        collateral: boolean;
+        ratio: bigint;
+      }>;
       result: SignExecuteScriptTxResult;
     };
-    editLiquidationBot: {
-      params: SignExecuteContractMethodParams<{ newBot: Address }>;
+    editMarketValues: {
+      params: SignExecuteContractMethodParams<{
+        contractId: HexString;
+        newBorrowAmount: bigint;
+        newInterest: bigint;
+        newTime: bigint;
+        liq: boolean;
+        collateral: boolean;
+        ratio: bigint;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    addFunds: {
+      params: SignExecuteContractMethodParams<{
+        contractId: HexString;
+        token: HexString;
+        amount: bigint;
+        gas: boolean;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    withdrawFunds: {
+      params: SignExecuteContractMethodParams<{
+        contractId: HexString;
+        token: HexString;
+        amount: bigint;
+      }>;
+      result: SignExecuteScriptTxResult;
+    };
+    destroyMarket: {
+      params: SignExecuteContractMethodParams<{ contractId: HexString }>;
+      result: SignExecuteScriptTxResult;
+    };
+    editRate: {
+      params: SignExecuteContractMethodParams<{ newRate: bigint }>;
       result: SignExecuteScriptTxResult;
     };
     tokenMapping: {
       params: SignExecuteContractMethodParams<{
         token: HexString;
         add: boolean;
-        pair: boolean;
         pairtoken: HexString;
+        decimals: bigint;
       }>;
       result: SignExecuteScriptTxResult;
     };
@@ -320,10 +454,7 @@ export namespace LoanFactoryTypes {
   export type SignExecuteMethodResult<T extends keyof SignExecuteMethodTable> =
     SignExecuteMethodTable[T]["result"];
 
-  export type Maps = {
-    tokenPrices?: Map<HexString, bigint>;
-    tokenPairs?: Map<HexString, HexString>;
-  };
+  export type Maps = { tokenPairs?: Map<HexString, PairInfo> };
 }
 
 class Factory extends ContractFactory<
@@ -338,7 +469,18 @@ class Factory extends ContractFactory<
     );
   }
 
-  eventIndex = { NewLoan: 0, AcceptedLoan: 1, LoanRemoved: 2, LoanWithdraw: 3 };
+  eventIndex = {
+    NewLoan: 0,
+    AcceptedLoan: 1,
+    LoanRemoved: 2,
+    LoanWithdraw: 3,
+    LoanLiquidation: 4,
+    AuctionRedeem: 5,
+    AuctionBid: 6,
+    MarketCreated: 7,
+    MarketUpdated: 8,
+    MarketDestroyed: 9,
+  };
   consts = {
     LoanCodes: { NotAdmin: BigInt("0"), TokenSizeTooSmall: BigInt("1") },
   };
@@ -348,26 +490,14 @@ class Factory extends ContractFactory<
   }
 
   tests = {
-    updateTokenPrice: async (
-      params: TestContractParams<
-        LoanFactoryTypes.Fields,
-        { token: HexString },
-        LoanFactoryTypes.Maps
-      >
-    ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
-      return testMethod(
-        this,
-        "updateTokenPrice",
-        params,
-        getContractByCodeHash
-      );
-    },
     determineCollateralRatio: async (
       params: TestContractParams<
         LoanFactoryTypes.Fields,
         {
           tokenRequested: HexString;
+          tokenAmount: bigint;
           collateralToken: HexString;
+          collateralAmount: bigint;
           threshhold: bigint;
         },
         LoanFactoryTypes.Maps
@@ -428,6 +558,23 @@ class Factory extends ContractFactory<
       >
     ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
       return testMethod(this, "createLoan", params, getContractByCodeHash);
+    },
+    acceptMarket: async (
+      params: TestContractParams<
+        LoanFactoryTypes.Fields,
+        {
+          tokenRequested: HexString;
+          tokenAmount: bigint;
+          collateralToken: HexString;
+          collateralAmount: bigint;
+          interest: bigint;
+          duration: bigint;
+          loaneeMarket: HexString;
+        },
+        LoanFactoryTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
+      return testMethod(this, "acceptMarket", params, getContractByCodeHash);
     },
     accept: async (
       params: TestContractParams<
@@ -492,6 +639,78 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
       return testMethod(this, "redeem", params, getContractByCodeHash);
     },
+    loaneeMarket: async (
+      params: TestContractParams<
+        LoanFactoryTypes.Fields,
+        {
+          token: HexString;
+          tokenAmount: bigint;
+          minTokenAmount: bigint;
+          minInterest: bigint;
+          maxTime: bigint;
+          liquidation: boolean;
+          collateral: boolean;
+          ratio: bigint;
+        },
+        LoanFactoryTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
+      return testMethod(this, "loaneeMarket", params, getContractByCodeHash);
+    },
+    editMarketValues: async (
+      params: TestContractParams<
+        LoanFactoryTypes.Fields,
+        {
+          contractId: HexString;
+          newBorrowAmount: bigint;
+          newInterest: bigint;
+          newTime: bigint;
+          liq: boolean;
+          collateral: boolean;
+          ratio: bigint;
+        },
+        LoanFactoryTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
+      return testMethod(
+        this,
+        "editMarketValues",
+        params,
+        getContractByCodeHash
+      );
+    },
+    addFunds: async (
+      params: TestContractParams<
+        LoanFactoryTypes.Fields,
+        {
+          contractId: HexString;
+          token: HexString;
+          amount: bigint;
+          gas: boolean;
+        },
+        LoanFactoryTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
+      return testMethod(this, "addFunds", params, getContractByCodeHash);
+    },
+    withdrawFunds: async (
+      params: TestContractParams<
+        LoanFactoryTypes.Fields,
+        { contractId: HexString; token: HexString; amount: bigint },
+        LoanFactoryTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
+      return testMethod(this, "withdrawFunds", params, getContractByCodeHash);
+    },
+    destroyMarket: async (
+      params: TestContractParams<
+        LoanFactoryTypes.Fields,
+        { contractId: HexString },
+        LoanFactoryTypes.Maps
+      >
+    ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
+      return testMethod(this, "destroyMarket", params, getContractByCodeHash);
+    },
     editRate: async (
       params: TestContractParams<
         LoanFactoryTypes.Fields,
@@ -501,24 +720,15 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
       return testMethod(this, "editRate", params, getContractByCodeHash);
     },
-    editLiquidationBot: async (
-      params: TestContractParams<
-        LoanFactoryTypes.Fields,
-        { newBot: Address },
-        LoanFactoryTypes.Maps
-      >
-    ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
-      return testMethod(
-        this,
-        "editLiquidationBot",
-        params,
-        getContractByCodeHash
-      );
-    },
     tokenMapping: async (
       params: TestContractParams<
         LoanFactoryTypes.Fields,
-        { token: HexString; add: boolean; pair: boolean; pairtoken: HexString },
+        {
+          token: HexString;
+          add: boolean;
+          pairtoken: HexString;
+          decimals: bigint;
+        },
         LoanFactoryTypes.Maps
       >
     ): Promise<TestContractResult<null, LoanFactoryTypes.Maps>> => {
@@ -599,8 +809,8 @@ class Factory extends ContractFactory<
 export const LoanFactory = new Factory(
   Contract.fromJson(
     LoanFactoryContractJson,
-    "=62-5+c=3-2+de=2-1+f=2-1+40=1-1+4423=1503-1+9=29-1+9=7-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=15-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=9-1+8=7-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=13-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
-    "6b61ea9d6a29ecbaa4739390361b840383a9e638d5b206f6a3361c29205ade35",
+    "=77-4=1-2+1f=2-2+33=2-2=1+c46=1+0=1-1+678=2886-2+4023=28-2+11=52+7a7e0214696e73657274206174206d617020706174683a2000=19-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
+    "a43222f789fafaddee8aa7c425dcb52f083c10fa9f6f06dfa43ed56caa99fe9b",
     AllStructs
   )
 );
@@ -613,12 +823,7 @@ export class LoanFactoryInstance extends ContractInstance {
   }
 
   maps = {
-    tokenPrices: new RalphMap<HexString, bigint>(
-      LoanFactory.contract,
-      this.contractId,
-      "tokenPrices"
-    ),
-    tokenPairs: new RalphMap<HexString, HexString>(
+    tokenPairs: new RalphMap<HexString, PairInfo>(
       LoanFactory.contract,
       this.contractId,
       "tokenPairs"
@@ -685,12 +890,96 @@ export class LoanFactoryInstance extends ContractInstance {
     );
   }
 
+  subscribeLoanLiquidationEvent(
+    options: EventSubscribeOptions<LoanFactoryTypes.LoanLiquidationEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      LoanFactory.contract,
+      this,
+      options,
+      "LoanLiquidation",
+      fromCount
+    );
+  }
+
+  subscribeAuctionRedeemEvent(
+    options: EventSubscribeOptions<LoanFactoryTypes.AuctionRedeemEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      LoanFactory.contract,
+      this,
+      options,
+      "AuctionRedeem",
+      fromCount
+    );
+  }
+
+  subscribeAuctionBidEvent(
+    options: EventSubscribeOptions<LoanFactoryTypes.AuctionBidEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      LoanFactory.contract,
+      this,
+      options,
+      "AuctionBid",
+      fromCount
+    );
+  }
+
+  subscribeMarketCreatedEvent(
+    options: EventSubscribeOptions<LoanFactoryTypes.MarketCreatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      LoanFactory.contract,
+      this,
+      options,
+      "MarketCreated",
+      fromCount
+    );
+  }
+
+  subscribeMarketUpdatedEvent(
+    options: EventSubscribeOptions<LoanFactoryTypes.MarketUpdatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      LoanFactory.contract,
+      this,
+      options,
+      "MarketUpdated",
+      fromCount
+    );
+  }
+
+  subscribeMarketDestroyedEvent(
+    options: EventSubscribeOptions<LoanFactoryTypes.MarketDestroyedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      LoanFactory.contract,
+      this,
+      options,
+      "MarketDestroyed",
+      fromCount
+    );
+  }
+
   subscribeAllEvents(
     options: EventSubscribeOptions<
       | LoanFactoryTypes.NewLoanEvent
       | LoanFactoryTypes.AcceptedLoanEvent
       | LoanFactoryTypes.LoanRemovedEvent
       | LoanFactoryTypes.LoanWithdrawEvent
+      | LoanFactoryTypes.LoanLiquidationEvent
+      | LoanFactoryTypes.AuctionRedeemEvent
+      | LoanFactoryTypes.AuctionBidEvent
+      | LoanFactoryTypes.MarketCreatedEvent
+      | LoanFactoryTypes.MarketUpdatedEvent
+      | LoanFactoryTypes.MarketDestroyedEvent
     >,
     fromCount?: number
   ): EventSubscription {
@@ -703,17 +992,6 @@ export class LoanFactoryInstance extends ContractInstance {
   }
 
   view = {
-    updateTokenPrice: async (
-      params: LoanFactoryTypes.CallMethodParams<"updateTokenPrice">
-    ): Promise<LoanFactoryTypes.CallMethodResult<"updateTokenPrice">> => {
-      return callMethod(
-        LoanFactory,
-        this,
-        "updateTokenPrice",
-        params,
-        getContractByCodeHash
-      );
-    },
     determineCollateralRatio: async (
       params: LoanFactoryTypes.CallMethodParams<"determineCollateralRatio">
     ): Promise<
@@ -756,6 +1034,17 @@ export class LoanFactoryInstance extends ContractInstance {
         LoanFactory,
         this,
         "createLoan",
+        params,
+        getContractByCodeHash
+      );
+    },
+    acceptMarket: async (
+      params: LoanFactoryTypes.CallMethodParams<"acceptMarket">
+    ): Promise<LoanFactoryTypes.CallMethodResult<"acceptMarket">> => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "acceptMarket",
         params,
         getContractByCodeHash
       );
@@ -837,6 +1126,61 @@ export class LoanFactoryInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
+    loaneeMarket: async (
+      params: LoanFactoryTypes.CallMethodParams<"loaneeMarket">
+    ): Promise<LoanFactoryTypes.CallMethodResult<"loaneeMarket">> => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "loaneeMarket",
+        params,
+        getContractByCodeHash
+      );
+    },
+    editMarketValues: async (
+      params: LoanFactoryTypes.CallMethodParams<"editMarketValues">
+    ): Promise<LoanFactoryTypes.CallMethodResult<"editMarketValues">> => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "editMarketValues",
+        params,
+        getContractByCodeHash
+      );
+    },
+    addFunds: async (
+      params: LoanFactoryTypes.CallMethodParams<"addFunds">
+    ): Promise<LoanFactoryTypes.CallMethodResult<"addFunds">> => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "addFunds",
+        params,
+        getContractByCodeHash
+      );
+    },
+    withdrawFunds: async (
+      params: LoanFactoryTypes.CallMethodParams<"withdrawFunds">
+    ): Promise<LoanFactoryTypes.CallMethodResult<"withdrawFunds">> => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "withdrawFunds",
+        params,
+        getContractByCodeHash
+      );
+    },
+    destroyMarket: async (
+      params: LoanFactoryTypes.CallMethodParams<"destroyMarket">
+    ): Promise<LoanFactoryTypes.CallMethodResult<"destroyMarket">> => {
+      return callMethod(
+        LoanFactory,
+        this,
+        "destroyMarket",
+        params,
+        getContractByCodeHash
+      );
+    },
     editRate: async (
       params: LoanFactoryTypes.CallMethodParams<"editRate">
     ): Promise<LoanFactoryTypes.CallMethodResult<"editRate">> => {
@@ -844,17 +1188,6 @@ export class LoanFactoryInstance extends ContractInstance {
         LoanFactory,
         this,
         "editRate",
-        params,
-        getContractByCodeHash
-      );
-    },
-    editLiquidationBot: async (
-      params: LoanFactoryTypes.CallMethodParams<"editLiquidationBot">
-    ): Promise<LoanFactoryTypes.CallMethodResult<"editLiquidationBot">> => {
-      return callMethod(
-        LoanFactory,
-        this,
-        "editLiquidationBot",
         params,
         getContractByCodeHash
       );
@@ -921,13 +1254,6 @@ export class LoanFactoryInstance extends ContractInstance {
   };
 
   transact = {
-    updateTokenPrice: async (
-      params: LoanFactoryTypes.SignExecuteMethodParams<"updateTokenPrice">
-    ): Promise<
-      LoanFactoryTypes.SignExecuteMethodResult<"updateTokenPrice">
-    > => {
-      return signExecuteMethod(LoanFactory, this, "updateTokenPrice", params);
-    },
     determineCollateralRatio: async (
       params: LoanFactoryTypes.SignExecuteMethodParams<"determineCollateralRatio">
     ): Promise<
@@ -958,6 +1284,11 @@ export class LoanFactoryInstance extends ContractInstance {
       params: LoanFactoryTypes.SignExecuteMethodParams<"createLoan">
     ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"createLoan">> => {
       return signExecuteMethod(LoanFactory, this, "createLoan", params);
+    },
+    acceptMarket: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"acceptMarket">
+    ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"acceptMarket">> => {
+      return signExecuteMethod(LoanFactory, this, "acceptMarket", params);
     },
     accept: async (
       params: LoanFactoryTypes.SignExecuteMethodParams<"accept">
@@ -994,17 +1325,37 @@ export class LoanFactoryInstance extends ContractInstance {
     ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"redeem">> => {
       return signExecuteMethod(LoanFactory, this, "redeem", params);
     },
+    loaneeMarket: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"loaneeMarket">
+    ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"loaneeMarket">> => {
+      return signExecuteMethod(LoanFactory, this, "loaneeMarket", params);
+    },
+    editMarketValues: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"editMarketValues">
+    ): Promise<
+      LoanFactoryTypes.SignExecuteMethodResult<"editMarketValues">
+    > => {
+      return signExecuteMethod(LoanFactory, this, "editMarketValues", params);
+    },
+    addFunds: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"addFunds">
+    ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"addFunds">> => {
+      return signExecuteMethod(LoanFactory, this, "addFunds", params);
+    },
+    withdrawFunds: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"withdrawFunds">
+    ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"withdrawFunds">> => {
+      return signExecuteMethod(LoanFactory, this, "withdrawFunds", params);
+    },
+    destroyMarket: async (
+      params: LoanFactoryTypes.SignExecuteMethodParams<"destroyMarket">
+    ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"destroyMarket">> => {
+      return signExecuteMethod(LoanFactory, this, "destroyMarket", params);
+    },
     editRate: async (
       params: LoanFactoryTypes.SignExecuteMethodParams<"editRate">
     ): Promise<LoanFactoryTypes.SignExecuteMethodResult<"editRate">> => {
       return signExecuteMethod(LoanFactory, this, "editRate", params);
-    },
-    editLiquidationBot: async (
-      params: LoanFactoryTypes.SignExecuteMethodParams<"editLiquidationBot">
-    ): Promise<
-      LoanFactoryTypes.SignExecuteMethodResult<"editLiquidationBot">
-    > => {
-      return signExecuteMethod(LoanFactory, this, "editLiquidationBot", params);
     },
     tokenMapping: async (
       params: LoanFactoryTypes.SignExecuteMethodParams<"tokenMapping">

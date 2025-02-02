@@ -1,20 +1,5 @@
 [
   {
-    "name": "DIAOracleValue",
-    "fieldNames": [
-      "value",
-      "timestamp"
-    ],
-    "fieldTypes": [
-      "U256",
-      "U256"
-    ],
-    "isMutable": [
-      true,
-      true
-    ]
-  },
-  {
     "name": "PlayerData",
     "fieldNames": [
       "nft",
@@ -63,14 +48,17 @@
     ]
   },
   {
-    "name": "TokenData",
+    "name": "DIAOracleValue",
     "fieldNames": [
-      "value"
+      "value",
+      "timestamp"
     ],
     "fieldTypes": [
+      "U256",
       "U256"
     ],
     "isMutable": [
+      true,
       true
     ]
   }

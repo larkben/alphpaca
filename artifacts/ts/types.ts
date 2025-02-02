@@ -23,6 +23,3 @@ export interface PlayerData extends Record<string, Val> {
   levels: [bigint, bigint, bigint, bigint];
   cooldown: bigint;
 }
-export interface TokenData extends Record<string, Val> {
-  value: bigint;
-}

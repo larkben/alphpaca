@@ -22,9 +22,9 @@ const deployLoan: DeployFunction<Settings> = async (
       startTime: 0n,
       active: false,
       parentContract: '',
-      liquidationBot: '',
       canLiquidate: false,
       liquidation: false,
+      ratio: 0n,
       highestBidder: '',
       highestBid: 0n,
       timeToEnd: 0n

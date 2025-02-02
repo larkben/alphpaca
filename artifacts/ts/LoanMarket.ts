@@ -33,18 +33,12 @@ import {
   encodeContractFields,
   Narrow,
 } from "@alephium/web3";
-import { default as LoaneeMarketContractJson } from "../test/LoaneeMarket.ral.json";
+import { default as LoanMarketContractJson } from "../loans/LoanMarket.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import {
-  DIAOracleValue,
-  PairInfo,
-  PlayerData,
-  TokenData,
-  AllStructs,
-} from "./types";
+import { DIAOracleValue, PairInfo, PlayerData, AllStructs } from "./types";
 
 // Custom types for the contract
-export namespace LoaneeMarketTypes {
+export namespace LoanMarketTypes {
   export type Fields = {
     creator: Address;
     token: HexString;
@@ -181,10 +175,10 @@ export namespace LoaneeMarketTypes {
 }
 
 class Factory extends ContractFactory<
-  LoaneeMarketInstance,
-  LoaneeMarketTypes.Fields
+  LoanMarketInstance,
+  LoanMarketTypes.Fields
 > {
-  encodeFields(fields: LoaneeMarketTypes.Fields) {
+  encodeFields(fields: LoanMarketTypes.Fields) {
     return encodeContractFields(
       addStdIdToFields(this.contract, fields),
       this.contract.fieldsSig,
@@ -192,14 +186,14 @@ class Factory extends ContractFactory<
     );
   }
 
-  at(address: string): LoaneeMarketInstance {
-    return new LoaneeMarketInstance(address);
+  at(address: string): LoanMarketInstance {
+    return new LoanMarketInstance(address);
   }
 
   tests = {
     getLoaneeTokenDetails: async (
       params: Omit<
-        TestContractParamsWithoutMaps<LoaneeMarketTypes.Fields, never>,
+        TestContractParamsWithoutMaps<LoanMarketTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<[HexString, bigint]>> => {
@@ -212,7 +206,7 @@ class Factory extends ContractFactory<
     },
     getLoaneeDetails: async (
       params: Omit<
-        TestContractParamsWithoutMaps<LoaneeMarketTypes.Fields, never>,
+        TestContractParamsWithoutMaps<LoanMarketTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<
@@ -227,7 +221,7 @@ class Factory extends ContractFactory<
     },
     getCollateralDetails: async (
       params: Omit<
-        TestContractParamsWithoutMaps<LoaneeMarketTypes.Fields, never>,
+        TestContractParamsWithoutMaps<LoanMarketTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResultWithoutMaps<[boolean, bigint]>> => {
@@ -240,7 +234,7 @@ class Factory extends ContractFactory<
     },
     editMarketValues: async (
       params: TestContractParamsWithoutMaps<
-        LoaneeMarketTypes.Fields,
+        LoanMarketTypes.Fields,
         {
           caller: Address;
           newMinAmount: bigint;
@@ -261,7 +255,7 @@ class Factory extends ContractFactory<
     },
     delegate: async (
       params: TestContractParamsWithoutMaps<
-        LoaneeMarketTypes.Fields,
+        LoanMarketTypes.Fields,
         { caller: Address; amount: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -269,7 +263,7 @@ class Factory extends ContractFactory<
     },
     add: async (
       params: TestContractParamsWithoutMaps<
-        LoaneeMarketTypes.Fields,
+        LoanMarketTypes.Fields,
         { caller: Address; amount: bigint; gas: boolean }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -277,7 +271,7 @@ class Factory extends ContractFactory<
     },
     withdraw: async (
       params: TestContractParamsWithoutMaps<
-        LoaneeMarketTypes.Fields,
+        LoanMarketTypes.Fields,
         { caller: Address; amount: bigint }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -285,7 +279,7 @@ class Factory extends ContractFactory<
     },
     destroy: async (
       params: TestContractParamsWithoutMaps<
-        LoaneeMarketTypes.Fields,
+        LoanMarketTypes.Fields,
         { caller: Address }
       >
     ): Promise<TestContractResultWithoutMaps<null>> => {
@@ -294,7 +288,7 @@ class Factory extends ContractFactory<
   };
 
   stateForTest(
-    initFields: LoaneeMarketTypes.Fields,
+    initFields: LoanMarketTypes.Fields,
     asset?: Asset,
     address?: string
   ) {
@@ -303,32 +297,32 @@ class Factory extends ContractFactory<
 }
 
 // Use this object to test and deploy the contract
-export const LoaneeMarket = new Factory(
+export const LoanMarket = new Factory(
   Contract.fromJson(
-    LoaneeMarketContractJson,
+    LoanMarketContractJson,
     "",
     "a9cc0b2ee9caa208dc8ca365d3db5b86d548798aafe8f9cf94f1653636b0a676",
     AllStructs
   )
 );
-registerContract(LoaneeMarket);
+registerContract(LoanMarket);
 
 // Use this class to interact with the blockchain
-export class LoaneeMarketInstance extends ContractInstance {
+export class LoanMarketInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<LoaneeMarketTypes.State> {
-    return fetchContractState(LoaneeMarket, this);
+  async fetchState(): Promise<LoanMarketTypes.State> {
+    return fetchContractState(LoanMarket, this);
   }
 
   view = {
     getLoaneeTokenDetails: async (
-      params?: LoaneeMarketTypes.CallMethodParams<"getLoaneeTokenDetails">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"getLoaneeTokenDetails">> => {
+      params?: LoanMarketTypes.CallMethodParams<"getLoaneeTokenDetails">
+    ): Promise<LoanMarketTypes.CallMethodResult<"getLoaneeTokenDetails">> => {
       return callMethod(
-        LoaneeMarket,
+        LoanMarket,
         this,
         "getLoaneeTokenDetails",
         params === undefined ? {} : params,
@@ -336,10 +330,10 @@ export class LoaneeMarketInstance extends ContractInstance {
       );
     },
     getLoaneeDetails: async (
-      params?: LoaneeMarketTypes.CallMethodParams<"getLoaneeDetails">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"getLoaneeDetails">> => {
+      params?: LoanMarketTypes.CallMethodParams<"getLoaneeDetails">
+    ): Promise<LoanMarketTypes.CallMethodResult<"getLoaneeDetails">> => {
       return callMethod(
-        LoaneeMarket,
+        LoanMarket,
         this,
         "getLoaneeDetails",
         params === undefined ? {} : params,
@@ -347,10 +341,10 @@ export class LoaneeMarketInstance extends ContractInstance {
       );
     },
     getCollateralDetails: async (
-      params?: LoaneeMarketTypes.CallMethodParams<"getCollateralDetails">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"getCollateralDetails">> => {
+      params?: LoanMarketTypes.CallMethodParams<"getCollateralDetails">
+    ): Promise<LoanMarketTypes.CallMethodResult<"getCollateralDetails">> => {
       return callMethod(
-        LoaneeMarket,
+        LoanMarket,
         this,
         "getCollateralDetails",
         params === undefined ? {} : params,
@@ -358,10 +352,10 @@ export class LoaneeMarketInstance extends ContractInstance {
       );
     },
     editMarketValues: async (
-      params: LoaneeMarketTypes.CallMethodParams<"editMarketValues">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"editMarketValues">> => {
+      params: LoanMarketTypes.CallMethodParams<"editMarketValues">
+    ): Promise<LoanMarketTypes.CallMethodResult<"editMarketValues">> => {
       return callMethod(
-        LoaneeMarket,
+        LoanMarket,
         this,
         "editMarketValues",
         params,
@@ -369,10 +363,10 @@ export class LoaneeMarketInstance extends ContractInstance {
       );
     },
     delegate: async (
-      params: LoaneeMarketTypes.CallMethodParams<"delegate">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"delegate">> => {
+      params: LoanMarketTypes.CallMethodParams<"delegate">
+    ): Promise<LoanMarketTypes.CallMethodResult<"delegate">> => {
       return callMethod(
-        LoaneeMarket,
+        LoanMarket,
         this,
         "delegate",
         params,
@@ -380,21 +374,15 @@ export class LoaneeMarketInstance extends ContractInstance {
       );
     },
     add: async (
-      params: LoaneeMarketTypes.CallMethodParams<"add">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"add">> => {
-      return callMethod(
-        LoaneeMarket,
-        this,
-        "add",
-        params,
-        getContractByCodeHash
-      );
+      params: LoanMarketTypes.CallMethodParams<"add">
+    ): Promise<LoanMarketTypes.CallMethodResult<"add">> => {
+      return callMethod(LoanMarket, this, "add", params, getContractByCodeHash);
     },
     withdraw: async (
-      params: LoaneeMarketTypes.CallMethodParams<"withdraw">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"withdraw">> => {
+      params: LoanMarketTypes.CallMethodParams<"withdraw">
+    ): Promise<LoanMarketTypes.CallMethodResult<"withdraw">> => {
       return callMethod(
-        LoaneeMarket,
+        LoanMarket,
         this,
         "withdraw",
         params,
@@ -402,10 +390,10 @@ export class LoaneeMarketInstance extends ContractInstance {
       );
     },
     destroy: async (
-      params: LoaneeMarketTypes.CallMethodParams<"destroy">
-    ): Promise<LoaneeMarketTypes.CallMethodResult<"destroy">> => {
+      params: LoanMarketTypes.CallMethodParams<"destroy">
+    ): Promise<LoanMarketTypes.CallMethodResult<"destroy">> => {
       return callMethod(
-        LoaneeMarket,
+        LoanMarket,
         this,
         "destroy",
         params,
@@ -416,78 +404,74 @@ export class LoaneeMarketInstance extends ContractInstance {
 
   transact = {
     getLoaneeTokenDetails: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"getLoaneeTokenDetails">
+      params: LoanMarketTypes.SignExecuteMethodParams<"getLoaneeTokenDetails">
     ): Promise<
-      LoaneeMarketTypes.SignExecuteMethodResult<"getLoaneeTokenDetails">
+      LoanMarketTypes.SignExecuteMethodResult<"getLoaneeTokenDetails">
     > => {
       return signExecuteMethod(
-        LoaneeMarket,
+        LoanMarket,
         this,
         "getLoaneeTokenDetails",
         params
       );
     },
     getLoaneeDetails: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"getLoaneeDetails">
-    ): Promise<
-      LoaneeMarketTypes.SignExecuteMethodResult<"getLoaneeDetails">
-    > => {
-      return signExecuteMethod(LoaneeMarket, this, "getLoaneeDetails", params);
+      params: LoanMarketTypes.SignExecuteMethodParams<"getLoaneeDetails">
+    ): Promise<LoanMarketTypes.SignExecuteMethodResult<"getLoaneeDetails">> => {
+      return signExecuteMethod(LoanMarket, this, "getLoaneeDetails", params);
     },
     getCollateralDetails: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"getCollateralDetails">
+      params: LoanMarketTypes.SignExecuteMethodParams<"getCollateralDetails">
     ): Promise<
-      LoaneeMarketTypes.SignExecuteMethodResult<"getCollateralDetails">
+      LoanMarketTypes.SignExecuteMethodResult<"getCollateralDetails">
     > => {
       return signExecuteMethod(
-        LoaneeMarket,
+        LoanMarket,
         this,
         "getCollateralDetails",
         params
       );
     },
     editMarketValues: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"editMarketValues">
-    ): Promise<
-      LoaneeMarketTypes.SignExecuteMethodResult<"editMarketValues">
-    > => {
-      return signExecuteMethod(LoaneeMarket, this, "editMarketValues", params);
+      params: LoanMarketTypes.SignExecuteMethodParams<"editMarketValues">
+    ): Promise<LoanMarketTypes.SignExecuteMethodResult<"editMarketValues">> => {
+      return signExecuteMethod(LoanMarket, this, "editMarketValues", params);
     },
     delegate: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"delegate">
-    ): Promise<LoaneeMarketTypes.SignExecuteMethodResult<"delegate">> => {
-      return signExecuteMethod(LoaneeMarket, this, "delegate", params);
+      params: LoanMarketTypes.SignExecuteMethodParams<"delegate">
+    ): Promise<LoanMarketTypes.SignExecuteMethodResult<"delegate">> => {
+      return signExecuteMethod(LoanMarket, this, "delegate", params);
     },
     add: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"add">
-    ): Promise<LoaneeMarketTypes.SignExecuteMethodResult<"add">> => {
-      return signExecuteMethod(LoaneeMarket, this, "add", params);
+      params: LoanMarketTypes.SignExecuteMethodParams<"add">
+    ): Promise<LoanMarketTypes.SignExecuteMethodResult<"add">> => {
+      return signExecuteMethod(LoanMarket, this, "add", params);
     },
     withdraw: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"withdraw">
-    ): Promise<LoaneeMarketTypes.SignExecuteMethodResult<"withdraw">> => {
-      return signExecuteMethod(LoaneeMarket, this, "withdraw", params);
+      params: LoanMarketTypes.SignExecuteMethodParams<"withdraw">
+    ): Promise<LoanMarketTypes.SignExecuteMethodResult<"withdraw">> => {
+      return signExecuteMethod(LoanMarket, this, "withdraw", params);
     },
     destroy: async (
-      params: LoaneeMarketTypes.SignExecuteMethodParams<"destroy">
-    ): Promise<LoaneeMarketTypes.SignExecuteMethodResult<"destroy">> => {
-      return signExecuteMethod(LoaneeMarket, this, "destroy", params);
+      params: LoanMarketTypes.SignExecuteMethodParams<"destroy">
+    ): Promise<LoanMarketTypes.SignExecuteMethodResult<"destroy">> => {
+      return signExecuteMethod(LoanMarket, this, "destroy", params);
     },
   };
 
-  async multicall<Calls extends LoaneeMarketTypes.MultiCallParams>(
+  async multicall<Calls extends LoanMarketTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<LoaneeMarketTypes.MultiCallResults<Calls>>;
-  async multicall<Callss extends LoaneeMarketTypes.MultiCallParams[]>(
+  ): Promise<LoanMarketTypes.MultiCallResults<Calls>>;
+  async multicall<Callss extends LoanMarketTypes.MultiCallParams[]>(
     callss: Narrow<Callss>
-  ): Promise<LoaneeMarketTypes.MulticallReturnType<Callss>>;
+  ): Promise<LoanMarketTypes.MulticallReturnType<Callss>>;
   async multicall<
     Callss extends
-      | LoaneeMarketTypes.MultiCallParams
-      | LoaneeMarketTypes.MultiCallParams[]
+      | LoanMarketTypes.MultiCallParams
+      | LoanMarketTypes.MultiCallParams[]
   >(callss: Callss): Promise<unknown> {
     return await multicallMethods(
-      LoaneeMarket,
+      LoanMarket,
       this,
       callss,
       getContractByCodeHash

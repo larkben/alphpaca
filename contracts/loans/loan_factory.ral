@@ -4,13 +4,22 @@ struct PairInfo {
     mut decimals: U256 
 }
 
-Contract LoanFactoryTest (
+struct DIAOracleValue {
+    mut value: U256,
+    mut timestamp: U256
+}
+  
+Interface IDIAOracle {
+    pub fn getValue(key: ByteVec) -> DIAOracleValue
+}
+
+Contract LoanFactory (
     admin: Address,
     loanTemplate: ByteVec,
     marketTemplate: ByteVec,
     mut activeLoans: U256,
     mut rate: U256,
-    oracle: TestOracle
+    oracle: IDIAOracle
 ) {
     // price mappings
     mapping [ByteVec, PairInfo] tokenPairs
@@ -77,7 +86,7 @@ Contract LoanFactoryTest (
     }
 
     pub fn getRequiredTokens(contractId: ByteVec, withInterest: Bool) -> (ByteVec, U256) {
-        let loan = LoanTest(contractId)
+        let loan = Loan(contractId)
 
         let (token, amount) = loan.getTokenRequested()
 
@@ -126,7 +135,7 @@ Contract LoanFactoryTest (
             150
         )
 
-        let (encodeImmutableFields, encodeMutableFields) = LoanTest.encodeFields!(
+        let (encodeImmutableFields, encodeMutableFields) = Loan.encodeFields!(
             caller,
             nullContractAddress!(),
             tokenRequested,
@@ -145,8 +154,7 @@ Contract LoanFactoryTest (
             ratio,
             nullContractAddress!(),
             tokenAmount,
-            0,
-            oracle
+            0
         )
 
         let contractID = copyCreateContract!{caller -> ALPH: (minimalContractDeposit!() * 2), collateralToken: collateralAmount}(
@@ -172,7 +180,7 @@ Contract LoanFactoryTest (
         loaneeMarket: ByteVec
     ) -> () {
         let caller = callerAddress!()
-        let market = LoaneeMarket(loaneeMarket)
+        let market = LoanMarket(loaneeMarket)
 
         checkTokenAmount(tokenAmount, rate)
 
@@ -199,7 +207,7 @@ Contract LoanFactoryTest (
 
         market.delegate(caller, tokenAmount)
 
-        let (encodeImmutableFields, encodeMutableFields) = LoanTest.encodeFields!(
+        let (encodeImmutableFields, encodeMutableFields) = Loan.encodeFields!(
             caller,
             loanee,
             tokenRequested,
@@ -210,7 +218,7 @@ Contract LoanFactoryTest (
             interest,
             rate,
             duration,
-            0,
+            blockTimeStamp!(),
             true,
             selfAddress!(),
             liquid,
@@ -218,8 +226,7 @@ Contract LoanFactoryTest (
             ratio,
             nullContractAddress!(),
             tokenAmount,
-            0,
-            oracle
+            0
         )
 
         let contractID = copyCreateContract!{caller -> ALPH: (minimalContractDeposit!() * 2), collateralToken: collateralAmount}(
@@ -236,7 +243,7 @@ Contract LoanFactoryTest (
 
     @using(checkExternalCaller = false, preapprovedAssets = true)
     pub fn accept(contractId: ByteVec) -> () {
-        let loan = LoanTest(contractId)
+        let loan = Loan(contractId)
 
         let caller = callerAddress!()
 
@@ -250,7 +257,7 @@ Contract LoanFactoryTest (
 
     @using(checkExternalCaller = false, preapprovedAssets = false)
     pub fn cancel(contractId: ByteVec) -> () {
-        let loan = LoanTest(contractId)
+        let loan = Loan(contractId)
 
         let caller = callerAddress!()
 
@@ -262,7 +269,7 @@ Contract LoanFactoryTest (
 
     @using(checkExternalCaller = false, preapprovedAssets = true, assetsInContract = enforced)
     pub fn pay(contractId: ByteVec) -> () {
-        let loan = LoanTest(contractId)
+        let loan = Loan(contractId)
 
         let caller = callerAddress!()
 
@@ -278,7 +285,7 @@ Contract LoanFactoryTest (
     // liquidation
     @using(checkExternalCaller = false, preapprovedAssets = false, assetsInContract = enforced)
     pub fn forfeit(contractId: ByteVec) -> () {
-        let loan = LoanTest(contractId)
+        let loan = Loan(contractId)
 
         let caller = callerAddress!()
 
@@ -293,7 +300,7 @@ Contract LoanFactoryTest (
     // check liquidation
     @using(checkExternalCaller = false, updateFields = false)
     pub fn liquidation(contractId: ByteVec) -> () {
-        let loan = LoanTest(contractId)
+        let loan = Loan(contractId)
 
         let caller = callerAddress!()
 
@@ -314,7 +321,7 @@ Contract LoanFactoryTest (
     // auction functions
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = true)
     pub fn bid(contractId: ByteVec, bidAmount: U256) -> () {
-        let loan = LoanTest(contractId)
+        let loan = Loan(contractId)
 
         let caller = callerAddress!()
 
@@ -332,7 +339,7 @@ Contract LoanFactoryTest (
 
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false, assetsInContract = enforced)
     pub fn redeem(contractId: ByteVec) -> () {
-        let loan = LoanTest(contractId)
+        let loan = Loan(contractId)
 
         let caller = callerAddress!()
 
@@ -361,7 +368,7 @@ Contract LoanFactoryTest (
         let caller = callerAddress!()
 
         // encode fields
-        let (encodeImmutableFields, encodeMutableFields) = LoaneeMarket.encodeFields!(
+        let (encodeImmutableFields, encodeMutableFields) = LoanMarket.encodeFields!(
             caller,
             token,
             tokenAmount,
@@ -388,7 +395,7 @@ Contract LoanFactoryTest (
     // update loanee market -> simplify
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false)
     pub fn editMarketValues(contractId: ByteVec, newBorrowAmount: U256, newInterest: U256, newTime: U256, liq: Bool, collateral: Bool, ratio: U256) -> () {
-        let market = LoaneeMarket(contractId)
+        let market = LoanMarket(contractId)
 
         let caller = callerAddress!()
 
@@ -402,7 +409,7 @@ Contract LoanFactoryTest (
 
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = true, assetsInContract = enforced)
     pub fn addFunds(contractId: ByteVec, token: ByteVec, amount: U256, gas: Bool) -> () {
-        let market = LoaneeMarket(contractId)
+        let market = LoanMarket(contractId)
 
         let caller = callerAddress!()
 
@@ -422,7 +429,7 @@ Contract LoanFactoryTest (
 
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false, assetsInContract = enforced)
     pub fn withdrawFunds(contractId: ByteVec, token: ByteVec, amount: U256) -> () {
-        let market = LoaneeMarket(contractId)
+        let market = LoanMarket(contractId)
 
         let caller = callerAddress!()
 
@@ -436,7 +443,7 @@ Contract LoanFactoryTest (
 
     @using(checkExternalCaller = false, updateFields = false, preapprovedAssets = false)
     pub fn destroyMarket(contractId: ByteVec) -> () {
-        let market = LoaneeMarket(contractId)
+        let market = LoanMarket(contractId)
 
         let caller = callerAddress!()
 
@@ -507,8 +514,8 @@ Contract LoanFactoryTest (
     } 
 }
 
-TxScript CreateLoanTest (
-    loanFactory: LoanFactoryTest,
+TxScript CreateLoan (
+    loanFactory: LoanFactory,
     tokenRequested: ByteVec,
     tokenAmount: U256,
     collateralToken: ByteVec,
@@ -528,8 +535,8 @@ TxScript CreateLoanTest (
     )
 }
 
-TxScript AcceptMarketTest (
-    loanFactory: LoanFactoryTest,
+TxScript AcceptMarket (
+    loanFactory: LoanFactory,
     tokenRequested: ByteVec, 
     tokenAmount: U256, 
     collateralToken: ByteVec, 
@@ -549,8 +556,8 @@ TxScript AcceptMarketTest (
     )
 }
 
-TxScript AcceptLoanTest (
-    loanFactory: LoanFactoryTest,
+TxScript AcceptLoan (
+    loanFactory: LoanFactory,
     contract: ByteVec
 ) {
     let (token, amount) = loanFactory.getRequiredTokens(contract, false)
@@ -558,15 +565,15 @@ TxScript AcceptLoanTest (
     loanFactory.accept{callerAddress!() -> token: amount}(contract)
 }
 
-TxScript CancelLoanTest (
-    loanFactory: LoanFactoryTest,
+TxScript CancelLoan (
+    loanFactory: LoanFactory,
     contract: ByteVec
 ) {
     loanFactory.cancel(contract)
 }
 
-TxScript PayLoanTest (
-    loanFactory: LoanFactoryTest,
+TxScript PayLoan (
+    loanFactory: LoanFactory,
     contract: ByteVec
 ) {
     let (token, amount) = loanFactory.getRequiredTokens(contract, true)
@@ -574,8 +581,8 @@ TxScript PayLoanTest (
     loanFactory.pay{callerAddress!() -> token: amount}(contract)
 }
 
-TxScript ForfeitLoanTest (
-    loanFactory: LoanFactoryTest,
+TxScript ForfeitLoan (
+    loanFactory: LoanFactory,
     contract: ByteVec
 ) {
     loanFactory.forfeit(contract)
@@ -583,15 +590,15 @@ TxScript ForfeitLoanTest (
 
 // liquidation and auctions
 
-TxScript LiquidationLoanTest (
-    loanFactory: LoanFactoryTest,
+TxScript LiquidationLoan (
+    loanFactory: LoanFactory,
     contract: ByteVec
 ) {
     loanFactory.liquidation(contract)
 }
 
-TxScript BidLoanTest (
-    loanFactory: LoanFactoryTest,
+TxScript BidLoan (
+    loanFactory: LoanFactory,
     contract: ByteVec,
     bidAmount: U256,
     token: ByteVec
@@ -599,8 +606,8 @@ TxScript BidLoanTest (
     loanFactory.bid{callerAddress!() -> token: bidAmount, ALPH: dustAmount!()}(contract, bidAmount)
 }
 
-TxScript RedeemLoanTest (
-    loanFactory: LoanFactoryTest,
+TxScript RedeemLoan (
+    loanFactory: LoanFactory,
     contract: ByteVec
 ) {
     loanFactory.redeem(contract)
@@ -608,8 +615,8 @@ TxScript RedeemLoanTest (
 
 // create market
 
-TxScript CreateLoaneeMarketTest (
-    loanFactory: LoanFactoryTest,
+TxScript CreateLoaneeMarket (
+    loanFactory: LoanFactory,
     token: ByteVec,
     tokenAmount: U256,
     minTokenAmount: U256,
@@ -632,7 +639,7 @@ TxScript CreateLoaneeMarketTest (
 }
 
 TxScript EditMarketValues (
-    loanFactory: LoanFactoryTest,
+    loanFactory: LoanFactory,
     contractId: ByteVec,
     newBorrowAmount: U256, 
     newInterest: U256, 
@@ -644,8 +651,8 @@ TxScript EditMarketValues (
     loanFactory.editMarketValues(contractId, newBorrowAmount, newInterest, newTime, liq, collateral, ratio)
 }
 
-TxScript AddFundsTest (
-    loanFactory: LoanFactoryTest,
+TxScript AddFunds (
+    loanFactory: LoanFactory,
     contractId: ByteVec,
     token: ByteVec,
     amount: U256,
@@ -660,8 +667,8 @@ TxScript AddFundsTest (
     loanFactory.addFunds{callerAddress!() -> token: amount, ALPH: minimalALPH}(contractId, token, amount, gas)
 }
 
-TxScript WithdrawFundsTest (
-    loanFactory: LoanFactoryTest,
+TxScript WithdrawFunds (
+    loanFactory: LoanFactory,
     contractId: ByteVec,
     token: ByteVec,
     amount: U256
@@ -669,8 +676,8 @@ TxScript WithdrawFundsTest (
     loanFactory.withdrawFunds(contractId, token, amount)
 }
 
-TxScript DestroyMarketTest (
-    loanFactory: LoanFactoryTest,
+TxScript DestroyMarket (
+    loanFactory: LoanFactory,
     contractId: ByteVec
 ) {
     loanFactory.destroyMarket(contractId)
@@ -678,15 +685,15 @@ TxScript DestroyMarketTest (
 
 // admin
 
-TxScript EditLoanRateTest (
-    loanFactory: LoanFactoryTest,
+TxScript EditLoanRate (
+    loanFactory: LoanFactory,
     newRate: U256
 ) {
     loanFactory.editRate(newRate)
 }
 
-TxScript WithdrawLoanFactoryFeesTest (
-    loanFactory: LoanFactoryTest,
+TxScript WithdrawLoanFactoryFees (
+    loanFactory: LoanFactory,
     who: Address,
     token: ByteVec,
     amount: U256
@@ -695,7 +702,7 @@ TxScript WithdrawLoanFactoryFeesTest (
 }
 
 TxScript TokenMapping (
-    loanFactory: LoanFactoryTest,
+    loanFactory: LoanFactory,
     token: ByteVec, 
     add: Bool,
     pairtoken: ByteVec,
@@ -706,15 +713,15 @@ TxScript TokenMapping (
 
 // upgrade / destroy
 
-TxScript UpdateLoanFactoryCodeTest (
-    loanFactory: LoanFactoryTest,
+TxScript UpdateLoanFactoryCode (
+    loanFactory: LoanFactory,
     newCode: ByteVec
 ) {
     loanFactory.updateLoanFactoryCode(newCode)
 }
 
-TxScript UpdateLoanFactoryFieldsTest (
-    loanFactory: LoanFactoryTest,
+TxScript UpdateLoanFactoryFields (
+    loanFactory: LoanFactory,
     newCode: ByteVec, 
     immFields: ByteVec, 
     mutFields: ByteVec
@@ -722,8 +729,8 @@ TxScript UpdateLoanFactoryFieldsTest (
     loanFactory.updateLoanFactoryFields(newCode, immFields, mutFields)
 }
 
-TxScript DestroyLoanFactoryTest (
-    loanFactory: LoanFactoryTest
+TxScript DestroyLoanFactory (
+    loanFactory: LoanFactory
 ) {
     loanFactory.destroyLoanFactory()
 }
