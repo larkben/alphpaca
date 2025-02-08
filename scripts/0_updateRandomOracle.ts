@@ -33,11 +33,11 @@ const deployScript: DeployFunction<Settings> = async (
 
     console.log(randomnessFetcher)
 
-    console.log(await getRandomness(randomnessFetcher))
+    //console.log(await getRandomness(randomnessFetcher))
     
-    const tx = await randomnessFetcher.transact.update({ signer: signer })
-    await waitForTxConfirmation(tx.txId, 1, 4000)
-    console.log(tx.txId)
+    //const tx = await randomnessFetcher.transact.update({ signer: signer })
+    //await waitForTxConfirmation(tx.txId, 1, 4000)
+    //console.log(tx.txId)
   }
   
   export default deployScript
