@@ -24,6 +24,8 @@ import {
   LoanInstance,
   LoanFactory,
   LoanFactoryInstance,
+  RandomnessFetcher,
+  RandomnessFetcherInstance,
 } from ".";
 import { default as mainnetDeployments } from "../../deployments/.deployments.mainnet.json";
 import { default as testnetDeployments } from "../../deployments/.deployments.testnet.json";
@@ -40,6 +42,7 @@ export type Deployments = {
     WrappedWangProtocol?: DeployContractExecutionResult<WrappedWangProtocolInstance>;
     Loan?: DeployContractExecutionResult<LoanInstance>;
     LoanFactory?: DeployContractExecutionResult<LoanFactoryInstance>;
+    RandomnessFetcher?: DeployContractExecutionResult<RandomnessFetcherInstance>;
   };
 };
 
@@ -115,6 +118,15 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["LoanFactory"],
             contractInstance: LoanFactory.at(
               json.contracts["LoanFactory"].contractInstance.address
+            ),
+          },
+    RandomnessFetcher:
+      json.contracts["RandomnessFetcher"] === undefined
+        ? undefined
+        : {
+            ...json.contracts["RandomnessFetcher"],
+            contractInstance: RandomnessFetcher.at(
+              json.contracts["RandomnessFetcher"].contractInstance.address
             ),
           },
   };

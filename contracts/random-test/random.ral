@@ -1,0 +1,30 @@
+struct DIARandomValue {
+    mut randomness: ByteVec,
+    mut signature: ByteVec,
+    mut round: U256
+}
+
+Interface IDIARandomOracle {
+    pub fn getLastRound() -> U256
+    pub fn getRandomValue(round: U256) -> DIARandomValue
+}
+
+// TestNet: 29isyQoYSFKE4VMaGKHfyy7zRHeM2VCwAy5pXx2xUksBm
+
+Contract RandomnessFetcher(
+  oracle: IDIARandomOracle,
+  mut randomValue: DIARandomValue
+) {
+  @using(updateFields = true, checkExternalCaller = false)
+  pub fn update() -> () {
+    let lastRound = oracle.getLastRound()
+    let value = oracle.getRandomValue(lastRound)
+    randomValue = value
+  }
+}
+
+TxScript UpdateRandomnessFetcher (
+    random: RandomnessFetcher
+) {
+    random.update()
+}

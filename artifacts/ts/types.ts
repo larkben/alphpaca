@@ -9,9 +9,10 @@ export interface DIAOracleValue extends Record<string, Val> {
   value: bigint;
   timestamp: bigint;
 }
-export interface PairInfo extends Record<string, Val> {
-  pair: HexString;
-  decimals: bigint;
+export interface DIARandomValue extends Record<string, Val> {
+  randomness: HexString;
+  signature: HexString;
+  round: bigint;
 }
 export interface PlayerData extends Record<string, Val> {
   nft: HexString;

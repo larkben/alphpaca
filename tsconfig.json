@@ -37,7 +37,7 @@
     "artifacts/**/*.ts",
     "sdk/alephiumFunctions.cjs",
     "sdk/CliMarketplace.mjs"
-, "test/listing/listing-functions.js"  ],
+, "test/listing/listing-functions.js", "sdk/test.js"  ],
   "exclude": [
     "node_modules"
   ]

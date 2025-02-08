@@ -14,6 +14,15 @@ struct PlayerData {
     mut cooldown: U256
 }
 
+struct DIAOracleValue {
+    mut value: U256,
+    mut timestamp: U256
+}
+  
+Interface IDIAOracle {
+    pub fn getValue(key: ByteVec) -> DIAOracleValue
+}
+
 Contract GamifyProtocol (
     admin: Address,
     mut supercharged: U256,

@@ -35,7 +35,12 @@ import {
 } from "@alephium/web3";
 import { default as WrappedWangProtocolContractJson } from "../wang/WrappedWangProtocol.ral.json";
 import { getContractByCodeHash, registerContract } from "./contracts";
-import { DIAOracleValue, PairInfo, PlayerData, AllStructs } from "./types";
+import {
+  DIAOracleValue,
+  DIARandomValue,
+  PlayerData,
+  AllStructs,
+} from "./types";
 
 // Custom types for the contract
 export namespace WrappedWangProtocolTypes {

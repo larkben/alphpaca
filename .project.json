@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v3.11.1",
+  "fullNodeVersion": "v3.12.0",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": true,
     "ignoreUnusedVariablesWarnings": true,
@@ -11,33 +11,15 @@
     "skipAbstractContractCheck": false
   },
   "infos": {
-    "AcceptLoan": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "AcceptMarket": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
     "ActivateWalfProtocol": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
-    "AddFunds": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
     "AddXp": {
       "sourceFile": "gamefi/gamify.ral",
-      "sourceCodeHash": "da4c65204a754bb869dc5a09fcf5372488d1cf112c5e5f7e93e0b37245604ce1",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -59,12 +41,6 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": "aa16f114c184851beb77111230f1d7924dc4a9f847372166539df2443c59d014"
     },
-    "BidLoan": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
     "Buildtoken": {
       "sourceFile": "createtoken/tx_make_token_alph.ral",
       "sourceCodeHash": "ce9de973033c53adde5b0f4758b34dfa3da12a439ad684d5f6b48e6830f71f08",
@@ -74,12 +50,6 @@
     "Cancel": {
       "sourceFile": "gamefi/battle/battleFactory.ral",
       "sourceCodeHash": "50748b75c6de5780f6c63fc91b1f0cc359fca081058ee1106cca462513f70e51",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "CancelLoan": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -98,18 +68,6 @@
     "CollectWangFees": {
       "sourceFile": "wang/wang.ral",
       "sourceCodeHash": "69a924ae6c2b7db04fbb68241ce0a50c0760b66e4a20e00aadf2e5f03ed1c4d9",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "CreateLoan": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "CreateLoaneeMarket": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -138,26 +96,20 @@
       "codeHashDebug": "2417efe145ca648a8d8cbc37ef9bc41b7d2f28406925fe7a88725c33a61542d9"
     },
     "DIAOracleValue": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
+      "sourceFile": "gamefi/gamify.ral",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "DIARandomValue": {
+      "sourceFile": "random-test/random.ral",
+      "sourceCodeHash": "e211e02b7c2f6dabf7d79de1b7289d98a1492cfc073ce0095fc035d3f726d0ca",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "Destroy": {
       "sourceFile": "scripts/destroy_faucet.ral",
       "sourceCodeHash": "0447e8824afa27dc76fdcaac5fac72247eb5b4aa93d5efc87da36d1450e1c4f7",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "DestroyLoanFactory": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "DestroyMarket": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -185,18 +137,6 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
-    "EditLoanRate": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "EditMarketValues": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
     "EditOgAlfFees": {
       "sourceFile": "walf/walf.ral",
       "sourceCodeHash": "a2ef19dfa83247889198666cb5ca90cd140e273967ee08f9dd44bd504b6a6f0c",
@@ -205,7 +145,7 @@
     },
     "EditValidContract": {
       "sourceFile": "gamefi/gamify.ral",
-      "sourceCodeHash": "da4c65204a754bb869dc5a09fcf5372488d1cf112c5e5f7e93e0b37245604ce1",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -233,27 +173,15 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": "8671dc4d763fef38a37762180a03a69d0a42c85466d4fee89b25e8598c5645fb"
     },
-    "ForceCancel": {
-      "sourceFile": "loans/loan.ral",
-      "sourceCodeHash": "3edd1eac071467432437ebdf5f268a09720b33f176a36e62bc9a59b05bcec040",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
     "ForceContractCancel": {
       "sourceFile": "gamefi/battle/battle.ral",
       "sourceCodeHash": "0f5eec10b0e90d93d56b885ac97b671b1acd14bc3ee3ae44020f753b1ddd0d67",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
-    "ForfeitLoan": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
     "GamifyProtocol": {
       "sourceFile": "gamefi/gamify.ral",
-      "sourceCodeHash": "da4c65204a754bb869dc5a09fcf5372488d1cf112c5e5f7e93e0b37245604ce1",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
       "bytecodeDebugPatch": "=14-2+9b=2-2+60=2-2+2e=2-1=1-4+7=2-2+a5=3-1+a=2-1+5b=1+56f=2-2+87=425-1+9=266+7a7e0214696e73657274206174206d617020706174683a2000=1647-1+e=29-1+c=36+7a7e0214696e73657274206174206d617020706174683a2000=13-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=224",
       "codeHashDebug": "069c4f18450971a6aa7e08b08ca1fff9ba632ffdc2c19fbb96fdbe6d43e5e357"
     },
@@ -264,31 +192,37 @@
       "codeHashDebug": ""
     },
     "IDIAOracle": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
+      "sourceFile": "gamefi/gamify.ral",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "IDIARandomOracle": {
+      "sourceFile": "random-test/random.ral",
+      "sourceCodeHash": "e211e02b7c2f6dabf7d79de1b7289d98a1492cfc073ce0095fc035d3f726d0ca",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "IFungibleToken": {
-      "sourceFile": "../node_modules/@alephium/web3/std/fungible_token_interface.ral",
+      "sourceFile": "../../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/fungible_token_interface.ral",
       "sourceCodeHash": "62910bf11e1eeb6cb2fd468626ff606a9b06306b2b81590c3b10f6deb5966bde",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFT": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_interface.ral",
+      "sourceFile": "../../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_interface.ral",
       "sourceCodeHash": "92956f4e61c198f011b48dbda2ed76193ffc79ac9c39f60bf1763a34e02f2c41",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFTCollection": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_collection_interface.ral",
+      "sourceFile": "../../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_collection_interface.ral",
       "sourceCodeHash": "9b199426ea89c188ce858b48ab809f13b9fc1ed0d64ca91e3d600eda8fbf6c42",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "INFTCollectionWithRoyalty": {
-      "sourceFile": "../node_modules/@alephium/web3/std/nft_collection_with_royalty_interface.ral",
+      "sourceFile": "../../../../../.npm/_npx/f1b120e1b513c04c/node_modules/@alephium/web3/std/nft_collection_with_royalty_interface.ral",
       "sourceCodeHash": "293aad668909a21df80183c9296f3d1a8edb76a43faa2cbf395a766d1879cdc6",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
@@ -304,30 +238,6 @@
       "sourceCodeHash": "50748b75c6de5780f6c63fc91b1f0cc359fca081058ee1106cca462513f70e51",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
-    },
-    "LiquidationLoan": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "Loan": {
-      "sourceFile": "loans/loan.ral",
-      "sourceCodeHash": "3edd1eac071467432437ebdf5f268a09720b33f176a36e62bc9a59b05bcec040",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "83905f562f0aa3793c9eefbcb44886fa76a4b3cb2e2b3a48a71b04c5d2cbe8da"
-    },
-    "LoanFactory": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "=77-4=1-2+1f=2-2+33=2-2=1+c46=1+0=1-1+678=2886-2+4023=28-2+11=52+7a7e0214696e73657274206174206d617020706174683a2000=19-1+a=36+7a7e021472656d6f7665206174206d617020706174683a2000=184",
-      "codeHashDebug": "a43222f789fafaddee8aa7c425dcb52f083c10fa9f6f06dfa43ed56caa99fe9b"
-    },
-    "LoanMarket": {
-      "sourceFile": "loans/loan_market.ral",
-      "sourceCodeHash": "e73c5e2a070080577a27711a94a0304845856c92eb42bc4533c506ffeac0cd8d",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "a9cc0b2ee9caa208dc8ca365d3db5b86d548798aafe8f9cf94f1653636b0a676"
     },
     "MintAlf": {
       "sourceFile": "walf/walf.ral",
@@ -467,18 +377,6 @@
       "bytecodeDebugPatch": "",
       "codeHashDebug": "ad947c2c58ed952e6a4492149f6b99b3bf074ec3f0eda8781329f0ce5a9d131e"
     },
-    "PairInfo": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "PayLoan": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
     "Player": {
       "sourceFile": "gamefi/player.ral",
       "sourceCodeHash": "6fb4e4595e8d33df53c1edceb6679705784ebc0a3b1deeb2dbd90e9d4ae4d77f",
@@ -493,19 +391,19 @@
     },
     "PlayerData": {
       "sourceFile": "gamefi/gamify.ral",
-      "sourceCodeHash": "da4c65204a754bb869dc5a09fcf5372488d1cf112c5e5f7e93e0b37245604ce1",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
-    "RedeemLoan": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
+    "RandomnessFetcher": {
+      "sourceFile": "random-test/random.ral",
+      "sourceCodeHash": "e211e02b7c2f6dabf7d79de1b7289d98a1492cfc073ce0095fc035d3f726d0ca",
       "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
+      "codeHashDebug": "35741d21031f56a1da31947e25bb2861663566b8d9a3e254155cd0651db416c6"
     },
     "Rest": {
       "sourceFile": "gamefi/gamify.ral",
-      "sourceCodeHash": "da4c65204a754bb869dc5a09fcf5372488d1cf112c5e5f7e93e0b37245604ce1",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -523,7 +421,7 @@
     },
     "Supercharge": {
       "sourceFile": "gamefi/gamify.ral",
-      "sourceCodeHash": "da4c65204a754bb869dc5a09fcf5372488d1cf112c5e5f7e93e0b37245604ce1",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -532,12 +430,6 @@
       "sourceCodeHash": "9c20c0b49bb6743d8c9182715fabf3c3976e41cb9ed4e7bf3ebcf3723450e904",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "215fe6aae7ba67810780a11c1f098f7845593d41f36aa7b99c737e2021b33c7b"
-    },
-    "TokenMapping": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
     },
     "Topup": {
       "sourceFile": "scripts/deposit.ral",
@@ -559,43 +451,19 @@
     },
     "UpdateGamifyCode": {
       "sourceFile": "gamefi/gamify.ral",
-      "sourceCodeHash": "da4c65204a754bb869dc5a09fcf5372488d1cf112c5e5f7e93e0b37245604ce1",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpdateGamifyFields": {
       "sourceFile": "gamefi/gamify.ral",
-      "sourceCodeHash": "da4c65204a754bb869dc5a09fcf5372488d1cf112c5e5f7e93e0b37245604ce1",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
     "UpdateLevel": {
       "sourceFile": "gamefi/gamify.ral",
-      "sourceCodeHash": "da4c65204a754bb869dc5a09fcf5372488d1cf112c5e5f7e93e0b37245604ce1",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "UpdateLoanCode": {
-      "sourceFile": "loans/loan.ral",
-      "sourceCodeHash": "3edd1eac071467432437ebdf5f268a09720b33f176a36e62bc9a59b05bcec040",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "UpdateLoanFactoryCode": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "UpdateLoanFactoryFields": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "UpdateLoanFields": {
-      "sourceFile": "loans/loan.ral",
-      "sourceCodeHash": "3edd1eac071467432437ebdf5f268a09720b33f176a36e62bc9a59b05bcec040",
+      "sourceCodeHash": "fc6415dfc0aaa6a0765eed4a77eeff75bfd984fd1b88a7f8a5a29b65751b88dc",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -608,6 +476,12 @@
     "UpdateNFTFields": {
       "sourceFile": "gamefi/playerbase.ral",
       "sourceCodeHash": "e46ba15ab2b06a4b2e5da9187d79fbb4435d43d785bcc3f13c810d86c2f12c4d",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": ""
+    },
+    "UpdateRandomnessFetcher": {
+      "sourceFile": "random-test/random.ral",
+      "sourceCodeHash": "e211e02b7c2f6dabf7d79de1b7289d98a1492cfc073ce0095fc035d3f726d0ca",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },
@@ -638,18 +512,6 @@
     "WithdrawFromPublicSaleCollectionSequential": {
       "sourceFile": "nfts/publicsale/scripts/withdraw_from_public_sale_collection_sequential.ral",
       "sourceCodeHash": "09c3b0330ecffd702743c7e6d87b33a4eca287fad168a52ba0f650239c3507d6",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "WithdrawFunds": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": ""
-    },
-    "WithdrawLoanFactoryFees": {
-      "sourceFile": "loans/loan_factory.ral",
-      "sourceCodeHash": "a1f7278a673ee8de0b7f5f21433d5de41f209ccb56c015e4f4596b220d7f649e",
       "bytecodeDebugPatch": "",
       "codeHashDebug": ""
     },

@@ -33,21 +33,6 @@
     ]
   },
   {
-    "name": "PairInfo",
-    "fieldNames": [
-      "pair",
-      "decimals"
-    ],
-    "fieldTypes": [
-      "ByteVec",
-      "U256"
-    ],
-    "isMutable": [
-      false,
-      true
-    ]
-  },
-  {
     "name": "DIAOracleValue",
     "fieldNames": [
       "value",
@@ -58,6 +43,24 @@
       "U256"
     ],
     "isMutable": [
+      true,
+      true
+    ]
+  },
+  {
+    "name": "DIARandomValue",
+    "fieldNames": [
+      "randomness",
+      "signature",
+      "round"
+    ],
+    "fieldTypes": [
+      "ByteVec",
+      "ByteVec",
+      "U256"
+    ],
+    "isMutable": [
+      true,
       true,
       true
     ]
