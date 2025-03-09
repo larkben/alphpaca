@@ -20,10 +20,6 @@ import {
   PlayerBaseInstance,
   WrappedWangProtocol,
   WrappedWangProtocolInstance,
-  Loan,
-  LoanInstance,
-  LoanFactory,
-  LoanFactoryInstance,
   RandomnessFetcher,
   RandomnessFetcherInstance,
 } from ".";
@@ -40,8 +36,6 @@ export type Deployments = {
     Player?: DeployContractExecutionResult<PlayerInstance>;
     PlayerBase?: DeployContractExecutionResult<PlayerBaseInstance>;
     WrappedWangProtocol?: DeployContractExecutionResult<WrappedWangProtocolInstance>;
-    Loan?: DeployContractExecutionResult<LoanInstance>;
-    LoanFactory?: DeployContractExecutionResult<LoanFactoryInstance>;
     RandomnessFetcher?: DeployContractExecutionResult<RandomnessFetcherInstance>;
   };
 };
@@ -100,24 +94,6 @@ function toDeployments(json: any): Deployments {
             ...json.contracts["WrappedWangProtocol"],
             contractInstance: WrappedWangProtocol.at(
               json.contracts["WrappedWangProtocol"].contractInstance.address
-            ),
-          },
-    Loan:
-      json.contracts["Loan"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["Loan"],
-            contractInstance: Loan.at(
-              json.contracts["Loan"].contractInstance.address
-            ),
-          },
-    LoanFactory:
-      json.contracts["LoanFactory"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["LoanFactory"],
-            contractInstance: LoanFactory.at(
-              json.contracts["LoanFactory"].contractInstance.address
             ),
           },
     RandomnessFetcher:

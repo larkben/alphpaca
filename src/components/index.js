@@ -30,10 +30,10 @@ export function Hero() {
       buttonColor: "bg-pink-300 hover:bg-pink-400"
     },
     {
-      title: "AlpacaFi",
-      description: "An alpaca's worst nightmare come to life.",
+      title: "AlpacaFi - Lending",
+      description: "P2P Custom Lending on Alephium",
       icon: <PiHandCoins className="h-8 w-8 text-white" />,
-      href: "#",
+      href: "https://alpacafi.app",
       color: "from-blue-800/90 to-blue-900/90",
       hoverColor: "hover:from-blue-800 hover:to-blue-900",
       buttonColor: "bg-blue-300 hover:bg-blue-400"
@@ -99,7 +99,7 @@ export function Hero() {
                         hover:shadow-lg`}
                     >
                       {feature.title === "On-Chain Gaming" || feature.title === "AlpacaFi" 
-                        ? "Coming Soon!" 
+                        ? "Live NOW!" 
                         : "Get Started"}
                     </Link>
                   </div>
@@ -156,6 +156,8 @@ export function Hero() {
                   <p className="text-gray-300 leading-relaxed">
                     I am a first generation blockchain smart contract developer, my background is in CS, 
                     more specifically Software Development. I have a growing passion to make crypto easier and more fun.
+
+                    <i> I don&apos;t work for money, I work to see my code be appreciated by others. </i>
                   </p>
                 </div>
               </motion.div>
