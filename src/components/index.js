@@ -99,8 +99,8 @@ export function Hero() {
                         hover:shadow-lg`}
                     >
                       {feature.title === "On-Chain Gaming" || feature.title === "AlpacaFi" 
-                        ? "Live NOW!" 
-                        : "Get Started"}
+                        ? "TBD" 
+                        : "Live Now!"}
                     </Link>
                   </div>
                 </div>
